@@ -1,12 +1,14 @@
 package interfaces;
 
+import data.LoginCred;
+
 /**
  * WebServiceClient interface.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface WebServiceClient {
-	public boolean signIn(String username, String password);
+	public boolean signIn(LoginCred cred);
 	
 	/* Common */
 	public int addOffer(String service);

@@ -1,5 +1,7 @@
 package interfaces;
 
+import data.LoginCred;
+
 /**
  * Mediator interface for Gui module.
  * 
@@ -9,7 +11,7 @@ public interface MediatorGui {
 	public void registerGui(Gui gui);
 
 	public void login();
-	public boolean signIn(String username, String password);
+	public boolean signIn(LoginCred cred);
 	public String getName();
 	
 	/* Common */

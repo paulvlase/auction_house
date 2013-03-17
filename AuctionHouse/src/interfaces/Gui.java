@@ -1,9 +1,6 @@
 package interfaces;
 
-import java.util.List;
-
-import config.GlobalConfig.UserType;
-import data.Service;
+import data.LoginCred;
 
 /**
  * Gui interface.
@@ -12,5 +9,5 @@ import data.Service;
  */
 public interface Gui {
 	public void login();
-	public void signIn(String username, String password, UserType type);
+	public void signIn(LoginCred cred);
 }
