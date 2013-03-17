@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * @author Ghennadi Procopciuc
  */
 public class Service {
-	String serviceName;
-	ArrayList<UserEntry> users;
+	private String serviceName;
+	private ArrayList<UserEntry> users;
 	
 	public Service(String serviceName, ArrayList<UserEntry> users){
 		this.serviceName = serviceName;
@@ -33,5 +33,13 @@ public class Service {
 
 	public void setUsers(ArrayList<UserEntry> users) {
 		this.users = users;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 }
