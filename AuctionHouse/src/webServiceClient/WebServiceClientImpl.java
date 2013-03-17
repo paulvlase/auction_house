@@ -1,5 +1,6 @@
 package webServiceClient;
 
+import data.LoginCred;
 import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
 
@@ -18,11 +19,14 @@ public class WebServiceClientImpl implements WebServiceClient {
 	}
 	
 	@Override
-	public boolean signIn(String username, String password) {
-		System.out.println("[WebServiceClientImpl : signIn] " + username + " " + password);
-		if (username.equals("pvlase") && password.equals("parola"))
+	public boolean signIn(LoginCred cred) {
+		System.out.println("[WebServiceClientImpl : signIn] " +
+				cred.getUsername() + " " + cred.getPassword());
+		if (cred.getUsername().equals("pvlase") &&
+				cred.getPassword().equals("parola"))
 			return true;
-		if (username.equals("unix140") && password.equals("marmota"))
+		if (cred.getUsername().equals("unix140") &&
+				cred.getPassword().equals("marmota"))
 			return true;
 		
 		return false;
