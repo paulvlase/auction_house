@@ -23,5 +23,8 @@ public class Main {
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
 		WebServiceClientImpl web = new WebServiceClientImpl(med);
+		
+		med.login();
+		System.out.println("Exit");
 	}
 }
