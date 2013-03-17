@@ -64,6 +64,7 @@ public class GuiConfig {
 	private static final String		OFFER_MADE_VALUES[]				= { "Offer made", "Ofertă" };
 	private static final String		TIME_VALUES[]					= { "Time", "Timp" };
 	private static final String		PRICE_VALUES[]					= { "Price", "Preț" };
+	private static final String		STATUS_VALUES[]					= { "Status", "Status" };
 
 	/* Login form */
 	public static final int			USERNAME						= 0;
@@ -94,6 +95,7 @@ public class GuiConfig {
 	public static final int			OFFER_MADE						= 21;
 	public static final int			TIME							= 22;
 	public static final int			PRICE							= 23;
+	public static final int			STATUS							= 24;
 
 	private static final String		values[][]						= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, SIGN_IN_VALUES,
@@ -101,7 +103,7 @@ public class GuiConfig {
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
 			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,
 			PROFILE_VALUES, LOGOUT_VALUES, EXIT_VALUES, SERVICE_VALUES, OFFER_MADE_VALUES,
-			TIME_VALUES, PRICE_VALUES								};
+			TIME_VALUES, PRICE_VALUES, STATUS_VALUES				};
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;
