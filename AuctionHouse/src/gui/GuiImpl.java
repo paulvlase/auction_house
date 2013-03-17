@@ -14,6 +14,7 @@ import config.FilesConfig;
 import config.GuiConfig;
 import config.GlobalConfig.UserType;
 import data.Service;
+import data.User;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 
@@ -56,6 +57,7 @@ public class GuiImpl implements Gui {
 			e.printStackTrace();
 		}
 
+		User user = loadLoginFile();
 		try {
 			br.readLine();
 			String username = br.readLine();
@@ -121,13 +123,17 @@ public class GuiImpl implements Gui {
 		}
 	}
 	
-	public ArrayList<Service> loadDemandsFile() {
+	private User loadLoginFile() {
+		return null;
+	}
+	
+	private ArrayList<Service> loadDemandsFile() {
 		File demandsFile = new File("FilesConfig.");
 		//TODO : Change this ...
 		return null;
 	}
 	
-	public ArrayList<Service> loadSuppliesFile() {
+	private ArrayList<Service> loadSuppliesFile() {
 		// TODO : Fix this ...
 		return null;
 	}

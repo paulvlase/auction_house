@@ -13,6 +13,4 @@ import data.Service;
 public interface Gui {
 	public void login();
 	public void signIn(String username, String password, UserType type);
-	public List<Service> loadDemandsFile();
-	public List<Service> loadSuppliesFile();
 }
