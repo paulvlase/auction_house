@@ -49,6 +49,10 @@ public class GuiConfig {
 	public static final String[][]	LANGUAGES						= { ENGLISH_VALUES,
 			ROMANIAN_VALUES										};
 
+	/* GuiImpl */
+	private static final String		WRONG_USR_PASS_VALUES[]			= {
+			"Wrong username or password", "Nume utilizator sau parolă greșită" };
+
 	/* Login form */
 	public static final int			USERNAME						= 0;
 	public static final int			PASSWORD						= 1;
@@ -65,11 +69,14 @@ public class GuiConfig {
 	public static final int			EMPTY_PASSWORD					= 12;
 	public static final int			LOGIN_TITLE						= 13;
 
+	/* GuiImpl */
+	public static final int			WRONG_USR_PASS					= 14;
+
 	private static final String		values[][]						= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, SIGN_IN_VALUES,
 			LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES, EMPTY_USERNAME_ERROR_VALUES,
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
-			LOGIN_TITLE_VALUES										};
+			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES				};
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;
