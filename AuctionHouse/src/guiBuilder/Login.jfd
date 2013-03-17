@@ -13,11 +13,11 @@
        <class>java.awt.GridBagLayout</class>
        <void method="setProperty">
         <string>$columnSpecs</string>
-        <string>10, 138, 10</string>
+        <string>10:1.0, 138, 10:1.0</string>
        </void>
        <void method="setProperty">
         <string>$rowSpecs</string>
-        <string>10, 0, 0, 10</string>
+        <string>10:1.0, 0, 0, 10:1.0</string>
        </void>
        <void method="setProperty">
         <string>$hGap</string>
@@ -42,7 +42,11 @@
       </void>
       <void method="setProperty">
        <string>$sizePolicy</string>
-       <int>2</int>
+       <int>1</int>
+      </void>
+      <void method="setProperty">
+       <string>title</string>
+       <string>Auction House - Autentificare</string>
       </void>
       <void method="add">
        <object class="com.jformdesigner.model.FormContainer">
@@ -51,7 +55,7 @@
          <class>java.awt.GridBagLayout</class>
          <void method="setProperty">
           <string>$columnSpecs</string>
-          <string>0, 96:1.0</string>
+          <string>0, 126:1.0</string>
          </void>
          <void method="setProperty">
           <string>$rowSpecs</string>
@@ -265,6 +269,68 @@
         </void>
        </object>
       </void>
+      <void property="menuBar">
+       <object class="com.jformdesigner.model.FormContainer">
+        <string>javax.swing.JMenuBar</string>
+        <object class="com.jformdesigner.model.FormLayoutManager">
+         <class>javax.swing.JMenuBar</class>
+        </object>
+        <void property="name">
+         <string>menuBar</string>
+        </void>
+        <void method="add">
+         <object class="com.jformdesigner.model.FormContainer">
+          <string>javax.swing.JMenu</string>
+          <object class="com.jformdesigner.model.FormLayoutManager">
+           <class>javax.swing.JMenu</class>
+          </object>
+          <void method="setProperty">
+           <string>text</string>
+           <string>Language</string>
+          </void>
+          <void property="name">
+           <string>languageMenu</string>
+          </void>
+          <void method="add">
+           <object class="com.jformdesigner.model.FormComponent">
+            <string>javax.swing.JCheckBoxMenuItem</string>
+            <void method="setProperty">
+             <string>text</string>
+             <string>English</string>
+            </void>
+            <void method="setProperty">
+             <string>$buttonGroup</string>
+             <object class="com.jformdesigner.model.FormReference">
+              <string>buttonGroup</string>
+             </object>
+            </void>
+            <void property="name">
+             <string>englishMenuItem</string>
+            </void>
+           </object>
+          </void>
+          <void method="add">
+           <object class="com.jformdesigner.model.FormComponent">
+            <string>javax.swing.JCheckBoxMenuItem</string>
+            <void method="setProperty">
+             <string>text</string>
+             <string>Romanian</string>
+            </void>
+            <void method="setProperty">
+             <string>$buttonGroup</string>
+             <object class="com.jformdesigner.model.FormReference">
+              <string>buttonGroup</string>
+             </object>
+            </void>
+            <void property="name">
+             <string>romanianMenuItem</string>
+            </void>
+           </object>
+          </void>
+         </object>
+        </void>
+       </object>
+      </void>
       <void property="name">
        <string>this</string>
       </void>
@@ -282,14 +348,37 @@
          <string>width</string>
          <void method="set">
           <object idref="Dimension0"/>
-          <int>400</int>
+          <int>310</int>
          </void>
         </void>
         <void class="java.awt.Dimension" method="getField">
          <string>height</string>
          <void method="set">
           <object idref="Dimension0"/>
-          <int>300</int>
+          <int>205</int>
+         </void>
+        </void>
+       </object>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="com.jformdesigner.model.FormNonVisual">
+      <string>javax.swing.ButtonGroup</string>
+      <void property="name">
+       <string>buttonGroup</string>
+      </void>
+     </object>
+     <object class="com.jformdesigner.model.FormLayoutConstraints">
+      <null/>
+      <void method="setProperty">
+       <string>location</string>
+       <object class="java.awt.Point" id="Point0">
+        <void class="java.awt.Point" method="getField">
+         <string>y</string>
+         <void method="set">
+          <object idref="Point0"/>
+          <int>310</int>
          </void>
         </void>
        </object>
