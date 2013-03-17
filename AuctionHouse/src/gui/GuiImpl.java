@@ -1,5 +1,8 @@
 package gui;
 
+import javax.swing.JOptionPane;
+
+import config.GuiConfig;
 import config.GlobalConfig.UserType;
 import interfaces.Gui;
 import interfaces.MediatorGui;
@@ -35,7 +38,9 @@ public class GuiImpl implements Gui {
 			System.out.println("Signed in");
 		} else {
 			// autentificare esuata, afisare dialog
-			System.out.println("Wrong username or password");
+			JOptionPane.showMessageDialog(null,
+					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
+					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

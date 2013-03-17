@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import config.GlobalConfig.UserType;
 import config.GuiConfig;
 
 /**
@@ -53,11 +54,12 @@ public class Login extends JFrame implements ActionListener {
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
-		((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {15, 143, 10, 0};
-		((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {15, 0, 0, 10, 0};
-		((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {1.0, 0.0, 1.0, 1.0E-4};
-		((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 0.0, 0.0, 1.0, 1.0E-4};
-
+		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 143, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 1.0, 0.0, 1.0,
+				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0,
+				1.0E-4 };
 
 		signinButton.addActionListener(this);
 
@@ -148,7 +150,7 @@ public class Login extends JFrame implements ActionListener {
 		contentPane.add(bottomPannel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
-		
+
 		setResizable(false);
 		setSize(310, 205);
 		setLocationRelativeTo(null);
@@ -160,7 +162,7 @@ public class Login extends JFrame implements ActionListener {
 
 	private void updateLanguage() {
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
-		
+
 		/* Update language menu */
 		for (int i = 0; i < GuiConfig.LANGUAGES.length; i++) {
 			languageMenu.getItem(i).setText(GuiConfig.LANGUAGES[i][GuiConfig.CURRENT_LANGUAGE]);
@@ -183,6 +185,8 @@ public class Login extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		UserType userType;
+
 		if (e.getSource() instanceof JCheckBoxMenuItem) {
 			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
 			Integer languageId = Integer.parseInt(menuItem.getName());
@@ -193,16 +197,26 @@ public class Login extends JFrame implements ActionListener {
 
 		if (e.getSource() == signinButton) {
 			if (usernameField.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
+				JOptionPane.showMessageDialog(null,
+						GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
 						GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			
-			if(passwordField.getPassword().length == 0){
-				JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD_ERROR),
+
+			if (passwordField.getPassword().length == 0) {
+				JOptionPane.showMessageDialog(null,
+						GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD_ERROR),
 						GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD), JOptionPane.WARNING_MESSAGE);
 				return;
 			}
+
+			if (roleCb.getSelectedItem().toString().equals(GuiConfig.getValue(GuiConfig.BUYER))) {
+				userType = UserType.BUYER;
+			} else {
+				userType = UserType.SELLER;
+			}
+			gui.signIn(usernameField.getText(), new String(passwordField.getPassword()), userType);
 		}
+
 	}
 }
