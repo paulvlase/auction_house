@@ -30,7 +30,7 @@ public class DefaultSpanModel implements SpanModel {
     /**
      *  Set of span definitions.
      */
-	private Set<Span> spans = new HashSet<Span>();
+	private Set<Span>			spans		= new HashSet<Span>();
 
     /**
      * The listeners for SpanEvents.
