@@ -23,23 +23,83 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 	}
 
+	@Override
 	public void registerGui(Gui gui) {
 		this.gui = gui;
 	}
 
+	@Override
 	public void registerNetwork(Network net) {
 		this.net = net;
 	}
 
+	@Override
 	public void registerWebServiceClient(WebServiceClient web) {
 		this.web = web;
 	}
 	
+	@Override
+	public void login() {
+		gui.login();
+	}
+	
+	@Override
 	public boolean signIn(String username, String password) {
 		return web.signIn(username, password);
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
+	}
+	
+	/* Common */
+	@Override
+	public int addOffer(String service) {
+		return web.addOffer(service);
+	}
+	
+	@Override
+	public int removeOffer(String service) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public int launchOffer(String service) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int dropOffer(String service) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	/* Buyer */
+	@Override
+	public int acceptOffer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int refuseOffer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* Seller */
+	@Override
+	public int makeOffer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int dropAction() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
