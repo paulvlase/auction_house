@@ -1,5 +1,6 @@
 package mediator;
 
+import data.LoginCred;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 import interfaces.MediatorNetwork;
@@ -44,8 +45,8 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	}
 	
 	@Override
-	public boolean signIn(String username, String password) {
-		return web.signIn(username, password);
+	public boolean signIn(LoginCred cred) {
+		return web.signIn(cred);
 	}
 
 	@Override
