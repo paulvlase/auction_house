@@ -1,29 +1,41 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
+import config.GuiConfig;
 
 /**
  * @author Ghennadi Procopciuc
  */
-public class Login extends JFrame {
-	private static final long serialVersionUID = 1L;
-	
-	private JPanel formPanel;
-	private JLabel usernameLabel;
-	private JTextField usernameField;
-	private JLabel passwordLabel;
-	private JPasswordField passwordField;
-	private JLabel roleLabel;
-	private JComboBox<String> roleCb;
-	private JPanel bottomPannel;
-	private JButton loginButton;
-	
+
+public class Login extends JFrame implements ActionListener {
+	private static final long	serialVersionUID	= 1L;
+
+	private JMenuBar			menuBar;
+	private JMenu				languageMenu;
+	private JPanel				formPanel;
+	private JLabel				usernameLabel;
+	private JTextField			usernameField;
+	private JLabel				passwordLabel;
+	private JPasswordField		passwordField;
+	private JLabel				roleLabel;
+	private JComboBox<String>	roleCb;
+	private JPanel				bottomPannel;
+	private JButton				signinButton;
+	private ButtonGroup			buttonGroup;
+
 	public Login() {
 		initComponents();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	private void initComponents() {
+		menuBar = new JMenuBar();
+		languageMenu = new JMenu();
 		formPanel = new JPanel();
 		usernameLabel = new JLabel();
 		usernameField = new JTextField();
@@ -32,84 +44,147 @@ public class Login extends JFrame {
 		roleLabel = new JLabel();
 		roleCb = new JComboBox<String>();
 		bottomPannel = new JPanel();
-		loginButton = new JButton();
+		signinButton = new JButton();
+		buttonGroup = new ButtonGroup();
 
-		// ======== this ========
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
-		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {
-				15, 143, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15,
-				0, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] {
-				0.0, 0.0, 0.0, 1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] {
-				0.0, 0.0, 0.0, 0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 143, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 0.0, 0.0,
+				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
+				1.0E-4 };
 
-		// ======== formPanel ========
+		// roleCb
+		{
+			roleCb.addItem(GuiConfig.getValue(GuiConfig.BUYER));
+			roleCb.addItem(GuiConfig.getValue(GuiConfig.SELLER));
+		}
+
+		// menuBar
+		{
+
+			// languageMenu
+			{
+				languageMenu.setText(GuiConfig.getValue(GuiConfig.LANGUAGE));
+
+				for (int i = 0; i < GuiConfig.LANGUAGES.length; i++) {
+					String[] language = GuiConfig.LANGUAGES[i];
+					JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem();
+					menuItem.setText(language[0]);
+					menuItem.addActionListener(this);
+					menuItem.setName("" + i);
+
+					languageMenu.add(menuItem);
+					buttonGroup.add(menuItem);
+
+				}
+			}
+			menuBar.add(languageMenu);
+		}
+		setJMenuBar(menuBar);
+
+		// formPanel
 		{
 			formPanel.setLayout(new GridBagLayout());
-			((GridBagLayout) formPanel.getLayout()).columnWidths = new int[] {
-					0, 96, 0 };
-			((GridBagLayout) formPanel.getLayout()).rowHeights = new int[] { 0,
-					0, 0, 0 };
-			((GridBagLayout) formPanel.getLayout()).columnWeights = new double[] {
-					0.0, 1.0, 1.0E-4 };
-			((GridBagLayout) formPanel.getLayout()).rowWeights = new double[] {
-					0.0, 0.0, 0.0, 1.0E-4 };
+			((GridBagLayout) formPanel.getLayout()).columnWidths = new int[] { 0, 96, 0 };
+			((GridBagLayout) formPanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
+			((GridBagLayout) formPanel.getLayout()).columnWeights = new double[] { 0.0, 1.0, 1.0E-4 };
+			((GridBagLayout) formPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0,
+					1.0E-4 };
 
-			// ---- usernameLabel ----
-			usernameLabel.setText("Username");
-			formPanel.add(usernameLabel, new GridBagConstraints(0, 0, 1, 1,
-					0.0, 0.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
-			formPanel.add(usernameField, new GridBagConstraints(1, 0, 1, 1,
-					0.0, 0.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
+			// usernameLabel
+			usernameLabel.setText(GuiConfig.getValue(GuiConfig.USERNAME));
+			formPanel.add(usernameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
+					0));
+			formPanel.add(usernameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
+					0));
 
-			// ---- passwordLabel ----
-			passwordLabel.setText("Password");
-			formPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1,
-					0.0, 0.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
-			formPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1,
-					0.0, 0.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
+			// passwordLabel
+			passwordLabel.setText(GuiConfig.getValue(GuiConfig.PASSWORD));
+			formPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
+					0));
+			formPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
+					0));
 
-			// ---- roleLabel ----
-			roleLabel.setText("Role");
-			formPanel.add(roleLabel, new GridBagConstraints(0, 2, 1, 1, 0.0,
-					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 5), 0, 0));
-			formPanel.add(roleCb, new GridBagConstraints(1, 2, 1, 1, 0.0,
-					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+			// roleLabel
+			roleLabel.setText(GuiConfig.getValue(GuiConfig.ROLE));
+			formPanel.add(roleLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
+					0));
+			formPanel.add(roleCb, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
+					0));
 		}
 		contentPane.add(formPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						0, 0, 5, 5), 0, 0));
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
-		// ======== bottomPannel ========
+		// bottomPannel
 		{
 			bottomPannel.setLayout(new GridBagLayout());
-			((GridBagLayout) bottomPannel.getLayout()).columnWidths = new int[] {
-					0, 0, 0 };
-			((GridBagLayout) bottomPannel.getLayout()).rowHeights = new int[] {
-					15, 0, 0 };
-			((GridBagLayout) bottomPannel.getLayout()).columnWeights = new double[] {
-					1.0, 0.0, 1.0E-4 };
-			((GridBagLayout) bottomPannel.getLayout()).rowWeights = new double[] {
-					0.0, 0.0, 1.0E-4 };
+			((GridBagLayout) bottomPannel.getLayout()).columnWidths = new int[] { 0, 0, 0 };
+			((GridBagLayout) bottomPannel.getLayout()).rowHeights = new int[] { 15, 0, 0 };
+			((GridBagLayout) bottomPannel.getLayout()).columnWeights = new double[] { 1.0, 0.0,
+					1.0E-4 };
+			((GridBagLayout) bottomPannel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
-			// ---- loginButton ----
-			loginButton.setText("Sign in");
-			bottomPannel.add(loginButton, new GridBagConstraints(1, 1, 1, 1,
-					0.0, 0.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+			// loginButton
+			signinButton.setText(GuiConfig.getValue(GuiConfig.SIGN_IN));
+			bottomPannel.add(signinButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
+					0));
 		}
-		contentPane.add(bottomPannel, new GridBagConstraints(1, 2, 1, 1, 0.0,
-				0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 5, 5), 0, 0));
+
+		contentPane.add(bottomPannel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		pack();
 		setLocationRelativeTo(null);
+	}
+
+	public static void main(String[] args) {
+		new Login().setVisible(true);
+	}
+
+	private void updateLanguage() {
+		/* Update language menu */
+		for (int i = 0; i < GuiConfig.LANGUAGES.length; i++) {
+			languageMenu.getItem(i).setText(GuiConfig.LANGUAGES[i][GuiConfig.CURRENT_LANGUAGE]);
+
+		}
+		
+		languageMenu.setText(GuiConfig.getValue(GuiConfig.LANGUAGE));
+		
+		usernameLabel.setText(GuiConfig.getValue(GuiConfig.USERNAME));
+		passwordLabel.setText(GuiConfig.getValue(GuiConfig.PASSWORD));
+		roleLabel.setText(GuiConfig.getValue(GuiConfig.ROLE));
+		
+		/* Update items in role combo box*/
+		roleCb.removeAllItems();
+		roleCb.addItem(GuiConfig.getValue(GuiConfig.BUYER));
+		roleCb.addItem(GuiConfig.getValue(GuiConfig.SELLER));
+		
+		signinButton.setText(GuiConfig.getValue(GuiConfig.SIGN_IN));
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() instanceof JCheckBoxMenuItem) {
+			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
+			Integer languageId = Integer.parseInt(menuItem.getName());
+
+			GuiConfig.setLanguage(languageId);
+			updateLanguage();
+		}
+		
+		if(e.getSource() == signinButton){
+			if(usernameField.getText().isEmpty()){
+				
+			}
+		}
 	}
 }
