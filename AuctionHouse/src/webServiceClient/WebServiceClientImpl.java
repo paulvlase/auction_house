@@ -18,7 +18,8 @@ public class WebServiceClientImpl implements WebServiceClient {
 	}
 	
 	public boolean signIn(String username, String password) {
-		if (username == "pvlase" && password == "parola")
+		System.out.println("[WebServiceClientImpl : signIn]" + username + " " + password);
+		if (username.equals("pvlase") && password.equals("parola"))
 			return true;
 		
 		return false;
