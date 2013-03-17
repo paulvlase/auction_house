@@ -1,5 +1,7 @@
 package gui;
 
+import interfaces.Gui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,7 @@ import config.GuiConfig;
 public class Login extends JFrame implements ActionListener {
 	private static final long	serialVersionUID	= 1L;
 
+	private Gui					gui;
 	private JMenuBar			menuBar;
 	private JMenu				languageMenu;
 	private JPanel				formPanel;
@@ -28,7 +31,8 @@ public class Login extends JFrame implements ActionListener {
 	private JButton				signinButton;
 	private ButtonGroup			buttonGroup;
 
-	public Login() {
+	public Login(Gui gui) {
+		this.gui = gui;
 		initComponents();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -147,7 +151,7 @@ public class Login extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		new Login().setVisible(true);
+		new Login(null).setVisible(true);
 	}
 
 	private void updateLanguage() {
