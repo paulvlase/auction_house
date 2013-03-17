@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import config.GlobalConfig.UserType;
 import config.GuiConfig;
+import data.LoginCred;
 
 /**
  * @author Ghennadi Procopciuc
@@ -215,7 +216,10 @@ public class Login extends JFrame implements ActionListener {
 			} else {
 				userType = UserType.SELLER;
 			}
-			gui.signIn(usernameField.getText(), new String(passwordField.getPassword()), userType);
+
+			LoginCred cred = new LoginCred(usernameField.getText(), new String(
+					passwordField.getPassword()), userType);
+			gui.signIn(cred);
 		}
 
 	}
