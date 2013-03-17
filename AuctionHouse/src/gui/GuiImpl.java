@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +13,7 @@ import config.FilesConfig;
 import config.GuiConfig;
 import config.GlobalConfig.UserType;
 import data.Service;
-import data.User;
+import data.LoginCred;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 
@@ -29,8 +28,6 @@ public class GuiImpl implements Gui {
 	private MainWindow  mainWindow;
 
 	public GuiImpl(MediatorGui med) {
-		boolean showLogin = false;
-		
 		this.med = med;
 		med.registerGui(this);
 		
@@ -42,22 +39,59 @@ public class GuiImpl implements Gui {
 	}
 	
 	public void login() {
+		LoginCred cred = loadLoginFile();
+		
+		if (cred == null) { 
+			login.setVisible(true);
+
+		} else {
+			signIn(cred);
+		}
+	}
+	
+	public void signIn(LoginCred cred) {
+		if (med.signIn(cred)) {
+			login.setVisible(false);
+			
+			//TODO: autentificare reusita, afisez fereastra pentru
+			// cumparator, vanzator
+			System.out.println("Signed in");
+			
+			ArrayList<Service> services = null;
+			if (cred.getType() == UserType.BUYER) {
+				services = loadDemandsFile();
+			}
+			if (cred.getType() == UserType.SELLER) {
+				services = loadSuppliesFile();
+			}
+			
+			mainWindow = new MainWindow(services);
+			mainWindow.setVisible(true);
+		} else {
+			// autentificare esuata, afisare dialog
+			JOptionPane.showMessageDialog(null,
+					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
+					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
 
-		if (!loginFile.exists()) {
-			login.setVisible(true);
-			return;
-		}
+		if (!loginFile.exists())
+			return null;
+
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(loginFile));
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-
-		User user = loadLoginFile();
+		
+		LoginCred loginCred = null;
 		try {
 			br.readLine();
 			String username = br.readLine();
@@ -77,15 +111,14 @@ public class GuiImpl implements Gui {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return;
+				return null;
 			}
 			
 			br.readLine();
 			String password = br.readLine();
 			
-			signIn(username, password, type);
+			loginCred = new LoginCred(username, password, type);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -94,47 +127,62 @@ public class GuiImpl implements Gui {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void signIn(String username, String password, UserType type) {
-		if (med.signIn(username, password)) {
-			login.setVisible(false);
-			
-			//TODO: autentificare reusita, afisez fereastra pentru
-			// cumparator, vanzator
-			System.out.println("Signed in");
-			
-			ArrayList<Service> services = null;
-			if (type == UserType.BUYER) {
-				services = loadDemandsFile();
-			}
-			if (type == UserType.SELLER) {
-				services = loadSuppliesFile();
-			}
-			
-			mainWindow = new MainWindow(services);
-			mainWindow.setVisible(true);
-		} else {
-			// autentificare esuata, afisare dialog
-			JOptionPane.showMessageDialog(null,
-					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
-					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
-	private User loadLoginFile() {
-		return null;
+		return loginCred;
 	}
 	
 	private ArrayList<Service> loadDemandsFile() {
-		File demandsFile = new File("FilesConfig.");
-		//TODO : Change this ...
-		return null;
+		ArrayList<Service> services = new ArrayList<Service>();
+
+		File demandsFile = new File(FilesConfig.DEMANDS_FILENAME);
+		if (demandsFile.exists()) {
+			BufferedReader br = null;
+			try {
+				br = new BufferedReader(
+						new FileReader(demandsFile));
+				
+				String line;
+				while ((line = br.readLine()) != null) {
+					System.out.println(line);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (br != null)
+					br.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return services;
 	}
 	
 	private ArrayList<Service> loadSuppliesFile() {
-		// TODO : Fix this ...
-		return null;
+		ArrayList<Service> services = new ArrayList<Service>();
+		
+		File suppliesFile = new File(FilesConfig.SUPPLIES_FILENAME);
+		if (suppliesFile.exists()) {
+			BufferedReader br = null;
+			try {
+				br = new BufferedReader(
+						new FileReader(suppliesFile));
+				
+				String line;
+				while ((line = br.readLine()) != null) {
+					System.out.println(line);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (br != null)
+					br.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return services;
 	}
 }
