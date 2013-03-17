@@ -6,5 +6,6 @@ package interfaces;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface MediatorNetwork {
-
+	public void registerNetwork(Network net);
+	public String getName();
 }

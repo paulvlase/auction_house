@@ -6,5 +6,7 @@ package interfaces;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface MediatorWeb {
+	public void registerWebServiceClient(WebServiceClient web);
 
+	public String getName();
 }
