@@ -1,6 +1,9 @@
 package interfaces;
 
+import java.util.List;
+
 import config.GlobalConfig.UserType;
+import data.Service;
 
 /**
  * Gui interface.

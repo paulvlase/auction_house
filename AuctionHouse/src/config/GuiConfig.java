@@ -53,6 +53,18 @@ public class GuiConfig {
 	private static final String		WRONG_USR_PASS_VALUES[]			= {
 			"Wrong username or password", "Nume utilizator sau parolă greșită" };
 
+	/* MainWindow */
+	private static final String		MENU_VALUES[]					= { "Menu", "Meniu" };
+	private static final String		ADD_SERVICE_VALUES[]			= { "Add service",
+			"Adaugă serviciu"										};
+	private static final String		PROFILE_VALUES[]				= { "Profile", "Profil" };
+	private static final String		LOGOUT_VALUES[]					= { "Logout", "Deautentificare" };
+	private static final String		EXIT_VALUES[]					= { "Exit", "Ieșire" };
+	private static final String		SERVICE_VALUES[]				= { "Service", "Serviciu" };
+	private static final String		OFFER_MADE_VALUES[]				= { "Offer made", "Ofertă" };
+	private static final String		TIME_VALUES[]					= { "Time", "Timp" };
+	private static final String		PRICE_VALUES[]					= { "Price", "Preț" };
+
 	/* Login form */
 	public static final int			USERNAME						= 0;
 	public static final int			PASSWORD						= 1;
@@ -72,11 +84,24 @@ public class GuiConfig {
 	/* GuiImpl */
 	public static final int			WRONG_USR_PASS					= 14;
 
+	/* MainWindow */
+	public static final int			MENU							= 15;
+	public static final int			ADD_SERVICE						= 16;
+	public static final int			PROFILE							= 17;
+	public static final int			LOGOUT							= 18;
+	public static final int			EXIT							= 19;
+	public static final int			SERVICE							= 20;
+	public static final int			OFFER_MADE						= 21;
+	public static final int			TIME							= 22;
+	public static final int			PRICE							= 23;
+
 	private static final String		values[][]						= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, SIGN_IN_VALUES,
 			LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES, EMPTY_USERNAME_ERROR_VALUES,
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
-			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES				};
+			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,
+			PROFILE_VALUES, LOGOUT_VALUES, EXIT_VALUES, SERVICE_VALUES, OFFER_MADE_VALUES,
+			TIME_VALUES, PRICE_VALUES								};
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;

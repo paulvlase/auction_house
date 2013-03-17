@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import config.FilesConfig;
 import config.GuiConfig;
 import config.GlobalConfig.UserType;
+import data.Service;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 
@@ -99,7 +102,7 @@ public class GuiImpl implements Gui {
 			// cumparator, vanzator
 			System.out.println("Signed in");
 			
-			List<Service> services;
+			ArrayList<Service> services = null;
 			if (type == UserType.BUYER) {
 				services = loadDemandsFile();
 			}
@@ -107,7 +110,7 @@ public class GuiImpl implements Gui {
 				services = loadSuppliesFile();
 			}
 			
-			mainWindow = new MainWin(services);
+			mainWindow = new MainWindow(services);
 			mainWindow.setVisible(true);
 		} else {
 			// autentificare esuata, afisare dialog
@@ -118,10 +121,14 @@ public class GuiImpl implements Gui {
 		}
 	}
 	
-	public List<Service> loadDemandsFile() {
+	public ArrayList<Service> loadDemandsFile() {
 		File demandsFile = new File("FilesConfig.");
+		//TODO : Change this ...
+		return null;
 	}
 	
-	public List<Service> loadSuppliesFile() {
+	public ArrayList<Service> loadSuppliesFile() {
+		// TODO : Fix this ...
+		return null;
 	}
 }
