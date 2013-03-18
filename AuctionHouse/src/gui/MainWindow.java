@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
-import spantable.SpanTable;
+import spantable.MultiSpanCellTable;
 
 import config.GuiConfig;
 import config.GlobalConfig.UserType;
@@ -34,7 +34,7 @@ public class MainWindow extends JFrame {
 	private JScrollPane			scrollPanel;
 
 	private String[]			tableComuns;
-	private SpanTable			table;
+	private MultiSpanCellTable	table;
 	private MySpanTableModel	model;
 
 	private ArrayList<Service>	services;
@@ -48,10 +48,12 @@ public class MainWindow extends JFrame {
 	private void initComponents() {
 		/* Table init */
 		tableComuns = new String[] { GuiConfig.getValue(GuiConfig.SERVICE),
-				GuiConfig.getValue(GuiConfig.SELLER), GuiConfig.getValue(GuiConfig.OFFER_MADE),
-				GuiConfig.getValue(GuiConfig.TIME), GuiConfig.getValue(GuiConfig.PRICE) };
+				GuiConfig.getValue(GuiConfig.STATUS), GuiConfig.getValue(GuiConfig.SELLER),
+				GuiConfig.getValue(GuiConfig.OFFER_MADE), GuiConfig.getValue(GuiConfig.TIME),
+				GuiConfig.getValue(GuiConfig.PRICE) };
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableComuns)));
-		table = new SpanTable(model);
+		table = new MultiSpanCellTable(model);
+		table.setCellSelectionEnabled(true);
 
 		menuBar = new JMenuBar();
 		menu = new JMenu();
@@ -153,6 +155,15 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
+//		try {
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		} catch (Exception e) {
+//			try {
+//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+//			} catch (Exception e1) {
+//			}
+//		}
+
 		ArrayList<Service> services = new ArrayList<Service>();
 		Service service1 = new Service("service1");
 		Service service2 = new Service("service2");
@@ -161,6 +172,8 @@ public class MainWindow extends JFrame {
 		service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
 		service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
 
+		services.add(service1);
+		services.add(service2);
 		new MainWindow(services).setVisible(true);
 	}
 }
