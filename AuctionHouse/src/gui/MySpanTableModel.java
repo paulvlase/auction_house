@@ -27,8 +27,6 @@ public class MySpanTableModel extends AbstractTableModel {
 		this.columns = columns;
 
 		buildData();
-//		System.out.println("Nr rows : " + getRowCount());
-//		System.out.println("Nr Columns : " + getColumnCount());
 		cellAtt = new DefaultCellAttribute(getRowCount(), getColumnCount());
 		applySpans();
 	}
@@ -76,6 +74,12 @@ public class MySpanTableModel extends AbstractTableModel {
 		spans.clear();
 		fireTableStructureChanged();
 	}
+	
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return (getValueAt(0, columnIndex).getClass());
+	}
+
 
 	/**
 	 * Builds "data" from an array of services

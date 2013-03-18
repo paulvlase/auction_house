@@ -99,6 +99,8 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 			if (component.getParent() == null) {
 				rendererPane.add(component);
 			}
+			
+			//System.out.println("Row " + row + " column : " + column + " " + component);
 			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
 					cellRect.width, cellRect.height, true);
 		}

@@ -155,25 +155,28 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-//		try {
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		} catch (Exception e) {
-//			try {
-//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//			} catch (Exception e1) {
-//			}
-//		}
+		// try {
+		// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		// } catch (Exception e) {
+		// try {
+		// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		// } catch (Exception e1) {
+		// }
+		// }
 
 		ArrayList<Service> services = new ArrayList<Service>();
-		Service service1 = new Service("service1");
-		Service service2 = new Service("service2");
+		for (int i = 0; i < 100; i++) {
 
-		service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
-		service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
-		service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
+			Service service1 = new Service("service1");
+			Service service2 = new Service("service2");
 
-		services.add(service1);
-		services.add(service2);
+			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
+			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
+			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
+
+			services.add(service1);
+			services.add(service2);
+		}
 		new MainWindow(services).setVisible(true);
 	}
 }
