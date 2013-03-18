@@ -2,6 +2,11 @@ package data;
 
 import config.GlobalConfig.UserType;
 
+/**
+ * Login credentials class.
+ * 
+ * @author Paul Vlase <vlase.paul@gmail.com>
+ */
 public class LoginCred {
 	private String username;
 	private String password;
