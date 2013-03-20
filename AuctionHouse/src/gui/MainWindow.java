@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import spantable.MultiSpanCellTable;
 
@@ -12,12 +14,15 @@ import config.GuiConfig;
 import config.GlobalConfig.UserType;
 
 import data.Service;
+import data.Service.Status;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
 /**
  * @author Ghennadi Procopciuc
  */
+
+
 public class MainWindow extends JFrame {
 
 	private JMenuBar			menuBar;
@@ -53,9 +58,6 @@ public class MainWindow extends JFrame {
 				GuiConfig.getValue(GuiConfig.PRICE) };
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableComuns)));
 		table = new MultiSpanCellTable(model);
-		table.setCellSelectionEnabled(true);
-		table.setDefaultRenderer(JLabel.class,  new CellRenderer());
-
 		menuBar = new JMenuBar();
 		menu = new JMenu();
 		addServiceItem = new JMenuItem();
@@ -68,6 +70,22 @@ public class MainWindow extends JFrame {
 		usernameLabel = new JLabel();
 		logoutButton = new JButton();
 		scrollPanel = new JScrollPane();
+		
+		table.setCellSelectionEnabled(true);
+		TableColumn column = table.getColumnModel().getColumn(2);
+		// column.setMaxWidth(60);
+		// column.setMinWidth(60);
+		// column.setResizable(false);
+		column = table.getColumnModel().getColumn(2);
+		column.setCellRenderer(new ProgressRenderer());
+		
+        scrollPanel.getViewport().setBackground(Color.WHITE);
+        table.setFillsViewportHeight(true);
+        table.setIntercellSpacing(new Dimension());
+        table.setShowGrid(false);
+        //table.setShowHorizontalLines(false);
+        //table.setShowVerticalLines(false);
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
@@ -156,28 +174,78 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-//		try {
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		} catch (Exception e) {
-//			try {
-//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//			} catch (Exception e1) {
-//			}
-//		}
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Exception e) {
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			} catch (Exception e1) {
+			}
+		}
 
 		ArrayList<Service> services = new ArrayList<Service>();
 		for (int i = 0; i < 10; i++) {
 
 			Service service1 = new Service("service1");
-			Service service2 = new Service("service2");
+			Service service2 = new Service("service2", Status.ACTIVE);
+			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
 
 			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
 			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
 			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
 
+			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
+			
 			services.add(service1);
 			services.add(service2);
+			services.add(service3);
 		}
 		new MainWindow(services).setVisible(true);
+	}
+}
+
+class ProgressRenderer extends DefaultTableCellRenderer {
+	private final JProgressBar	b	= new JProgressBar(0, 100);
+	private final JPanel		p	= new JPanel(new BorderLayout());
+
+	public ProgressRenderer() {
+		super();
+		setOpaque(true);
+		p.add(b);
+		p.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+			boolean hasFocus, int row, int column) {
+		if (value instanceof Integer) {
+			Integer i = (Integer) value;
+			String text = "Done";
+			if (i < 0) {
+				text = "Canceled";
+			} else if (i < 100) {
+				b.setValue(i);
+				return p;
+			}
+			super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
+			return this;
+		}
+
+		if (value instanceof JLabel) {
+			return (JLabel) value;
+		}
+
+		if (value instanceof String) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
+
+		return this;
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (p != null)
+			SwingUtilities.updateComponentTreeUI(p);
 	}
 }

@@ -1,10 +1,12 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
 import spantable.CellAttribute;
@@ -34,8 +36,6 @@ public class MySpanTableModel extends AbstractTableModel {
 		for (Service service : services) {
 			addService(service);
 		}
-
-//		removeService(new Service("service2"));
 	}
 
 	public void addSpan(Span span) {
@@ -86,63 +86,24 @@ public class MySpanTableModel extends AbstractTableModel {
 			addService(serv);
 		}
 	}
-	
-	public void removeService(Service service){
+
+	public void removeService(Service service) {
 		removeService(services.indexOf(service));
-	}	
+	}
 
 	public void addService(Service service) {
 		ArrayList<UserEntry> users;
-		ArrayList<Object> row;
-		Boolean first;
+		ArrayList<ArrayList<Object>> serviceData;
+		
 		users = service.getUsers();
-
-		if (users == null) {
-			row = new ArrayList<Object>();
-			/* Service Name */
-			row.add(service.getName());
-			/* Status */
-			row.add("Inactive");
-			/* User */
-			row.add(new JLabel());
-			/* Offer made */
-			row.add("");
-			/* Time */
-			row.add("");
-			/* Price */
-			row.add("");
-			data.add(row);
-			cellAtt.addRow();
-
+		serviceData = service.getAsTable();
+		
+		data.addAll(serviceData);
+		cellAtt.addRows(serviceData.size());
+		
+		if(serviceData.size() == 1){
 			addSpan(new Span(data.size() - 1, 2, 1, 4));
 		} else {
-			first = true;
-			for (UserEntry user : users) {
-				row = new ArrayList<Object>();
-				if (first) {
-					/* Service Name */
-					row.add(service.getName());
-					/* Status */
-					row.add("Active");
-					first = false;
-				} else {
-					/* Service Name */
-					row.add("");
-					/* Status */
-					row.add("");
-				}
-				/* User */
-				row.add(user.getName());
-				/* Offer made */
-				row.add(user.getOffer());
-				/* Time */
-				row.add(user.getTime());
-				/* Price */
-				row.add(user.getPrice());
-				data.add(row);
-				cellAtt.addRow();
-			}
-
 			/* Service name span */
 			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
 			/* Status span */
