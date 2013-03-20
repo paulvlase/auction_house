@@ -1,12 +1,12 @@
 package app;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import webServiceClient.WebServiceClientImpl;
-import network.NetworkImpl;
 import gui.GuiImpl;
+
+import javax.swing.UIManager;
+
 import mediator.MockupMediator;
+import network.NetworkImpl;
+import webServiceClient.WebServiceClientImpl;
 
 public class Main {
 	public static void main(String[] args) {

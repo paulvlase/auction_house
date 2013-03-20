@@ -1,34 +1,20 @@
-/*
- * (swing1.1beta3)
- * 
- */
-
 package spantable;
 
 import gui.MySpanTableModel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicTableUI;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * @version 1.0 11/26/98
+ * @author Ghennadi Procopciuc
  */
-
 public class MultiSpanCellTableUI extends BasicTableUI {
 
 	public void paint(Graphics g, JComponent c) {
@@ -65,7 +51,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 		for (int column = 0; column < numColumns; column++) {
 			Rectangle cellRect = table.getCellRect(row, column, true);
 			int cellRow, cellColumn;
-			
+
 			if (cellAtt.isVisible(row, column)) {
 				cellRow = row;
 				cellColumn = column;
@@ -73,7 +59,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 				cellRow = row + cellAtt.getSpan(row, column)[CellSpan.ROW];
 				cellColumn = column + cellAtt.getSpan(row, column)[CellSpan.COLUMN];
 			}
-			
+
 			if (cellRect.intersects(rect)) {
 				drawn = true;
 				paintCell(g, cellRect, cellRow, cellColumn);

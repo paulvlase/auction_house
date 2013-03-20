@@ -1,6 +1,5 @@
 package config;
 
-import java.util.HashMap;
 
 /**
  * Configurations for GuiConfig.

@@ -1,18 +1,34 @@
 package gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import spantable.MultiSpanCellTable;
-
 import config.GuiConfig;
-import config.GlobalConfig.UserType;
-
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
@@ -25,6 +41,8 @@ import data.UserEntry.Offer;
 
 public class MainWindow extends JFrame {
 
+	private static final long	serialVersionUID	= 1L;
+	
 	private JMenuBar			menuBar;
 	private JMenu				menu;
 	private JMenuItem			addServiceItem;
@@ -205,6 +223,8 @@ public class MainWindow extends JFrame {
 }
 
 class ProgressRenderer extends DefaultTableCellRenderer {
+
+	private static final long	serialVersionUID	= 1L;
 	private final JProgressBar	b	= new JProgressBar(0, 100);
 	private final JPanel		p	= new JPanel(new BorderLayout());
 

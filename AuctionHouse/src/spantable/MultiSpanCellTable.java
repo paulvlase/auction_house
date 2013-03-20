@@ -1,23 +1,24 @@
-/*
- * (swing1.1beta3)
- * 
- */
 package spantable;
 
 import gui.MySpanTableModel;
 
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.plaf.basic.*;
-import javax.swing.event.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.Enumeration;
+
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
- * @version 1.0 11/26/98
+ * @author Ghennadi Procopciuc
  */
-
 public class MultiSpanCellTable extends JTable {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public MultiSpanCellTable(TableModel model) {
 		super(model);
@@ -42,13 +43,12 @@ public class MultiSpanCellTable extends JTable {
 		int[] n = cellAtt.getSpan(row, column);
 
 		int index = 0;
-		int columnMargin = getColumnModel().getColumnMargin();
 		Rectangle cellFrame = new Rectangle();
 		int aCellHeight = rowHeight + rowMargin;
 		cellFrame.y = row * aCellHeight;
 		cellFrame.height = n[CellSpan.ROW] * aCellHeight;
 
-		Enumeration enumeration = getColumnModel().getColumns();
+		Enumeration<?> enumeration = getColumnModel().getColumns();
 		while (enumeration.hasMoreElements()) {
 			TableColumn aColumn = (TableColumn) enumeration.nextElement();
 			cellFrame.width = aColumn.getWidth();
