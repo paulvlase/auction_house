@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * @author Ghennadi Procopciuc
  */
 public class Service {
-	private String serviceName;
+	private String name;
 	private long time;
 	private double price;
 	private ArrayList<UserEntry> users;
 	
-	public Service(String serviceName, ArrayList<UserEntry> users){
-		this.serviceName = serviceName;
+	public Service(String name, ArrayList<UserEntry> users){
+		this.name = name;
 		this.users = users;
 		this.time = 0;
 		this.price = 0;
@@ -41,12 +41,12 @@ public class Service {
 		this.users = users;
 	}
 
-	public String getServiceName() {
-		return serviceName;
+	public String getName() {
+		return name;
 	}
 
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
+	public void setName(String serviceName) {
+		this.name = serviceName;
 	}
 
 	public long getTime() {
@@ -63,5 +63,14 @@ public class Service {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	
+	@Override
+	public boolean equals(Object arg0) {
+		if(!(arg0 instanceof Service)){
+			return false;
+		}
+		
+		return ((Service)arg0).getName().equals(name);
 	}
 }
