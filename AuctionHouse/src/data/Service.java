@@ -3,30 +3,70 @@ package data;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.JProgressBar;
-
 /**
  * If user field is null, then this offer is inactive, otherwise it's active. If
  * time is 0, this offer is expired. If price is 0, this offer is a demand,
  * otherwise it's supply.
  * 
+ * A service that have one of the statuses : TRANSFER_* should have only one
+ * user entry, he will be the user who accepted the transfer, the rest of the
+ * users specified in <code>users</code> field will be ignored.
+ * 
  * @author Ghennadi Procopciuc
+ * @see Status
  */
 public class Service {
 	private String					name;
 	private long					time;
 	private double					price;
 	private ArrayList<UserEntry>	users;
+	private Status					status;
 
-	public Service(String name, ArrayList<UserEntry> users) {
+	/**
+	 * This field will be used only with a TRANSFER_* status, otherwise it means
+	 * nothing.
+	 */
+	private int						progress;
+
+	/**
+	 * Service status :
+	 * 
+	 * INACTIVE - if no one offers this service
+	 * 
+	 * ACTIVE - if someone offers this service
+	 * 
+	 * TRANSFER_* - Transaction statuses
+	 * 
+	 */
+	public enum Status {
+		ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED
+	};
+
+	public Service(String name, ArrayList<UserEntry> users, Status status) {
 		this.name = name;
 		this.users = users;
 		this.time = 0;
 		this.price = 0;
+		this.status = status;
 	}
 
 	public Service(String serviceName) {
-		this(serviceName, null);
+		this(serviceName, null, Status.INACTIVE);
+	}
+
+	/**
+	 * Note, if <code>status</code> is not <code>Status.INACTIVE</code>, after
+	 * instantiation you have to add at least one
+	 * <code>UserEntry<code>, otherwise you will get unpredictable results
+	 * 
+	 * @param serviceName
+	 *            Name of the service
+	 * @param status
+	 *            Service/Transaction status
+	 * @see Status
+	 */
+	public Service(String serviceName, Status status) {
+		this(serviceName, null, status);
 	}
 
 	public void addUserEntry(UserEntry user) {
@@ -65,23 +105,44 @@ public class Service {
 		return price;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
 
+	public int getProgress() {
+		return progress;
+	}
+
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
+
 	public ArrayList<ArrayList<Object>> getAsTable() {
 		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-		ArrayList<Object> row;
 		Boolean first = true;
 
-		if (users == null) {
-			/**
-			 * Columns from row : Service Name, Status, User, Offer made, Time,
-			 * Price
-			 */
+		/**
+		 * Columns from row are : Service Name, Status, User, Offer made, Time,
+		 * Price
+		 */
+		ArrayList<Object> row;
+
+		// TODO Add the constant strings from below and their translation to
+		// the configurations file.
+		switch (status) {
+		case INACTIVE:
 			row = new ArrayList<Object>(Arrays.asList(getName(), "Inactive", "", "", "", ""));
 			data.add(row);
-		} else {
+			break;
+		case ACTIVE:
 			for (UserEntry user : users) {
 				row = new ArrayList<Object>();
 				if (first) {
@@ -96,8 +157,23 @@ public class Service {
 
 				data.add(row);
 			}
+			break;
+		case TRANSFER_IN_PROGRESS:
+		case TRANSFER_STARTED:
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", progress, "", "", ""));
+			data.add(row);
+			break;
+		case TRANSFER_COMPLETE:
+			// TODO
+			break;
+		case TRANSFER_FAILED:
+			// TODO
+			break;
+		default:
+			System.err.println("[Service, getAsTable] Unexpected Status :|");
+			break;
 		}
-		
+
 		return data;
 	}
 
