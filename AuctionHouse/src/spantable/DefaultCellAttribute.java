@@ -172,6 +172,13 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 		}
 		rowSize++;
 	}
+	
+
+	public void addRows(Integer rows) {
+		for (int i = 0; i < rows; i++) {
+			addRow();
+		}
+	}
 
 	public void insertRow(int row) {
 		int[][][] oldSpan = span;

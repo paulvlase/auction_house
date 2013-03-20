@@ -7,14 +7,22 @@ package spantable;
 
 import gui.MySpanTableModel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -96,6 +104,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 			component.validate();
 		} else {
 			TableCellRenderer renderer = table.getCellRenderer(row, column);
+
 			Component component = table.prepareRenderer(renderer, row, column);
 
 			if (component.getParent() == null) {

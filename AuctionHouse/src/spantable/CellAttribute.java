@@ -15,6 +15,8 @@ public interface CellAttribute {
 	public void addColumn();
 
 	public void addRow();
+	
+	public void addRows(Integer rows);
 
 	public void insertRow(int row);
 
