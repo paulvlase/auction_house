@@ -57,6 +57,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 		for (int column = 0; column < numColumns; column++) {
 			Rectangle cellRect = table.getCellRect(row, column, true);
 			int cellRow, cellColumn;
+			
 			if (cellAtt.isVisible(row, column)) {
 				cellRow = row;
 				cellColumn = column;
@@ -64,11 +65,12 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 				cellRow = row + cellAtt.getSpan(row, column)[CellSpan.ROW];
 				cellColumn = column + cellAtt.getSpan(row, column)[CellSpan.COLUMN];
 			}
+			
 			if (cellRect.intersects(rect)) {
 				drawn = true;
 				paintCell(g, cellRect, cellRow, cellColumn);
 			} else {
-				if (drawn){
+				if (drawn) {
 					break;
 				}
 			}
@@ -99,8 +101,9 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 			if (component.getParent() == null) {
 				rendererPane.add(component);
 			}
-			
-			//System.out.println("Row " + row + " column : " + column + " " + component);
+
+			// System.out.println("Row " + row + " column : " + column + " " +
+			// component);
 			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
 					cellRect.width, cellRect.height, true);
 		}

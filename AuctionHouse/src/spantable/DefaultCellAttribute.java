@@ -18,7 +18,7 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	protected Color[][]	background; //
 
 	public DefaultCellAttribute() {
-		this(1, 1);
+		this(0, 0);
 	}
 
 	public DefaultCellAttribute(int numRows, int numColumns) {
@@ -142,9 +142,25 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 			span[i][numColumns][CellSpan.COLUMN] = 1;
 			span[i][numColumns][CellSpan.ROW] = 1;
 		}
+		
+		//TODO: Update columnSize
 	}
 
 	public void addRow() {
+//		System.out.println("Rowsize : " + rowSize);
+//		System.out.println("Columnsie : " + columnSize);
+		
+		if(rowSize == 0){
+			span = new int[1][columnSize][2];
+			for (int i = 0; i < columnSize; i++) {
+				span[0][i][CellSpan.COLUMN] = 1;
+				span[0][i][CellSpan.ROW] = 1;
+			}
+			
+			rowSize++;
+			return;
+		}
+		
 		int[][][] oldSpan = span;
 		int numRows = oldSpan.length;
 		int numColumns = oldSpan[0].length;
@@ -154,6 +170,7 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 			span[numRows][i][CellSpan.COLUMN] = 1;
 			span[numRows][i][CellSpan.ROW] = 1;
 		}
+		rowSize++;
 	}
 
 	public void insertRow(int row) {
@@ -169,6 +186,8 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 			span[row][i][CellSpan.COLUMN] = 1;
 			span[row][i][CellSpan.ROW] = 1;
 		}
+		
+		//TODO : Update rowSize and columnSize
 	}
 
 	public Dimension getSize() {
@@ -207,13 +226,13 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 //		System.out.println("Columnsize : " + columnSize);
 //		System.out.println("Row : " + row + " column : " + column);
 //		System.out.println("Width : " + width + " height "+ height);
-		if (row < 0 || row + width > rowSize) {
-//			System.out.println("Row condition");
+		if (row < 0 || row + height > rowSize) {
+			System.out.println("Row condition");
 			return true;
 		}
 
-		if (column < 0 || column + height > columnSize) {
-//			System.out.println("Row Column");
+		if (column < 0 || column + width > columnSize) {
+			System.out.println("Row Column");
 			return true;
 		}
 
