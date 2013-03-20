@@ -5,4 +5,9 @@ public class GlobalConfig {
 		BUYER,
 		SELLER
 	};
+	
+	public enum ServiceType {
+		SUPPLY,
+		DEMAND
+	};
 }
