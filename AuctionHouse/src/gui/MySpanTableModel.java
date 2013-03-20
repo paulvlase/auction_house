@@ -35,7 +35,7 @@ public class MySpanTableModel extends AbstractTableModel {
 			addService(service);
 		}
 
-		removeService(new Service("service2"));
+//		removeService(new Service("service2"));
 	}
 
 	public void addSpan(Span span) {
