@@ -2,7 +2,9 @@ package gui;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
 import spantable.CellAttribute;
@@ -23,19 +25,17 @@ public class MySpanTableModel extends AbstractTableModel {
 	protected CellAttribute					cellAtt;
 
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
-		this.services = services;
+		this.services = (ArrayList<Service>) services.clone();
 		this.columns = columns;
 
-		buildData();
-		cellAtt = new DefaultCellAttribute(getRowCount(), getColumnCount());
-		applySpans();
-	}
-	
-	private void applySpans(){
-		for (Span span : spans) {
-			System.out.println(span);
-			((CellSpan) cellAtt).combine(span);
+		data = new ArrayList<ArrayList<Object>>();
+		cellAtt = new DefaultCellAttribute(0, getColumnCount());
+
+		for (Service service : services) {
+			addService(service);
 		}
+
+		removeService(new Service("service2"));
 	}
 
 	public void addSpan(Span span) {
@@ -74,76 +74,79 @@ public class MySpanTableModel extends AbstractTableModel {
 		spans.clear();
 		fireTableStructureChanged();
 	}
-	
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        return (getValueAt(0, columnIndex).getClass());
+
+	public void removeService(Integer index) {
+		data = new ArrayList<ArrayList<Object>>();
+		cellAtt = new DefaultCellAttribute(0, getColumnCount());
+		clearSpans();
+
+		services.remove(index.intValue());
+
+		for (Service serv : services) {
+			addService(serv);
+		}
 	}
+	
+	public void removeService(Service service){
+		removeService(services.indexOf(service));
+	}	
 
-
-	/**
-	 * Builds "data" from an array of services
-	 */
-	private void buildData() {
-		System.out.println("Here");
+	public void addService(Service service) {
 		ArrayList<UserEntry> users;
 		ArrayList<Object> row;
 		Boolean first;
+		users = service.getUsers();
 
-		data = new ArrayList<ArrayList<Object>>();
-		spans = new ArrayList<Span>();
+		if (users == null) {
+			row = new ArrayList<Object>();
+			/* Service Name */
+			row.add(service.getName());
+			/* Status */
+			row.add("Inactive");
+			/* User */
+			row.add(new JLabel());
+			/* Offer made */
+			row.add("");
+			/* Time */
+			row.add("");
+			/* Price */
+			row.add("");
+			data.add(row);
+			cellAtt.addRow();
 
-		for (Service service : services) {
-			users = service.getUsers();
-
-			if (users == null) {
+			addSpan(new Span(data.size() - 1, 2, 1, 4));
+		} else {
+			first = true;
+			for (UserEntry user : users) {
 				row = new ArrayList<Object>();
-				/* Service Name */
-				row.add(service.getServiceName());
-				/* Status */
-				row.add("Inactive");
-				/* User */
-				row.add("");
-				/* Offer made */
-				row.add("");
-				/* Time */
-				row.add("");
-				/* Price */
-				row.add("");
-				data.add(row);
-				spans.add(new Span(data.size() - 1, 2, 1, 4));
-			} else {
-				first = true;
-				for (UserEntry user : users) {
-					row = new ArrayList<Object>();
-					if (first) {
-						/* Service Name */
-						row.add(service.getServiceName());
-						/* Status */
-						row.add("Active");
-						first = false;
-					} else {
-						/* Service Name */
-						row.add("");
-						/* Status */
-						row.add("");
-					}
-					/* User */
-					row.add(user.getName());
-					/* Offer made */
-					row.add(user.getOffer());
-					/* Time */
-					row.add(user.getTime());
-					/* Price */
-					row.add(user.getPrice());
-					data.add(row);
+				if (first) {
+					/* Service Name */
+					row.add(service.getName());
+					/* Status */
+					row.add("Active");
+					first = false;
+				} else {
+					/* Service Name */
+					row.add("");
+					/* Status */
+					row.add("");
 				}
-
-				/* Service name span */
-				spans.add(new Span(data.size() - users.size(), 0, users.size(), 1));
-				/* Status span */
-				spans.add(new Span(data.size() - users.size(), 1, users.size(), 1));
+				/* User */
+				row.add(user.getName());
+				/* Offer made */
+				row.add(user.getOffer());
+				/* Time */
+				row.add(user.getTime());
+				/* Price */
+				row.add(user.getPrice());
+				data.add(row);
+				cellAtt.addRow();
 			}
+
+			/* Service name span */
+			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
+			/* Status span */
+			addSpan(new Span(data.size() - users.size(), 1, users.size(), 1));
 		}
 	}
 
@@ -174,11 +177,11 @@ public class MySpanTableModel extends AbstractTableModel {
 	public void setCellAttribute(CellAttribute newCellAtt) {
 		int numColumns = getColumnCount();
 		int numRows = getRowCount();
-		
+
 		if ((newCellAtt.getSize().width != numColumns) || (newCellAtt.getSize().height != numRows)) {
 			newCellAtt.setSize(new Dimension(numRows, numColumns));
 		}
-		
+
 		cellAtt = newCellAtt;
 		fireTableDataChanged();
 	}

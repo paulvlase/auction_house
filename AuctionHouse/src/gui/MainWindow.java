@@ -54,6 +54,7 @@ public class MainWindow extends JFrame {
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableComuns)));
 		table = new MultiSpanCellTable(model);
 		table.setCellSelectionEnabled(true);
+		table.setDefaultRenderer(JLabel.class,  new CellRenderer());
 
 		menuBar = new JMenuBar();
 		menu = new JMenu();
@@ -155,17 +156,17 @@ public class MainWindow extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// try {
-		// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		// } catch (Exception e) {
-		// try {
-		// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-		// } catch (Exception e1) {
-		// }
-		// }
+//		try {
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		} catch (Exception e) {
+//			try {
+//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+//			} catch (Exception e1) {
+//			}
+//		}
 
 		ArrayList<Service> services = new ArrayList<Service>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 
 			Service service1 = new Service("service1");
 			Service service2 = new Service("service2");
