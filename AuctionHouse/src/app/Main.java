@@ -6,7 +6,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import webServiceClient.WebServiceClientImpl;
 import network.NetworkImpl;
 import gui.GuiImpl;
-import mediator.MediatorImpl;
+import mediator.MockupMediator;
 
 public class Main {
 	public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class Main {
 			} catch (Exception e1) {}
 		}
 		
-		MediatorImpl med = new MediatorImpl();
+		MockupMediator med = new MockupMediator();
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
 		WebServiceClientImpl web = new WebServiceClientImpl(med);
