@@ -6,11 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
 import config.FilesConfig;
 import config.GuiConfig;
+import config.GlobalConfig.ServiceType;
 import config.GlobalConfig.UserType;
 import data.Service;
 import data.LoginCred;
@@ -59,10 +61,10 @@ public class GuiImpl implements Gui {
 			
 			ArrayList<Service> services = null;
 			if (cred.getType() == UserType.BUYER) {
-				services = loadDemandsFile();
+				services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
 			}
 			if (cred.getType() == UserType.SELLER) {
-				services = loadSuppliesFile();
+				services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
 			}
 			
 			mainWindow = new MainWindow(services);
@@ -130,10 +132,46 @@ public class GuiImpl implements Gui {
 		return loginCred;
 	}
 	
-	private ArrayList<Service> loadDemandsFile() {
+	private Service parseLine(String line, ServiceType type) {
+		StringTokenizer st = new StringTokenizer(line, " ");
+
+		if (!st.hasMoreTokens())
+			return null;
+		Service service = new Service(st.nextToken());
+		
+		if (!st.hasMoreTokens())
+			return null;
+		
+		try {
+			long time = Long.parseLong(st.nextToken());
+			
+			service.setTime(time);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		if (type == ServiceType.SUPPLY) {
+			try {
+				long price = Long.parseLong(st.nextToken());
+				
+				service.setPrice(price);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		if (st.hasMoreTokens())
+			return null;
+
+		return service;
+	}
+	
+	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
 		ArrayList<Service> services = new ArrayList<Service>();
 
-		File demandsFile = new File(FilesConfig.DEMANDS_FILENAME);
+		File demandsFile = new File(filename);
 		if (demandsFile.exists()) {
 			BufferedReader br = null;
 			try {
@@ -143,34 +181,10 @@ public class GuiImpl implements Gui {
 				String line;
 				while ((line = br.readLine()) != null) {
 					System.out.println(line);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (br != null)
-					br.close();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return services;
-	}
-	
-	private ArrayList<Service> loadSuppliesFile() {
-		ArrayList<Service> services = new ArrayList<Service>();
-		
-		File suppliesFile = new File(FilesConfig.SUPPLIES_FILENAME);
-		if (suppliesFile.exists()) {
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(
-						new FileReader(suppliesFile));
-				
-				String line;
-				while ((line = br.readLine()) != null) {
-					System.out.println(line);
+					Service d = parseLine(line, type);
+					
+					/* TODO: wrong file format. */
+					services.add(d);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
