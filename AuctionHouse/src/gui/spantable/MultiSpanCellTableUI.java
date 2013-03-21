@@ -1,4 +1,4 @@
-package spantable;
+package gui.spantable;
 
 import gui.MySpanTableModel;
 

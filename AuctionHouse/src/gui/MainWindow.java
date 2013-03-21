@@ -1,5 +1,6 @@
 package gui;
 
+import gui.spantable.MultiSpanCellTable;
 import interfaces.Gui;
 
 import java.awt.BorderLayout;
@@ -12,6 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -34,7 +37,6 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import spantable.MultiSpanCellTable;
 import config.GuiConfig;
 import data.Service;
 import data.Service.Status;
@@ -45,7 +47,7 @@ import data.UserEntry.Offer;
  * @author Ghennadi Procopciuc
  */
 
-public class MainWindow extends JFrame implements ActionListener, WindowListener {
+public class MainWindow extends JFrame implements ActionListener, WindowListener, MouseListener {
 
 	private static final long	serialVersionUID	= 1L;
 
@@ -62,9 +64,15 @@ public class MainWindow extends JFrame implements ActionListener, WindowListener
 	private JLabel				usernameLabel;
 	private JButton				signOutButton;
 	private JScrollPane			scrollPanel;
+	
 	private JPopupMenu			popupMenu;
 	private JMenuItem			launchRequestItem;
 	private JMenuItem			dropRequestItem;
+	private JMenuItem			acceptOfferItem;
+	private JMenuItem			refusetOfferItem;
+	private JMenuItem			makeOfferItem;
+	private JMenuItem			dropAuctionItem;
+	
 
 	private Gui					gui;
 	private String[]			tableComuns;
@@ -108,13 +116,28 @@ public class MainWindow extends JFrame implements ActionListener, WindowListener
 		popupMenu = new JPopupMenu();
 		launchRequestItem = new JMenuItem();
 		dropRequestItem = new JMenuItem();
+		acceptOfferItem = new JMenuItem();
+		refusetOfferItem = new JMenuItem();
+		makeOfferItem = new JMenuItem();
+		dropAuctionItem = new JMenuItem();
+
 
 		// JPopupMenu
 		{
 			launchRequestItem.setText("Launch Offer Request");
 			dropRequestItem.setText("Drop Offer Request");
+			acceptOfferItem.setText("Accept Offer");
+			refusetOfferItem.setText("Refuse Offer");
+			makeOfferItem.setText("Make Offer");
+			dropAuctionItem.setText("Make Offer");
+			
 			popupMenu.add(launchRequestItem);
 			popupMenu.add(dropRequestItem);
+			popupMenu.add(acceptOfferItem);
+			popupMenu.add(refusetOfferItem);
+			popupMenu.add(makeOfferItem);
+			popupMenu.add(dropAuctionItem);
+			table.addMouseListener(this);
 		}
 
 		// Table
@@ -223,36 +246,6 @@ public class MainWindow extends JFrame implements ActionListener, WindowListener
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) {
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			} catch (Exception e1) {
-			}
-		}
-
-		ArrayList<Service> services = new ArrayList<Service>();
-		for (int i = 0; i < 10; i++) {
-
-			Service service1 = new Service("service1");
-			Service service2 = new Service("service2", Status.ACTIVE);
-			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
-
-			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
-			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
-			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
-
-			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
-
-			services.add(service1);
-			services.add(service2);
-			services.add(service3);
-		}
-		new MainWindow(services).setVisible(true);
-	}
-
 	public void addServices(ArrayList<Service> services) {
 		System.out.println("TODO");
 	}
@@ -328,6 +321,24 @@ public class MainWindow extends JFrame implements ActionListener, WindowListener
 		gui.logOut();
 	}
 
+	private void showPopup(MouseEvent e) {
+		if (e.isPopupTrigger()) {
+			int row = table.rowAtPoint(e.getPoint());
+			int column = table.columnAtPoint(e.getPoint());
+			System.out.println("Selected Row : " + row + " Column : " + column);
+			buildPopupMenu(model.getServiceFromRow(row));
+			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+		}
+
+	}
+	
+	private void buildPopupMenu(Service service){
+		//launchRequestItem.setVisible(false);
+		
+		// TODO : Check user Role
+		
+	}
+
 	public void showWindow() {
 		setVisible(true);
 	}
@@ -360,5 +371,63 @@ public class MainWindow extends JFrame implements ActionListener, WindowListener
 
 	@Override
 	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		showPopup(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		showPopup(e);
+	}
+	
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Exception e) {
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			} catch (Exception e1) {
+			}
+		}
+
+		ArrayList<Service> services = new ArrayList<Service>();
+		for (int i = 0; i < 10; i++) {
+
+			Service service1 = new Service("service1");
+			Service service2 = new Service("service2", Status.ACTIVE);
+			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
+
+			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
+			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
+			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
+
+			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
+
+			services.add(service1);
+			services.add(service2);
+			services.add(service3);
+		}
+		new MainWindow(services).setVisible(true);
 	}
 }

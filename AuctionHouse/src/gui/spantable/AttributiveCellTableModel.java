@@ -1,4 +1,4 @@
-package spantable;
+package gui.spantable;
 
 /*
  * (swing1.1beta3)

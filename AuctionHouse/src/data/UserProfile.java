@@ -7,18 +7,17 @@ package data;
  * @author Ghennadi Procopciuc
  */
 public class UserProfile {
-	private String username;
-	private String name;
-	private UserRole role;
-	private String password;
-	
+	private String		username;
+	private String		name;
+	private UserRole	role;
+	private String		password;
+
 	// Add Image here, maybe later
 
-	enum UserRole {
-		BUYER,
-		SELLER
+	public enum UserRole {
+		BUYER, SELLER
 	}
-	
+
 	public UserProfile(String username, String name, UserRole role, String password) {
 		this.username = username;
 		this.name = name;

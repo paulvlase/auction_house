@@ -1,5 +1,10 @@
 package gui;
 
+import gui.spantable.CellAttribute;
+import gui.spantable.CellSpan;
+import gui.spantable.DefaultCellAttribute;
+import gui.spantable.Span;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -9,11 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
-import spantable.CellAttribute;
-import spantable.CellSpan;
-import spantable.DefaultCellAttribute;
-import spantable.Span;
 import data.Service;
+import data.Service.Status;
 import data.UserEntry;
 
 public class MySpanTableModel extends AbstractTableModel {
@@ -111,6 +113,39 @@ public class MySpanTableModel extends AbstractTableModel {
 		}
 		fireTableDataChanged();
 		fireTableStructureChanged();
+	}
+	
+	public Service getServiceFromRow(Integer row){
+		int counter = 0;
+		if(row > getRowCount() || row < 0){
+			return null;
+		}
+		
+		for (Service service : services) {
+			if(row >= counter && row < counter + getNeededRows(service)){
+				return service;
+			}
+		}
+		return null;
+	}
+	
+	private Integer getNeededRows(Service service) {
+		switch (service.getStatus()) {
+		case INACTIVE:
+			return 1;
+		case ACTIVE:
+			return service.getUsers().size();
+		case TRANSFER_IN_PROGRESS:
+		case TRANSFER_STARTED:
+		case TRANSFER_COMPLETE:
+		case TRANSFER_FAILED:
+			return 1;
+		default:
+			System.err.println("[MySpanTableModel, geNeededRows] Unexpected Status :|");
+			break;
+		}
+
+		return 0;
 	}
 
 	@Override

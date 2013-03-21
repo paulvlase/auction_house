@@ -2,7 +2,7 @@
  * (swing1.1beta3)
  * 
  */
-package spantable;
+package gui.spantable;
 
 import java.awt.*;
 

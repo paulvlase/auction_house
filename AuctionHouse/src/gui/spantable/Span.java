@@ -1,4 +1,4 @@
-package spantable;
+package gui.spantable;
 
 public class Span {
 	private int	row;
