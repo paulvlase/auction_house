@@ -23,8 +23,8 @@ public interface MediatorGui {
 	public int addOffer(String service);
 	public int removeOffer(String service);
 	
-	public int launchOffer(String service);
-	public int dropOffer(String service);
+	public int launchOffer(Service service);
+	public int dropOffer(Service service);
 	
 	/* Buyer */
 	public int acceptOffer();
