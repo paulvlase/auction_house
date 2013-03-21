@@ -1,6 +1,7 @@
 package interfaces;
 
 import data.LoginCred;
+import data.UserProfile;
 
 /**
  * WebServiceClient interface.
@@ -10,6 +11,9 @@ import data.LoginCred;
 public interface WebServiceClient {
 	public boolean logIn(LoginCred cred);
 	public void logOut();
+	
+	public UserProfile getUserProfile();
+	public boolean setUserProfile(UserProfile profile);
 	
 	/* Common */
 	public int addOffer(String service);
