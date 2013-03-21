@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -42,7 +45,7 @@ import data.UserEntry.Offer;
  * @author Ghennadi Procopciuc
  */
 
-public class MainWindow extends JFrame implements ActionListener {
+public class MainWindow extends JFrame implements ActionListener, WindowListener {
 
 	private static final long	serialVersionUID	= 1L;
 
@@ -59,6 +62,9 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JLabel				usernameLabel;
 	private JButton				signOutButton;
 	private JScrollPane			scrollPanel;
+	private JPopupMenu			popupMenu;
+	private JMenuItem			launchRequestItem;
+	private JMenuItem			dropRequestItem;
 
 	private Gui					gui;
 	private String[]			tableComuns;
@@ -76,7 +82,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	public MainWindow(Gui gui) {
-		// this(gui.loadSerives());
+		this(gui.loadOffers());
 	}
 
 	private void initComponents() {
@@ -99,15 +105,28 @@ public class MainWindow extends JFrame implements ActionListener {
 		usernameLabel = new JLabel();
 		signOutButton = new JButton();
 		scrollPanel = new JScrollPane();
+		popupMenu = new JPopupMenu();
+		launchRequestItem = new JMenuItem();
+		dropRequestItem = new JMenuItem();
 
-		table.setCellSelectionEnabled(true);
+		// JPopupMenu
+		{
+			launchRequestItem.setText("Launch Offer Request");
+			dropRequestItem.setText("Drop Offer Request");
+			popupMenu.add(launchRequestItem);
+			popupMenu.add(dropRequestItem);
+		}
 
-		scrollPanel.getViewport().setBackground(Color.WHITE);
-		table.setFillsViewportHeight(true);
-		table.setIntercellSpacing(new Dimension());
-		table.setShowGrid(false);
-		
-		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		// Table
+		{
+			table.setCellSelectionEnabled(true);
+			scrollPanel.getViewport().setBackground(Color.WHITE);
+			table.setFillsViewportHeight(true);
+			table.setIntercellSpacing(new Dimension());
+			table.setShowGrid(false);
+
+			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		}
 
 		// Listeners
 		{
@@ -279,7 +298,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == signOutButton || e.getSource() == signOutItem) {
 			System.out.println("signOutAction");
-			signOutAction();
+			logOutAction();
 			return;
 		}
 	}
@@ -288,8 +307,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		System.out.println("Add Service action");
 
 		new AddNewService(this).setVisible(true);
-		
-		if(progressRenderer == table.getColumnModel().getColumn(2).getCellRenderer()){
+
+		if (progressRenderer == table.getColumnModel().getColumn(2).getCellRenderer()) {
 			System.out.println("Same .. :(((((");
 		} else {
 			System.out.println("Rendereres are no the same ..");
@@ -304,11 +323,42 @@ public class MainWindow extends JFrame implements ActionListener {
 		System.out.println("Exit Action");
 	}
 
-	private void signOutAction() {
+	private void logOutAction() {
 		System.out.println("TODO signOutAction");
+		gui.logOut();
 	}
 
 	public void showWindow() {
 		setVisible(true);
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		System.out.println("Hete");
+		gui.logOut();
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
 	}
 }

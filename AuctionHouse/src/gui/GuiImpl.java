@@ -27,65 +27,67 @@ import interfaces.MediatorGui;
 public class GuiImpl implements Gui {
 	private MediatorGui	med;
 	private Login		login;
-	private MainWindow  mainWindow;
+	private MainWindow	mainWindow;
 
 	public GuiImpl(MediatorGui med) {
 		this.med = med;
 		med.registerGui(this);
-		
+
 		login = new Login(this);
 	}
 
 	public String getName() {
 		return med.getName();
 	}
-	
+
 	public void start() {
 		LoginCred cred = loadLoginFile();
-		
-		if (cred == null) 
+
+		if (cred == null) {
 			login.showWindow();
-		else
+		} else {
 			logIn(cred);
+		}
 	}
-	
+
 	public void logIn(LoginCred cred) {
 		if (med.logIn(cred)) {
 			login.hideWindow();
-			
-			//TODO: autentificare reusita, afisez fereastra pentru
+
+			// TODO: autentificare reusita, afisez fereastra pentru
 			// cumparator, vanzator
 			System.out.println("[GuiImpl:logIn] Signed in");
-			
+
 			mainWindow = new MainWindow(this);
 			mainWindow.showWindow();
 		} else {
 			// autentificare esuata, afisare dialog
-			JOptionPane.showMessageDialog(null,
-					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
-					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
+					GuiConfig.getValue(GuiConfig.WRONG_USR_PASS), JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	public void logOut() {
 		System.out.println("[GuiImpl:logOut()] Bye bye");
 		med.logOut();
 	}
-	
+
 	public void addService(Service service) {
-		
+
 	}
+
 	public void addServices(ArrayList<Service> services) {
-		
+
 	}
+
 	public void removeService(Service service) {
-		
+
 	}
+
 	public void removeServices(ArrayList<Service> services) {
-		
+
 	}
-	
+
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
 
@@ -100,15 +102,15 @@ public class GuiImpl implements Gui {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		LoginCred loginCred = null;
 		try {
 			br.readLine();
 			String username = br.readLine();
-			
+
 			br.readLine();
 			String typeStr = br.readLine();
-			
+
 			UserType type;
 			if (typeStr.equals("SELLER")) {
 				type = UserType.SELLER;
@@ -123,20 +125,24 @@ public class GuiImpl implements Gui {
 				}
 				return null;
 			}
-			
+
 			br.readLine();
 			String password = br.readLine();
-			
+
 			loginCred = new LoginCred(username, password, type);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return loginCred;
+	}
+	
+	public ArrayList<Service> loadOffers(){
+		return med.loadOffers();
 	}
 }

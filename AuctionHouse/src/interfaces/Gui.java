@@ -19,4 +19,5 @@ public interface Gui {
 	public void addServices(ArrayList<Service> services);
 	public void removeService(Service service);
 	public void removeServices(ArrayList<Service> services);
+	public ArrayList<Service> loadOffers();
 }
