@@ -78,6 +78,10 @@ public class GuiImpl implements Gui {
 		}
 	}
 	
+	public void signOut() {
+		med.signOut();
+	}
+	
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
 
