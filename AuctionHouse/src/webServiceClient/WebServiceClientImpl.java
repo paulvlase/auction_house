@@ -31,6 +31,11 @@ public class WebServiceClientImpl implements WebServiceClient {
 		
 		return false;
 	}
+	
+	@Override
+	public void signOut() {
+		System.out.println("[WebServiceClient:signOut()] Bye bye");
+	}
 
 	/* Common */
 	@Override
