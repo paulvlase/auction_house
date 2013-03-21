@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import data.LoginCred;
 import data.Service;
+import data.UserProfile;
 
 /**
  * Mediator interface for Gui module.
@@ -16,8 +17,9 @@ public interface MediatorGui {
 	public void start();
 	public boolean logIn(LoginCred cred);
 	public void logOut();
-	public String getName();
-	
+	public UserProfile getUserProfile();
+	public boolean setUserProfile();
+
 	/* Common */
 	public ArrayList<Service> loadOffers();
 	public int addOffer(String service);
