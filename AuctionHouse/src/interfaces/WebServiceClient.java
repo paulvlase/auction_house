@@ -9,6 +9,7 @@ import data.LoginCred;
  */
 public interface WebServiceClient {
 	public boolean signIn(LoginCred cred);
+	public void signOut();
 	
 	/* Common */
 	public int addOffer(String service);
