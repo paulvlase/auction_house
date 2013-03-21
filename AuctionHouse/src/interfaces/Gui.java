@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import data.LoginCred;
 import data.Service;
+import data.UserProfile;
 
 /**
  * Gui interface.
@@ -14,6 +15,8 @@ public interface Gui {
 	public void start();
 	public void logIn(LoginCred cred);
 	public void logOut();
+	public UserProfile getUserProfile();
+	public boolean setUserProfile(UserProfile profile);
 	
 	public void addService(Service service);
 	public void addServices(ArrayList<Service> services);
