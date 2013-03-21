@@ -16,6 +16,7 @@ import config.GlobalConfig.ServiceType;
 import config.GlobalConfig.UserType;
 import data.Service;
 import data.LoginCred;
+import data.UserProfile;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 
@@ -34,10 +35,6 @@ public class GuiImpl implements Gui {
 		med.registerGui(this);
 
 		login = new Login(this);
-	}
-
-	public String getName() {
-		return med.getName();
 	}
 
 	public void start() {
@@ -70,6 +67,14 @@ public class GuiImpl implements Gui {
 	public void logOut() {
 		System.out.println("[GuiImpl:logOut()] Bye bye");
 		med.logOut();
+	}
+	
+	public UserProfile getUserProfile() {
+		return med.getUserProfile();
+	}
+	
+	public boolean setUserProfile(UserProfile profile) {
+		return false;
 	}
 
 	public void addService(Service service) {
