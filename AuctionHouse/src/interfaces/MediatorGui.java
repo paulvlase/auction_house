@@ -12,6 +12,7 @@ public interface MediatorGui {
 
 	public void login();
 	public boolean signIn(LoginCred cred);
+	public void signOut();
 	public String getName();
 	
 	/* Common */
