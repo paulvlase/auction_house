@@ -1,6 +1,9 @@
 package interfaces;
 
+import java.util.ArrayList;
+
 import data.LoginCred;
+import data.Service;
 
 /**
  * Gui interface.
