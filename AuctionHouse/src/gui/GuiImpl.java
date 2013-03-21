@@ -153,7 +153,7 @@ public class GuiImpl implements Gui {
 		
 		if (type == ServiceType.SUPPLY) {
 			try {
-				long price = Long.parseLong(st.nextToken());
+				double price = Double.parseDouble(st.nextToken());
 				
 				service.setPrice(price);
 			} catch (Exception e) {
