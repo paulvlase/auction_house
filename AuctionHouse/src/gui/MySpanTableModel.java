@@ -109,6 +109,8 @@ public class MySpanTableModel extends AbstractTableModel {
 			/* Status span */
 			addSpan(new Span(data.size() - users.size(), 1, users.size(), 1));
 		}
+		fireTableDataChanged();
+		fireTableStructureChanged();
 	}
 
 	@Override
@@ -156,5 +158,4 @@ public class MySpanTableModel extends AbstractTableModel {
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return false;
 	}
-
 }

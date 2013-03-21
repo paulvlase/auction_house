@@ -4,38 +4,45 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import config.GuiConfig;
+import data.Service;
+
 /**
  * @author Ghennadi Procopciuc
  */
 public class AddNewService extends JFrame {
-	private JPanel		mainPanel;
-	private JLabel		nameLabel;
-	private JTextField	textField1;
-	private JLabel		timeLabel;
-	private JSpinner	timeSpinner;
-	private JLabel		priceLabel;
-	private JTextField	textField3;
-	private JPanel		bottomPanel;
-	private JButton		cancelButton;
-	private JButton		okButton;
+	private static final long	serialVersionUID	= 1L;
 
-	public AddNewService() {
+	private JPanel				mainPanel;
+	private JLabel				nameLabel;
+	private JTextField			nameField;
+	private JLabel				timeLabel;
+	private JSpinner			timeSpinner;
+	private JLabel				priceLabel;
+	private JTextField			priceField;
+	private JPanel				bottomPanel;
+	private JButton				cancelButton;
+	private JButton				okButton;
+	private MainWindow			mainWindow;
+
+	public AddNewService(MainWindow mainWindow) {
+		this.mainWindow = mainWindow;
 		initComponents();
 	}
 
 	private void initComponents() {
 		mainPanel = new JPanel();
 		nameLabel = new JLabel();
-		textField1 = new JTextField();
+		nameField = new JTextField();
 		timeLabel = new JLabel();
 		timeSpinner = new JSpinner();
 		priceLabel = new JLabel();
-		textField3 = new JTextField();
+		priceField = new JTextField();
 		bottomPanel = new JPanel();
 		cancelButton = new JButton();
 		okButton = new JButton();
 
-		//  this 
+		// this
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
@@ -45,7 +52,7 @@ public class AddNewService extends JFrame {
 		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
 				1.0E-4 };
 
-		//  mainPanel 
+		// mainPanel
 		{
 			mainPanel.setLayout(new GridBagLayout());
 			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] { 0, 110, 0 };
@@ -54,22 +61,22 @@ public class AddNewService extends JFrame {
 			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0,
 					1.0E-4 };
 
-			//  nameLabel 
+			// nameLabel
 			nameLabel.setText("Name");
 			mainPanel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
-			mainPanel.add(textField1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+			mainPanel.add(nameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
 					0));
 
-			//  timeLabel 
+			// timeLabel
 			timeLabel.setText("Time");
 			mainPanel.add(timeLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
 
-			//  timeSpinner 
+			// timeSpinner
 			timeSpinner.setModel(new SpinnerDateModel(new java.util.Date((System
 					.currentTimeMillis() / 60000) * 60000), new java.util.Date((System
 					.currentTimeMillis() / 60000) * 60000), null, java.util.Calendar.MINUTE));
@@ -78,19 +85,19 @@ public class AddNewService extends JFrame {
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
 					0));
 
-			//  priceLabel 
+			// priceLabel
 			priceLabel.setText("Price");
 			mainPanel.add(priceLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
 					0));
-			mainPanel.add(textField3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+			mainPanel.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
 					0));
 		}
 		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
-		//  bottomPanel 
+		// bottomPanel
 		{
 			bottomPanel.setLayout(new GridBagLayout());
 			((GridBagLayout) bottomPanel.getLayout()).columnWidths = new int[] { 0, 0, 0, 0 };
@@ -99,7 +106,7 @@ public class AddNewService extends JFrame {
 					1.0E-4 };
 			((GridBagLayout) bottomPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
-			//  cancelButton 
+			// cancelButton
 			cancelButton.setText("Cancel");
 			cancelButton.addActionListener(new ActionListener() {
 				@Override
@@ -111,7 +118,7 @@ public class AddNewService extends JFrame {
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
 					0));
 
-			//  okButton 
+			// okButton
 			okButton.setText("OK");
 			okButton.addActionListener(new ActionListener() {
 				@Override
@@ -132,13 +139,45 @@ public class AddNewService extends JFrame {
 	private void okButtonActionPerformed(ActionEvent e) {
 		System.out.println("Ok button ...");
 		System.out.println(timeSpinner.getValue());
+
+		if (nameField.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null,
+					"Service name seems to be empty, please complete it.", "Empty name",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		if (mainWindow.getServices().contains(new Service(nameField.getText()))) {
+			JOptionPane.showMessageDialog(null, "Service '" + nameField.getText()
+					+ "' already exists in your list.", "", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		Double price = 0.0;
+
+		try {
+			price = Double.parseDouble(priceField.getText());
+		} catch (NumberFormatException e2) {
+			JOptionPane.showMessageDialog(null, "Price should be a number.", "",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		mainWindow.addService(new Service(nameField.getText()));
+		
+		//TODO : Send ServiceRequest to Mediator ....
+		
+		setVisible(false);
+		dispose();
 	}
 
 	private void cancelButtonActionPerformed(ActionEvent e) {
 		System.out.println("Cancel button ...");
 	}
-	
+
 	public static void main(String[] args) {
-		new AddNewService().setVisible(true);
+		AddNewService service = new AddNewService(null);
+		service.setVisible(true);
+		service.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 }

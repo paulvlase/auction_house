@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
@@ -19,10 +20,12 @@ import javax.swing.table.TableModel;
 public class MultiSpanCellTable extends JTable {
 
 	private static final long	serialVersionUID	= 1L;
+	TableCellRenderer renderer;
 
-	public MultiSpanCellTable(TableModel model) {
+	public MultiSpanCellTable(TableModel model, TableCellRenderer renderer) {
 		super(model);
 		setUI(new MultiSpanCellTableUI());
+		this.renderer = renderer;
 		getTableHeader().setReorderingAllowed(false);
 		setCellSelectionEnabled(true);
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -119,6 +122,11 @@ public class MultiSpanCellTable extends JTable {
 			dirtyRegion.add(getCellRect(index, i, false));
 		}
 		repaint(dirtyRegion.x, dirtyRegion.y, dirtyRegion.width, dirtyRegion.height);
+	}
+	
+	@Override
+	public TableCellRenderer getCellRenderer(int row, int column) {
+		return renderer;
 	}
 
 }

@@ -89,13 +89,13 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 	
 	@Override
-	public int launchOffer(String service) {
+	public int launchOffer(Service service) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int dropOffer(String service) {
+	public int dropOffer(Service service) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

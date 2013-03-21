@@ -57,7 +57,7 @@ public class GuiImpl implements Gui {
 			// cumparator, vanzator
 			System.out.println("[GuiImpl:logIn] Signed in");
 			
-			mainWindow = new MainWindow(gui);
+			mainWindow = new MainWindow(this);
 			mainWindow.showWindow();
 		} else {
 			// autentificare esuata, afisare dialog

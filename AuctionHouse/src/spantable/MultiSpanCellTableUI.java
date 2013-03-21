@@ -89,6 +89,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 			component.setBounds(cellRect);
 			component.validate();
 		} else {
+			//System.out.println("Get cell render for : " + row + " " + column);
 			TableCellRenderer renderer = table.getCellRenderer(row, column);
 
 			Component component = table.prepareRenderer(renderer, row, column);

@@ -30,7 +30,7 @@ public class GuiConfig {
 	private static String			ROLES_VALUES[]					= { "Role", "Rol" };
 	private static String			BUYER_VALUES[]					= { "Buyer", "Cumpărător" };
 	private static String			SELLER_VALUES[]					= { "Seller", "Furnizor" };
-	private static String			SIGN_IN_VALUES[]				= { "Sign in", "Autentificare" };
+	private static String			LOG_IN_VALUES[]				= { "Log in", "Autentificare" };
 	private static String			LANGUAGE_VALUES[]				= { "Language", "Limbă" };
 	private static String			ENGLISH_VALUES[]				= { "English", "Engleză" };
 	private static String			ROMANIAN_VALUES[]				= { "Romanian", "Română" };
@@ -57,7 +57,7 @@ public class GuiConfig {
 	private static final String		ADD_SERVICE_VALUES[]			= { "Add service",
 			"Adaugă serviciu"										};
 	private static final String		PROFILE_VALUES[]				= { "Profile", "Profil" };
-	private static final String		LOGOUT_VALUES[]					= { "Logout", "Deautentificare" };
+	private static final String		LOGOUT_VALUES[]					= { "Logut", "Deautentificare" };
 	private static final String		EXIT_VALUES[]					= { "Exit", "Ieșire" };
 	private static final String		SERVICE_VALUES[]				= { "Service", "Serviciu" };
 	private static final String		OFFER_MADE_VALUES[]				= { "Offer made", "Ofertă" };
@@ -71,7 +71,7 @@ public class GuiConfig {
 	public static final int			ROLE							= 2;
 	public static final int			BUYER							= 3;
 	public static final int			SELLER							= 4;
-	public static final int			SIGN_IN							= 5;
+	public static final int			LOG_IN							= 5;
 	public static final int			LANGUAGE						= 6;
 	public static final int			ENGLISH							= 7;
 	public static final int			ROMANIAN						= 8;
@@ -88,7 +88,7 @@ public class GuiConfig {
 	public static final int			MENU							= 15;
 	public static final int			ADD_SERVICE						= 16;
 	public static final int			PROFILE							= 17;
-	public static final int			LOGOUT							= 18;
+	public static final int			LOG_OUT							= 18;
 	public static final int			EXIT							= 19;
 	public static final int			SERVICE							= 20;
 	public static final int			OFFER_MADE						= 21;
@@ -97,7 +97,7 @@ public class GuiConfig {
 	public static final int			STATUS							= 24;
 
 	private static final String		values[][]						= { USERNAME_VALUES,
-			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, SIGN_IN_VALUES,
+			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,
 			LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES, EMPTY_USERNAME_ERROR_VALUES,
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
 			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,

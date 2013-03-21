@@ -142,7 +142,7 @@ public class Login extends JFrame implements ActionListener {
 			((GridBagLayout) bottomPannel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
 			// loginButton
-			signinButton.setText(GuiConfig.getValue(GuiConfig.SIGN_IN));
+			signinButton.setText(GuiConfig.getValue(GuiConfig.LOG_IN));
 			bottomPannel.add(signinButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
 					0));
@@ -181,7 +181,7 @@ public class Login extends JFrame implements ActionListener {
 		roleCb.addItem(GuiConfig.getValue(GuiConfig.BUYER));
 		roleCb.addItem(GuiConfig.getValue(GuiConfig.SELLER));
 
-		signinButton.setText(GuiConfig.getValue(GuiConfig.SIGN_IN));
+		signinButton.setText(GuiConfig.getValue(GuiConfig.LOG_IN));
 	}
 
 	@Override
@@ -219,8 +219,16 @@ public class Login extends JFrame implements ActionListener {
 
 			LoginCred cred = new LoginCred(usernameField.getText(), new String(
 					passwordField.getPassword()), userType);
-			gui.signIn(cred);
+			gui.logIn(cred);
 		}
 
+	}
+
+	public void showWindow() {
+		setVisible(true);
+	}
+
+	public void hideWindow() {
+		setVisible(false);
 	}
 }

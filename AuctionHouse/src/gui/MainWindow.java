@@ -1,5 +1,7 @@
 package gui;
 
+import interfaces.Gui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -8,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -38,34 +42,41 @@ import data.UserEntry.Offer;
  * @author Ghennadi Procopciuc
  */
 
-
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ActionListener {
 
 	private static final long	serialVersionUID	= 1L;
-	
+
+	/* Swing components */
 	private JMenuBar			menuBar;
 	private JMenu				menu;
 	private JMenuItem			addServiceItem;
 	private JMenuItem			profileItem;
-	private JMenuItem			logoutItem;
+	private JMenuItem			signOutItem;
 	private JMenuItem			exitItem;
 	private JPanel				mainPanel;
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
 	private JLabel				usernameLabel;
-	private JButton				logoutButton;
+	private JButton				signOutButton;
 	private JScrollPane			scrollPanel;
 
+	private Gui					gui;
 	private String[]			tableComuns;
 	private MultiSpanCellTable	table;
 	private MySpanTableModel	model;
 
 	private ArrayList<Service>	services;
 
+	private MyTableCellRenderer	progressRenderer;
+
 	public MainWindow(ArrayList<Service> services) {
 		this.services = services;
 
 		initComponents();
+	}
+
+	public MainWindow(Gui gui) {
+		// this(gui.loadSerives());
 	}
 
 	private void initComponents() {
@@ -75,35 +86,37 @@ public class MainWindow extends JFrame {
 				GuiConfig.getValue(GuiConfig.OFFER_MADE), GuiConfig.getValue(GuiConfig.TIME),
 				GuiConfig.getValue(GuiConfig.PRICE) };
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableComuns)));
-		table = new MultiSpanCellTable(model);
+		table = new MultiSpanCellTable(model, new MyTableCellRenderer());
 		menuBar = new JMenuBar();
 		menu = new JMenu();
 		addServiceItem = new JMenuItem();
 		profileItem = new JMenuItem();
-		logoutItem = new JMenuItem();
+		signOutItem = new JMenuItem();
 		exitItem = new JMenuItem();
 		mainPanel = new JPanel();
 		topPanel = new JPanel();
 		avatarLabel = new JLabel();
 		usernameLabel = new JLabel();
-		logoutButton = new JButton();
+		signOutButton = new JButton();
 		scrollPanel = new JScrollPane();
-		
+
 		table.setCellSelectionEnabled(true);
-		TableColumn column = table.getColumnModel().getColumn(2);
-		// column.setMaxWidth(60);
-		// column.setMinWidth(60);
-		// column.setResizable(false);
-		column = table.getColumnModel().getColumn(2);
-		column.setCellRenderer(new ProgressRenderer());
+
+		scrollPanel.getViewport().setBackground(Color.WHITE);
+		table.setFillsViewportHeight(true);
+		table.setIntercellSpacing(new Dimension());
+		table.setShowGrid(false);
 		
-        scrollPanel.getViewport().setBackground(Color.WHITE);
-        table.setFillsViewportHeight(true);
-        table.setIntercellSpacing(new Dimension());
-        table.setShowGrid(false);
-        //table.setShowHorizontalLines(false);
-        //table.setShowVerticalLines(false);
-        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+		// Listeners
+		{
+			signOutButton.addActionListener(this);
+			addServiceItem.addActionListener(this);
+			signOutItem.addActionListener(this);
+			profileItem.addActionListener(this);
+			exitItem.addActionListener(this);
+		}
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
@@ -129,8 +142,8 @@ public class MainWindow extends JFrame {
 				menu.add(profileItem);
 
 				// logoutItem
-				logoutItem.setText(GuiConfig.getValue(GuiConfig.LOGOUT));
-				menu.add(logoutItem);
+				signOutItem.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
+				menu.add(signOutItem);
 
 				// exitItem
 				exitItem.setText(GuiConfig.getValue(GuiConfig.EXIT));
@@ -167,8 +180,8 @@ public class MainWindow extends JFrame {
 						0, 0));
 
 				// logoutButton
-				logoutButton.setText(GuiConfig.getValue(GuiConfig.LOGOUT));
-				topPanel.add(logoutButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
+				topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0),
 						0, 0));
 			}
@@ -213,59 +226,89 @@ public class MainWindow extends JFrame {
 			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
 
 			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
-			
+
 			services.add(service1);
 			services.add(service2);
 			services.add(service3);
 		}
 		new MainWindow(services).setVisible(true);
 	}
-}
 
-class ProgressRenderer extends DefaultTableCellRenderer {
+	public void addServices(ArrayList<Service> services) {
+		System.out.println("TODO");
+	}
 
-	private static final long	serialVersionUID	= 1L;
-	private final JProgressBar	b	= new JProgressBar(0, 100);
-	private final JPanel		p	= new JPanel(new BorderLayout());
+	public void addService(Service service) {
+		model.addService(service);
+	}
 
-	public ProgressRenderer() {
-		super();
-		setOpaque(true);
-		p.add(b);
-		p.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+	public void removeService(Service service) {
+		System.out.println("TODO");
+	}
+
+	public void removeServices(ArrayList<Service> services) {
+		for (Service service : services) {
+			addService(service);
+		}
+	}
+
+	public ArrayList<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(ArrayList<Service> services) {
+		this.services = services;
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
-		if (value instanceof Integer) {
-			Integer i = (Integer) value;
-			String text = "Done";
-			if (i < 0) {
-				text = "Canceled";
-			} else if (i < 100) {
-				b.setValue(i);
-				return p;
-			}
-			super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
-			return this;
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == addServiceItem) {
+			System.out.println("addServiceAction");
+			addServiceAction();
+			return;
 		}
-
-		if (value instanceof JLabel) {
-			return (JLabel) value;
+		if (e.getSource() == profileItem) {
+			System.out.println("profileAction");
+			profileAction();
+			return;
 		}
-
-		if (value instanceof String) {
-			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		if (e.getSource() == exitItem) {
+			System.out.println("profileAction");
+			exitAction();
+			return;
 		}
-
-		return this;
+		if (e.getSource() == signOutButton || e.getSource() == signOutItem) {
+			System.out.println("signOutAction");
+			signOutAction();
+			return;
+		}
 	}
 
-	@Override
-	public void updateUI() {
-		super.updateUI();
-		if (p != null)
-			SwingUtilities.updateComponentTreeUI(p);
+	private void addServiceAction() {
+		System.out.println("Add Service action");
+
+		new AddNewService(this).setVisible(true);
+		
+		if(progressRenderer == table.getColumnModel().getColumn(2).getCellRenderer()){
+			System.out.println("Same .. :(((((");
+		} else {
+			System.out.println("Rendereres are no the same ..");
+		}
+	}
+
+	private void profileAction() {
+		System.out.println("Profile action");
+	}
+
+	private void exitAction() {
+		System.out.println("Exit Action");
+	}
+
+	private void signOutAction() {
+		System.out.println("TODO signOutAction");
+	}
+
+	public void showWindow() {
+		setVisible(true);
 	}
 }
