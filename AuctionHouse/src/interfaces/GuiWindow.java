@@ -7,4 +7,5 @@ public interface GuiWindow {
 	public void logIn(LoginCred cred);
 	public void logOut();
 	public UserProfile getUserProfile();
+	public boolean setUserProfile(UserProfile profile);
 }
