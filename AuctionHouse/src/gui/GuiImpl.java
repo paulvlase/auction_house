@@ -79,7 +79,21 @@ public class GuiImpl implements Gui {
 	}
 	
 	public void signOut() {
+		System.out.println("[GuiImpl:signOut()] Bye bye");
 		med.signOut();
+	}
+	
+	public void addService(Service service) {
+		
+	}
+	public void addServices(ArrayList<Service> services) {
+		
+	}
+	public void removeService(Service service) {
+		
+	}
+	public void removeServices(ArrayList<Service> services) {
+		
 	}
 	
 	private LoginCred loadLoginFile() {
