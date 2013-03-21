@@ -1,6 +1,8 @@
 package webServiceClient;
 
 import data.LoginCred;
+import data.UserProfile;
+import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
 
@@ -19,22 +21,38 @@ public class WebServiceClientImpl implements WebServiceClient {
 	}
 	
 	@Override
-	public boolean logIn(LoginCred cred) {
+	public UserProfile logIn(LoginCred cred) {
 		System.out.println("[WebServiceClientImpl : logIn] " +
 				cred.getUsername() + " " + cred.getPassword());
 		if (cred.getUsername().equals("pvlase") &&
 				cred.getPassword().equals("parola"))
-			return true;
+			return getUserProfile("pvlase");
 		if (cred.getUsername().equals("unix140") &&
 				cred.getPassword().equals("marmota"))
-			return true;
+			return getUserProfile("unix140");
 		
-		return false;
+		return null;
 	}
 	
 	@Override
 	public void logOut() {
 		System.out.println("[WebServiceClient:logOut()] Bye bye");
+	}
+	
+	@Override
+	public UserProfile getUserProfile(String username) {
+		if (username.equals("pvlase")) {
+			return new UserProfile("pvlase","Paul Vlase", UserRole.BUYER, null);
+		}
+		if (username.equals("unix140")) {
+			return new UserProfile("unix140","Ghennadi Procopciuc", UserRole.SELLER, null);
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean setUserProfile(UserProfile profile) {
+		return false;
 	}
 
 	/* Common */
