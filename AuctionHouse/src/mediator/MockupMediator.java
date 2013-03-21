@@ -45,14 +45,14 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 	
 	@Override
-	public boolean signIn(LoginCred cred) {
-		return web.signIn(cred);
+	public boolean logIn(LoginCred cred) {
+		return web.logIn(cred);
 	}
 	
 	@Override
-	public void signOut() {
-		System.out.println("[MockupMediator:signOut()] Bye bye");
-		web.signOut();
+	public void logOut() {
+		System.out.println("[MockupMediator:logOut()] Bye bye");
+		web.logOut();
 	}
 
 	@Override

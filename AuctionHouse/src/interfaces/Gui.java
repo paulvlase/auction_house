@@ -12,8 +12,8 @@ import data.Service;
  */
 public interface Gui {
 	public void login();
-	public void signIn(LoginCred cred);
-	public void signOut();
+	public void logIn(LoginCred cred);
+	public void logOut();
 	
 	public void addService(Service service);
 	public void addServices(ArrayList<Service> services);

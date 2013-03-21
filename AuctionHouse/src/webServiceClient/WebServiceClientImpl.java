@@ -19,8 +19,8 @@ public class WebServiceClientImpl implements WebServiceClient {
 	}
 	
 	@Override
-	public boolean signIn(LoginCred cred) {
-		System.out.println("[WebServiceClientImpl : signIn] " +
+	public boolean logIn(LoginCred cred) {
+		System.out.println("[WebServiceClientImpl : logIn] " +
 				cred.getUsername() + " " + cred.getPassword());
 		if (cred.getUsername().equals("pvlase") &&
 				cred.getPassword().equals("parola"))
@@ -33,8 +33,8 @@ public class WebServiceClientImpl implements WebServiceClient {
 	}
 	
 	@Override
-	public void signOut() {
-		System.out.println("[WebServiceClient:signOut()] Bye bye");
+	public void logOut() {
+		System.out.println("[WebServiceClient:logOut()] Bye bye");
 	}
 
 	/* Common */

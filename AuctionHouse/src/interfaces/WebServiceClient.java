@@ -8,8 +8,8 @@ import data.LoginCred;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface WebServiceClient {
-	public boolean signIn(LoginCred cred);
-	public void signOut();
+	public boolean logIn(LoginCred cred);
+	public void logOut();
 	
 	/* Common */
 	public int addOffer(String service);

@@ -47,12 +47,12 @@ public class GuiImpl implements Gui {
 			login.setVisible(true);
 
 		} else {
-			signIn(cred);
+			logIn(cred);
 		}
 	}
 	
-	public void signIn(LoginCred cred) {
-		if (med.signIn(cred)) {
+	public void logIn(LoginCred cred) {
+		if (med.logIn(cred)) {
 			login.setVisible(false);
 			
 			//TODO: autentificare reusita, afisez fereastra pentru
@@ -78,9 +78,9 @@ public class GuiImpl implements Gui {
 		}
 	}
 	
-	public void signOut() {
-		System.out.println("[GuiImpl:signOut()] Bye bye");
-		med.signOut();
+	public void logOut() {
+		System.out.println("[GuiImpl:logOut()] Bye bye");
+		med.logOut();
 	}
 	
 	public void addService(Service service) {

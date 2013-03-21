@@ -11,8 +11,8 @@ public interface MediatorGui {
 	public void registerGui(Gui gui);
 
 	public void login();
-	public boolean signIn(LoginCred cred);
-	public void signOut();
+	public boolean logIn(LoginCred cred);
+	public void logOut();
 	public String getName();
 	
 	/* Common */
