@@ -9,10 +9,10 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface WebServiceClient {
-	public boolean logIn(LoginCred cred);
+	public UserProfile logIn(LoginCred cred);
 	public void logOut();
 	
-	public UserProfile getUserProfile();
+	public UserProfile getUserProfile(String username);
 	public boolean setUserProfile(UserProfile profile);
 	
 	/* Common */
