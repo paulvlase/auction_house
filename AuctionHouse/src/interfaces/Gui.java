@@ -10,4 +10,5 @@ import data.LoginCred;
 public interface Gui {
 	public void login();
 	public void signIn(LoginCred cred);
+	public void signOut();
 }
