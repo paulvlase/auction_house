@@ -1,6 +1,7 @@
 package interfaces;
 
 public interface Window {
-	public void show();
-	public void clear();
+	public void showWindow();
+	public void clearWindow();
+	public void hideWindow();
 }

@@ -1,6 +1,9 @@
 package interfaces;
 
+import java.util.ArrayList;
+
 import data.LoginCred;
+import data.Service;
 
 /**
  * Mediator interface for Gui module.
@@ -10,12 +13,13 @@ import data.LoginCred;
 public interface MediatorGui {
 	public void registerGui(Gui gui);
 
-	public void login();
+	public void start();
 	public boolean logIn(LoginCred cred);
 	public void logOut();
 	public String getName();
 	
 	/* Common */
+	public ArrayList<Service> loadOffers();
 	public int addOffer(String service);
 	public int removeOffer(String service);
 	

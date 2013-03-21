@@ -37,38 +37,28 @@ public class GuiImpl implements Gui {
 	}
 
 	public String getName() {
-		return this.med.getName();
+		return med.getName();
 	}
 	
-	public void login() {
+	public void start() {
 		LoginCred cred = loadLoginFile();
 		
-		if (cred == null) { 
-			login.setVisible(true);
-
-		} else {
+		if (cred == null) 
+			login.showWindow();
+		else
 			logIn(cred);
-		}
 	}
 	
 	public void logIn(LoginCred cred) {
 		if (med.logIn(cred)) {
-			login.setVisible(false);
+			login.hideWindow();
 			
 			//TODO: autentificare reusita, afisez fereastra pentru
 			// cumparator, vanzator
-			System.out.println("Signed in");
+			System.out.println("[GuiImpl:logIn] Signed in");
 			
-			ArrayList<Service> services = null;
-			if (cred.getType() == UserType.BUYER) {
-				services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
-			}
-			if (cred.getType() == UserType.SELLER) {
-				services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
-			}
-			
-			mainWindow = new MainWindow(services);
-			mainWindow.setVisible(true);
+			mainWindow = new MainWindow(gui);
+			mainWindow.showWindow();
 		} else {
 			// autentificare esuata, afisare dialog
 			JOptionPane.showMessageDialog(null,
@@ -148,73 +138,5 @@ public class GuiImpl implements Gui {
 			e.printStackTrace();
 		}
 		return loginCred;
-	}
-	
-	private Service parseLine(String line, ServiceType type) {
-		StringTokenizer st = new StringTokenizer(line, " ");
-
-		if (!st.hasMoreTokens())
-			return null;
-		Service service = new Service(st.nextToken());
-		
-		if (!st.hasMoreTokens())
-			return null;
-		
-		try {
-			long time = Long.parseLong(st.nextToken());
-			
-			service.setTime(time);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-		if (type == ServiceType.SUPPLY) {
-			try {
-				double price = Double.parseDouble(st.nextToken());
-				
-				service.setPrice(price);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-		if (st.hasMoreTokens())
-			return null;
-
-		return service;
-	}
-	
-	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
-		ArrayList<Service> services = new ArrayList<Service>();
-
-		File demandsFile = new File(filename);
-		if (demandsFile.exists()) {
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(
-						new FileReader(demandsFile));
-				
-				String line;
-				while ((line = br.readLine()) != null) {
-					System.out.println(line);
-					Service d = parseLine(line, type);
-					
-					/* TODO: wrong file format. */
-					services.add(d);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (br != null)
-					br.close();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return services;
 	}
 }

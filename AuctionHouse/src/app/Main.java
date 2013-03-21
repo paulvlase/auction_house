@@ -24,7 +24,7 @@ public class Main {
 		NetworkImpl net = new NetworkImpl(med);
 		WebServiceClientImpl web = new WebServiceClientImpl(med);
 		
-		med.login();
+		med.start();
 		System.out.println("Exit");
 	}
 }

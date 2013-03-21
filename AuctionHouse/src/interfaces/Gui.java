@@ -11,7 +11,7 @@ import data.Service;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface Gui {
-	public void login();
+	public void start();
 	public void logIn(LoginCred cred);
 	public void logOut();
 	
