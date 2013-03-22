@@ -45,7 +45,7 @@ public class WebServiceClientImpl implements WebServiceClient {
 			return new UserProfile("pvlase","Paul Vlase", UserRole.BUYER, null);
 		}
 		if (username.equals("unix140")) {
-			return new UserProfile("unix140","Ghennadi Procopciuc", UserRole.SELLER, null);
+			return new UserProfile("unix140","Ghennadi Procopciuc", UserRole.BUYER, null);
 		}
 		return null;
 	}
