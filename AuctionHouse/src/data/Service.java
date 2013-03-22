@@ -39,7 +39,7 @@ public class Service {
 	 * 
 	 */
 	public enum Status {
-		ACTIVE, INACTIVE, NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED
+		ACTIVE, INACTIVE, NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
 	};
 
 	public Service(String name, ArrayList<UserEntry> users, Status status) {
@@ -67,6 +67,17 @@ public class Service {
 	 */
 	public Service(String serviceName, Status status) {
 		this(serviceName, null, status);
+	}
+
+	public Service(String name, long time, double price, ArrayList<UserEntry> users, Status status,
+			int progress) {
+		super();
+		this.name = name;
+		this.time = time;
+		this.price = price;
+		this.users = users;
+		this.status = status;
+		this.progress = progress;
 	}
 
 	public void addUserEntry(UserEntry user) {
@@ -176,6 +187,10 @@ public class Service {
 		}
 
 		return data;
+	}
+
+	public Service clone() {
+		return new Service(name, time, price, users, status, progress);
 	}
 
 	@Override
