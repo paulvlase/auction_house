@@ -30,7 +30,6 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	private Network				net;
 	private WebServiceClient	web;
 
-	private String				name;
 	private UserProfile         profile;
 
 	public MockupMediator() {
@@ -54,6 +53,12 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	@Override
 	public void start() {
+		{
+			Service service =  new Service("service");
+			service.setPrice(2.2);
+			service.setTime(101);
+			startTransfer(service);
+		}
 		gui.start();
 	}
 	
@@ -73,6 +78,12 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 		System.out.println("[MockupMediator:logOut()] Bye bye");
 		web.logOut();
 		profile = null;
+	}
+	
+
+	@Override
+	public boolean startTransfer(Service service) {
+		return net.startTransfer(service);
 	}
 
 	@Override
