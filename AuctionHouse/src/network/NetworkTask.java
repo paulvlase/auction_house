@@ -12,7 +12,6 @@ import javax.swing.SwingWorker;
 import data.Service;
 
 public class NetworkTask extends SwingWorker<Service, Service> {
-	private static final int DELAY = 1000;
 	private NetworkTransfer net;
 	private Service service;
 
@@ -24,7 +23,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	@Override
 	protected Service doInBackground() throws Exception {
 		System.out.println(Thread.currentThread());
-		// TODO 3.2
+		
 		int DELAY = 1000;
 		int count = 10;
 		int i = 0;
@@ -46,7 +45,6 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		System.out.println(Thread.currentThread());
 
 		for (Service service:  services) {
-			System.out.println("aici");
 			net.transferProgress(service);
 		}
 	}
