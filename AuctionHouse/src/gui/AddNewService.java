@@ -62,7 +62,7 @@ public class AddNewService extends JFrame {
 					1.0E-4 };
 
 			// nameLabel
-			nameLabel.setText("Name");
+			nameLabel.setText(GuiConfig.getValue(GuiConfig.NAME));
 			mainPanel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
@@ -71,7 +71,7 @@ public class AddNewService extends JFrame {
 					0));
 
 			// timeLabel
-			timeLabel.setText("Time");
+			timeLabel.setText(GuiConfig.getValue(GuiConfig.TIME));
 			mainPanel.add(timeLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
@@ -86,7 +86,7 @@ public class AddNewService extends JFrame {
 					0));
 
 			// priceLabel
-			priceLabel.setText("Price");
+			priceLabel.setText(GuiConfig.getValue(GuiConfig.PRICE));
 			mainPanel.add(priceLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
 					0));
@@ -107,7 +107,7 @@ public class AddNewService extends JFrame {
 			((GridBagLayout) bottomPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
 			// cancelButton
-			cancelButton.setText("Cancel");
+			cancelButton.setText(GuiConfig.getValue(GuiConfig.CANCEL));
 			cancelButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -119,7 +119,7 @@ public class AddNewService extends JFrame {
 					0));
 
 			// okButton
-			okButton.setText("OK");
+			okButton.setText(GuiConfig.getValue(GuiConfig.OK));
 			okButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -132,24 +132,24 @@ public class AddNewService extends JFrame {
 		}
 		contentPane.add(bottomPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
 	}
 
 	private void okButtonActionPerformed(ActionEvent e) {
-		System.out.println("Ok button ...");
 		System.out.println(timeSpinner.getValue());
 
 		if (nameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null,
-					"Service name seems to be empty, please complete it.", "Empty name",
-					JOptionPane.WARNING_MESSAGE);
+					GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME_ERROR),
+					GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME), JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		if (mainWindow.getServices().contains(new Service(nameField.getText()))) {
-			JOptionPane.showMessageDialog(null, "Service '" + nameField.getText()
-					+ "' already exists in your list.", "", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.SERVICE_TWICE_ERROR),
+					"", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
@@ -158,22 +158,22 @@ public class AddNewService extends JFrame {
 		try {
 			price = Double.parseDouble(priceField.getText());
 		} catch (NumberFormatException e2) {
-			JOptionPane.showMessageDialog(null, "Price should be a number.", "",
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		
+
 		mainWindow.addService(new Service(nameField.getText()));
-		
-		//TODO : Send ServiceRequest to Mediator ....
-		
+
+		// TODO : Send ServiceRequest to Mediator ....
+
 		setVisible(false);
 		dispose();
 	}
 
 	private void cancelButtonActionPerformed(ActionEvent e) {
-		System.out.println("Cancel button ...");
-		// TODO
+		setVisible(false);
+		dispose();
 	}
 
 	public static void main(String[] args) {
