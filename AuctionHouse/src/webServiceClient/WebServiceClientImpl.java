@@ -1,5 +1,7 @@
 package webServiceClient;
 
+import java.util.Hashtable;
+
 import data.LoginCred;
 import data.UserProfile;
 import data.UserProfile.UserRole;
@@ -15,29 +17,34 @@ public class WebServiceClientImpl implements WebServiceClient {
 	private MediatorWeb med;
 	private WebServiceMockup webService;
 	
+	private Hashtable<String, UserProfile> users;
+	
 	public WebServiceClientImpl(MediatorWeb med) {
 		this.med = med;
 		
 		med.registerWebServiceClient(this);
+
+		/* TODO: This should be deleted.
+		 * Used only for mockup test.
+		 */
+		users = new Hashtable<String, UserProfile>();
+		users.put("pvlase", new UserProfile("pvlase","Paul Vlase", UserRole.BUYER, "parola"));
+		users.put("unix140", new UserProfile("unix140","Ghennadi Procopciuc", UserRole.BUYER, "marmota"));
 	}
 	
 	@Override
 	public UserProfile logIn(LoginCred cred) {
-		UserProfile profile = null;
-
-		System.out.println("[WebServiceClientImpl : logIn] " +
-				cred.getUsername() + " " + cred.getPassword());
-		if (cred.getUsername().equals("pvlase") &&
-				cred.getPassword().equals("parola"))
-			profile =  getUserProfile("pvlase");
-		if (cred.getUsername().equals("unix140") &&
-				cred.getPassword().equals("marmota"))
-			profile = getUserProfile("unix140");
+		UserProfile profile;
 		
-		if (profile != null) {
-			WebServiceMockup webService = new WebServiceMockup(med);
-			webService.start();
+		profile = getUserProfile(cred.getUsername());
+		if (profile == null) {
+			return null;
 		}
+		
+		if (profile.getPassword() != cred.getPassword()) {
+			return null;
+		}
+		
 		return profile;
 	}
 	
@@ -45,7 +52,7 @@ public class WebServiceClientImpl implements WebServiceClient {
 	public void logOut() {
 		System.out.println("[WebServiceClient:logOut()] Bye bye");
 		
-		/* This will be deleted.
+		/* TODO: This should be deleted.
 		 * Used only for mockup test.
 		 */
 		try {
@@ -57,18 +64,13 @@ public class WebServiceClientImpl implements WebServiceClient {
 	
 	@Override
 	public UserProfile getUserProfile(String username) {
-		if (username.equals("pvlase")) {
-			return new UserProfile("pvlase","Paul Vlase", UserRole.BUYER, null);
-		}
-		if (username.equals("unix140")) {
-			return new UserProfile("unix140","Ghennadi Procopciuc", UserRole.BUYER, null);
-		}
-		return null;
+		return users.get(username);
 	}
 	
 	@Override
 	public boolean setUserProfile(UserProfile profile) {
-		return false;
+		users.put(profile.getName(), profile);
+		return true;
 	}
 
 	/* Common */
