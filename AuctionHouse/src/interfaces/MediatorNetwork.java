@@ -1,5 +1,7 @@
 package interfaces;
 
+import data.Service;
+
 /**
  * Mediator interface for Network module.
  * 
@@ -7,4 +9,5 @@ package interfaces;
  */
 public interface MediatorNetwork {
 	public void registerNetwork(Network net);
+	public boolean startTransfer(Service service);
 }
