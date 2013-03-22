@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
+import data.Pair;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
@@ -96,14 +97,15 @@ public class MySpanTableModel extends AbstractTableModel {
 	public void addService(Service service) {
 		ArrayList<UserEntry> users;
 		ArrayList<ArrayList<Object>> serviceData;
-		
+
 		users = service.getUsers();
 		serviceData = service.getAsTable();
-		
+
 		data.addAll(serviceData);
 		cellAtt.addRows(serviceData.size());
-		
-		if(serviceData.size() == 1){
+		services.add(service);
+
+		if (serviceData.size() == 1) {
 			addSpan(new Span(data.size() - 1, 2, 1, 4));
 		} else {
 			/* Service name span */
@@ -111,24 +113,45 @@ public class MySpanTableModel extends AbstractTableModel {
 			/* Status span */
 			addSpan(new Span(data.size() - users.size(), 1, users.size(), 1));
 		}
+		
 		fireTableDataChanged();
 		fireTableStructureChanged();
 	}
-	
-	public Service getServiceFromRow(Integer row){
+
+	public Pair<Service, Integer> getServiceFromRow(Integer row) {
 		int counter = 0;
-		if(row > getRowCount() || row < 0){
+		int userCounter;
+		
+//		System.out.println("Search for : " + row);
+		
+		if (row > getRowCount() || row < 0) {
 			return null;
 		}
-		
+
 		for (Service service : services) {
-			if(row >= counter && row < counter + getNeededRows(service)){
-				return service;
+//			System.out.println("row >= " + counter + " && row < " + (counter + getNeededRows(service)));
+			if (row >= counter && row < counter + getNeededRows(service)) {
+				userCounter = 0;
+				
+				/* Get selected user */
+				if (service.getUsers() != null) {
+					for (UserEntry user : service.getUsers()) {
+						if (row == userCounter + counter) {
+							return new Pair<Service, Integer>(service, userCounter);
+						}
+						userCounter++;
+					}
+				}
+				
+				return new Pair<Service, Integer>(service, -1);
 			}
+
+			counter += getNeededRows(service);
 		}
+
 		return null;
 	}
-	
+
 	private Integer getNeededRows(Service service) {
 		switch (service.getStatus()) {
 		case INACTIVE:
