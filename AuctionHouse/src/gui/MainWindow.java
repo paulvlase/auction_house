@@ -158,22 +158,6 @@ public class MainWindow extends JFrame {
 			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		}
 
-		// Listeners
-		{
-			signOutButton.addActionListener(listener);
-			addServiceItem.addActionListener(listener);
-			signOutItem.addActionListener(listener);
-			profileItem.addActionListener(listener);
-			exitItem.addActionListener(listener);
-
-			launchRequestItem.addActionListener(listener);
-			dropRequestItem.addActionListener(listener);
-			acceptOfferItem.addActionListener(listener);
-			refusetOfferItem.addActionListener(listener);
-			makeOfferItem.addActionListener(listener);
-			dropAuctionItem.addActionListener(listener);
-		}
-
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {

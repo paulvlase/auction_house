@@ -1,5 +1,7 @@
 package gui;
 
+import interfaces.Command;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,6 +25,9 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Command c = (Command) e.getSource();
+		
+		c.execute();
 	}
 
 	private void showPopup(MouseEvent e) {
