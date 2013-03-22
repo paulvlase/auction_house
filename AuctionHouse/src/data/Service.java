@@ -39,7 +39,7 @@ public class Service {
 	 * 
 	 */
 	public enum Status {
-		ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED
+		ACTIVE, INACTIVE, NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED
 	};
 
 	public Service(String name, ArrayList<UserEntry> users, Status status) {
@@ -160,7 +160,8 @@ public class Service {
 			break;
 		case TRANSFER_IN_PROGRESS:
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", progress, "", "", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", progress, "",
+					"", ""));
 			data.add(row);
 			break;
 		case TRANSFER_COMPLETE:
