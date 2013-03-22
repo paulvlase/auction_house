@@ -13,7 +13,6 @@ public class WebServiceMockup extends Thread {
 
 	private MediatorWeb med;
 	private ArrayList<Service> offers;
-
 	
 	public WebServiceMockup(MediatorWeb med) {
 		this.med = med;
@@ -30,7 +29,7 @@ public class WebServiceMockup extends Thread {
 				int sleepTime = 100 + random.nextInt(timeLimit);
 				
 				Thread.sleep(sleepTime);
-				System.out.println(sleepTime);
+				//System.out.println(sleepTime);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
