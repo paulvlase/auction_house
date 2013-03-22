@@ -1,5 +1,16 @@
 package gui;
 
+import gui.items.AcceptOfferItem;
+import gui.items.AddServiceItem;
+import gui.items.DropAuctionItem;
+import gui.items.DropRequestItem;
+import gui.items.ExitItem;
+import gui.items.LaunchRequestItem;
+import gui.items.MakeOfferItem;
+import gui.items.ProfileItem;
+import gui.items.RefuseOfferItem;
+import gui.items.SignOutButton;
+import gui.items.SignOutItem;
 import gui.spantable.MultiSpanCellTable;
 import interfaces.Gui;
 
@@ -9,12 +20,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,16 +35,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.UIManager;
-
-import org.omg.PortableInterceptor.INACTIVE;
 
 import config.GuiConfig;
-import data.Pair;
 import data.Service;
-import data.Service.Status;
-import data.UserEntry;
-import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
 /**
@@ -51,25 +51,25 @@ public class MainWindow extends JFrame {
 	/* Swing components */
 	private JMenuBar			menuBar;
 	private JMenu				menu;
-	private JMenuItem			addServiceItem;
-	private JMenuItem			profileItem;
-	private JMenuItem			signOutItem;
-	private JMenuItem			exitItem;
+	private AddServiceItem		addServiceItem;
+	private ProfileItem			profileItem;
+	private SignOutItem			signOutItem;
+	private ExitItem			exitItem;
 	private JPanel				mainPanel;
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
 	private JLabel				usernameLabel;
-	private JButton				signOutButton;
+	private SignOutButton		signOutButton;
 	private JScrollPane			scrollPanel;
 
 	private JPopupMenu			popupMenu;
-	private JMenuItem			launchRequestItem;
-	private JMenuItem			dropRequestItem;
+	private LaunchRequestItem	launchRequestItem;
+	private DropRequestItem		dropRequestItem;
 	private JSeparator			menuSeparator;
-	private JMenuItem			acceptOfferItem;
-	private JMenuItem			refusetOfferItem;
-	private JMenuItem			makeOfferItem;
-	private JMenuItem			dropAuctionItem;
+	private AcceptOfferItem		acceptOfferItem;
+	private RefuseOfferItem		refusetOfferItem;
+	private MakeOfferItem		makeOfferItem;
+	private DropAuctionItem		dropAuctionItem;
 
 	private Gui					gui;
 	private String[]			tableColumns;
@@ -94,35 +94,39 @@ public class MainWindow extends JFrame {
 	}
 
 	private void initComponents() {
+		/* Don't move this. */
+		listener = new MainWindowListener(this);
+
 		/* Table init */
 		tableColumns = new String[] { GuiConfig.getValue(GuiConfig.SERVICE),
-				GuiConfig.getValue(GuiConfig.STATUS), GuiConfig.getValue(GuiConfig.SELLER),
-				GuiConfig.getValue(GuiConfig.OFFER_MADE), GuiConfig.getValue(GuiConfig.TIME),
+				GuiConfig.getValue(GuiConfig.STATUS),
+				GuiConfig.getValue(GuiConfig.SELLER),
+				GuiConfig.getValue(GuiConfig.OFFER_MADE),
+				GuiConfig.getValue(GuiConfig.TIME),
 				GuiConfig.getValue(GuiConfig.PRICE) };
-		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)));
+		model = new MySpanTableModel(services, new ArrayList<String>(
+				Arrays.asList(tableColumns)));
 		table = new MultiSpanCellTable(model, new MyTableCellRenderer());
 		menuBar = new JMenuBar();
 		menu = new JMenu();
-		addServiceItem = new JMenuItem();
-		profileItem = new JMenuItem();
-		signOutItem = new JMenuItem();
-		exitItem = new JMenuItem();
+		addServiceItem = new AddServiceItem(this, gui);
+		profileItem = new ProfileItem(this, gui);
+		signOutItem = new SignOutItem(this, gui);
+		exitItem = new ExitItem(this, gui);
 		mainPanel = new JPanel();
 		topPanel = new JPanel();
 		avatarLabel = new JLabel();
 		usernameLabel = new JLabel();
-		signOutButton = new JButton();
+		signOutButton = new SignOutButton(this, gui);
 		scrollPanel = new JScrollPane();
 		popupMenu = new JPopupMenu();
-		launchRequestItem = new JMenuItem();
-		dropRequestItem = new JMenuItem();
+		launchRequestItem = new LaunchRequestItem(this, gui);
+		dropRequestItem = new DropRequestItem(this, gui);
 		menuSeparator = new JSeparator();
-		acceptOfferItem = new JMenuItem();
-		refusetOfferItem = new JMenuItem();
-		makeOfferItem = new JMenuItem();
-		dropAuctionItem = new JMenuItem();
-		
-		listener = new MainWindowListener(this);
+		acceptOfferItem = new AcceptOfferItem(this, gui);
+		refusetOfferItem = new RefuseOfferItem(this, gui);
+		makeOfferItem = new MakeOfferItem(this, gui);
+		dropAuctionItem = new DropAuctionItem(this, gui);
 
 		// JPopupMenu
 		{
@@ -161,7 +165,7 @@ public class MainWindow extends JFrame {
 			signOutItem.addActionListener(listener);
 			profileItem.addActionListener(listener);
 			exitItem.addActionListener(listener);
-			
+
 			launchRequestItem.addActionListener(listener);
 			dropRequestItem.addActionListener(listener);
 			acceptOfferItem.addActionListener(listener);
@@ -172,11 +176,14 @@ public class MainWindow extends JFrame {
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
-		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 14, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 1.0, 1.0, 1.0,
-				1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {
+				15, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 14,
+				0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] {
+				1.0, 1.0, 1.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] {
+				1.0, 1.0, 1.0, 1.0E-4 };
 
 		// menuBar1
 		{
@@ -186,7 +193,8 @@ public class MainWindow extends JFrame {
 				menu.setText(GuiConfig.getValue(GuiConfig.MENU));
 
 				// addServiceItem
-				addServiceItem.setText(GuiConfig.getValue(GuiConfig.ADD_SERVICE));
+				addServiceItem.setText(GuiConfig
+						.getValue(GuiConfig.ADD_SERVICE));
 				menu.add(addServiceItem);
 
 				// profileItem
@@ -208,49 +216,57 @@ public class MainWindow extends JFrame {
 		// mainPanel
 		{
 			mainPanel.setLayout(new GridBagLayout());
-			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] { 0, 0 };
-			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0, 0, 0 };
-			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] { 1.0, 1.0E-4 };
-			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
+			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] {
+					0, 0 };
+			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0,
+					0, 0 };
+			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] {
+					1.0, 1.0E-4 };
+			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] {
+					0.0, 0.0, 1.0E-4 };
 
 			// topPanel
 			{
 				topPanel.setLayout(new GridBagLayout());
-				((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] { 0, 0, 0, 0, 0 };
-				((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] { 0, 0 };
-				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0,
-						0.0, 0.0, 1.0E-4 };
-				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] { 0.0, 1.0E-4 };
-				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5),
-						0, 0));
+				((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] {
+						0, 0, 0, 0, 0 };
+				((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] {
+						0, 0 };
+				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] {
+						1.0, 0.0, 0.0, 0.0, 1.0E-4 };
+				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] {
+						0.0, 1.0E-4 };
+				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1,
+						0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 				// usernameLabel
 				usernameLabel.setText("Ghennadi Procopciuc");
-				topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5),
-						0, 0));
+				topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1,
+						0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 				// logoutButton
 				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
-				topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0),
-						0, 0));
+				topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1,
+						0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			}
-			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0,
+					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 5, 0), 0, 0));
 
 			// scrollPane1
 			{
 				scrollPanel.setViewportView(table);
 			}
-			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0,
+					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 0), 0, 0));
 		}
 		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
+						0, 0, 5, 5), 0, 0));
 
 		if (gui.getUserProfile().getRole() == UserRole.SELLER) {
 			setTitle("Seller");
@@ -261,6 +277,10 @@ public class MainWindow extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	public ActionListener getActionListener() {
+		return listener;
 	}
 
 	public void addServices(ArrayList<Service> services) {
@@ -293,44 +313,20 @@ public class MainWindow extends JFrame {
 		setVisible(true);
 	}
 
-	public JMenuItem getAddServiceItem() {
-		return addServiceItem;
-	}
-
-	public void setAddServiceItem(JMenuItem addServiceItem) {
-		this.addServiceItem = addServiceItem;
-	}
-
 	public JMenuItem getProfileItem() {
 		return profileItem;
-	}
-
-	public void setProfileItem(JMenuItem profileItem) {
-		this.profileItem = profileItem;
 	}
 
 	public JMenuItem getSignOutItem() {
 		return signOutItem;
 	}
 
-	public void setSignOutItem(JMenuItem signOutItem) {
-		this.signOutItem = signOutItem;
-	}
-
 	public JMenuItem getExitItem() {
 		return exitItem;
 	}
 
-	public void setExitItem(JMenuItem exitItem) {
-		this.exitItem = exitItem;
-	}
-
 	public JButton getSignOutButton() {
 		return signOutButton;
-	}
-
-	public void setSignOutButton(JButton signOutButton) {
-		this.signOutButton = signOutButton;
 	}
 
 	public JPopupMenu getPopupMenu() {
@@ -345,16 +341,8 @@ public class MainWindow extends JFrame {
 		return launchRequestItem;
 	}
 
-	public void setLaunchRequestItem(JMenuItem launchRequestItem) {
-		this.launchRequestItem = launchRequestItem;
-	}
-
 	public JMenuItem getDropRequestItem() {
 		return dropRequestItem;
-	}
-
-	public void setDropRequestItem(JMenuItem dropRequestItem) {
-		this.dropRequestItem = dropRequestItem;
 	}
 
 	public JSeparator getMenuSeparator() {
@@ -369,32 +357,16 @@ public class MainWindow extends JFrame {
 		return acceptOfferItem;
 	}
 
-	public void setAcceptOfferItem(JMenuItem acceptOfferItem) {
-		this.acceptOfferItem = acceptOfferItem;
-	}
-
 	public JMenuItem getRefusetOfferItem() {
 		return refusetOfferItem;
-	}
-
-	public void setRefusetOfferItem(JMenuItem refusetOfferItem) {
-		this.refusetOfferItem = refusetOfferItem;
 	}
 
 	public JMenuItem getMakeOfferItem() {
 		return makeOfferItem;
 	}
 
-	public void setMakeOfferItem(JMenuItem makeOfferItem) {
-		this.makeOfferItem = makeOfferItem;
-	}
-
 	public JMenuItem getDropAuctionItem() {
 		return dropAuctionItem;
-	}
-
-	public void setDropAuctionItem(JMenuItem dropAuctionItem) {
-		this.dropAuctionItem = dropAuctionItem;
 	}
 
 	public Gui getGui() {
@@ -429,33 +401,37 @@ public class MainWindow extends JFrame {
 		this.table = table;
 	}
 
-//	public static void main(String[] args) {
-//		try {
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		} catch (Exception e) {
-//			try {
-//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//			} catch (Exception e1) {
-//			}
-//		}
-//
-//		ArrayList<Service> services = new ArrayList<Service>();
-//		for (int i = 0; i < 10; i++) {
-//
-//			Service service1 = new Service("service1");
-//			Service service2 = new Service("service2", Status.ACTIVE);
-//			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
-//
-//			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
-//			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
-//			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
-//
-//			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
-//
-//			services.add(service1);
-//			services.add(service2);
-//			services.add(service3);
-//		}
-//		new MainWindow(services).setVisible(true);
-//	}
+	// public static void main(String[] args) {
+	// try {
+	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+	// } catch (Exception e) {
+	// try {
+	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+	// } catch (Exception e1) {
+	// }
+	// }
+	//
+	// ArrayList<Service> services = new ArrayList<Service>();
+	// for (int i = 0; i < 10; i++) {
+	//
+	// Service service1 = new Service("service1");
+	// Service service2 = new Service("service2", Status.ACTIVE);
+	// Service service3 = new Service("service3", Status.TRANSFER_STARTED);
+	//
+	// service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L,
+	// 25.2));
+	// service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED,
+	// 101L, 28.7));
+	// service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L,
+	// 29.9));
+	//
+	// service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L,
+	// 25.2));
+	//
+	// services.add(service1);
+	// services.add(service2);
+	// services.add(service3);
+	// }
+	// new MainWindow(services).setVisible(true);
+	// }
 }

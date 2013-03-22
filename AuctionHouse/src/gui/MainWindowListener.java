@@ -23,99 +23,6 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == mainWindow.getAddServiceItem()) {
-			addServiceAction();
-			return;
-		}
-		
-		if (e.getSource() == mainWindow.getProfileItem()) {
-			profileAction();
-			return;
-		}
-		
-		if (e.getSource() == mainWindow.getExitItem()) {
-			exitAction();
-			return;
-		}
-		
-		if (e.getSource() == mainWindow.getSignOutButton()
-				|| e.getSource() == mainWindow.getSignOutItem()) {
-			logOutAction();
-			return;
-		}
-		
-		if(e.getSource() == mainWindow.getLaunchRequestItem()){
-			launchOffer();
-			return;
-		}
-		
-		if(e.getSource() == mainWindow.getDropRequestItem()){
-			dropRequest();
-			return;
-		}
-		
-		if(e.getSource() == mainWindow.getAcceptOfferItem()){
-			acceptRequest();
-			return;
-		}
-		
-		if(e.getSource() == mainWindow.getRefusetOfferItem()){
-			refuseRequest();
-			return;
-		}
-		
-		if(e.getSource() == mainWindow.getMakeOfferItem()){
-			makeOffer();
-			return;
-		}
-
-		if(e.getSource() == mainWindow.getDropAuctionItem()){
-			dropAuction();
-			return;
-		}
-	}
-
-	private void dropAuction() {
-		System.out.println("Drop Auction");
-	}
-
-	private void makeOffer() {
-		System.out.println("Make offer");
-	}
-
-	private void refuseRequest() {
-		System.out.println("Refuse Request");
-	}
-
-	private void acceptRequest() {
-		System.out.println("Accept Request");
-	}
-
-	private void dropRequest() {
-		System.out.println("Drop Request");
-	}
-
-	private void launchOffer() {
-		System.out.println("Launch Offer");		
-	}
-
-	private void addServiceAction() {
-		System.out.println("Add Service action");
-
-		new AddNewService(mainWindow).setVisible(true);
-	}
-
-	private void profileAction() {
-		System.out.println("Profile action");
-	}
-
-	private void exitAction() {
-		System.out.println("Exit Action");
-	}
-
-	private void logOutAction() {
-		System.out.println("TODO signOutAction");
-		mainWindow.getGui().logOut();
 	}
 
 	private void showPopup(MouseEvent e) {
@@ -126,7 +33,6 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			buildPopupMenu(mainWindow.getModel().getServiceFromRow(row), column);
 			mainWindow.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 		}
-
 	}
 
 	private void buildPopupMenu(Pair<Service, Integer> pair, Integer column) {
