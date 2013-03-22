@@ -10,7 +10,6 @@ import webServiceClient.WebServiceClientImpl;
 
 public class Main {
 	public static void main(String[] args) {
-		// TODO : Check if this look and feel is available on system
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {

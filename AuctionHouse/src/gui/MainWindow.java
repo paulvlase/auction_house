@@ -161,6 +161,13 @@ public class MainWindow extends JFrame {
 			signOutItem.addActionListener(listener);
 			profileItem.addActionListener(listener);
 			exitItem.addActionListener(listener);
+			
+			launchRequestItem.addActionListener(listener);
+			dropRequestItem.addActionListener(listener);
+			acceptOfferItem.addActionListener(listener);
+			refusetOfferItem.addActionListener(listener);
+			makeOfferItem.addActionListener(listener);
+			dropAuctionItem.addActionListener(listener);
 		}
 
 		Container contentPane = getContentPane();
@@ -422,33 +429,33 @@ public class MainWindow extends JFrame {
 		this.table = table;
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) {
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			} catch (Exception e1) {
-			}
-		}
-
-		ArrayList<Service> services = new ArrayList<Service>();
-		for (int i = 0; i < 10; i++) {
-
-			Service service1 = new Service("service1");
-			Service service2 = new Service("service2", Status.ACTIVE);
-			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
-
-			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
-			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
-			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
-
-			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
-
-			services.add(service1);
-			services.add(service2);
-			services.add(service3);
-		}
-		new MainWindow(services).setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		try {
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		} catch (Exception e) {
+//			try {
+//				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+//			} catch (Exception e1) {
+//			}
+//		}
+//
+//		ArrayList<Service> services = new ArrayList<Service>();
+//		for (int i = 0; i < 10; i++) {
+//
+//			Service service1 = new Service("service1");
+//			Service service2 = new Service("service2", Status.ACTIVE);
+//			Service service3 = new Service("service3", Status.TRANSFER_STARTED);
+//
+//			service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L, 25.2));
+//			service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, 101L, 28.7));
+//			service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L, 29.9));
+//
+//			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L, 25.2));
+//
+//			services.add(service1);
+//			services.add(service2);
+//			services.add(service3);
+//		}
+//		new MainWindow(services).setVisible(true);
+//	}
 }

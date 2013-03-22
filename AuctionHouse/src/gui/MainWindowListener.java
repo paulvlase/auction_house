@@ -24,26 +24,79 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == mainWindow.getAddServiceItem()) {
-			System.out.println("addServiceAction");
 			addServiceAction();
 			return;
 		}
+		
 		if (e.getSource() == mainWindow.getProfileItem()) {
-			System.out.println("profileAction");
 			profileAction();
 			return;
 		}
+		
 		if (e.getSource() == mainWindow.getExitItem()) {
-			System.out.println("profileAction");
 			exitAction();
 			return;
 		}
+		
 		if (e.getSource() == mainWindow.getSignOutButton()
 				|| e.getSource() == mainWindow.getSignOutItem()) {
-			System.out.println("signOutAction");
 			logOutAction();
 			return;
 		}
+		
+		if(e.getSource() == mainWindow.getLaunchRequestItem()){
+			launchOffer();
+			return;
+		}
+		
+		if(e.getSource() == mainWindow.getDropRequestItem()){
+			dropRequest();
+			return;
+		}
+		
+		if(e.getSource() == mainWindow.getAcceptOfferItem()){
+			acceptRequest();
+			return;
+		}
+		
+		if(e.getSource() == mainWindow.getRefusetOfferItem()){
+			refuseRequest();
+			return;
+		}
+		
+		if(e.getSource() == mainWindow.getMakeOfferItem()){
+			makeOffer();
+			return;
+		}
+
+		if(e.getSource() == mainWindow.getDropAuctionItem()){
+			dropAuction();
+			return;
+		}
+	}
+
+	private void dropAuction() {
+		System.out.println("Drop Auction");
+	}
+
+	private void makeOffer() {
+		System.out.println("Make offer");
+	}
+
+	private void refuseRequest() {
+		System.out.println("Refuse Request");
+	}
+
+	private void acceptRequest() {
+		System.out.println("Accept Request");
+	}
+
+	private void dropRequest() {
+		System.out.println("Drop Request");
+	}
+
+	private void launchOffer() {
+		System.out.println("Launch Offer");		
 	}
 
 	private void addServiceAction() {
