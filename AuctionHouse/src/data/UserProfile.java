@@ -8,9 +8,12 @@ package data;
  */
 public class UserProfile {
 	private String		username;
-	private String		name;
+	private String		firstName;
+	private String		lastName;
 	private UserRole	role;
 	private String		password;
+	private byte[]		avatar;
+	private String		location;
 
 	// Add Image here, maybe later
 
@@ -18,9 +21,10 @@ public class UserProfile {
 		BUYER, SELLER
 	}
 
-	public UserProfile(String username, String name, UserRole role, String password) {
+	public UserProfile(String username, String firstName, String lastName, UserRole role, String password) {
 		this.username = username;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.role = role;
 		this.password = password;
 	}
@@ -31,14 +35,6 @@ public class UserProfile {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public UserRole getRole() {
@@ -55,5 +51,37 @@ public class UserProfile {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public byte[] getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

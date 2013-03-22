@@ -3,6 +3,7 @@ package gui.items;
 import javax.swing.JMenuItem;
 
 import gui.MainWindow;
+import gui.ProfileWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
@@ -19,6 +20,6 @@ public class ProfileItem extends JMenuItem implements Command {
 	
 	@Override
 	public void execute() {
-		System.out.println("Profile action");
+		new ProfileWindow(gui).showWindow();
 	}
 }

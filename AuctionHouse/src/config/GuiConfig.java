@@ -1,6 +1,5 @@
 package config;
 
-
 /**
  * Configurations for GuiConfig.
  * 
@@ -30,7 +29,7 @@ public class GuiConfig {
 	private static String			ROLES_VALUES[]					= { "Role", "Rol" };
 	private static String			BUYER_VALUES[]					= { "Buyer", "Cumpărător" };
 	private static String			SELLER_VALUES[]					= { "Seller", "Furnizor" };
-	private static String			LOG_IN_VALUES[]				= { "Log in", "Autentificare" };
+	private static String			LOG_IN_VALUES[]					= { "Log in", "Autentificare" };
 	private static String			LANGUAGE_VALUES[]				= { "Language", "Limbă" };
 	private static String			ENGLISH_VALUES[]				= { "English", "Engleză" };
 	private static String			ROMANIAN_VALUES[]				= { "Romanian", "Română" };
@@ -65,6 +64,26 @@ public class GuiConfig {
 	private static final String		PRICE_VALUES[]					= { "Price", "Preț" };
 	private static final String		STATUS_VALUES[]					= { "Status", "Status" };
 
+	/* Profile editor */
+	private static String			PROFILE_TITLE_VALUES[]			= {
+			APPLICATION_NAME + " : Profile", APPLICATION_NAME + " : Profil" };
+	private static final String		CHANGE_PICTURE_VALUES[]			= {
+			"Press image to change your profile picture.", "Apasă pe imagine pentru a o schimba." };
+	private static final String		FIRST_NAME_VALUES[]				= { "First name", "Prenume" };
+	private static final String		LAST_NAME_VALUES[]				= { "Last name", "Nume" };
+	private static final String		NEW_PASSWORD_VALUES[]			= { "New password",
+			"Parola noua"											};
+	private static final String		LOCATION_VALUES[]				= { "Location", "Locație" };
+	private static final String		CANCEL_VALUES[]					= { "Cancel", "Anulează" };
+	private static final String		OK_VALUES[]						= { "OK", "OK" };
+	private static final String		PASSWORD_ERROR_VALUES[]			= {
+			"If you want to change the password you should complete both password fields.",
+			"Pentru a schimba parola, trebuie să completați ambele câmpuri" };
+	private static final String		PASSWORD_MATCH_ERROR_VALUES[]	= { "Passwords do not match",
+			"Parolele nu coincid"									};
+	private static final String		FILE_CHOOSER_VALUES[]			= { "JPG & GIF Images",
+			"Imagini JPG & GIF"									};
+
 	/* Login form */
 	public static final int			USERNAME						= 0;
 	public static final int			PASSWORD						= 1;
@@ -96,13 +115,33 @@ public class GuiConfig {
 	public static final int			PRICE							= 23;
 	public static final int			STATUS							= 24;
 
+	/* Profile editor */
+	public static final int			CHANGE_PICTURE					= 25;
+	public static final int			FIRST_NAME						= 26;
+	public static final int			LAST_NAME						= 27;
+	public static final int			NEW_PASSWORD					= 28;
+	public static final int			LOCATION						= 29;
+	public static final int			CANCEL							= 30;
+	public static final int			OK								= 31;
+	public static final int			PROFILE_TITLE					= 32;
+	public static final int			PASSWORD_ERROR					= 33;
+	public static final int			PASSWORD_MATCH_ERROR			= 34;
+	public static final int			FILE_CHOOSER_TILE				= 35;
+
+	/* Other settings for Profile editor */
+	public static final int			AVATAR_WIDTH					= 100;
+	public static final int			AVATAR_HEIGHT					= 100;
+	public static final String		DEFAULT_AVATAR					= "/resources/images/default_avatar.png";
+
 	private static final String		values[][]						= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,
 			LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES, EMPTY_USERNAME_ERROR_VALUES,
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
 			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,
 			PROFILE_VALUES, LOGOUT_VALUES, EXIT_VALUES, SERVICE_VALUES, OFFER_MADE_VALUES,
-			TIME_VALUES, PRICE_VALUES, STATUS_VALUES				};
+			TIME_VALUES, PRICE_VALUES, STATUS_VALUES, CHANGE_PICTURE_VALUES, FIRST_NAME_VALUES,
+			LAST_NAME_VALUES, NEW_PASSWORD_VALUES, LOCATION_VALUES, CANCEL_VALUES, OK_VALUES,
+			PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES,PASSWORD_MATCH_ERROR_VALUES, FILE_CHOOSER_VALUES };
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;
