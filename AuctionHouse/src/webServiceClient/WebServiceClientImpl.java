@@ -28,8 +28,8 @@ public class WebServiceClientImpl implements WebServiceClient {
 		 * Used only for mockup test.
 		 */
 		users = new Hashtable<String, UserProfile>();
-		users.put("pvlase", new UserProfile("pvlase","Paul Vlase", UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140","Ghennadi Procopciuc", UserRole.BUYER, "marmota"));
+		users.put("pvlase", new UserProfile("pvlase","Paul",  "Vlase", UserRole.BUYER, "parola"));
+		users.put("unix140", new UserProfile("unix140","Ghennadi",  "Procopciuc", UserRole.BUYER, "marmota"));
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class WebServiceClientImpl implements WebServiceClient {
 	
 	@Override
 	public boolean setUserProfile(UserProfile profile) {
-		users.put(profile.getName(), profile);
+		users.put(profile.getUsername(), profile);
 		return true;
 	}
 
