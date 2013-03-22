@@ -7,5 +7,4 @@ package interfaces;
  */
 public interface MediatorNetwork {
 	public void registerNetwork(Network net);
-	public String getName();
 }

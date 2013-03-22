@@ -11,6 +11,8 @@ import config.GlobalConfig.ServiceType;
 import config.GlobalConfig.UserType;
 import data.LoginCred;
 import data.Service;
+import data.UserProfile;
+import data.UserProfile.UserRole;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 import interfaces.MediatorNetwork;
@@ -29,7 +31,7 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	private WebServiceClient	web;
 
 	private String				name;
-	private LoginCred           cred;
+	private UserProfile         profile;
 
 	public MockupMediator() {
 
@@ -57,23 +59,30 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	@Override
 	public boolean logIn(LoginCred cred) {
-		boolean bRet = web.logIn(cred);
+		UserProfile profile = web.logIn(cred);
 	 
-		if (bRet) 
-			this.cred = cred;
-		return bRet;
+		if (profile != null) {
+			this.profile = profile;
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
 	public void logOut() {
 		System.out.println("[MockupMediator:logOut()] Bye bye");
 		web.logOut();
-		cred = null;
+		profile = null;
 	}
 
 	@Override
-	public String getName() {
-		return this.name;
+	public UserProfile getUserProfile() {
+		return profile;
+	}
+	
+	@Override
+	public boolean setUserProfile(UserProfile profile) {
+		return web.setUserProfile(profile);
 	}
 	
 	/* Common */
@@ -128,14 +137,14 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	@Override
 	public ArrayList<Service> loadOffers() {
-		if (cred == null)
+		if (profile == null)
 			return null;
 		
 		ArrayList<Service> services = null;
-		if (cred.getType() == UserType.BUYER)
+		if (profile.getRole() == UserRole.BUYER)
 			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
 
-		if (cred.getType() == UserType.SELLER)
+		if (profile.getRole() == UserRole.SELLER)
 			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
 		
 		return services;

@@ -18,7 +18,7 @@ public interface MediatorGui {
 	public boolean logIn(LoginCred cred);
 	public void logOut();
 	public UserProfile getUserProfile();
-	public boolean setUserProfile();
+	public boolean setUserProfile(UserProfile profile);
 
 	/* Common */
 	public ArrayList<Service> loadOffers();
