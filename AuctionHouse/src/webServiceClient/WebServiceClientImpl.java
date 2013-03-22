@@ -12,7 +12,8 @@ import interfaces.WebServiceClient;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServiceClientImpl implements WebServiceClient {
-	private MediatorWeb med = null;
+	private MediatorWeb med;
+	private WebServiceMockup webService;
 	
 	public WebServiceClientImpl(MediatorWeb med) {
 		this.med = med;
@@ -22,21 +23,36 @@ public class WebServiceClientImpl implements WebServiceClient {
 	
 	@Override
 	public UserProfile logIn(LoginCred cred) {
+		UserProfile profile = null;
+
 		System.out.println("[WebServiceClientImpl : logIn] " +
 				cred.getUsername() + " " + cred.getPassword());
 		if (cred.getUsername().equals("pvlase") &&
 				cred.getPassword().equals("parola"))
-			return getUserProfile("pvlase");
+			profile =  getUserProfile("pvlase");
 		if (cred.getUsername().equals("unix140") &&
 				cred.getPassword().equals("marmota"))
-			return getUserProfile("unix140");
+			profile = getUserProfile("unix140");
 		
-		return null;
+		if (profile != null) {
+			WebServiceMockup webService = new WebServiceMockup(med);
+			webService.start();
+		}
+		return profile;
 	}
 	
 	@Override
 	public void logOut() {
 		System.out.println("[WebServiceClient:logOut()] Bye bye");
+		
+		/* This will be deleted.
+		 * Used only for mockup test.
+		 */
+		try {
+			webService.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
