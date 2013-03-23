@@ -164,25 +164,26 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	public void newUserNotify(Service service) {
 		gui.newUserNotify(service);
 	}
-	
+
 	@Override
 	public ArrayList<Service> loadOffers() {
-//		if (profile == null)
-//			return null;
-//		
-//		ArrayList<Service> services = null;
-//		if (profile.getRole() == UserRole.BUYER)
-//			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
-//
-//		if (profile.getRole() == UserRole.SELLER)
-//			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
-//		
-//		return services;
+		// if (profile == null)
+		// return null;
+		//
+		// ArrayList<Service> services = null;
+		// if (profile.getRole() == UserRole.BUYER)
+		// services = loadServicesFile(FilesConfig.DEMANDS_FILENAME,
+		// ServiceType.DEMAND);
+		//
+		// if (profile.getRole() == UserRole.SELLER)
+		// services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME,
+		// ServiceType.SUPPLY);
+		//
+		// return services;
 		ArrayList<Service> services = new ArrayList<Service>();
-		Date date1 = create(14, 12, 2014, 18, 56, 45);
-		Date date2 = create(29, 1, 2015, 10, 44, 21);
-		
-		
+		Date date1 = create(14, 5, 2013, 18, 56, 45);
+		Date date2 = create(29, 6, 2013, 10, 44, 21);
+
 		for (int i = 0; i < 10; i++) {
 
 			Service service1 = new Service("service1");
@@ -193,7 +194,8 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 			service2.addUserEntry(new UserEntry("Ghennadi", Offer.NO_OFFER, date2.getTime(), 28.7));
 			service2.addUserEntry(new UserEntry("Ana", Offer.NO_OFFER, date1.getTime(), 29.9));
 
-			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_ACCEPTED, date2.getTime(), 25.2));
+			service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_ACCEPTED,
+					date2.getTime(), 25.2));
 
 			services.add(service1);
 			services.add(service2);
