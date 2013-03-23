@@ -162,6 +162,10 @@ public class GuiConfig {
 	public static final int			AVATAR_WIDTH						= 100;
 	public static final int			AVATAR_HEIGHT						= 100;
 	public static final String		DEFAULT_AVATAR						= "resources/images/default_avatar.png";
+	
+	public static final String		AUCTION_ICON64						= "resources/images/auction64x64.png";
+	public static final String		AUCTION_ICON32						= "resources/images/auction32x32.png";
+	public static final String		AUCTION_ICON16						= "resources/images/auction16x16.png";
 
 	/* Other settings for MainWindow */
 	public static final int			MINI_AVATAR_WIDTH					= 40;

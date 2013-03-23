@@ -170,13 +170,19 @@ public class Service {
 			}
 			break;
 		case TRANSFER_IN_PROGRESS:
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer in progress", progress, "",
+					"", ""));
+			data.add(row);
+			break;
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", progress, "",
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", -1, "",
 					"", ""));
 			data.add(row);
 			break;
 		case TRANSFER_COMPLETE:
-			// TODO
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer complete", progress, "",
+					"", ""));
+			data.add(row);
 			break;
 		case TRANSFER_FAILED:
 			// TODO
