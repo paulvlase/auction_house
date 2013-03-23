@@ -125,7 +125,7 @@ public class WebServiceClientThread extends Thread {
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
 		service.setStatus(Status.ACTIVE);
-		service.setUsers(new ArrayList<UserEntry>());
+		//service.setUsers(new ArrayList<UserEntry>());
 		offers.put(service.getName(), service);
 
 		med.launchOfferNotify(service);
@@ -137,7 +137,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
 		for (Service service: services) {
 			service.setStatus(Status.ACTIVE);
-			service.setUsers(new ArrayList<UserEntry>());
+			//service.setUsers(new ArrayList<UserEntry>());
 			offers.put(service.getName(), service);
 			System.out.println("[WebServiceClientMockup:addOffers] " + service.getName());
 		}
