@@ -36,6 +36,13 @@
         <boolean>true</boolean>
        </void>
       </object>
+      <void method="setProperty">
+       <string>iconImage</string>
+       <object class="com.jformdesigner.model.SwingIcon">
+        <int>1</int>
+        <string>C:\Users\Ghennadi\Desktop\icons\Auction.png</string>
+       </object>
+      </void>
       <void method="add">
        <object class="com.jformdesigner.model.FormContainer">
         <string>javax.swing.JPanel</string>

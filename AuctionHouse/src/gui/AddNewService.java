@@ -164,8 +164,7 @@ public class AddNewService extends JFrame {
 		}
 
 		mainWindow.addService(new Service(nameField.getText()));
-
-		// TODO : Send ServiceRequest to Mediator ....
+		mainWindow.getGui().addService(new Service(nameField.getText()));
 
 		setVisible(false);
 		dispose();

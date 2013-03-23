@@ -32,6 +32,7 @@ public class MainWindow extends JFrame {
 		table1 = new JTable();
 
 		//======== this ========
+		setIconImage(new ImageIcon("C:\\Users\\Ghennadi\\Desktop\\icons\\Auction.png").getImage());
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {15, 0, 10, 0};

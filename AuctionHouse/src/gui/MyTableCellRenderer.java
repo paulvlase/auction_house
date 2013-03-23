@@ -14,14 +14,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 class MyTableCellRenderer extends DefaultTableCellRenderer {
 
 	private static final long	serialVersionUID	= 1L;
-	private final JProgressBar	b					= new JProgressBar(0, 100);
-	private final JPanel		p					= new JPanel(new BorderLayout());
+	private final JProgressBar	bar					= new JProgressBar(0, 100);
+	private final JPanel		panel					= new JPanel(new BorderLayout());
 
 	public MyTableCellRenderer() {
 		super();
 		setOpaque(true);
-		p.add(b);
-		p.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		panel.add(bar);
+		panel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 	}
 
 	@Override
@@ -33,10 +33,24 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 				Integer i = (Integer) value;
 				String text = "Done";
 				if (i < 0) {
-					text = "Canceled";
+					if(i == -1){
+						new Runnable() {
+							
+							@Override
+							public void run() {
+								bar.setIndeterminate(true);
+								bar.updateUI();
+							}
+						};
+						bar.setIndeterminate(true);
+						return panel;
+					} else {
+						text = "Canceled";						
+					}
 				} else if (i < 100) {
-					b.setValue(i);
-					return p;
+					bar.setIndeterminate(false);
+					bar.setValue(i);
+					return panel;
 				}
 				super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
 				return this;
@@ -53,7 +67,7 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 	@Override
 	public void updateUI() {
 		super.updateUI();
-		if (p != null)
-			SwingUtilities.updateComponentTreeUI(p);
+		if (panel != null)
+			SwingUtilities.updateComponentTreeUI(panel);
 	}
 }

@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -316,6 +317,12 @@ public class MainWindow extends JFrame {
 		} else {
 			setTitle(GuiConfig.getValue(GuiConfig.BUYER_TITLE));
 		}
+		
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON64).getImage());
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON32).getImage());
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON16).getImage());
+		setIconImages(icons);
 
 		pack();
 		setLocationRelativeTo(null);
