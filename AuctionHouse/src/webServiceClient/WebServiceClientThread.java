@@ -24,6 +24,8 @@ public class WebServiceClientThread extends Thread {
 	private Hashtable<String, UserProfile> users;
 	
 	public WebServiceClientThread(MediatorWeb med) {
+		this.med = med;
+		
 		random = new Random();
 
 		users = new Hashtable<String, UserProfile>();
@@ -38,7 +40,7 @@ public class WebServiceClientThread extends Thread {
 		running = true;
 		
 		try {
-			while (running) {
+			while (isRunning()) {
 				int sleepTime = 100 + random.nextInt(timeLimit);
 				
 				Thread.sleep(sleepTime);
@@ -46,8 +48,10 @@ public class WebServiceClientThread extends Thread {
 				for (Map.Entry<String, Service> offer: offers.entrySet()) {
 					Service service = offer.getValue();
 
-					int event = random.nextInt(1000);					
+					int event = random.nextInt(1000);
+					System.out.println("event = " + event);
 					if (event < 300) {
+						System.out.println("Merg");
 						UserEntry user = new UserEntry("cineva", Offer.NO_OFFER, 100L, 2.0);
 			
 						service.addUserEntry(user);
@@ -60,8 +64,12 @@ public class WebServiceClientThread extends Thread {
 		}
 	}
 	
-	public void stopThread() {
+	public synchronized void stopThread() {
 		running = false;
+	}
+	
+	public synchronized boolean isRunning() {
+		return running;
 	}
 	
 	public UserProfile logIn(LoginCred cred) {

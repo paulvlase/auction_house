@@ -51,6 +51,8 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
 		
 		try {
+			thread.stopThread();
+			thread.interrupt();
 			thread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
