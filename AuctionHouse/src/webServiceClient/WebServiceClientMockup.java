@@ -78,25 +78,27 @@ public class WebServiceClientMockup implements WebServiceClient {
 	/* Common */
 	@Override
 	public boolean launchOffer(Service service) {
+		webService.launchOffer(service);
 		
-		return false;
+		return true;
 	}
 	
 	@Override
-	public boolean launchOffers(ArrayList<Service> service) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean launchOffers(ArrayList<Service> services) {
+		webService.launchOffers(services);
+		
+		return true;
 	}
 
 	@Override
 	public boolean dropOffer(Service service) {
-		// TODO Auto-generated method stub
+		webService.dropOffer(service);
 		return false;
 	}
 	
 	@Override
-	public boolean dropOffers(ArrayList<Service> service) {
-		// TODO Auto-generated method stub
+	public boolean dropOffers(ArrayList<Service> services) {
+		webService.dropOffers(services);
 		return false;
 	}
 

@@ -3,6 +3,7 @@ package webServiceClient;
 import interfaces.MediatorWeb;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import data.Service;
@@ -12,7 +13,7 @@ public class WebServiceMockup extends Thread {
 	private Random random;
 
 	private MediatorWeb med;
-	private ArrayList<Service> offers;
+	private Hashtable<String, Service> offers;
 	
 	public WebServiceMockup(MediatorWeb med) {
 		this.med = med;
@@ -40,13 +41,34 @@ public class WebServiceMockup extends Thread {
 		running = false;
 	}
 	
-	public synchronized boolean addOffers(ArrayList<Service> services) {
-		offers.addAll(services);
+	public synchronized boolean launchOffer(Service service) {
+		offers.put(service.getName(), service);
+		System.out.println("[WebServiceMockup:addOffer] " + service.getName());
+
+		return true;
+	}
+	
+	public synchronized boolean launchOffers(ArrayList<Service> services) {
+		for (Service service: services) {
+			offers.put(service.getName(), service);
+			System.out.println("[WebServiceMockup:addOffers] " + service.getName());
+		}
 		
 		return true;
 	}
-	public synchronized boolean addOffer(Service service) {
-		offers.add(service);
+	
+	public synchronized boolean dropOffer(Service service) {
+		offers.remove(service.getName());
+		System.out.println("[WebServiceMockup:dropOffer] " + service.getName());
+		return true;
+	}
+	
+	public synchronized boolean dropOffers(ArrayList<Service> services) {
+		for (Service service: services) {
+			offers.remove(service.getName());
+			System.out.println("[WebServiceMockup:addOffers] " + service.getName());
+		}
+		
 		return true;
 	}
 }
