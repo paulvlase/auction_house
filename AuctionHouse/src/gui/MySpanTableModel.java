@@ -117,6 +117,30 @@ public class MySpanTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 		fireTableStructureChanged();
 	}
+	
+	public void addUser(Service service){
+		boolean found = false;
+		
+		for (Service serv : services) {
+			if(serv.equals(service)){
+				found = true;
+				serv.addUserEntry(service.getUsers().get(0));
+				service = serv;
+				break;
+			}
+		}
+		
+		if(!found){
+			return;
+		}
+		
+		service = service.clone();
+		removeService(service);
+		addService(service);
+		
+		fireTableDataChanged();
+		fireTableStructureChanged();
+	}
 
 	public Pair<Service, Integer> getServiceFromRow(Integer row) {
 		int counter = 0;

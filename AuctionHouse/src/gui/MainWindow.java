@@ -380,18 +380,6 @@ public class MainWindow extends JFrame {
 		setVisible(true);
 	}
 
-	public JMenuItem getProfileItem() {
-		return profileItem;
-	}
-
-	public JMenuItem getSignOutItem() {
-		return signOutItem;
-	}
-
-	public JMenuItem getExitItem() {
-		return exitItem;
-	}
-
 	public JButton getSignOutButton() {
 		return signOutButton;
 	}
@@ -404,36 +392,9 @@ public class MainWindow extends JFrame {
 		this.popupMenu = popupMenu;
 	}
 
-	public JMenuItem getLaunchRequestItem() {
-		return launchRequestItem;
-	}
-
-	public JMenuItem getDropRequestItem() {
-		return dropRequestItem;
-	}
-
-	public JSeparator getMenuSeparator() {
-		return menuSeparator;
-	}
 
 	public void setMenuSeparator(JSeparator menuSeparator) {
 		this.menuSeparator = menuSeparator;
-	}
-
-	public JMenuItem getAcceptOfferItem() {
-		return acceptOfferItem;
-	}
-
-	public JMenuItem getRefusetOfferItem() {
-		return refusetOfferItem;
-	}
-
-	public JMenuItem getMakeOfferItem() {
-		return makeOfferItem;
-	}
-
-	public JMenuItem getDropAuctionItem() {
-		return dropAuctionItem;
 	}
 
 	public Gui getGui() {
@@ -493,8 +454,84 @@ public class MainWindow extends JFrame {
 		usernameLabel.setText("<html><b>" + firstName + " " + lastName + "</b></html>");
 	}
 
+	public AddServiceItem getAddServiceItem() {
+		return addServiceItem;
+	}
+
+	public void setAddServiceItem(AddServiceItem addServiceItem) {
+		this.addServiceItem = addServiceItem;
+	}
+
+	public ProfileItem getProfileItem() {
+		return profileItem;
+	}
+
+	public void setProfileItem(ProfileItem profileItem) {
+		this.profileItem = profileItem;
+	}
+
+	public ExitItem getExitItem() {
+		return exitItem;
+	}
+
+	public void setExitItem(ExitItem exitItem) {
+		this.exitItem = exitItem;
+	}
+
+	public LaunchRequestItem getLaunchRequestItem() {
+		return launchRequestItem;
+	}
+
+	public void setLaunchRequestItem(LaunchRequestItem launchRequestItem) {
+		this.launchRequestItem = launchRequestItem;
+	}
+
+	public DropRequestItem getDropRequestItem() {
+		return dropRequestItem;
+	}
+
+	public void setDropRequestItem(DropRequestItem dropRequestItem) {
+		this.dropRequestItem = dropRequestItem;
+	}
+
+	public AcceptOfferItem getAcceptOfferItem() {
+		return acceptOfferItem;
+	}
+
+	public void setAcceptOfferItem(AcceptOfferItem acceptOfferItem) {
+		this.acceptOfferItem = acceptOfferItem;
+	}
+
+	public RefuseOfferItem getRefusetOfferItem() {
+		return refusetOfferItem;
+	}
+
+	public void setRefusetOfferItem(RefuseOfferItem refusetOfferItem) {
+		this.refusetOfferItem = refusetOfferItem;
+	}
+
+	public MakeOfferItem getMakeOfferItem() {
+		return makeOfferItem;
+	}
+
+	public void setMakeOfferItem(MakeOfferItem makeOfferItem) {
+		this.makeOfferItem = makeOfferItem;
+	}
+
+	public DropAuctionItem getDropAuctionItem() {
+		return dropAuctionItem;
+	}
+
+	public void setDropAuctionItem(DropAuctionItem dropAuctionItem) {
+		this.dropAuctionItem = dropAuctionItem;
+	}
+
+	public JSeparator getMenuSeparator() {
+		return menuSeparator;
+	}
+
 	public void newUserNotify(Service service) {
-		System.out.println("TODO : Add new user in table ...");
+		model.addUser(service);
 	}
 
 	// public static void main(String[] args) {
