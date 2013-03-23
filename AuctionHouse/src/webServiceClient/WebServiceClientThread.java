@@ -53,9 +53,9 @@ public class WebServiceClientThread extends Thread {
 				for (Map.Entry<String, Service> offer: offers.entrySet()) {
 					Service service = offer.getValue();
 
-					int event = random.nextInt(10000);
+					int event = random.nextInt(1000);
 					System.out.println("event = " + event);
-					if (event < 300) {
+					if (event < 200) {
 						String username = getRandomString(5 + random.nextInt(16));
 						Long time = date.getTime() + random.nextInt();
 						Double price = random.nextDouble();
