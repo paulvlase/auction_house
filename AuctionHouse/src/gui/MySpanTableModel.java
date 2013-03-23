@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -29,6 +31,8 @@ public class MySpanTableModel extends AbstractTableModel {
 	private ArrayList<Span>					spans;
 	protected CellAttribute					cellAtt;
 
+	private final Lock						mutex				= new ReentrantLock(true);
+
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
 		this.services = (ArrayList<Service>) services.clone();
 		this.columns = columns;
@@ -42,6 +46,7 @@ public class MySpanTableModel extends AbstractTableModel {
 	}
 
 	public void addSpan(Span span) {
+		mutex.lock();
 		if (spans == null) {
 			spans = new ArrayList<Span>();
 		}
@@ -51,9 +56,11 @@ public class MySpanTableModel extends AbstractTableModel {
 			spans.add(span);
 			fireTableStructureChanged();
 		}
+		mutex.unlock();
 	}
 
 	public void removeSpan(Span obj) {
+		mutex.lock();
 		Boolean found = false;
 		for (Span span : spans) {
 			if (span.equals(obj)) {
@@ -67,34 +74,47 @@ public class MySpanTableModel extends AbstractTableModel {
 			spans.remove(obj);
 			fireTableStructureChanged();
 		}
+		mutex.unlock();
 	}
 
 	public void clearSpans() {
+		mutex.lock();
 		for (Span span : spans) {
 			((CellSpan) cellAtt).split(span);
 		}
 
 		spans.clear();
 		fireTableStructureChanged();
+		mutex.unlock();
 	}
 
 	public void removeService(Integer index) {
+		System.out.println(Thread.currentThread().getName() + " is trying to acquaire lock ...");
+		mutex.lock();
+		System.out.println(Thread.currentThread().getName() + " acquaired lock ...");
+
 		data = new ArrayList<ArrayList<Object>>();
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 		clearSpans();
 
 		services.remove(index.intValue());
 
-		for (Service serv : services) {
+		for (Service serv : (ArrayList<Service>) services.clone()) {
 			addService(serv);
 		}
+
+		mutex.unlock();
+		System.out.println(Thread.currentThread().getName() + " released lock ...");
 	}
 
 	public void removeService(Service service) {
+		mutex.lock();
 		removeService(services.indexOf(service));
+		mutex.unlock();
 	}
 
 	public void addService(Service service) {
+		mutex.lock();
 		ArrayList<UserEntry> users;
 		ArrayList<ArrayList<Object>> serviceData;
 
@@ -113,66 +133,81 @@ public class MySpanTableModel extends AbstractTableModel {
 			/* Status span */
 			addSpan(new Span(data.size() - users.size(), 1, users.size(), 1));
 		}
-		
+
 		fireTableDataChanged();
 		fireTableStructureChanged();
+
+		mutex.unlock();
 	}
-	
-	public void addUser(Service service){
+
+	public void addUser(Service service) {
+		mutex.lock();
 		boolean found = false;
-		
+
 		for (Service serv : services) {
-			if(serv.equals(service)){
+			if (serv.equals(service)) {
 				found = true;
 				serv.addUserEntry(service.getUsers().get(0));
 				service = serv;
 				break;
 			}
 		}
-		
-		if(!found){
+
+		if (!found) {
+			mutex.unlock();
 			return;
 		}
-		
+
 		service = service.clone();
 		removeService(service);
 		addService(service);
-		
+
 		fireTableDataChanged();
 		fireTableStructureChanged();
+
+		mutex.unlock();
 	}
 
 	public Pair<Service, Integer> getServiceFromRow(Integer row) {
+
+		mutex.lock();
+
 		int counter = 0;
 		int userCounter;
-		
-//		System.out.println("Search for : " + row);
-		
+
+		// System.out.println("Search for : " + row);
+
 		if (row > getRowCount() || row < 0) {
+			mutex.unlock();
 			return null;
 		}
 
 		for (Service service : services) {
-//			System.out.println("row >= " + counter + " && row < " + (counter + getNeededRows(service)));
+			// System.out.println("row >= " + counter + " && row < " +
+			// (counter
+			// + getNeededRows(service)));
 			if (row >= counter && row < counter + getNeededRows(service)) {
 				userCounter = 0;
-				
+
 				/* Get selected user */
 				if (service.getUsers() != null) {
 					for (UserEntry user : service.getUsers()) {
 						if (row == userCounter + counter) {
+							mutex.unlock();
 							return new Pair<Service, Integer>(service, userCounter);
 						}
 						userCounter++;
 					}
 				}
-				
+
+				mutex.unlock();
 				return new Pair<Service, Integer>(service, -1);
 			}
 
 			counter += getNeededRows(service);
 		}
 
+		mutex.unlock();
 		return null;
 	}
 
@@ -197,29 +232,52 @@ public class MySpanTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return columns.size();
+
+		mutex.lock();
+		int count = columns.size();
+		mutex.unlock();
+
+		return count;
 	}
 
 	@Override
 	public int getRowCount() {
-		return data.size();
+
+		mutex.lock();
+		int count = data.size();
+		mutex.unlock();
+
+		return count;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return data.get(rowIndex).get(columnIndex);
+
+		mutex.lock();
+		Object obj = data.get(rowIndex).get(columnIndex);
+		mutex.unlock();
+
+		return obj;
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		return columns.get(column);
+
+		mutex.lock();
+		String columnName = columns.get(column);
+		mutex.unlock();
+		return columnName;
 	}
 
 	public CellAttribute getCellAttribute() {
-		return cellAtt;
+		mutex.lock();
+		CellAttribute attr = cellAtt;
+		mutex.unlock();
+		return attr;
 	}
 
 	public void setCellAttribute(CellAttribute newCellAtt) {
+		mutex.lock();
 		int numColumns = getColumnCount();
 		int numRows = getRowCount();
 
@@ -229,11 +287,14 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		cellAtt = newCellAtt;
 		fireTableDataChanged();
+		mutex.unlock();
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		mutex.lock();
 		data.get(rowIndex).set(columnIndex, aValue);
+		mutex.unlock();
 	}
 
 	@Override
