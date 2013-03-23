@@ -11,4 +11,5 @@ public interface MediatorWeb {
 	public void registerWebServiceClient(WebServiceClient web);
 	
 	public void newUserNotify(Service service);
+	public void dropRequestNotify(Service service);
 }

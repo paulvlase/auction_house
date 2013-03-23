@@ -30,12 +30,13 @@ import interfaces.WebServiceClient;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
-	private Gui					gui;
-	private Network				net;
+public class MediatorMockup implements MediatorGui, MediatorNetwork,
+		MediatorWeb {
+	private Gui			gui;
+	private Network			net;
 	private WebServiceClient	web;
 
-	private UserProfile			profile;
+	private UserProfile		profile;
 
 	public MediatorMockup() {
 
@@ -150,7 +151,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		return 0;
 	}
 
-	public static Date create(int day, int month, int year, int hourofday, int minute, int second) {
+	public static Date create(int day, int month, int year, int hourofday,
+			int minute, int second) {
 		if (day == 0 && month == 0 && year == 0)
 			return null;
 		Calendar cal = Calendar.getInstance();
@@ -163,6 +165,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	@Override
 	public void newUserNotify(Service service) {
 		gui.newUserNotify(service);
+	}
+	
+	public void dropRequestNotify(Service service) {
+		gui.dropRequestNotify(service);
 	}
 
 	@Override
@@ -188,14 +194,18 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		Service service1 = new Service("service1");
 		Service service2 = new Service("service2", Status.ACTIVE);
-		Service service3 = new Service("service3", Status.TRANSFER_STARTED);
+		Service service3 = new Service("service3",
+				Status.TRANSFER_STARTED);
 
-		service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, date1.getTime(), 25.2));
-		service2.addUserEntry(new UserEntry("Ghennadi", Offer.NO_OFFER, date2.getTime(), 28.7));
-		service2.addUserEntry(new UserEntry("Ana", Offer.NO_OFFER, date1.getTime(), 29.9));
+		service2.addUserEntry(new UserEntry("Paul Vlase",
+				Offer.NO_OFFER, date1.getTime(), 25.2));
+		service2.addUserEntry(new UserEntry("Ghennadi", Offer.NO_OFFER,
+				date2.getTime(), 28.7));
+		service2.addUserEntry(new UserEntry("Ana", Offer.NO_OFFER,
+				date1.getTime(), 29.9));
 
-		service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_ACCEPTED, date2.getTime(),
-				25.2));
+		service3.addUserEntry(new UserEntry("Paul Vlase",
+				Offer.OFFER_ACCEPTED, date2.getTime(), 25.2));
 
 		services.add(service1);
 		services.add(service2);
@@ -225,7 +235,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		if (type == ServiceType.SUPPLY) {
 			try {
-				double price = Double.parseDouble(st.nextToken());
+				double price = Double.parseDouble(st
+						.nextToken());
 
 				service.setPrice(price);
 			} catch (Exception e) {
@@ -240,14 +251,16 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		return service;
 	}
 
-	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
+	private ArrayList<Service> loadServicesFile(String filename,
+			ServiceType type) {
 		ArrayList<Service> services = new ArrayList<Service>();
 
 		File demandsFile = new File(filename);
 		if (demandsFile.exists()) {
 			BufferedReader br = null;
 			try {
-				br = new BufferedReader(new FileReader(demandsFile));
+				br = new BufferedReader(new FileReader(
+						demandsFile));
 
 				String line;
 				while ((line = br.readLine()) != null) {

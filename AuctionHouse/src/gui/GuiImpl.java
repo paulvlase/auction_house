@@ -102,6 +102,12 @@ public class GuiImpl implements Gui {
 		}
 	}
 	
+	public void dropRequestNotify(Service service) {
+		if (mainWindow != null) {
+			mainWindow.dropRequestNotify(service);
+		}
+	}
+	
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
 
