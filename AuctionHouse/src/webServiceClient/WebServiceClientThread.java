@@ -118,7 +118,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean dropOffers(ArrayList<Service> services) {
 		for (Service service: services) {
 			offers.remove(service.getName());
-			System.out.println("[WebServiceClientMockup:addOffers] " + service.getName());
+			System.out.println("[WebServiceClientMockup:dropOffers] " + service.getName());
 		}
 		
 		return true;
