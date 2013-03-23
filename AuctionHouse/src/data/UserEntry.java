@@ -68,4 +68,9 @@ public class UserEntry {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

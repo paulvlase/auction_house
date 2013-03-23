@@ -529,6 +529,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public void newUserNotify(Service service) {
+		//model.removeService(0);
+		System.out.println("Adds user ..");
 		model.addUser(service.clone());
 	}
 

@@ -22,7 +22,8 @@ public class DropRequestItem extends JMenuItem implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("Drop Request");
+		System.out.println("User : " + service.getUsers().get(0));
+		gui.dropOffer(service);
 	}
 	
 	public void showItem(Service service) {
