@@ -82,8 +82,6 @@ public class MainWindow extends JFrame {
 	private MySpanTableModel	model;
 
 	private ArrayList<Service>	services;
-
-	private MyTableCellRenderer	progressRenderer;
 	private MainWindowListener	listener;
 
 	public MainWindow(ArrayList<Service> services) {

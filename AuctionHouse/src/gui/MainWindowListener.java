@@ -18,7 +18,6 @@ import data.UserProfile.UserRole;
 
 public class MainWindowListener implements ActionListener, WindowListener, MouseListener {
 	private MainWindow	mainWindow;
-	private MouseEvent	event;
 
 	public MainWindowListener(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
@@ -100,15 +99,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 		}
 
 	}
-
-	public MouseEvent getEvent() {
-		return event;
-	}
-
-	public void setEvent(MouseEvent event) {
-		this.event = event;
-	}
-
+	
 	@Override
 	public void windowActivated(WindowEvent e) {
 	}
