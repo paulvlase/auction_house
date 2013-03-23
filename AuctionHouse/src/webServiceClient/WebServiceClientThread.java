@@ -61,7 +61,7 @@ public class WebServiceClientThread extends Thread {
 						Double price = Math.abs(random.nextInt(10000)) / 100.0;
 
 						UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
-			
+
 						service.addUserEntry(user);
 						med.newUserNotify(service);
 					}
@@ -125,6 +125,7 @@ public class WebServiceClientThread extends Thread {
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
 		service.setStatus(Status.ACTIVE);
+		service.setUsers(new ArrayList<UserEntry>());
 		offers.put(service.getName(), service);
 
 		med.launchOfferNotify(service);
@@ -136,6 +137,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
 		for (Service service: services) {
 			service.setStatus(Status.ACTIVE);
+			service.setUsers(new ArrayList<UserEntry>());
 			offers.put(service.getName(), service);
 			System.out.println("[WebServiceClientMockup:addOffers] " + service.getName());
 		}
@@ -158,6 +160,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean dropOffers(ArrayList<Service> services) {
 		for (Service service: services) {
 			service.setStatus(Status.INACTIVE);
+			service.setStatus(null);
 			offers.remove(service.getName());
 			System.out.println("[WebServiceClientMockup:dropOffers] " + service.getName());
 		}
