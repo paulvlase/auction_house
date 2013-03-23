@@ -36,8 +36,8 @@ public class MainWindow extends JFrame {
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {15, 0, 10, 0};
 		((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {14, 0, 10, 0};
-		((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
-		((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
+		((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
+		((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
 
 		//======== menuBar1 ========
 		{
@@ -72,30 +72,30 @@ public class MainWindow extends JFrame {
 			((GridBagLayout)mainPanel.getLayout()).columnWidths = new int[] {0, 0};
 			((GridBagLayout)mainPanel.getLayout()).rowHeights = new int[] {0, 0, 0};
 			((GridBagLayout)mainPanel.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-			((GridBagLayout)mainPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
+			((GridBagLayout)mainPanel.getLayout()).rowWeights = new double[] {0.0, 1.0, 1.0E-4};
 
 			//======== topPanel ========
 			{
 				topPanel.setLayout(new GridBagLayout());
 				((GridBagLayout)topPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
-				((GridBagLayout)topPanel.getLayout()).rowHeights = new int[] {0, 0};
+				((GridBagLayout)topPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
 				((GridBagLayout)topPanel.getLayout()).columnWeights = new double[] {1.0, 0.0, 0.0, 0.0, 1.0E-4};
-				((GridBagLayout)topPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
-				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+				((GridBagLayout)topPanel.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0, 1.0E-4};
+				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 3, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 5), 0, 0));
 
 				//---- usernameLabel ----
 				usernameLabel.setText("Ghennadi Procopciuc");
-				topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+				topPanel.add(usernameLabel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 5), 0, 0));
+					new Insets(0, 0, 5, 5), 0, 0));
 
 				//---- logoutButton ----
 				logoutButton.setText("Logout");
-				topPanel.add(logoutButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+				topPanel.add(logoutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+					new Insets(0, 0, 5, 0), 0, 0));
 			}
 			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,

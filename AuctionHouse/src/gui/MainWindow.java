@@ -19,12 +19,14 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
 
 import config.GuiConfig;
 import data.Service;
@@ -91,6 +94,8 @@ public class MainWindow extends JFrame {
 		this.services = gui.loadOffers();
 		this.gui = gui;
 		initComponents();
+		setAvatar(gui.getUserProfile().getAvatar());
+		setName(gui.getUserProfile().getFirstName(), gui.getUserProfile().getLastName());
 	}
 
 	private void initComponents() {
@@ -98,14 +103,14 @@ public class MainWindow extends JFrame {
 		listener = new MainWindowListener(this);
 
 		/* Table init */
-		tableColumns = new String[] { GuiConfig.getValue(GuiConfig.SERVICE),
+		tableColumns = new String[] {
+				GuiConfig.getValue(GuiConfig.SERVICE),
 				GuiConfig.getValue(GuiConfig.STATUS),
-				GuiConfig.getValue(GuiConfig.SELLER),
-				GuiConfig.getValue(GuiConfig.OFFER_MADE),
-				GuiConfig.getValue(GuiConfig.TIME),
+				gui.getUserProfile().getRole() == UserRole.SELLER ? GuiConfig
+						.getValue(GuiConfig.SELLER) : GuiConfig.getValue(GuiConfig.BUYER),
+				GuiConfig.getValue(GuiConfig.OFFER_STATUS), GuiConfig.getValue(GuiConfig.TIME),
 				GuiConfig.getValue(GuiConfig.PRICE) };
-		model = new MySpanTableModel(services, new ArrayList<String>(
-				Arrays.asList(tableColumns)));
+		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)));
 		table = new MultiSpanCellTable(model, new MyTableCellRenderer());
 		menuBar = new JMenuBar();
 		menu = new JMenu();
@@ -158,16 +163,24 @@ public class MainWindow extends JFrame {
 			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		}
 
+		// Container contentPane = getContentPane();
+		// contentPane.setLayout(new GridBagLayout());
+		// ((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {
+		// 15, 0, 10, 0 };
+		// ((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] {
+		// 14, 0, 10, 0 };
+		// ((GridBagLayout) contentPane.getLayout()).columnWeights = new
+		// double[] { 1.0, 1.0, 1.0,
+		// 1.0E-4 };
+		// ((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] {
+		// 1.0, 1.0, 1.0, 1.0E-4 };
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
-		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {
-				15, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 14,
-				0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] {
-				1.0, 1.0, 1.0, 1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] {
-				1.0, 1.0, 1.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 14, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0,
+				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 1.0, 0.0, 1.0E-4 };
 
 		// menuBar1
 		{
@@ -177,8 +190,7 @@ public class MainWindow extends JFrame {
 				menu.setText(GuiConfig.getValue(GuiConfig.MENU));
 
 				// addServiceItem
-				addServiceItem.setText(GuiConfig
-						.getValue(GuiConfig.ADD_SERVICE));
+				addServiceItem.setText(GuiConfig.getValue(GuiConfig.ADD_SERVICE));
 				menu.add(addServiceItem);
 
 				// profileItem
@@ -199,70 +211,117 @@ public class MainWindow extends JFrame {
 
 		// mainPanel
 		{
+
 			mainPanel.setLayout(new GridBagLayout());
-			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] {
-					0, 0 };
-			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0,
-					0, 0 };
-			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] {
-					1.0, 1.0E-4 };
-			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] {
-					0.0, 0.0, 1.0E-4 };
+			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] { 0, 0 };
+			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0, 0, 0 };
+			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] { 1.0, 1.0E-4 };
+			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 1.0, 1.0E-4 };
+
+			// mainPanel.setLayout(new GridBagLayout());
+			// ((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[]
+			// { 0, 0 };
+			// ((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] {
+			// 0, 0, 0 };
+			// ((GridBagLayout) mainPanel.getLayout()).columnWeights = new
+			// double[] { 1.0, 1.0E-4 };
+			// ((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[]
+			// { 0.0, 0.0, 1.0E-4 };
+
+			// // topPanel
+			// {
+			// topPanel.setLayout(new GridBagLayout());
+			// ((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] {
+			// 0, 0, 0, 0, 0 };
+			// ((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] {
+			// 0, 0 };
+			// ((GridBagLayout) topPanel.getLayout()).columnWeights = new
+			// double[] { 1.0, 0.0,
+			// 0.0, 0.0, 1.0E-4 };
+			// ((GridBagLayout) topPanel.getLayout()).rowWeights = new double[]
+			// { 0.0, 1.0E-4 };
+			// topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1, 0.0,
+			// 0.0,
+			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
+			// 0, 0, 5),
+			// 0, 0));
+			//
+			// // usernameLabel
+			// usernameLabel.setText("Ghennadi Procopciuc");
+			// topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1,
+			// 0.0, 0.0,
+			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
+			// 0, 0, 5),
+			// 0, 0));
+			//
+			// // logoutButton
+			// signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
+			// topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1,
+			// 0.0, 0.0,
+			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
+			// 0, 0, 0),
+			// 0, 0));
+			// }
+			// mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0,
+			// 0.0,
+			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
+			// 0, 5, 0), 0,
+			// 0));
 
 			// topPanel
 			{
 				topPanel.setLayout(new GridBagLayout());
-				((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] {
-						0, 0, 0, 0, 0 };
-				((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] {
-						0, 0 };
-				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] {
-						1.0, 0.0, 0.0, 0.0, 1.0E-4 };
-				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] {
-						0.0, 1.0E-4 };
-				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1,
-						0.0, 0.0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+				((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] { 0, 0, 0, 0, 0 };
+				((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
+				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0,
+						0.0, 0.0, 1.0E-4 };
+				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] { 1.0, 0.0, 1.0,
+						1.0E-4 };
+				
+
+				avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
+				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 3, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5),
+						0, 0));
 
 				// usernameLabel
-				usernameLabel.setText("Ghennadi Procopciuc");
-				topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1,
-						0.0, 0.0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+				usernameLabel.setText("");
+				topPanel.add(usernameLabel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5),
+						0, 0));
 
 				// logoutButton
 				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
-				topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1,
-						0.0, 0.0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				topPanel.add(signOutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0),
+						0, 0));
 			}
-			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0,
-					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 5, 0), 0, 0));
+			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
+					0));
 
 			// scrollPane1
 			{
 				scrollPanel.setViewportView(table);
 			}
-			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0,
-					0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
+					0));
 		}
 		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						0, 0, 5, 5), 0, 0));
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		if (gui.getUserProfile().getRole() == UserRole.SELLER) {
-			setTitle("Seller");
+			setTitle(GuiConfig.getValue(GuiConfig.SELLER_TITLE));
 		} else {
-			setTitle("Buyer");
+			setTitle(GuiConfig.getValue(GuiConfig.BUYER_TITLE));
 		}
 
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	
+
 	public ActionListener getActionListener() {
 		return listener;
 	}
@@ -383,6 +442,30 @@ public class MainWindow extends JFrame {
 
 	public void setTable(MultiSpanCellTable table) {
 		this.table = table;
+	}
+
+	public void setAvatar(byte[] avatar) {
+		if (avatar == null) {
+			setAvatar((ImageIcon) null);
+		} else {
+			setAvatar(new ImageIcon(avatar));
+		}
+	}
+
+	public void setAvatar(ImageIcon avatar) {
+		ImageIcon newAvatar;
+
+		if (avatar == null) {
+			avatar = new ImageIcon(getClass().getResource(GuiConfig.DEFAULT_AVATAR));
+		}
+
+		newAvatar = new ImageIcon(avatar.getImage().getScaledInstance(GuiConfig.MINI_AVATAR_HEIGHT,
+				GuiConfig.MINI_AVATAR_WIDTH, Image.SCALE_DEFAULT));
+		avatarLabel.setIcon(newAvatar);
+	}
+
+	private void setName(String firstName, String lastName) {
+		usernameLabel.setText("<html><b>" + firstName + " " + lastName + "</b></html>");
 	}
 
 	// public static void main(String[] args) {

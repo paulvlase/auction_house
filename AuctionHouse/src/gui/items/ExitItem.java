@@ -1,5 +1,8 @@
 package gui.items;
 
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JMenuItem;
 
 import gui.MainWindow;
@@ -20,6 +23,11 @@ public class ExitItem extends JMenuItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Exit Action");
+		gui.logOut();
+		
+		/* Dispose main window */
+		WindowEvent wev = new WindowEvent(window, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 	}
 
 }

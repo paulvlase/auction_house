@@ -13,11 +13,11 @@
        <class>java.awt.GridBagLayout</class>
        <void method="setProperty">
         <string>$columnSpecs</string>
-        <string>10:1.0, 0:1.0, 10:1.0</string>
+        <string>10, 0:1.0, 10</string>
        </void>
        <void method="setProperty">
         <string>$rowSpecs</string>
-        <string>9:1.0, 0:1.0, 10:1.0</string>
+        <string>9, 0:1.0, 10</string>
        </void>
        <void method="setProperty">
         <string>$hGap</string>
@@ -47,7 +47,7 @@
          </void>
          <void method="setProperty">
           <string>$rowSpecs</string>
-          <string>0, 0</string>
+          <string>0, 0:1.0</string>
          </void>
          <void method="setProperty">
           <string>$hGap</string>
@@ -80,7 +80,7 @@
            </void>
            <void method="setProperty">
             <string>$rowSpecs</string>
-            <string>0</string>
+            <string>0:1.0, 0, 0:1.0</string>
            </void>
            <void method="setProperty">
             <string>$hGap</string>
@@ -115,6 +115,10 @@
              <string>gridx</string>
              <int>1</int>
             </void>
+            <void method="setProperty">
+             <string>gridheight</string>
+             <int>3</int>
+            </void>
            </object>
           </void>
           <void method="add">
@@ -134,6 +138,10 @@
              <string>gridx</string>
              <int>2</int>
             </void>
+            <void method="setProperty">
+             <string>gridy</string>
+             <int>1</int>
+            </void>
            </object>
           </void>
           <void method="add">
@@ -152,6 +160,10 @@
             <void method="setProperty">
              <string>gridx</string>
              <int>3</int>
+            </void>
+            <void method="setProperty">
+             <string>gridy</string>
+             <int>1</int>
             </void>
            </object>
           </void>

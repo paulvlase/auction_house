@@ -7,58 +7,69 @@ package gui;
 import interfaces.Gui;
 import interfaces.Window;
 
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.RenderedImage;
-import java.awt.image.WritableRaster;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.GuiConfig;
-import data.UserProfile;
 
 /**
  * @author Ghennadi Procopciuc
  */
 public class ProfileWindow extends JFrame implements ActionListener, MouseListener, Window {
-	private JPanel			topPanel;
-	private JLabel			avatarLabel;
-	private JLabel			nameLabel;
-	private JSeparator		separator1;
-	private JPanel			middlePanel;
-	private JLabel			usernameLabel;
-	private JLabel			usernameLabelValue;
-	private JLabel			firstnameLabel;
-	private JTextField		firstnameField;
-	private JLabel			newPasswordLabel;
-	private JPasswordField	newPasswordField;
-	private JLabel			lastnameLabel;
-	private JTextField		lastnameField;
-	private JLabel			newPasswordRetype;
-	private JPasswordField	newPasswordRetypePasswordField;
-	private JLabel			locationLabel;
-	private JTextField		locationField;
-	private JSeparator		separator2;
-	private JPanel			panel1;
-	private JButton			cancelButton;
-	private JButton			okButton;
 
-	private Gui				gui;
+	private static final long	serialVersionUID	= 1L;
+
+	private JPanel				topPanel;
+	private JLabel				avatarLabel;
+	private JLabel				nameLabel;
+	private JSeparator			separator1;
+	private JPanel				middlePanel;
+	private JLabel				usernameLabel;
+	private JLabel				usernameLabelValue;
+	private JLabel				firstnameLabel;
+	private JTextField			firstnameField;
+	private JLabel				newPasswordLabel;
+	private JPasswordField		newPasswordField;
+	private JLabel				lastnameLabel;
+	private JTextField			lastnameField;
+	private JLabel				newPasswordRetype;
+	private JPasswordField		newPasswordRetypePasswordField;
+	private JLabel				locationLabel;
+	private JTextField			locationField;
+	private JSeparator			separator2;
+	private JPanel				panel1;
+	private JButton				cancelButton;
+	private JButton				okButton;
+
+	private Gui					gui;
 
 	public ProfileWindow() {
 		initComponents();
@@ -66,8 +77,20 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 	}
 
 	public ProfileWindow(Gui gui) {
-		initComponents();
 		this.gui = gui;
+		initComponents();
+		initData();
+	}
+
+	private void initData() {
+		System.out.println(gui.getUserProfile());
+		if (gui.getUserProfile().getAvatar() != null) {
+			setAvatar(new ImageIcon(gui.getUserProfile().getAvatar()));
+		}
+
+		setName(gui.getUserProfile().getFirstName(), gui.getUserProfile().getLastName());
+		setLocation(gui.getUserProfile().getLocation());
+		setUsername(gui.getUserProfile().getUsername());
 	}
 
 	private void initComponents() {
@@ -233,19 +256,12 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 		setSize(435, 305);
 		setTitle(GuiConfig.getValue(GuiConfig.PROFILE_TITLE));
 		setLocationRelativeTo(getOwner());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
-	private void setName(String firstName, String lastName) {
-		nameLabel.setText("<html><b><font size=\"15\" align=\"right\">" + firstName + "<br/>"
-				+ lastName + "</font></b></html>");
-
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			System.out.println("Ok Button");
 			if (newPasswordField.getPassword().length != 0) {
 				if (newPasswordRetypePasswordField.getPassword().length == 0) {
 					JOptionPane.showMessageDialog(null,
@@ -254,7 +270,7 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 					return;
 				}
 
-				if (new String(newPasswordField.getPassword()).equals(new String(
+				if (!new String(newPasswordField.getPassword()).equals(new String(
 						newPasswordRetypePasswordField.getPassword()))) {
 					JOptionPane.showMessageDialog(null,
 							GuiConfig.getValue(GuiConfig.PASSWORD_MATCH_ERROR),
@@ -264,22 +280,20 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 
 				gui.getUserProfile().setPassword(new String(newPasswordField.getPassword()));
 			}
-			
+
 			gui.getUserProfile().setLocation(locationField.getText());
 			gui.getUserProfile().setFirstName(firstnameField.getText());
 			gui.getUserProfile().setLastName(lastnameField.getText());
-			
+
 			gui.setUserProfile(gui.getUserProfile());
+			setVisible(false);
+			dispose();
 		}
 
 		if (e.getSource() == cancelButton) {
 			setVisible(false);
 			dispose();
 		}
-	}
-
-	public static void main(String[] args) {
-		new ProfileWindow().setVisible(true);
 	}
 
 	@Override
@@ -326,19 +340,18 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 
 		try {
 			byte[] byteArray;
-			BufferedReader buffer = new BufferedReader(new FileReader(tempFile));
 			RandomAccessFile file = new RandomAccessFile(tempFile, "r");
 			byteArray = new byte[(int) file.length()];
 			file.readFully(byteArray);
 			file.close();
-			
+
 			return byteArray;
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} finally {
 			tempFile.delete();
 		}
-		
+
 		return null;
 	}
 
@@ -346,28 +359,35 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 		avatarLabel.setIcon(avatar);
 	}
 
+	private void setLocation(String location) {
+		locationField.setText(location);
+	}
+
+	private void setUsername(String username) {
+		usernameLabelValue.setText("<html><b>" + username + "</b></html>");
+	}
+
+	private void setName(String firstName, String lastName) {
+		nameLabel.setText("<html><b><font size=\"15\" align=\"right\">" + firstName + "<br/>"
+				+ lastName + "</font></b></html>");
+		firstnameField.setText(firstName);
+		lastnameField.setText(lastName);
+	}
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -389,4 +409,7 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 		setVisible(false);
 	}
 
+	public static void main(String[] args) {
+		new ProfileWindow().setVisible(true);
+	}
 }

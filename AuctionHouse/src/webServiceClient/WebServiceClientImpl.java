@@ -41,7 +41,7 @@ public class WebServiceClientImpl implements WebServiceClient {
 			return null;
 		}
 		
-		if (profile.getPassword() != cred.getPassword()) {
+		if (!profile.getPassword().equals(cred.getPassword())) {
 			return null;
 		}
 		
