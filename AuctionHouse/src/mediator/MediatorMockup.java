@@ -30,14 +30,14 @@ import interfaces.WebServiceClient;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb {
+public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
 	private Gui					gui;
 	private Network				net;
 	private WebServiceClient	web;
 
 	private UserProfile			profile;
 
-	public MockupMediator() {
+	public MediatorMockup() {
 
 	}
 
