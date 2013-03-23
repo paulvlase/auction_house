@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserEntry;
 import data.UserProfile;
@@ -86,15 +87,13 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	
 	/* Buyer */
 	@Override
-	public int acceptOffer() {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean acceptOffer(Pair<Service, Integer> pair) {
+		return thread.acceptOffer(pair);
 	}
 
 	@Override
-	public int refuseOffer() {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean refuseOffer(Pair<Service, Integer> pair) {
+		return true;
 	}
 
 	/* Seller */

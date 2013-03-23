@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserEntry;
 import data.UserProfile;
@@ -165,6 +166,24 @@ public class WebServiceClientThread extends Thread {
 			System.out.println("[WebServiceClientMockup:dropOffers] " + service.getName());
 		}
 		
+		return true;
+	}
+	
+	public synchronized boolean acceptOffer(Pair<Service, Integer> pair) {
+		Service service = pair.getKey();
+		ArrayList<UserEntry> users = service.getUsers();
+		
+		for (UserEntry user: users) {
+			user.setOffer(Offer.OFFER_REFUSED);
+		}
+		
+		UserEntry user = users.get(pair.getValue());
+		user.setOffer(Offer.OFFER_ACCEPTED);
+
+		return true;
+	}
+
+	public synchronized boolean refuseOffer(Pair<Service, Integer> pair) {
 		return true;
 	}
 }

@@ -12,6 +12,7 @@ import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
 import config.GlobalConfig.UserType;
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserEntry;
 import data.UserProfile;
@@ -127,13 +128,17 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 
 	/* Buyer */
 	@Override
-	public int acceptOffer() {
-		// TODO Auto-generated method stub
+	public void acceptOffer(Pair<Service, Integer> pair) {
+		boolean bRet;
+		bRet = web.acceptOffer(pair);
+		if(bRet) {
+			net.startTransfer(pair);
+		}
 		return 0;
 	}
 
 	@Override
-	public int refuseOffer() {
+	public int refuseOffer(Service service) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

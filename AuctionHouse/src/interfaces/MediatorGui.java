@@ -29,8 +29,8 @@ public interface MediatorGui {
 	public boolean dropOffers(ArrayList<Service> services);
 	
 	/* Buyer */
-	public int acceptOffer();
-	public int refuseOffer();
+	public void acceptOffer(Service service);
+	public int refuseOffer(Service service);
 	
 	/* Seller */
 	public int makeOffer();

@@ -3,6 +3,7 @@ package interfaces;
 import java.util.ArrayList;
 
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserProfile;
 
@@ -26,8 +27,8 @@ public interface WebServiceClient {
 	public boolean dropOffers(ArrayList<Service> service);
 	
 	/* Buyer */
-	public int acceptOffer();
-	public int refuseOffer();
+	public boolean acceptOffer(Pair<Service, Integer> pair);
+	public boolean refuseOffer(Pair<Service, Integer> pair);
 	
 	/* Seller */
 	public int makeOffer();

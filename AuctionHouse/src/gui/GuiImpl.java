@@ -14,6 +14,7 @@ import config.FilesConfig;
 import config.GuiConfig;
 import config.GlobalConfig.ServiceType;
 import config.GlobalConfig.UserType;
+import data.Pair;
 import data.Service;
 import data.LoginCred;
 import data.UserProfile;
@@ -174,5 +175,10 @@ public class GuiImpl implements Gui {
 	
 	public ArrayList<Service> loadOffers(){
 		return med.loadOffers();
+	}
+
+	@Override
+	public void acceptOffer(Pair<Service, Integer> pair) {
+		med.acceptOffer(pair);
 	}
 }

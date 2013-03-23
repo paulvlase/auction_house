@@ -2,11 +2,8 @@ package data;
 
 public class UserEntry {
 	public enum Offer {
-		NO_OFFER,
-		OFFER_MADE,
-		OFFER_ACCEPTED,
-		OFFER_REFUSED;
-		
+		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED;
+
 		public String toString() {
 			switch (ordinal()) {
 			case 0:
@@ -20,21 +17,28 @@ public class UserEntry {
 			default:
 				break;
 			}
-			
+
 			return "";
 		};
 	}
-	
-	String name;
-	Offer offer;
-	Long time;
-	Double price;
-	
-	public UserEntry(String name, Offer offer, Long time, Double price){
+
+	String	name;
+	Offer	offer;
+	Long	time;
+	Double	price;
+
+	public UserEntry(String name, Offer offer, Long time, Double price) {
 		this.name = name;
 		this.offer = offer;
 		this.time = time;
 		this.price = price;
+	}
+
+	public UserEntry(UserEntry user) {
+		this.name = user.getName();
+		this.offer = user.getOffer();
+		this.time = user.getTime();
+		this.price = user.getPrice();
 	}
 
 	public String getName() {
@@ -68,7 +72,7 @@ public class UserEntry {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
