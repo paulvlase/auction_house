@@ -57,8 +57,8 @@ public class WebServiceClientThread extends Thread {
 					System.out.println("event = " + event);
 					if (event < 200) {
 						String username = getRandomString(5 + random.nextInt(16));
-						Long time = date.getTime() + random.nextInt();
-						Double price = random.nextDouble();
+						Long time = date.getTime() + random.nextInt(100000);
+						Double price = random.nextDouble() + Math.pow(10, random.nextInt(5));
 
 						UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
 			
