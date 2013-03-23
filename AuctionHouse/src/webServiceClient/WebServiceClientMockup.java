@@ -15,13 +15,13 @@ import interfaces.WebServiceClient;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceClientImpl implements WebServiceClient {
+public class WebServiceClientMockup implements WebServiceClient {
 	private MediatorWeb med;
 	private WebServiceMockup webService;
 	
 	private Hashtable<String, UserProfile> users;
 	
-	public WebServiceClientImpl(MediatorWeb med) {
+	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
 		
 		med.registerWebServiceClient(this);
@@ -78,25 +78,27 @@ public class WebServiceClientImpl implements WebServiceClient {
 	/* Common */
 	@Override
 	public boolean launchOffer(Service service) {
-		// TODO Auto-generated method stub
-		return false;
+		webService.launchOffer(service);
+		
+		return true;
 	}
 	
 	@Override
-	public boolean launchOffers(ArrayList<Service> service) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean launchOffers(ArrayList<Service> services) {
+		webService.launchOffers(services);
+		
+		return true;
 	}
 
 	@Override
 	public boolean dropOffer(Service service) {
-		// TODO Auto-generated method stub
+		webService.dropOffer(service);
 		return false;
 	}
 	
 	@Override
-	public boolean dropOffers(ArrayList<Service> service) {
-		// TODO Auto-generated method stub
+	public boolean dropOffers(ArrayList<Service> services) {
+		webService.dropOffers(services);
 		return false;
 	}
 
