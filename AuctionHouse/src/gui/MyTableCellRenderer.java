@@ -58,7 +58,6 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 			Calendar cal = Calendar.getInstance();
 
 			if (value instanceof Long) {
-				System.out.println("Date ... ");
 				String text = "" + new Period(cal.getTime().getTime(), (Long) value);
 				super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
 				return this;
