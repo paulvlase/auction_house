@@ -11,10 +11,7 @@ import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-public class ExitItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-	private Service		service;
+public class ExitItem extends GuiAbstractItem implements Command {
 
 	public ExitItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -32,14 +29,4 @@ public class ExitItem extends JMenuItem implements Command {
 		WindowEvent wev = new WindowEvent(window, WindowEvent.WINDOW_CLOSING);
 		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 	}
-
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
-	}
-
 }

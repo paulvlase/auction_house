@@ -8,11 +8,7 @@ import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-public class LaunchRequestItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-
-	private Service		service;
+public class LaunchRequestItem extends GuiAbstractItem implements Command {
 
 	public LaunchRequestItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -25,15 +21,5 @@ public class LaunchRequestItem extends JMenuItem implements Command {
 	public void execute() {
 		System.out.println("Launch Offer");
 		gui.launchOffer(service.clone());
-	}
-
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	
-	public void hideItem() {
-		setVisible(false);
 	}
 }

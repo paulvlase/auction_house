@@ -9,12 +9,7 @@ import javax.swing.JMenuItem;
 
 import data.Service;
 
-public class AddServiceItem extends JMenuItem implements Command {
-
-	private static final long	serialVersionUID	= 1L;
-	private MainWindow			window;
-	private Gui					gui;
-	private Service				service;
+public class AddServiceItem  extends GuiAbstractItem implements Command {
 
 	public AddServiceItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -28,14 +23,5 @@ public class AddServiceItem extends JMenuItem implements Command {
 		System.out.println("Add Service action");
 
 		new AddNewService(window).setVisible(true);
-	}
-
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
 	}
 }

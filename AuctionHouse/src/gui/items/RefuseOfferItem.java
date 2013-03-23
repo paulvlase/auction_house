@@ -8,10 +8,7 @@ import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-public class RefuseOfferItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-	private Service		service;
+public class RefuseOfferItem extends GuiAbstractItem implements Command {
 
 	public RefuseOfferItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -25,12 +22,4 @@ public class RefuseOfferItem extends JMenuItem implements Command {
 		System.out.println("Refuse Request");
 	}
 
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
-	}
 }

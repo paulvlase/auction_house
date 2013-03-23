@@ -8,10 +8,7 @@ import interfaces.Command;
 import interfaces.Gui;
 import gui.MainWindow;
 
-public class DropRequestItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-	private Service		service;
+public class DropRequestItem extends GuiAbstractItem implements Command {
 
 	public DropRequestItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -22,16 +19,7 @@ public class DropRequestItem extends JMenuItem implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("User : " + service.getUsers().get(0));
+		System.out.println("User : " + service.getUsers());
 		gui.dropOffer(service);
-	}
-	
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
 	}
 }

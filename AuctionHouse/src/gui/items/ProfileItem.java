@@ -9,10 +9,7 @@ import gui.ProfileWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-public class ProfileItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-	private Service		service;
+public class ProfileItem extends GuiAbstractItem implements Command {
 
 	public ProfileItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -26,12 +23,4 @@ public class ProfileItem extends JMenuItem implements Command {
 		new ProfileWindow(gui).showWindow();
 	}
 
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
-	}
 }

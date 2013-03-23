@@ -36,12 +36,11 @@ public class MySpanTableModel extends AbstractTableModel {
 	private final Lock			mutex				= new ReentrantLock(true);
 
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
-		this.services = (List<Service>) Collections
-				.synchronizedCollection((ArrayList<Service>) services.clone());
+		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services
+				.clone());
 		// this.columns = columns;
 
-		this.columns = (List<String>) Collections.synchronizedCollection(new ArrayList<String>(
-				columns));
+		this.columns = (List<String>) Collections.synchronizedList(new ArrayList<String>(columns));
 
 		data = Collections.synchronizedList(new ArrayList<List<Object>>());
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
@@ -109,7 +108,7 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		services.remove(index.intValue());
 
-		for (Service serv : (ArrayList<Service>) ((ArrayList<Service>) services).clone()) {
+		for (Service serv : services) {
 			addService(serv, false);
 		}
 
@@ -129,6 +128,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		ArrayList<ArrayList<Object>> serviceData;
 
 		users = service.getUsers();
+		System.out.println(service);
 		serviceData = service.getAsTable();
 
 		data.addAll(serviceData);
@@ -138,7 +138,7 @@ public class MySpanTableModel extends AbstractTableModel {
 			services.add(service);
 		}
 
-		if (service.getStatus() == Status.ACTIVE) {
+		if (service.getStatus() == Status.ACTIVE && users != null) {
 			/* Service name span */
 			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
 			/* Status span */
@@ -217,7 +217,11 @@ public class MySpanTableModel extends AbstractTableModel {
 		case INACTIVE:
 			return 1;
 		case ACTIVE:
-			return service.getUsers().size();
+			if (service.getUsers() == null) {
+				return 1;
+			} else {
+				return service.getUsers().size();
+			}
 		case TRANSFER_IN_PROGRESS:
 		case TRANSFER_STARTED:
 		case TRANSFER_COMPLETE:

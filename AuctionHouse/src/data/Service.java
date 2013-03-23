@@ -164,6 +164,11 @@ public class Service {
 			data.add(row);
 			break;
 		case ACTIVE:
+			if(users == null){
+				row = new ArrayList<Object>(Arrays.asList(getName(), "Active", "", "", "", ""));
+				data.add(row);
+				break;
+			}
 			for (UserEntry user : users) {
 				row = new ArrayList<Object>();
 				if (first) {

@@ -57,19 +57,19 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.BUYER) {
 			if (service.getStatus() == Status.INACTIVE) {
-				mainWindow.getLaunchRequestItem().showItem(service);
+				mainWindow.getLaunchRequestItem().showItem(pair);
 			} else {
 				mainWindow.getLaunchRequestItem().setVisible(false);
 			}
 
 			if (service.getStatus() != Status.INACTIVE && !accepted) {
 				if (column >= 2) {
-					mainWindow.getDropRequestItem().showItem(service);
+					mainWindow.getDropRequestItem().showItem(pair);
 					mainWindow.getMenuSeparator().setVisible(true);
-					mainWindow.getAcceptOfferItem().showItem(service);
-					mainWindow.getRefusetOfferItem().showItem(service);
+					mainWindow.getAcceptOfferItem().showItem(pair);
+					mainWindow.getRefusetOfferItem().showItem(pair);
 				} else {
-					mainWindow.getDropRequestItem().showItem(service);
+					mainWindow.getDropRequestItem().showItem(pair);
 					mainWindow.getMenuSeparator().setVisible(false);
 					mainWindow.getAcceptOfferItem().hideItem();
 					mainWindow.getRefusetOfferItem().hideItem();
@@ -93,8 +93,8 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			mainWindow.getRefusetOfferItem().hideItem();
 
 			if (service.getStatus() != Status.INACTIVE && !accepted && column >= 2) {
-				mainWindow.getMakeOfferItem().showItem(service);
-				mainWindow.getDropAuctionItem().showItem(service);
+				mainWindow.getMakeOfferItem().showItem(pair);
+				mainWindow.getDropAuctionItem().showItem(pair);
 			} else {
 				mainWindow.getMakeOfferItem().hideItem();
 				mainWindow.getDropAuctionItem().hideItem();

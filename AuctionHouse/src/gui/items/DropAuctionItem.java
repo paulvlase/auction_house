@@ -8,10 +8,7 @@ import javax.swing.JMenuItem;
 
 import data.Service;
 
-public class DropAuctionItem extends JMenuItem implements Command {
-	private MainWindow	window;
-	private Gui			gui;
-	private Service		service;
+public class DropAuctionItem extends GuiAbstractItem implements Command {
 
 	public DropAuctionItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -24,14 +21,4 @@ public class DropAuctionItem extends JMenuItem implements Command {
 	public void execute() {
 		System.out.println("Drop Auction");
 	}
-
-	public void showItem(Service service) {
-		this.service = service;
-		setVisible(true);
-	}
-
-	public void hideItem() {
-		setVisible(false);
-	}
-
 }
