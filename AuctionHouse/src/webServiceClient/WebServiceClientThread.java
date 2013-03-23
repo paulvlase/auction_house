@@ -3,6 +3,7 @@ package webServiceClient;
 import interfaces.MediatorWeb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Random;
@@ -11,12 +12,15 @@ import data.LoginCred;
 import data.Service;
 import data.UserEntry;
 import data.UserProfile;
+import data.Service.Status;
 import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
 public class WebServiceClientThread extends Thread {
 	private boolean running;
+
 	private Random random;
+	private Date date;
 
 	private MediatorWeb med;
 
@@ -27,6 +31,7 @@ public class WebServiceClientThread extends Thread {
 		this.med = med;
 		
 		random = new Random();
+		date = new Date();
 
 		users = new Hashtable<String, UserProfile>();
 		offers = new Hashtable<String, Service>();
@@ -51,8 +56,11 @@ public class WebServiceClientThread extends Thread {
 					int event = random.nextInt(1000);
 					System.out.println("event = " + event);
 					if (event < 300) {
-						System.out.println("Merg");
-						UserEntry user = new UserEntry("cineva", Offer.NO_OFFER, 100L, 2.0);
+						String username = getRandomString(5 + random.nextInt(16));
+						Long time = date.getTime() + random.nextInt();
+						Double price = random.nextDouble();
+
+						UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
 			
 						service.addUserEntry(user);
 						med.newUserNotify(service);
@@ -62,6 +70,20 @@ public class WebServiceClientThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String getRandomString(int len) {
+		char[] str = new char[len];
+
+		for (int i = 0; i < len; i++) {
+			int c;
+			do {
+				c = 65 + random.nextInt(123);
+			} while(c >= 91 && c <= 96);
+			str[i] = (char) c;
+		}
+
+		return new String(str);
 	}
 	
 	public synchronized void stopThread() {
