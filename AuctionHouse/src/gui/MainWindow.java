@@ -179,7 +179,7 @@ public class MainWindow extends JFrame {
 			}).start();
 
 		}
-		
+
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
@@ -328,7 +328,6 @@ public class MainWindow extends JFrame {
 		this.popupMenu = popupMenu;
 	}
 
-
 	public void setMenuSeparator(JSeparator menuSeparator) {
 		this.menuSeparator = menuSeparator;
 	}
@@ -467,8 +466,23 @@ public class MainWindow extends JFrame {
 	}
 
 	public void newUserNotify(Service service) {
-		//model.removeService(0);
 		System.out.println("Adds user ..");
 		model.addUser(service.clone());
+	}
+
+	public void dropOfferNotify(Service service) {
+		model.removeService(service);
+		model.addService(service);
+	}
+
+	public void launchOffersNotify(ArrayList<Service> services) {
+		for (Service service : services) {
+			launchOfferNotify(service);
+		}
+	}
+
+	public void launchOfferNotify(Service service) {
+		model.removeService(service);
+		model.addService(service);
 	}
 }

@@ -34,6 +34,9 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 		if (e.isPopupTrigger()) {
 			int row = mainWindow.getTable().rowAtPoint(e.getPoint());
 			int column = mainWindow.getTable().columnAtPoint(e.getPoint());
+			if(column < 0 || row < 0){
+				return;
+			}
 			System.out.println("Selected Row : " + row + " Column : " + column);
 			buildPopupMenu(mainWindow.getModel().getServiceFromRow(row), column);
 			mainWindow.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());

@@ -8,7 +8,9 @@ import gui.spantable.Span;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -23,21 +25,25 @@ import data.UserEntry;
 
 public class MySpanTableModel extends AbstractTableModel {
 
-	private static final long				serialVersionUID	= 1L;
+	private static final long	serialVersionUID	= 1L;
 
-	private ArrayList<ArrayList<Object>>	data;
-	private ArrayList<String>				columns;
-	private ArrayList<Service>				services;
-	private ArrayList<Span>					spans;
-	protected CellAttribute					cellAtt;
+	private List<List<Object>>	data;
+	private List<String>		columns;
+	private List<Service>		services;
+	private ArrayList<Span>		spans;
+	protected CellAttribute		cellAtt;
 
-	private final Lock						mutex				= new ReentrantLock(true);
+	private final Lock			mutex				= new ReentrantLock(true);
 
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
-		this.services = (ArrayList<Service>) services.clone();
-		this.columns = columns;
+		this.services = (List<Service>) Collections
+				.synchronizedCollection((ArrayList<Service>) services.clone());
+		// this.columns = columns;
 
-		data = new ArrayList<ArrayList<Object>>();
+		this.columns = (List<String>) Collections.synchronizedCollection(new ArrayList<String>(
+				columns));
+
+		data = Collections.synchronizedList(new ArrayList<List<Object>>());
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 
 		System.out.println("From constructor ...");
@@ -103,7 +109,7 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		services.remove(index.intValue());
 
-		for (Service serv : (ArrayList<Service>) services.clone()) {
+		for (Service serv : (ArrayList<Service>) ((ArrayList<Service>) services).clone()) {
 			addService(serv, false);
 		}
 

@@ -105,7 +105,7 @@ public class GuiImpl implements Gui {
 		mainWindow.launchOffersNotify(services);
 	}
 
-	public void dropRequestNotify(Service service) {
+	public void dropOfferNotify(Service service) {
 		if (mainWindow != null) {
 			mainWindow.dropOfferNotify(service);
 		}
