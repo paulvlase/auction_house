@@ -18,9 +18,9 @@ public interface Gui {
 	public UserProfile getUserProfile();
 	public boolean setUserProfile(UserProfile profile);
 	
-	public void addService(Service service);
-	public void addServices(ArrayList<Service> services);
-	public void removeService(Service service);
-	public void removeServices(ArrayList<Service> services);
+	public boolean launchOffer(Service service);
+	public boolean launchOffers(ArrayList<Service> services);
+	public boolean dropOffer(Service service);
+	public boolean dropOffers(ArrayList<Service> services);
 	public ArrayList<Service> loadOffers();
 }
