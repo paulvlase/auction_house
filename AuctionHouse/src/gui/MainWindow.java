@@ -163,6 +163,23 @@ public class MainWindow extends JFrame {
 			table.setShowGrid(false);
 
 			table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+			new Thread(new Runnable() {
+				public void run() {
+					while (true) {
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								table.repaint();
+							}
+						});
+						try {
+							Thread.sleep(1000);
+						} catch (Exception e) {
+						}
+					}
+				}
+			}).start();
+
 		}
 
 		// Container contentPane = getContentPane();
@@ -474,6 +491,10 @@ public class MainWindow extends JFrame {
 
 	private void setName(String firstName, String lastName) {
 		usernameLabel.setText("<html><b>" + firstName + " " + lastName + "</b></html>");
+	}
+
+	public void newUserNotify(Service service) {
+		System.out.println("TODO : Add new user in table ...");
 	}
 
 	// public static void main(String[] args) {

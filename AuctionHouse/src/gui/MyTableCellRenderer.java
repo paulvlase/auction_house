@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -11,11 +13,13 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import data.Period;
+
 class MyTableCellRenderer extends DefaultTableCellRenderer {
 
 	private static final long	serialVersionUID	= 1L;
 	private final JProgressBar	bar					= new JProgressBar(0, 100);
-	private final JPanel		panel					= new JPanel(new BorderLayout());
+	private final JPanel		panel				= new JPanel(new BorderLayout());
 
 	public MyTableCellRenderer() {
 		super();
@@ -33,8 +37,8 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 				Integer i = (Integer) value;
 				String text = "Done";
 				if (i < 0) {
-					if(i == -1){
-						text = "Canceled";						
+					if (i == -1) {
+						text = "Canceled";
 					}
 				} else if (i < 100) {
 					bar.setIndeterminate(false);
@@ -47,6 +51,17 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 
 			if (value instanceof JLabel) {
 				return (JLabel) value;
+			}
+		}
+
+		if (column == 4) {
+			Calendar cal = Calendar.getInstance();
+
+			if (value instanceof Long) {
+				System.out.println("Date ... ");
+				String text = "" + new Period(cal.getTime().getTime(), (Long) value);
+				super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
+				return this;
 			}
 		}
 
