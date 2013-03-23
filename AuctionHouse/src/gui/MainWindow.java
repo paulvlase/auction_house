@@ -456,7 +456,8 @@ public class MainWindow extends JFrame {
 		ImageIcon newAvatar;
 
 		if (avatar == null) {
-			avatar = new ImageIcon(getClass().getResource(GuiConfig.DEFAULT_AVATAR));
+			System.out.println(GuiConfig.DEFAULT_AVATAR);
+			avatar = new ImageIcon(GuiConfig.DEFAULT_AVATAR);
 		}
 
 		newAvatar = new ImageIcon(avatar.getImage().getScaledInstance(GuiConfig.MINI_AVATAR_HEIGHT,

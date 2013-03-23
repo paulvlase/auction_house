@@ -161,7 +161,7 @@ public class GuiConfig {
 	/* Other settings for Profile editor */
 	public static final int			AVATAR_WIDTH						= 100;
 	public static final int			AVATAR_HEIGHT						= 100;
-	public static final String		DEFAULT_AVATAR						= "/resources/images/default_avatar.png";
+	public static final String		DEFAULT_AVATAR						= "resources/images/default_avatar.png";
 
 	/* Other settings for MainWindow */
 	public static final int			MINI_AVATAR_WIDTH					= 40;

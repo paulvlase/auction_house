@@ -138,7 +138,7 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 			// avatraLabel
 			avatarLabel.addMouseListener(this);
 			avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
-			avatarLabel.setIcon(new ImageIcon(getClass().getResource(GuiConfig.DEFAULT_AVATAR)));
+			avatarLabel.setIcon(new ImageIcon(GuiConfig.DEFAULT_AVATAR));
 			avatarLabel.setToolTipText(GuiConfig.getValue(GuiConfig.CHANGE_PICTURE));
 
 			topPanel.add(avatarLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
