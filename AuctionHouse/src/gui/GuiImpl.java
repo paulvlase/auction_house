@@ -77,20 +77,20 @@ public class GuiImpl implements Gui {
 		return false;
 	}
 
-	public void addService(Service service) {
-
+	public boolean launchOffer(Service service) {
+		return med.launchOffer(service);
 	}
 
-	public void addServices(ArrayList<Service> services) {
-
+	public boolean launchOffers(ArrayList<Service> services) {
+		return med.launchOffers(services);
 	}
 
-	public void removeService(Service service) {
-
+	public boolean dropOffer(Service service) {
+		return med.dropOffer(service);
 	}
 
-	public void removeServices(ArrayList<Service> services) {
-
+	public boolean dropOffers(ArrayList<Service> services) {
+		return med.dropOffers(services);
 	}
 
 	private LoginCred loadLoginFile() {
