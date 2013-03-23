@@ -19,17 +19,16 @@ public class WebServiceClientThread extends Thread {
 	private Random random;
 
 	private MediatorWeb med;
+
 	private Hashtable<String, Service> offers;
-	
 	private Hashtable<String, UserProfile> users;
 	
 	public WebServiceClientThread(MediatorWeb med) {
 		random = new Random();
 
-		/* TODO: This should be deleted.
-		 * Used only for mockup test.
-		 */
 		users = new Hashtable<String, UserProfile>();
+		offers = new Hashtable<String, Service>();
+
 		users.put("pvlase", new UserProfile("pvlase","Paul",  "Vlase", UserRole.BUYER, "parola"));
 		users.put("unix140", new UserProfile("unix140","Ghennadi",  "Procopciuc", UserRole.BUYER, "marmota"));
 	}
