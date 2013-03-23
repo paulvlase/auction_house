@@ -167,8 +167,16 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		gui.newUserNotify(service);
 	}
 	
-	public void dropRequestNotify(Service service) {
-		gui.dropRequestNotify(service);
+	public void launchOfferNotify(Service service) {
+		gui.launchOfferNotify(service);
+	}
+	
+	public void launchOffersNotify(ArrayList<Service> services) {
+		gui.launchOffersNotify(services);
+	}
+	
+	public void dropOfferNotify(Service service) {
+		gui.dropOfferNotify(service);
 	}
 
 	@Override

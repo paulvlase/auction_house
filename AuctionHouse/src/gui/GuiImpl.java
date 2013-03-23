@@ -96,17 +96,27 @@ public class GuiImpl implements Gui {
 		return med.dropOffers(services);
 	}
 	
+	/* Notify */
+	public void launchOfferNotify(Service service) {
+		mainWindow.launchOfferNotify(service);
+	}
+	
+	public void launchOffersNotify(ArrayList<Service> services) {
+		mainWindow.launchOffersNotify(services);
+	}
+
+	public void dropRequestNotify(Service service) {
+		if (mainWindow != null) {
+			mainWindow.dropOfferNotify(service);
+		}
+	}
+	
 	public void newUserNotify(Service service) {
 		if (mainWindow != null) {
 			mainWindow.newUserNotify(service);
 		}
-	}
-	
-	public void dropRequestNotify(Service service) {
-		if (mainWindow != null) {
-			mainWindow.dropRequestNotify(service);
-		}
-	}
+	}	
+
 	
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);

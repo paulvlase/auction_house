@@ -25,7 +25,9 @@ public interface Gui {
 	public boolean dropOffer(Service service);
 	public boolean dropOffers(ArrayList<Service> services);
 	
+	public void launchOfferNotify(Service service);
+	public void launchOffersNotify(ArrayList<Service> service);
+	public void dropOfferNotify(Service service);
+	
 	public void newUserNotify(Service service);
-	public void dropRequestNotify(Service service);
-
 }

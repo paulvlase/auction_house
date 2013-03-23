@@ -127,6 +127,7 @@ public class WebServiceClientThread extends Thread {
 		service.setStatus(Status.ACTIVE);
 		offers.put(service.getName(), service);
 
+		med.launchOfferNotify(service);
 		System.out.println("[WebServiceClientMockup:addOffer] " + service.getName());
 
 		return true;
@@ -138,6 +139,7 @@ public class WebServiceClientThread extends Thread {
 			offers.put(service.getName(), service);
 			System.out.println("[WebServiceClientMockup:addOffers] " + service.getName());
 		}
+		med.launchOffersNotify(services);
 		
 		return true;
 	}
@@ -149,7 +151,7 @@ public class WebServiceClientThread extends Thread {
 		offers.remove(service.getName());
 		System.out.println("[WebServiceClientMockup:dropOffer] " + service.getName());
 		
-		med.dropRequestNotify(service);
+		med.dropOfferNotify(service);
 		return true;
 	}
 	
