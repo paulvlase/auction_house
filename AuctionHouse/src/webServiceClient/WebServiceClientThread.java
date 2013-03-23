@@ -78,11 +78,11 @@ public class WebServiceClientThread extends Thread {
 		for (int i = 0; i < len; i++) {
 			int c;
 			do {
-				c = 65 + random.nextInt(124 - 65);
-			} while(c >= 91 && c <= 96);
+				c = 48 + random.nextInt(123 - 48);
+			} while((c >= 91 && c <= 96) || (c >= 58 && c <= 64));
 			str[i] = (char) c;
 		}
-
+		System.out.println(new String(str));
 		return new String(str);
 	}
 	
