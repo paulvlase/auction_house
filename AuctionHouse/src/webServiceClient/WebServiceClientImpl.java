@@ -1,8 +1,10 @@
 package webServiceClient;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import data.LoginCred;
+import data.Service;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
@@ -75,27 +77,27 @@ public class WebServiceClientImpl implements WebServiceClient {
 
 	/* Common */
 	@Override
-	public int addOffer(String service) {
+	public boolean launchOffer(Service service) {
 		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int removeOffer(String service) {
-		// TODO Auto-generated method stub
-		return 0;
+		return false;
 	}
 	
 	@Override
-	public int launchOffer(String service) {
+	public boolean launchOffers(ArrayList<Service> service) {
 		// TODO Auto-generated method stub
-		return 0;
+		return false;
 	}
 
 	@Override
-	public int dropOffer(String service) {
+	public boolean dropOffer(Service service) {
 		// TODO Auto-generated method stub
-		return 0;
+		return false;
+	}
+	
+	@Override
+	public boolean dropOffers(ArrayList<Service> service) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/* Buyer */

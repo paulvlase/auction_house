@@ -101,26 +101,26 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	/* Common */
 	@Override
-	public int addOffer(String service) {
-		return web.addOffer(service);
+	public boolean launchOffer(Service service) {
+		// TODO Auto-generated method stub
+		return web.launchOffer(service);
 	}
 	
 	@Override
-	public int removeOffer(String service) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-	@Override
-	public int launchOffer(Service service) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean launchOffers(ArrayList<Service> services) {
+		return web.launchOffers(services);
 	}
 
 	@Override
-	public int dropOffer(Service service) {
+	public boolean dropOffer(Service service) {
 		// TODO Auto-generated method stub
-		return 0;
+		return web.dropOffer(service);
+	}
+	
+	@Override
+	public boolean dropOffers(ArrayList<Service> service) {
+		// TODO Auto-generated method stub
+		return web.dropOffers(service);
 	}
 	
 	/* Buyer */

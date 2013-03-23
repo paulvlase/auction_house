@@ -1,6 +1,9 @@
 package interfaces;
 
+import java.util.ArrayList;
+
 import data.LoginCred;
+import data.Service;
 import data.UserProfile;
 
 /**
@@ -16,11 +19,11 @@ public interface WebServiceClient {
 	public boolean setUserProfile(UserProfile profile);
 	
 	/* Common */
-	public int addOffer(String service);
-	public int removeOffer(String service);
+	public boolean launchOffer(Service service);
+	public boolean launchOffers(ArrayList<Service> service);
 	
-	public int launchOffer(String service);
-	public int dropOffer(String service);
+	public boolean dropOffer(Service service);
+	public boolean dropOffers(ArrayList<Service> service);
 	
 	/* Buyer */
 	public int acceptOffer();

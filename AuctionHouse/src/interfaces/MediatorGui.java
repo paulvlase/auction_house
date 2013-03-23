@@ -22,11 +22,11 @@ public interface MediatorGui {
 
 	/* Common */
 	public ArrayList<Service> loadOffers();
-	public int addOffer(String service);
-	public int removeOffer(String service);
 	
-	public int launchOffer(Service service);
-	public int dropOffer(Service service);
+	public boolean launchOffer(Service service);
+	public boolean launchOffers(ArrayList<Service> service);
+	public boolean dropOffer(Service service);
+	public boolean dropOffers(ArrayList<Service> services);
 	
 	/* Buyer */
 	public int acceptOffer();
