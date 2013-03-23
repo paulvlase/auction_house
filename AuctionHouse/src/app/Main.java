@@ -4,8 +4,8 @@ import gui.GuiImpl;
 
 import javax.swing.UIManager;
 
-import mediator.MockupMediator;
-import network.NetworkImpl;
+import mediator.MediatorMockup;
+import network.NetworkMockup;
 import webServiceClient.WebServiceClientMockup;
 
 public class Main {
@@ -18,9 +18,9 @@ public class Main {
 			} catch (Exception e1) {}
 		}
 		
-		MockupMediator med = new MockupMediator();
+		MediatorMockup med = new MediatorMockup();
 		GuiImpl gui = new GuiImpl(med);
-		NetworkImpl net = new NetworkImpl(med);
+		NetworkMockup net = new NetworkMockup(med);
 		WebServiceClientMockup web = new WebServiceClientMockup(med);
 		
 		med.start();
