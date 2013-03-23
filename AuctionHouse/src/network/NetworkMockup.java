@@ -10,10 +10,10 @@ import interfaces.NetworkTransfer;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class NetworkImpl implements Network, NetworkTransfer {
+public class NetworkMockup implements Network, NetworkTransfer {
 	private MediatorNetwork med = null;
 	
-	public NetworkImpl(MediatorNetwork med) {
+	public NetworkMockup(MediatorNetwork med) {
 		this.med = med;
 		
 		med.registerNetwork(this);

@@ -2,10 +2,14 @@ package webServiceClient;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Random;
 
 import data.LoginCred;
 import data.Service;
+import data.UserEntry;
 import data.UserProfile;
+import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
@@ -15,26 +19,19 @@ import interfaces.WebServiceClient;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceClientMockup implements WebServiceClient {
+public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	private MediatorWeb med;
-	private WebServiceMockup webService;
-	
-	private Hashtable<String, UserProfile> users;
-	
+	private WebServiceClientThread thread;
+
 	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
 		
 		med.registerWebServiceClient(this);
-
-		/* TODO: This should be deleted.
-		 * Used only for mockup test.
-		 */
-		users = new Hashtable<String, UserProfile>();
-		users.put("pvlase", new UserProfile("pvlase","Paul",  "Vlase", UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140","Ghennadi",  "Procopciuc", UserRole.BUYER, "marmota"));
+		
+		thread = new WebServiceClientThread(med);
+		thread.start();
 	}
 	
-	@Override
 	public UserProfile logIn(LoginCred cred) {
 		UserProfile profile;
 		
@@ -50,58 +47,41 @@ public class WebServiceClientMockup implements WebServiceClient {
 		return profile;
 	}
 	
-	@Override
 	public void logOut() {
-		System.out.println("[WebServiceClient:logOut()] Bye bye");
+		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
 		
-		/* TODO: This should be deleted.
-		 * Used only for mockup test.
-		 */
 		try {
-			webService.join();
+			thread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 	
-	@Override
 	public UserProfile getUserProfile(String username) {
-		return users.get(username);
+		return thread.getUserProfile(username);
 	}
 	
-	@Override
 	public boolean setUserProfile(UserProfile profile) {
-		users.put(profile.getUsername(), profile);
-		return true;
+		return thread.setUserProfile(profile);
 	}
 
 	/* Common */
-	@Override
-	public boolean launchOffer(Service service) {
-		webService.launchOffer(service);
-		
-		return true;
+	public synchronized boolean launchOffer(Service service) {
+		return thread.launchOffer(service);
 	}
 	
-	@Override
-	public boolean launchOffers(ArrayList<Service> services) {
-		webService.launchOffers(services);
-		
-		return true;
-	}
-
-	@Override
-	public boolean dropOffer(Service service) {
-		webService.dropOffer(service);
-		return false;
+	public synchronized boolean launchOffers(ArrayList<Service> services) {
+		return thread.launchOffers(services);
 	}
 	
-	@Override
-	public boolean dropOffers(ArrayList<Service> services) {
-		webService.dropOffers(services);
-		return false;
+	public synchronized boolean dropOffer(Service service) {
+		return thread.dropOffer(service);
 	}
-
+	
+	public synchronized boolean dropOffers(ArrayList<Service> services) {
+		return thread.dropOffers(services);
+	}
+	
 	/* Buyer */
 	@Override
 	public int acceptOffer() {
