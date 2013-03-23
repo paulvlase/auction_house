@@ -78,7 +78,7 @@ public class WebServiceClientThread extends Thread {
 		for (int i = 0; i < len; i++) {
 			int c;
 			do {
-				c = 65 + random.nextInt(123);
+				c = 65 + random.nextInt(124 - 65);
 			} while(c >= 91 && c <= 96);
 			str[i] = (char) c;
 		}
