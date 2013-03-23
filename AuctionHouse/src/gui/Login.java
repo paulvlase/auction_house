@@ -107,6 +107,7 @@ public class Login extends JFrame implements ActionListener {
 			formPanel.add(usernameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
+			usernameField.addActionListener(this);
 			formPanel.add(usernameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
 					0));
@@ -116,6 +117,7 @@ public class Login extends JFrame implements ActionListener {
 			formPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
 					0));
+			passwordField.addActionListener(this);
 			formPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
 					0));
@@ -186,7 +188,6 @@ public class Login extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		UserType userType;
 
 		if (e.getSource() instanceof JCheckBoxMenuItem) {
 			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
@@ -197,31 +198,44 @@ public class Login extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == signinButton) {
-			if (usernameField.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(null,
-						GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
-						GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
-				return;
-			}
-
-			if (passwordField.getPassword().length == 0) {
-				JOptionPane.showMessageDialog(null,
-						GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD_ERROR),
-						GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD), JOptionPane.WARNING_MESSAGE);
-				return;
-			}
-
-			if (roleCb.getSelectedItem().toString().equals(GuiConfig.getValue(GuiConfig.BUYER))) {
-				userType = UserType.BUYER;
-			} else {
-				userType = UserType.SELLER;
-			}
-
-			LoginCred cred = new LoginCred(usernameField.getText(), new String(
-					passwordField.getPassword()), userType);
-			gui.logIn(cred);
+			signInAction();
+			return;
 		}
 
+		if (e.getSource() == passwordField) {
+			signInAction();
+			return;
+		}
+		
+		if(e.getSource() == usernameField){
+			signInAction();
+			return;
+		}
+	}
+
+	private void signInAction() {
+		UserType userType;
+		if (usernameField.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
+					GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		if (passwordField.getPassword().length == 0) {
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD_ERROR),
+					GuiConfig.getValue(GuiConfig.EMPTY_PASSWORD), JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		if (roleCb.getSelectedItem().toString().equals(GuiConfig.getValue(GuiConfig.BUYER))) {
+			userType = UserType.BUYER;
+		} else {
+			userType = UserType.SELLER;
+		}
+
+		LoginCred cred = new LoginCred(usernameField.getText(), new String(
+				passwordField.getPassword()), userType);
+		gui.logIn(cred);
 	}
 
 	public void showWindow() {
