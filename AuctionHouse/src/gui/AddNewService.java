@@ -164,7 +164,7 @@ public class AddNewService extends JFrame {
 		}
 
 		mainWindow.addService(new Service(nameField.getText()));
-		mainWindow.getGui().addService(new Service(nameField.getText()));
+		mainWindow.getGui().launchOffer(new Service(nameField.getText()));
 
 		setVisible(false);
 		dispose();
