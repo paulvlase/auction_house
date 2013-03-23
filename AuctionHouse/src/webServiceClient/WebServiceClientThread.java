@@ -46,14 +46,14 @@ public class WebServiceClientThread extends Thread {
 		
 		try {
 			while (isRunning()) {
-				int sleepTime = 100 + random.nextInt(timeLimit);
+				int sleepTime = 1000 + random.nextInt(timeLimit);
 				
 				Thread.sleep(sleepTime);
 				
 				for (Map.Entry<String, Service> offer: offers.entrySet()) {
 					Service service = offer.getValue();
 
-					int event = random.nextInt(1000);
+					int event = random.nextInt(10000);
 					System.out.println("event = " + event);
 					if (event < 300) {
 						String username = getRandomString(5 + random.nextInt(16));
