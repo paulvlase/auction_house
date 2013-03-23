@@ -36,8 +36,6 @@ public class WebServiceMockup extends Thread {
 				
 				Thread.sleep(sleepTime);
 				
-
-				
 				for (Map.Entry<String, Service> offer: offers.entrySet()) {
 					Service service = offer.getValue();
 
