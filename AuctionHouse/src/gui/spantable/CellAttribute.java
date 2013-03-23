@@ -23,5 +23,7 @@ public interface CellAttribute {
 	public Dimension getSize();
 
 	public void setSize(Dimension size);
+	
+	public void clear();
 
 }

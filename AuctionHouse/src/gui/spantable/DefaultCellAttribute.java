@@ -21,6 +21,12 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 		this(0, 0);
 	}
 
+	@Override
+	public void clear() {
+		span = null;
+		background = null;
+	}
+
 	public DefaultCellAttribute(int numRows, int numColumns) {
 		setSize(new Dimension(numColumns, numRows));
 	}

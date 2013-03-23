@@ -51,6 +51,14 @@ public class Service {
 		this.price = 0;
 		this.status = status;
 	}
+	
+	public Service(Service service) {
+		this.name = service.getName();
+		this.users = service.getUsers();
+		this.time = service.getTime();
+		this.price = service.getPrice();
+		this.status = service.getStatus();
+	}
 
 	public Service(String serviceName) {
 		this(serviceName, null, Status.INACTIVE);
@@ -207,5 +215,10 @@ public class Service {
 		}
 
 		return ((Service) arg0).getName().equals(name);
+	}
+	
+	@Override
+	public String toString() {
+		return "" + name  + " " + users;
 	}
 }

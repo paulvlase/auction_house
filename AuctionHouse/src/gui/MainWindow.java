@@ -107,7 +107,7 @@ public class MainWindow extends JFrame {
 				GuiConfig.getValue(GuiConfig.SERVICE),
 				GuiConfig.getValue(GuiConfig.STATUS),
 				gui.getUserProfile().getRole() == UserRole.SELLER ? GuiConfig
-						.getValue(GuiConfig.SELLER) : GuiConfig.getValue(GuiConfig.BUYER),
+						.getValue(GuiConfig.BUYER) : GuiConfig.getValue(GuiConfig.SELLER),
 				GuiConfig.getValue(GuiConfig.OFFER_STATUS), GuiConfig.getValue(GuiConfig.TIME),
 				GuiConfig.getValue(GuiConfig.PRICE) };
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)));
@@ -179,18 +179,7 @@ public class MainWindow extends JFrame {
 			}).start();
 
 		}
-
-		// Container contentPane = getContentPane();
-		// contentPane.setLayout(new GridBagLayout());
-		// ((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] {
-		// 15, 0, 10, 0 };
-		// ((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] {
-		// 14, 0, 10, 0 };
-		// ((GridBagLayout) contentPane.getLayout()).columnWeights = new
-		// double[] { 1.0, 1.0, 1.0,
-		// 1.0E-4 };
-		// ((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] {
-		// 1.0, 1.0, 1.0, 1.0E-4 };
+		
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
@@ -201,7 +190,6 @@ public class MainWindow extends JFrame {
 
 		// menuBar1
 		{
-
 			// menu
 			{
 				menu.setText(GuiConfig.getValue(GuiConfig.MENU));
@@ -234,56 +222,6 @@ public class MainWindow extends JFrame {
 			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0, 0, 0 };
 			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] { 1.0, 1.0E-4 };
 			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 1.0, 1.0E-4 };
-
-			// mainPanel.setLayout(new GridBagLayout());
-			// ((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[]
-			// { 0, 0 };
-			// ((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] {
-			// 0, 0, 0 };
-			// ((GridBagLayout) mainPanel.getLayout()).columnWeights = new
-			// double[] { 1.0, 1.0E-4 };
-			// ((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[]
-			// { 0.0, 0.0, 1.0E-4 };
-
-			// // topPanel
-			// {
-			// topPanel.setLayout(new GridBagLayout());
-			// ((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] {
-			// 0, 0, 0, 0, 0 };
-			// ((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] {
-			// 0, 0 };
-			// ((GridBagLayout) topPanel.getLayout()).columnWeights = new
-			// double[] { 1.0, 0.0,
-			// 0.0, 0.0, 1.0E-4 };
-			// ((GridBagLayout) topPanel.getLayout()).rowWeights = new double[]
-			// { 0.0, 1.0E-4 };
-			// topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 1, 0.0,
-			// 0.0,
-			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
-			// 0, 0, 5),
-			// 0, 0));
-			//
-			// // usernameLabel
-			// usernameLabel.setText("Ghennadi Procopciuc");
-			// topPanel.add(usernameLabel, new GridBagConstraints(2, 0, 1, 1,
-			// 0.0, 0.0,
-			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
-			// 0, 0, 5),
-			// 0, 0));
-			//
-			// // logoutButton
-			// signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
-			// topPanel.add(signOutButton, new GridBagConstraints(3, 0, 1, 1,
-			// 0.0, 0.0,
-			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
-			// 0, 0, 0),
-			// 0, 0));
-			// }
-			// mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0,
-			// 0.0,
-			// GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,
-			// 0, 5, 0), 0,
-			// 0));
 
 			// topPanel
 			{
@@ -529,40 +467,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public void newUserNotify(Service service) {
+		//model.removeService(0);
+		System.out.println("Adds user ..");
 		model.addUser(service.clone());
 	}
-
-	// public static void main(String[] args) {
-	// try {
-	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-	// } catch (Exception e) {
-	// try {
-	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-	// } catch (Exception e1) {
-	// }
-	// }
-	//
-	// ArrayList<Service> services = new ArrayList<Service>();
-	// for (int i = 0; i < 10; i++) {
-	//
-	// Service service1 = new Service("service1");
-	// Service service2 = new Service("service2", Status.ACTIVE);
-	// Service service3 = new Service("service3", Status.TRANSFER_STARTED);
-	//
-	// service2.addUserEntry(new UserEntry("Paul Vlase", Offer.NO_OFFER, 100L,
-	// 25.2));
-	// service2.addUserEntry(new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED,
-	// 101L, 28.7));
-	// service2.addUserEntry(new UserEntry("Ana", Offer.OFFER_MADE, 102L,
-	// 29.9));
-	//
-	// service3.addUserEntry(new UserEntry("Paul Vlase", Offer.OFFER_MADE, 100L,
-	// 25.2));
-	//
-	// services.add(service1);
-	// services.add(service2);
-	// services.add(service3);
-	// }
-	// new MainWindow(services).setVisible(true);
-	// }
 }

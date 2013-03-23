@@ -40,9 +40,11 @@ public class MySpanTableModel extends AbstractTableModel {
 		data = new ArrayList<ArrayList<Object>>();
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 
+		System.out.println("From constructor ...");
 		for (Service service : services) {
-			addService(service);
+			addService(service, false);
 		}
+		System.out.println("Exit from constructor...");
 	}
 
 	public void addSpan(Span span) {
@@ -93,14 +95,16 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.lock();
 		System.out.println(Thread.currentThread().getName() + " acquaired lock ...");
 
-		data = new ArrayList<ArrayList<Object>>();
+		/* Clear all the previous data */
+		data.clear();
+		// cellAtt.clear();
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 		clearSpans();
 
 		services.remove(index.intValue());
 
 		for (Service serv : (ArrayList<Service>) services.clone()) {
-			addService(serv);
+			addService(serv, false);
 		}
 
 		mutex.unlock();
@@ -113,7 +117,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.unlock();
 	}
 
-	public void addService(Service service) {
+	private void addService(Service service, Boolean add) {
 		mutex.lock();
 		ArrayList<UserEntry> users;
 		ArrayList<ArrayList<Object>> serviceData;
@@ -123,15 +127,18 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		data.addAll(serviceData);
 		cellAtt.addRows(serviceData.size());
-		services.add(service);
 
-		if (serviceData.size() == 1) {
-			addSpan(new Span(data.size() - 1, 2, 1, 4));
-		} else {
+		if (add) {
+			services.add(service);
+		}
+
+		if (service.getStatus() == Status.ACTIVE) {
 			/* Service name span */
 			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
 			/* Status span */
 			addSpan(new Span(data.size() - users.size(), 1, users.size(), 1));
+		} else {
+			addSpan(new Span(data.size() - 1, 2, 1, 4));
 		}
 
 		fireTableDataChanged();
@@ -140,25 +147,18 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.unlock();
 	}
 
+	public void addService(Service service) {
+		mutex.lock();
+		System.out.println("Before add : " + services.size());
+		addService(service, true);
+		System.out.println("After add : " + services.size());
+		mutex.unlock();
+	}
+
 	public void addUser(Service service) {
 		mutex.lock();
-		boolean found = false;
+		System.out.println("Before Before : " + services.size());
 
-		for (Service serv : services) {
-			if (serv.equals(service)) {
-				found = true;
-				serv.addUserEntry(service.getUsers().get(0));
-				service = serv;
-				break;
-			}
-		}
-
-		if (!found) {
-			mutex.unlock();
-			return;
-		}
-
-		service = service.clone();
 		removeService(service);
 		addService(service);
 
@@ -175,17 +175,12 @@ public class MySpanTableModel extends AbstractTableModel {
 		int counter = 0;
 		int userCounter;
 
-		// System.out.println("Search for : " + row);
-
 		if (row > getRowCount() || row < 0) {
 			mutex.unlock();
 			return null;
 		}
 
 		for (Service service : services) {
-			// System.out.println("row >= " + counter + " && row < " +
-			// (counter
-			// + getNeededRows(service)));
 			if (row >= counter && row < counter + getNeededRows(service)) {
 				userCounter = 0;
 
