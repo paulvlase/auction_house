@@ -2,6 +2,8 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * If user field is null, then this offer is inactive, otherwise it's active. If
@@ -170,13 +172,12 @@ public class Service {
 			}
 			break;
 		case TRANSFER_IN_PROGRESS:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer in progress", progress, "",
-					"", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer in progress", progress,
+					"", "", ""));
 			data.add(row);
 			break;
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", 0, "",
-					"", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", 0, "", "", ""));
 			data.add(row);
 			break;
 		case TRANSFER_COMPLETE:
