@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 
 import mediator.MockupMediator;
 import network.NetworkImpl;
-import webServiceClient.WebServiceClientImpl;
+import webServiceClient.WebServiceClientMockup;
 
 public class Main {
 	public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class Main {
 		MockupMediator med = new MockupMediator();
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
-		WebServiceClientImpl web = new WebServiceClientImpl(med);
+		WebServiceClientMockup web = new WebServiceClientMockup(med);
 		
 		med.start();
 		System.out.println("Exit");

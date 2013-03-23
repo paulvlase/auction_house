@@ -149,6 +149,12 @@ public class MockupMediator implements MediatorGui, MediatorNetwork, MediatorWeb
 		return 0;
 	}
 	
+	/* MediatorWeb */
+	@Override
+	public void newUserNotify(Service service) {
+		gui.newUserNotify(service);
+	}
+	
 	@Override
 	public ArrayList<Service> loadOffers() {
 //		if (profile == null)

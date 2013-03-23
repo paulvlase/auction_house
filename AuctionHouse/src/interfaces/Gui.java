@@ -18,9 +18,13 @@ public interface Gui {
 	public UserProfile getUserProfile();
 	public boolean setUserProfile(UserProfile profile);
 	
+	public ArrayList<Service> loadOffers();
+	
 	public boolean launchOffer(Service service);
 	public boolean launchOffers(ArrayList<Service> services);
 	public boolean dropOffer(Service service);
 	public boolean dropOffers(ArrayList<Service> services);
-	public ArrayList<Service> loadOffers();
+	
+	public void newUserNotify(Service service);
+
 }
