@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import config.GuiConfig;
@@ -278,7 +279,6 @@ public class MainWindow extends JFrame {
 						0.0, 0.0, 1.0E-4 };
 				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] { 1.0, 0.0, 1.0,
 						1.0E-4 };
-				
 
 				avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
 				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 3, 0.0, 0.0,
@@ -317,7 +317,7 @@ public class MainWindow extends JFrame {
 		} else {
 			setTitle(GuiConfig.getValue(GuiConfig.BUYER_TITLE));
 		}
-		
+
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON64).getImage());
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON32).getImage());

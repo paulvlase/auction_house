@@ -34,17 +34,6 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 				String text = "Done";
 				if (i < 0) {
 					if(i == -1){
-						new Runnable() {
-							
-							@Override
-							public void run() {
-								bar.setIndeterminate(true);
-								bar.updateUI();
-							}
-						};
-						bar.setIndeterminate(true);
-						return panel;
-					} else {
 						text = "Canceled";						
 					}
 				} else if (i < 100) {

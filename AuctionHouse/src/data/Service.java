@@ -175,7 +175,7 @@ public class Service {
 			data.add(row);
 			break;
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", -1, "",
+			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", 0, "",
 					"", ""));
 			data.add(row);
 			break;
