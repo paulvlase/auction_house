@@ -5,7 +5,24 @@ public class UserEntry {
 		NO_OFFER,
 		OFFER_MADE,
 		OFFER_ACCEPTED,
-		OFFER_REFUSED
+		OFFER_REFUSED;
+		
+		public String toString() {
+			switch (ordinal()) {
+			case 0:
+				return "No offer";
+			case 1:
+				return "Offer made";
+			case 2:
+				return "Offer accepted";
+			case 3:
+				return "Offer refused";
+			default:
+				break;
+			}
+			
+			return "";
+		};
 	}
 	
 	String name;
