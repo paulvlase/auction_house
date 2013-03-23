@@ -529,7 +529,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public void newUserNotify(Service service) {
-		model.addUser(service);
+		model.addUser(service.clone());
 	}
 
 	// public static void main(String[] args) {

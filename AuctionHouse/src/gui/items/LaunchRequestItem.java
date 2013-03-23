@@ -24,7 +24,7 @@ public class LaunchRequestItem extends JMenuItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Launch Offer");
-		gui.launchOffer(service);
+		gui.launchOffer(service.clone());
 	}
 
 	public void showItem(Service service) {
