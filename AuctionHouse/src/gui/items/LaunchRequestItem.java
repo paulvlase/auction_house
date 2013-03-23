@@ -24,11 +24,7 @@ public class LaunchRequestItem extends JMenuItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Launch Offer");
-		int row = window.getTable().rowAtPoint(window.getListener().getEvent().getPoint());
-		int column = window.getTable().columnAtPoint(window.getListener().getEvent().getPoint());
-		System.out.println("Selected Row : " + row + " Column : " + column);
-		// buildPopupMenu(window.getModel().getServiceFromRow(row), column);
-		gui.launchOffer(window.getModel().getServiceFromRow(row).getKey());
+		gui.launchOffer(service);
 	}
 
 	public void showItem(Service service) {
