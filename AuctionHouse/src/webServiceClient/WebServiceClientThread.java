@@ -124,7 +124,9 @@ public class WebServiceClientThread extends Thread {
 
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
+		service.setStatus(Status.ACTIVE);
 		offers.put(service.getName(), service);
+
 		System.out.println("[WebServiceClientMockup:addOffer] " + service.getName());
 
 		return true;
@@ -132,6 +134,7 @@ public class WebServiceClientThread extends Thread {
 	
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
 		for (Service service: services) {
+			service.setStatus(Status.ACTIVE);
 			offers.put(service.getName(), service);
 			System.out.println("[WebServiceClientMockup:addOffers] " + service.getName());
 		}
@@ -140,6 +143,7 @@ public class WebServiceClientThread extends Thread {
 	}
 	
 	public synchronized boolean dropOffer(Service service) {
+		service.setStatus(Status.INACTIVE);
 		offers.remove(service.getName());
 		System.out.println("[WebServiceClientMockup:dropOffer] " + service.getName());
 		return true;
@@ -147,6 +151,7 @@ public class WebServiceClientThread extends Thread {
 	
 	public synchronized boolean dropOffers(ArrayList<Service> services) {
 		for (Service service: services) {
+			service.setStatus(Status.INACTIVE);
 			offers.remove(service.getName());
 			System.out.println("[WebServiceClientMockup:dropOffers] " + service.getName());
 		}
