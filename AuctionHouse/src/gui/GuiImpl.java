@@ -67,6 +67,9 @@ public class GuiImpl implements Gui {
 	public void logOut() {
 		System.out.println("[GuiImpl:logOut()] Bye bye");
 		med.logOut();
+
+		mainWindow.setVisible(false);
+		login.showWindow();
 	}
 	
 	public UserProfile getUserProfile() {
