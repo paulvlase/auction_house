@@ -9,6 +9,7 @@ import gui.items.LaunchRequestItem;
 import gui.items.MakeOfferItem;
 import gui.items.ProfileItem;
 import gui.items.RefuseOfferItem;
+import gui.items.RemoveServiceItem;
 import gui.items.SignOutButton;
 import gui.items.SignOutItem;
 import gui.spantable.MultiSpanCellTable;
@@ -75,6 +76,7 @@ public class MainWindow extends JFrame {
 	private RefuseOfferItem		refusetOfferItem;
 	private MakeOfferItem		makeOfferItem;
 	private DropAuctionItem		dropAuctionItem;
+	private RemoveServiceItem	removeServiceItem;
 
 	private Gui					gui;
 	private String[]			tableColumns;
@@ -135,6 +137,7 @@ public class MainWindow extends JFrame {
 		refusetOfferItem = new RefuseOfferItem(this, gui);
 		makeOfferItem = new MakeOfferItem(this, gui);
 		dropAuctionItem = new DropAuctionItem(this, gui);
+		removeServiceItem = new RemoveServiceItem(this, gui);
 
 		// JPopupMenu
 		{
@@ -150,7 +153,10 @@ public class MainWindow extends JFrame {
 			makeOfferItem.setIcon(new ImageIcon(GuiConfig.MAKE_OFFER_ICON));
 			dropAuctionItem.setText(GuiConfig.getValue(GuiConfig.DROP_AUCTION));
 			dropAuctionItem.setIcon(new ImageIcon(GuiConfig.DROP_AUCTION_ICON));
+			removeServiceItem.setText(GuiConfig.getValue(GuiConfig.REMOVE_SERVICE));
+			removeServiceItem.setIcon(new ImageIcon(GuiConfig.EXIT_ICON));
 
+			popupMenu.add(removeServiceItem);
 			popupMenu.add(launchRequestItem);
 			popupMenu.add(dropRequestItem);
 			popupMenu.add(menuSeparator);
@@ -470,6 +476,14 @@ public class MainWindow extends JFrame {
 
 	public JSeparator getMenuSeparator() {
 		return menuSeparator;
+	}
+
+	public RemoveServiceItem getRemoveServiceItem() {
+		return removeServiceItem;
+	}
+
+	public void setRemoveServiceItem(RemoveServiceItem removeServiceItem) {
+		this.removeServiceItem = removeServiceItem;
 	}
 
 	public void changeServiceNotify(Service service) {

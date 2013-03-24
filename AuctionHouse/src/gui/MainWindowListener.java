@@ -46,6 +46,9 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 		Service service = pair.getKey();
 		Integer userIndex = pair.getValue();
 		Boolean accepted = false;
+
+		mainWindow.getRemoveServiceItem().showItem(pair);
+
 		if (service.getUsers() != null) {
 			for (UserEntry userEntry : service.getUsers()) {
 				if (userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
@@ -98,9 +101,16 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			mainWindow.getAcceptOfferItem().hideItem();
 			mainWindow.getRefusetOfferItem().hideItem();
 
-			if (service.getStatus() != Status.INACTIVE && column >= 2
-					&& service.getUsers() != null) {
-				mainWindow.getMakeOfferItem().showItem(pair);
+			if (service.getStatus() != Status.INACTIVE && column >= 2 && service.getUsers() != null) {
+
+				Offer userOffer = service.getUsers().get(userIndex).getOffer();
+				if (userOffer != Offer.TRANSFER_COMPLETE && userOffer != Offer.TRANSFER_FAILED
+						&& userOffer != Offer.TRANSFER_IN_PROGRESS
+						&& userOffer != Offer.TRANSFER_STARTED) {
+					mainWindow.getMakeOfferItem().showItem(pair);
+				} else {
+					mainWindow.getMakeOfferItem().hideItem();					
+				}
 
 				if (service.getUsers().get(userIndex).getOffer() == Offer.OFFER_EXCEDED) {
 					mainWindow.getDropAuctionItem().showItem(pair);

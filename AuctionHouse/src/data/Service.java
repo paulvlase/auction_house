@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import config.GuiConfig;
+import data.UserEntry.Offer;
+import data.UserProfile.UserRole;
 
 /**
  * If user field is null, then this offer is inactive, otherwise it's active. If
@@ -147,6 +149,30 @@ public class Service implements Comparable<Service> {
 	}
 
 	public ArrayList<ArrayList<Object>> getAsTable() {
+		return getAsTable(UserRole.BUYER);
+	}
+
+	private ArrayList<Object> getActiveRow(UserRole role, UserEntry user) {
+		ArrayList<Object> row = new ArrayList<Object>();
+
+		switch (user.getOffer()) {
+		case TRANSFER_STARTED:
+			row = new ArrayList<Object>(Arrays.asList("", "", 0, "", "", ""));
+			break;
+		case TRANSFER_COMPLETE:
+		case TRANSFER_IN_PROGRESS:
+			row = new ArrayList<Object>(Arrays.asList("", "", user.getProgress(), "", "", ""));
+			break;
+		default:
+			row = new ArrayList<Object>(Arrays.asList("", "", user.getName(), user.getOffer(),
+					user.getTime(), user.getPrice()));
+			break;
+		}
+
+		return row;
+	}
+
+	public ArrayList<ArrayList<Object>> getAsTable(UserRole role) {
 		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
 		Boolean first = true;
 
@@ -169,37 +195,47 @@ public class Service implements Comparable<Service> {
 				data.add(row);
 				break;
 			}
+
 			for (UserEntry user : users) {
-				row = new ArrayList<Object>();
+
+				row = getActiveRow(role, user);
 				if (first) {
 					first = false;
 
-					row = new ArrayList<Object>(Arrays.asList(getName(),
-							GuiConfig.getValue(GuiConfig.ACTIVE), user.getName(), user.getOffer(),
-							user.getTime(), user.getPrice()));
-				} else {
-					row = new ArrayList<Object>(Arrays.asList("", "", user.getName(),
-							user.getOffer(), user.getTime(), user.getPrice()));
+					row.set(0, getName());
+					row.set(1, GuiConfig.getValue(GuiConfig.ACTIVE));
 				}
 
 				data.add(row);
 			}
 			break;
 		case TRANSFER_IN_PROGRESS:
-			row = new ArrayList<Object>(Arrays.asList(getName(),
-					GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
-			data.add(row);
-			break;
+			if (role == UserRole.BUYER) {
+				row = new ArrayList<Object>(Arrays.asList(getName(),
+						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
+				data.add(row);
+				break;
+			} else {
+				// TODO
+			}
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(),
-					GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "", "", ""));
-			data.add(row);
-			break;
+			if (role == UserRole.BUYER) {
+				row = new ArrayList<Object>(Arrays.asList(getName(),
+						GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "", "", ""));
+				data.add(row);
+				break;
+			} else {
+				// TODO
+			}
 		case TRANSFER_COMPLETE:
-			row = new ArrayList<Object>(Arrays.asList(getName(),
-					GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE), progress, "", "", ""));
-			data.add(row);
-			break;
+			if (role == UserRole.BUYER) {
+				row = new ArrayList<Object>(Arrays.asList(getName(),
+						GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE), progress, "", "", ""));
+				data.add(row);
+				break;
+			} else {
+				// TODO
+			}
 		case TRANSFER_FAILED:
 			// TODO
 			break;

@@ -1,9 +1,8 @@
 package data;
 
-public class UserEntry implements Comparable<UserEntry>{
+public class UserEntry implements Comparable<UserEntry> {
 	public enum Offer {
-		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, OFFER_EXCEDED,
-		TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED;
+		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, OFFER_EXCEDED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED;
 
 		public String toString() {
 			switch (ordinal()) {
@@ -33,10 +32,11 @@ public class UserEntry implements Comparable<UserEntry>{
 		};
 	}
 
-	String	name;
-	Offer	offer;
-	Long	time;
-	Double	price;
+	private String	name;
+	private Offer	offer;
+	private Long	time;
+	private Double	price;
+	private Integer	progress;
 
 	public UserEntry(String name, Offer offer, Long time, Double price) {
 		this.name = name;
@@ -82,6 +82,14 @@ public class UserEntry implements Comparable<UserEntry>{
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Integer getProgress() {
+		return progress;
+	}
+
+	public void setProgress(Integer progress) {
+		this.progress = progress;
 	}
 
 	@Override
