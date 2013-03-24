@@ -251,19 +251,41 @@ public class WebServiceClientThread extends Thread {
 	/* Seller */
 	public boolean makeOffer(Pair<Service, Integer> pair) {
 		Service service = pair.getKey();
-		Integer userIndex = pair.getValue();
-		UserEntry user = service.getUsers().get(userIndex);
+		int userIndex = pair.getValue();
+		ArrayList<UserEntry> users = service.getUsers();
 		
-		user.setOffer(Offer.OFFER_MADE);		
-		offers.put(service.getName(), service);
+		System.out.println("[WebServiceClient:dropAuction()] Aici");
+		if (users != null) {
+			UserEntry user = users.get(userIndex);
+			user.setOffer(Offer.OFFER_MADE);
+			offers.put(service.getName(), service);
 		
-		med.changeServiceNotify(service);
-		
-		return false;
+			med.changeServiceNotify(service);
+		}
+
+		return true;
 	}
 
 	public boolean dropAuction(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
-		return false;
+		Service service = pair.getKey();
+		int userIndex = pair.getValue();
+		ArrayList<UserEntry> users = service.getUsers();
+		
+		System.out.println("[WebServiceClient:dropAuction()] Aici");
+		if (users != null) {
+			UserEntry user = users.get(userIndex);
+			
+			user.setOffer(Offer.OFFER_REFUSED);
+			users.remove(userIndex);
+			
+			if (users.size() == 0) {
+				service.setUsers(null);
+			}
+			offers.put(service.getName(), service);
+			
+			med.changeServiceNotify(service);
+		}
+		
+		return true;
 	}
 }
