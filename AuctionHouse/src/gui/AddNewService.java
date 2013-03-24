@@ -183,10 +183,4 @@ public class AddNewService extends JFrame {
 		setVisible(false);
 		dispose();
 	}
-
-	public static void main(String[] args) {
-		AddNewService service = new AddNewService(null);
-		service.setVisible(true);
-		service.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
 }

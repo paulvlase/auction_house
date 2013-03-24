@@ -414,8 +414,4 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 	public void hideWindow() {
 		setVisible(false);
 	}
-
-	public static void main(String[] args) {
-		new ProfileWindow().setVisible(true);
-	}
 }
