@@ -196,6 +196,7 @@ public class MainWindow extends JFrame {
 
 				// addServiceItem
 				addServiceItem.setText(GuiConfig.getValue(GuiConfig.ADD_SERVICE));
+				addServiceItem.setIcon(new ImageIcon(GuiConfig.ADD_ICON));
 				menu.add(addServiceItem);
 
 				// profileItem
@@ -482,6 +483,11 @@ public class MainWindow extends JFrame {
 	}
 
 	public void launchOfferNotify(Service service) {
+		model.removeService(service);
+		model.addService(service);
+	}
+
+	public void transferProgressNotify(Service service) {
 		model.removeService(service);
 		model.addService(service);
 	}
