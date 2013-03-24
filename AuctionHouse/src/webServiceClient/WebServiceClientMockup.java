@@ -31,17 +31,16 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		med.registerWebServiceClient(this);
 		
 		task = new WebServiceClientTask(med);
-		task.execute();
 	}
 	
 	public UserProfile logIn(LoginCred cred) {
+		task.execute();
 		return task.logIn(cred);
 	}
 	
 	public void logOut() {
 		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
 		
-
 		try {
 			task.cancel(false);
 			task.get();

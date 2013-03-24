@@ -33,7 +33,6 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 	private boolean							running;
 
 	private Random							random;
-	private Date							date;
 
 	private MediatorWeb						med;
 
@@ -44,7 +43,6 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		this.med = med;
 
 		random = new Random();
-		date = new Date();
 
 		users = new Hashtable<String, UserProfile>();
 		offers = new Hashtable<String, Service>();
@@ -59,10 +57,9 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 	@Override
 	protected Command doInBackground() throws Exception {		
 		int timeLimit = 2500;
-		running = true;
-
+		System.out.println("[WebserviceClientTask:doInBackground()] Here");
 		try {
-			while (isRunning()) {
+			while(true) {
 				int sleepTime = 1000 + random.nextInt(timeLimit);
 
 				Thread.sleep(sleepTime);
@@ -82,6 +79,7 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 
 	protected void process(List<Command> events) {
 		for (Command event:  events) {
+			System.out.println("[WebserviceClientTask:process()] Here");
 			event.execute();
 		}
 	}
