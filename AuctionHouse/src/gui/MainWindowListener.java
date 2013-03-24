@@ -34,7 +34,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 		if (e.isPopupTrigger()) {
 			int row = mainWindow.getTable().rowAtPoint(e.getPoint());
 			int column = mainWindow.getTable().columnAtPoint(e.getPoint());
-			if(column < 0 || row < 0){
+			if (column < 0 || row < 0) {
 				return;
 			}
 			buildPopupMenu(mainWindow.getModel().getServiceFromRow(row), column);
@@ -44,7 +44,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 	private void buildPopupMenu(Pair<Service, Integer> pair, Integer column) {
 		Service service = pair.getKey();
-		Integer userIndex  = pair.getValue();
+		Integer userIndex = pair.getValue();
 		Boolean accepted = false;
 		if (service.getUsers() != null) {
 			for (UserEntry userEntry : service.getUsers()) {
@@ -65,14 +65,14 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			if (service.getStatus() != Status.INACTIVE && !accepted) {
 				if (column >= 2) {
 					mainWindow.getDropRequestItem().showItem(pair);
-					if(service.getUsers() != null){
+					if (service.getUsers() != null) {
 						mainWindow.getMenuSeparator().setVisible(true);
 						mainWindow.getAcceptOfferItem().showItem(pair);
-						mainWindow.getRefusetOfferItem().showItem(pair);						
+						mainWindow.getRefusetOfferItem().showItem(pair);
 					} else {
 						mainWindow.getMenuSeparator().setVisible(false);
 						mainWindow.getAcceptOfferItem().hideItem();
-						mainWindow.getRefusetOfferItem().hideItem();	
+						mainWindow.getRefusetOfferItem().hideItem();
 					}
 				} else {
 					mainWindow.getDropRequestItem().showItem(pair);
@@ -98,15 +98,16 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			mainWindow.getAcceptOfferItem().hideItem();
 			mainWindow.getRefusetOfferItem().hideItem();
 
-			if (service.getStatus() != Status.INACTIVE && !accepted && column >= 2) {
+			if (service.getStatus() != Status.INACTIVE && !accepted && column >= 2
+					&& service.getUsers() != null) {
 				mainWindow.getMakeOfferItem().showItem(pair);
-				
-				if(service.getUsers().get(userIndex).getOffer() == Offer.OFFER_EXCEDED){
+
+				if (service.getUsers().get(userIndex).getOffer() == Offer.OFFER_EXCEDED) {
 					mainWindow.getDropAuctionItem().showItem(pair);
-				}else{
-					mainWindow.getDropAuctionItem().hideItem();					
+				} else {
+					mainWindow.getDropAuctionItem().hideItem();
 				}
-				
+
 			} else {
 				mainWindow.getMakeOfferItem().hideItem();
 				mainWindow.getDropAuctionItem().hideItem();
@@ -114,7 +115,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 		}
 
 	}
-	
+
 	@Override
 	public void windowActivated(WindowEvent e) {
 	}
