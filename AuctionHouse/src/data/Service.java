@@ -41,7 +41,7 @@ public class Service implements Comparable<Service> {
 	 * 
 	 */
 	public enum Status {
-		ACTIVE, INACTIVE, NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
+		ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
 	};
 
 	public Service(String name, ArrayList<UserEntry> users, Status status) {
