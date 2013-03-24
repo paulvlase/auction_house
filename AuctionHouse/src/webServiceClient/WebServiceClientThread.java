@@ -68,7 +68,7 @@ public class WebServiceClientThread extends Thread {
 						String username = getRandomString(5 + Math.abs(random
 								.nextInt(16)));
 						Long time = date.getTime()
-								+ 200 + Math.abs(random.nextInt(10000));
+								+ 10000 + Math.abs(random.nextInt(1000000));
 						Double price = Math.abs(random.nextInt(10000)) / 100.0;
 
 						UserEntry user = new UserEntry(username,
