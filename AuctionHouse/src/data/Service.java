@@ -17,7 +17,7 @@ import java.util.Date;
  * @author Ghennadi Procopciuc
  * @see Status
  */
-public class Service {
+public class Service implements Comparable<Service>{
 	private String					name;
 	private long					time;
 	private double					price;
@@ -225,5 +225,10 @@ public class Service {
 	@Override
 	public String toString() {
 		return "" + name  + " " + users;
+	}
+
+	@Override
+	public int compareTo(Service o) {
+		return getName().compareTo(o.getName());
 	}
 }

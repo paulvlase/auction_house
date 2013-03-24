@@ -38,7 +38,6 @@ public class MySpanTableModel extends AbstractTableModel {
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
 		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services
 				.clone());
-		// this.columns = columns;
 
 		this.columns = (List<String>) Collections.synchronizedList(new ArrayList<String>(columns));
 
@@ -102,7 +101,6 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		/* Clear all the previous data */
 		data.clear();
-		// cellAtt.clear();
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 		clearSpans();
 
@@ -163,6 +161,10 @@ public class MySpanTableModel extends AbstractTableModel {
 
 	public void changeService(Service service) {
 		mutex.lock();
+
+		if (service.getUsers() != null) {
+			Collections.sort(service.getUsers());
+		}
 
 		removeService(service);
 		addService(service);

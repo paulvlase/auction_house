@@ -69,6 +69,10 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 						mainWindow.getMenuSeparator().setVisible(true);
 						mainWindow.getAcceptOfferItem().showItem(pair);
 						mainWindow.getRefusetOfferItem().showItem(pair);						
+					} else {
+						mainWindow.getMenuSeparator().setVisible(false);
+						mainWindow.getAcceptOfferItem().hideItem();
+						mainWindow.getRefusetOfferItem().hideItem();	
 					}
 				} else {
 					mainWindow.getDropRequestItem().showItem(pair);
