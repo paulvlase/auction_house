@@ -44,6 +44,7 @@ import javax.swing.UIManager;
 
 import config.GuiConfig;
 import data.Service;
+import data.UserProfile;
 import data.UserProfile.UserRole;
 
 /**
@@ -145,7 +146,9 @@ public class MainWindow extends JFrame {
 			refusetOfferItem.setText("Refuse Offer");
 			refusetOfferItem.setIcon(new ImageIcon(GuiConfig.REFUSE_OFFER_ICON));
 			makeOfferItem.setText("Make Offer");
+			makeOfferItem.setIcon(new ImageIcon(GuiConfig.MAKE_OFFER_ICON));
 			dropAuctionItem.setText("Drop auction");
+			dropAuctionItem.setIcon(new ImageIcon(GuiConfig.DROP_AUCTION_ICON));
 
 			popupMenu.add(launchRequestItem);
 			popupMenu.add(dropRequestItem);
@@ -288,7 +291,7 @@ public class MainWindow extends JFrame {
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON16).getImage());
 		setIconImages(icons);
 
-		pack();
+		setSize(new Dimension(700, 400));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -500,5 +503,10 @@ public class MainWindow extends JFrame {
 	public void transferProgressNotify(Service service) {
 		model.removeService(service);
 		model.addService(service);
+	}
+
+	public void profileChangedNotify(UserProfile profile) {
+		setName(profile.getFirstName(), profile.getLastName());
+		setAvatar(new ImageIcon(profile.getAvatar()));
 	}
 }
