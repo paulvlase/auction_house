@@ -1,6 +1,6 @@
 package data;
 
-public class UserEntry {
+public class UserEntry implements Comparable<UserEntry>{
 	public enum Offer {
 		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED;
 
@@ -76,5 +76,10 @@ public class UserEntry {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(UserEntry o) {
+		return this.price.compareTo(o.getPrice());
 	}
 }

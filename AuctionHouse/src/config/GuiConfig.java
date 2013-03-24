@@ -162,7 +162,7 @@ public class GuiConfig {
 	public static final int			AVATAR_WIDTH						= 100;
 	public static final int			AVATAR_HEIGHT						= 100;
 	public static final String		DEFAULT_AVATAR						= "resources/images/default_avatar.png";
-	
+
 	public static final String		AUCTION_ICON64						= "resources/images/auction64x64.png";
 	public static final String		AUCTION_ICON32						= "resources/images/auction32x32.png";
 	public static final String		AUCTION_ICON16						= "resources/images/auction16x16.png";
@@ -170,6 +170,9 @@ public class GuiConfig {
 	/* Other settings for MainWindow */
 	public static final int			MINI_AVATAR_WIDTH					= 40;
 	public static final int			MINI_AVATAR_HEIGHT					= 40;
+	public static final String		ADD_ICON							= "resources/images/add.png";
+	public static final String		LAUNCH_OFFER_ICON					= "resources/images/launch_offer.png";
+	public static final String		LOGOUT_ICON							= "resources/images/logout.png";
 
 	private static final String		values[][]							= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,
