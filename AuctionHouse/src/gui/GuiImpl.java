@@ -181,4 +181,10 @@ public class GuiImpl implements Gui {
 	public void acceptOffer(Pair<Service, Integer> pair) {
 		med.acceptOffer(pair);
 	}
+	
+	@Override
+	public void transferProgress(Service service) {
+		if (mainWindow != null)
+			mainWindow.transferProgressNotify(service);
+	}
 }

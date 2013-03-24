@@ -10,14 +10,17 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import data.Service;
+import data.Service.Status;
 
 public class NetworkTask extends SwingWorker<Service, Service> {
-	private NetworkTransfer net;
+	private MediatorNetwork med;
 	private Service service;
 
-	public NetworkTask(NetworkTransfer net, Service service) {
-		this.net = net;
+	public NetworkTask(MediatorNetwork med, Service service) {
+		this.med = med;
 		this.service = service;
+		
+		service.setStatus(Status.TRANSFER_IN_PROGRESS);
 	}
 
 	@Override
@@ -45,16 +48,19 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		System.out.println(Thread.currentThread());
 
 		for (Service service:  services) {
-			net.transferProgress(service);
+			med.transferProgressNotify(service);
 		}
 	}
 
 	@Override
 	protected void done() {
 		System.out.println(Thread.currentThread());
-		if (isCancelled())
+		if (isCancelled()) {
 			System.out.println("Cancelled !");
-		else
+			service.setStatus(Status.TRANSFER_FAILED);
+		} else {
 			System.out.println("Done !");
+			service.setStatus(Status.TRANSFER_COMPLETE);
+		}
 	}
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -155,18 +156,24 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	/* MediatorWeb */
 	@Override
 	public void newUserNotify(Service service) {
+		Collections.sort(service.getUsers());
 		gui.newUserNotify(service);
 	}
 
 	public void launchOfferNotify(Service service) {
+		Collections.sort(service.getUsers());
 		gui.launchOfferNotify(service);
 	}
 
 	public void launchOffersNotify(ArrayList<Service> services) {
+		for (Service service: services) {
+			Collections.sort(service.getUsers());
+		}
 		gui.launchOffersNotify(services);
 	}
 
 	public void dropOfferNotify(Service service) {
+		Collections.sort(service.getUsers());
 		gui.dropOfferNotify(service);
 	}
 
@@ -206,6 +213,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		services.add(service2);
 		services.add(service3);
 		// }
+		
+		for (Service service: services) {
+			Collections.sort(service.getUsers());
+		}
 		return services;
 	}
 
@@ -280,5 +291,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public int refuseOffer(Pair<Service, Integer> pair) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void transferProgressNotify(Service service) {
+		gui.transferProgressNotify(service);
 	}
 }

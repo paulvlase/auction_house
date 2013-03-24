@@ -32,4 +32,6 @@ public interface Gui {
 	
 	public void newUserNotify(Service service);
 	public void acceptOffer(Pair<Service, Integer> pair);
+	
+	public void transferProgressNotify(Service service);
 }

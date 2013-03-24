@@ -9,4 +9,5 @@ import data.Service;
  */
 public interface MediatorNetwork {
 	public void registerNetwork(Network net);
+	public void transferProgressNotify(Service service);
 }

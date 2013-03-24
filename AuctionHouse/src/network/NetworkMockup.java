@@ -1,6 +1,7 @@
 package network;
 
 import data.Service;
+import data.Service.Status;
 import interfaces.MediatorNetwork;
 import interfaces.Network;
 import interfaces.NetworkTransfer;
@@ -21,14 +22,12 @@ public class NetworkMockup implements Network, NetworkTransfer {
 	
 	@Override
 	public boolean startTransfer(Service service) {
-		NetworkTask task = new NetworkTask(this, service);
+		service.setStatus(Status.TRANSFER_STARTED);
+		med.transferProgressNotify(service);
+
+		NetworkTask task = new NetworkTask(med, service);
 		task.execute();
 		
 		return true;
-	}
-	
-	@Override
-	public void transferProgress(Service service) {
-		System.out.println("[NetworkImpl:transferProgress()] " + service.getProgress());
 	}
 }
