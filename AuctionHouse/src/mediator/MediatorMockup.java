@@ -1,31 +1,30 @@
 package mediator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-
-import config.FilesConfig;
-import config.GlobalConfig.ServiceType;
-import data.LoginCred;
-import data.Pair;
-import data.Service;
-import data.UserEntry;
-import data.UserProfile;
-import data.Service.Status;
-import data.UserEntry.Offer;
-import data.UserProfile.UserRole;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 import interfaces.Network;
 import interfaces.WebServiceClient;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+import config.GlobalConfig.ServiceType;
+import data.LoginCred;
+import data.Pair;
+import data.Service;
+import data.Service.Status;
+import data.UserEntry;
+import data.UserEntry.Offer;
+import data.UserProfile;
+import data.UserProfile.UserRole;
 
 /**
  * Mediator module implementation.
@@ -210,7 +209,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			
 			Service service2 = new Service("service2", null, Status.INACTIVE);
 			Service service3 = new Service("service3", null, Status.ACTIVE);
-			services.add(service1);
+			//services.add(service1);
 			services.add(service2);
 			services.add(service3);				
 		}
