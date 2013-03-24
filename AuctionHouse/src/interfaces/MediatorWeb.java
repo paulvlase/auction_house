@@ -14,6 +14,9 @@ public interface MediatorWeb {
 	public void registerWebServiceClient(WebServiceClient web);
 	
 	public UserProfile getUserProfile();
+	public void putOffer(Service service);
+	public Service getOffer(String serviceName);
+	
 	
 	public void changeServiceNotify(Service service);
 	public void changeServicesNotify(ArrayList<Service> services);

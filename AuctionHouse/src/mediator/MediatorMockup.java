@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import config.FilesConfig;
@@ -37,9 +38,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	private WebServiceClient	web;
 
 	private UserProfile			profile;
+	private Hashtable<String, Service> offers;
 
 	public MediatorMockup() {
-
+		offers = new Hashtable<String, Service>();
 	}
 
 	@Override
@@ -66,6 +68,14 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		// startTransfer(service);
 		// }
 		gui.start();
+	}
+	
+	public synchronized void putOffer(Service service) {
+		offers.put(service.getName(), service);
+	}
+	
+	public synchronized Service getOffer(String serviceName) {
+		return offers.get(serviceName);
 	}
 
 	@Override
