@@ -24,19 +24,22 @@ public class OfferExceededEvent implements Command {
 	public void execute() {
 		ArrayList<UserEntry> users = service.getUsers();
 
-		if (users != null) {
-			Integer userIndex = random.nextInt(users.size());
-
-			UserEntry user = users.get(userIndex);
-
-			if (user.getOffer() != Offer.OFFER_MADE) {
-				return;
-			}
-
-			user.setOffer(Offer.OFFER_EXCEDED);
-
-			med.putOffer(service);
-			med.changeServiceNotify(service);
+		if (users == null || users.size() == 0) {
+			return;
 		}
+		
+		Integer userIndex = random.nextInt(users.size());
+
+		UserEntry user = users.get(userIndex);
+
+		if (user.getOffer() != Offer.OFFER_MADE) {
+			return;
+		}
+
+		user.setOffer(Offer.OFFER_EXCEDED);
+
+		med.putOffer(service);
+		med.changeServiceNotify(service);
+
 	}
 }

@@ -60,12 +60,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public void start() {
-		// {
-		// Service service = new Service("service");
-		// service.setPrice(2.2);
-		// service.setTime(101);
-		// startTransfer(service);
-		// }
 		gui.start();
 	}
 	
