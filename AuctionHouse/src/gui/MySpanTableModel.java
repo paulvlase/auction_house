@@ -94,6 +94,10 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.lock();
 		System.out.println(Thread.currentThread().getName() + " acquaired lock ...");
 
+		if(index < 0 || index >= services.size()){
+			System.err.println("Trying to remove an element : " + index);
+			return;			
+		}
 		/* Clear all the previous data */
 		data.clear();
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());

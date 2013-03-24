@@ -1,4 +1,4 @@
-Ghennadi                                                                   Vlase
+﻿Ghennadi                                                                   Vlase
 Procopciuc                                                                 Paul
 
 
@@ -87,10 +87,6 @@ Cuprins:
     Rularea proiectului :
     ant Main
 
-    //TODO : verifica
-
-                                                                    [ pagina 3 ]
-
 3. Organizarea surselor
 
     Proiectul este organizat în 11 pachete, după cum urmează :
@@ -106,6 +102,7 @@ Cuprins:
     mediator            Modulul mediator
     network             Modulul rețea
     webServiceClient    Modulul clientului web
+                                                                    [ pagina 3 ]
 
 4. Testare
 
@@ -139,25 +136,40 @@ Cuprins:
     Comunicarea între module se face cu ajutorul unor notificări. Pachetele
     prin intermediul cărora se transmit date sunt prezente în pachetul data.
 
-    //TODO Utilizator github
-    //TODO adresa proiect online
+
+                                                                    [ pagina 4 ]
 
     Credențiale utilizate în interfața grafică :
         Usernmae : unix140
         Password : marmota
-        
+
 6. Acces surse :
-    În dezvolatare surselor am folosit git, pe GitHub. Pentru a observa modul în
+    În dezvolatare surselor am folosit git (GitHub). Pentru a observa modul în
     care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
-    
+
     Username : IDPdummyAccount
     Password : IDPdummyAccount1
-    
-6. Bonus :
 
-    - Interfață bilingvă cu posibilitate de extindere
+    Adresă proiect : https://github.com/paulvlase/auction_house
+
+7. Bonus :
+
+    - Interfață bilingvă cu posibilitate de extindere (Opțiunea se accesează
+      din fereastra Login, Language)
     - Interfață îmbunătățită
-    - Posibilitatea de a adăuga/șterge servicii în mod dinamic
+    - Posibilitatea de a adăuga/șterge servicii în mod dinamic pentru ambele
+      entități
     - Posibilitatea de editare a profilului utilizatorului
+    - Fereastră de Login
     - Adăugarea avatarului în setări cu posibilitatea de încărcarea unei poze
     - Un utilizator poate accesa ambele conturi atât vânzător cât și producător
+
+
+
+
+
+
+
+
+
+                                                                    [ pagina 5 ]
