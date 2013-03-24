@@ -29,6 +29,7 @@ public class GuiImpl implements Gui {
 	private MediatorGui	med;
 	private Login		login;
 	private MainWindow	mainWindow;
+	private RegisterWindow registerWindow;
 
 	public GuiImpl(MediatorGui med) {
 		this.med = med;
@@ -78,9 +79,22 @@ public class GuiImpl implements Gui {
 		return med.setUserProfile(profile);
 	}
 	
-	public boolean registerUser(UserProfile profile) {
-		return med.registerUser(profile);
+	public void registerUserStep1() {
+		login.hideWindow();
+		if (registerWindow == null) {
+			registerWindow =  new RegisterWindow(this);
+		}
+		registerWindow.setVisible(false);
 	}
+	
+	public boolean registerUser(UserProfile profile) {
+			return med.registerUser(profile);
+	}
+	
+	public void registerUserStep3() {
+		registerWindow.setVisible(false);
+		login.showWindow();
+}
 	
 	public boolean verifyUsername(String username) {
 		return med.verifyUsername(username);

@@ -85,6 +85,9 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 	
 	public boolean registerUser(UserProfile profile) {
+		if (users.get(profile.getUsername()) != null)
+			return false;
+	
 		users.put(profile.getUsername(), profile);
 		return true;
 	}
