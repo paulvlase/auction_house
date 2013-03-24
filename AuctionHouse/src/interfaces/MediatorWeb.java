@@ -3,6 +3,7 @@ package interfaces;
 import java.util.ArrayList;
 
 import data.Service;
+import data.UserProfile;
 
 /**
  * Mediator interface for WebServiceClient module.
@@ -18,4 +19,5 @@ public interface MediatorWeb {
 	public void dropOfferNotify(Service service);
 
 	public void newUserNotify(Service service);
+	public void profileChangedNotify(UserProfile profile);
 }

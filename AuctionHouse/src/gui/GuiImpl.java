@@ -187,4 +187,10 @@ public class GuiImpl implements Gui {
 		if (mainWindow != null)
 			mainWindow.transferProgressNotify(service);
 	}
+
+	@Override
+	public void profileChangedNotify(UserProfile profile) {
+		if (mainWindow != null)
+			mainWindow.profileChangedNotify(profile);
+	}
 }

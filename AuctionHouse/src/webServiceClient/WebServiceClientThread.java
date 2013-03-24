@@ -125,6 +125,7 @@ public class WebServiceClientThread extends Thread {
 	
 	public synchronized boolean setUserProfile(UserProfile profile) {
 		users.put(profile.getUsername(), profile);
+		med.profileChangedNotify(profile);
 		return true;
 	}
 

@@ -307,4 +307,9 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public void transferProgressNotify(Service service) {
 		gui.transferProgressNotify(service);
 	}
+
+	@Override
+	public void profileChangedNotify(UserProfile profile) {
+		gui.profileChangedNotify(profile);
+	}
 }

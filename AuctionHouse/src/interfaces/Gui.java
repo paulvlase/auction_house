@@ -34,4 +34,5 @@ public interface Gui {
 	public void acceptOffer(Pair<Service, Integer> pair);
 	
 	public void transferProgressNotify(Service service);
+	public void profileChangedNotify(UserProfile profile);
 }
