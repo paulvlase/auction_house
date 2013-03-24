@@ -3,7 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -13,8 +12,12 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import config.GuiConfig;
 import data.Period;
 
+/**
+ * @author Ghennadi Procopciuc
+ */
 class MyTableCellRenderer extends DefaultTableCellRenderer {
 
 	private static final long	serialVersionUID	= 1L;
@@ -35,10 +38,10 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 		if (column == 2) {
 			if (value instanceof Integer) {
 				Integer i = (Integer) value;
-				String text = "Done";
+				String text = GuiConfig.getValue(GuiConfig.DONE);
 				if (i < 0) {
 					if (i == -1) {
-						text = "Canceled";
+						text = GuiConfig.getValue(GuiConfig.CANCELED);
 					}
 				} else if (i <= 100) {
 					bar.setIndeterminate(false);

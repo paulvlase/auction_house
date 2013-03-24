@@ -44,11 +44,9 @@ public class MySpanTableModel extends AbstractTableModel {
 		data = Collections.synchronizedList(new ArrayList<List<Object>>());
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 
-		System.out.println("From constructor ...");
 		for (Service service : services) {
 			addService(service, false);
 		}
-		System.out.println("Exit from constructor...");
 	}
 
 	public void addSpan(Span span) {

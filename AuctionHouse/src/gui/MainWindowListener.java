@@ -37,7 +37,6 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			if(column < 0 || row < 0){
 				return;
 			}
-			System.out.println("Selected Row : " + row + " Column : " + column);
 			buildPopupMenu(mainWindow.getModel().getServiceFromRow(row), column);
 			mainWindow.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 		}

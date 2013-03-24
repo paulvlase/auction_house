@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import config.GuiConfig;
+
 /**
  * If user field is null, then this offer is inactive, otherwise it's active. If
  * time is 0, this offer is expired. If price is 0, this offer is a demand,
@@ -17,7 +19,7 @@ import java.util.Date;
  * @author Ghennadi Procopciuc
  * @see Status
  */
-public class Service implements Comparable<Service>{
+public class Service implements Comparable<Service> {
 	private String					name;
 	private long					time;
 	private double					price;
@@ -51,7 +53,7 @@ public class Service implements Comparable<Service>{
 		this.price = 0;
 		this.status = status;
 	}
-	
+
 	public Service(Service service) {
 		this.name = service.getName();
 		this.users = service.getUsers();
@@ -156,16 +158,16 @@ public class Service implements Comparable<Service>{
 		 */
 		ArrayList<Object> row;
 
-		// TODO Add the constant strings from below and their translation to
-		// the configurations file.
 		switch (status) {
 		case INACTIVE:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Inactive", "", "", "", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(),
+					GuiConfig.getValue(GuiConfig.INACTIVE), "", "", "", ""));
 			data.add(row);
 			break;
 		case ACTIVE:
-			if(users == null){
-				row = new ArrayList<Object>(Arrays.asList(getName(), "Active", "", "", "", ""));
+			if (users == null) {
+				row = new ArrayList<Object>(Arrays.asList(getName(),
+						GuiConfig.getValue(GuiConfig.ACTIVE), "", "", "", ""));
 				data.add(row);
 				break;
 			}
@@ -174,8 +176,9 @@ public class Service implements Comparable<Service>{
 				if (first) {
 					first = false;
 
-					row = new ArrayList<Object>(Arrays.asList(getName(), "Active", user.getName(),
-							user.getOffer(), user.getTime(), user.getPrice()));
+					row = new ArrayList<Object>(Arrays.asList(getName(),
+							GuiConfig.getValue(GuiConfig.ACTIVE), user.getName(), user.getOffer(),
+							user.getTime(), user.getPrice()));
 				} else {
 					row = new ArrayList<Object>(Arrays.asList("", "", user.getName(),
 							user.getOffer(), user.getTime(), user.getPrice()));
@@ -185,17 +188,18 @@ public class Service implements Comparable<Service>{
 			}
 			break;
 		case TRANSFER_IN_PROGRESS:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer in progress", progress,
-					"", "", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(),
+					GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
 			data.add(row);
 			break;
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer started", 0, "", "", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(),
+					GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "", "", ""));
 			data.add(row);
 			break;
 		case TRANSFER_COMPLETE:
-			row = new ArrayList<Object>(Arrays.asList(getName(), "Transfer complete", progress, "",
-					"", ""));
+			row = new ArrayList<Object>(Arrays.asList(getName(),
+					GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE), progress, "", "", ""));
 			data.add(row);
 			break;
 		case TRANSFER_FAILED:
@@ -221,10 +225,10 @@ public class Service implements Comparable<Service>{
 
 		return ((Service) arg0).getName().equals(name);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "" + name  + " " + users;
+		return "" + name + " " + users;
 	}
 
 	@Override

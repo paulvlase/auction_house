@@ -117,6 +117,23 @@ public class GuiConfig {
 	private static final String		PRICE_ERROR_VALUES[]				= {
 			"Price should be a number.", "Prețul trebuie să fie un număr" };
 
+	/* MyTableCellRender */
+	private static final String		DONE_VALUES[]						= { "Done", "Terminat" };
+	private static final String		CANCELED_VALUES[]					= { "Canceled", "Anulat" };
+
+	/* NewPrice */
+	private static final String		NEW_PRICE_VALUES[]					= { "New price", "Preț nou" };
+
+	/* Service */
+	private static final String		INACTIVE_VALUES[]					= { "Inactive", "Inactiv" };
+	private static final String		ACTIVE_VALUES[]						= { "Active", "Activ" };
+	private static final String		TRANSFER_STARTED_VALUES[]			= { "Transfer started",
+			"Transfer a început"										};
+	private static final String		TRANSFER_IN_PROGRESS_VALUES[]		= { "Transfer in prgress",
+			"Transfer în progres"										};
+	private static final String		TRANSFER_COMPLETE_VALUES[]			= { "Transfer complete",
+			"Transfer complet"											};
+	
 	/* Login form */
 	public static final int			USERNAME							= 0;
 	public static final int			PASSWORD							= 1;
@@ -176,6 +193,20 @@ public class GuiConfig {
 	public static final int			SERVICE_TWICE_ERROR					= 47;
 	public static final int			PRICE_ERROR							= 48;
 
+	/* MyTableCellRender */
+	public static final int			DONE								= 49;
+	public static final int			CANCELED							= 50;
+
+	/* NewPrice */
+	public static final int			NEW_PRICE							= 51;
+
+	/* Service */
+	public static final int			INACTIVE							= 52;
+	public static final int			ACTIVE								= 53;
+	public static final int			TRANSFER_STARTED					= 54;
+	public static final int			TRANSFER_IN_PROGRESS				= 55;
+	public static final int			TRANSFER_COMPLETE					= 56;
+
 	/* Other settings for Profile editor */
 	public static final int			AVATAR_WIDTH						= 100;
 	public static final int			AVATAR_HEIGHT						= 100;
@@ -215,7 +246,9 @@ public class GuiConfig {
 			LAST_NAME_VALUES, NEW_PASSWORD_VALUES, LOCATION_VALUES, CANCEL_VALUES, OK_VALUES,
 			PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES, PASSWORD_MATCH_ERROR_VALUES,
 			FILE_CHOOSER_VALUES, NAME_VALUES, EMPTY_SERVICE_NAME_VALUES,
-			EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES, PRICE_ERROR_VALUES };
+			EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES, PRICE_ERROR_VALUES,
+			DONE_VALUES, CANCELED_VALUES, NEW_PRICE_VALUES, INACTIVE_VALUES, ACTIVE_VALUES,
+			TRANSFER_STARTED_VALUES, TRANSFER_IN_PROGRESS_VALUES, TRANSFER_COMPLETE_VALUES };
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;

@@ -1,7 +1,3 @@
-/*
- * Created by JFormDesigner on Sun Mar 24 15:47:47 EET 2013
- */
-
 package gui;
 
 import interfaces.Gui;
@@ -60,7 +56,7 @@ public class PriceWindow extends JFrame implements ActionListener {
 				0.0, 1.0E-4 };
 
 		// label1
-		priceLabel.setText("New price");
+		priceLabel.setText(GuiConfig.getValue(GuiConfig.NEW_PRICE));
 		priceField.addActionListener(this);
 		contentPane.add(priceLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
@@ -68,7 +64,7 @@ public class PriceWindow extends JFrame implements ActionListener {
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// button1
-		okButton.setText("OK");
+		okButton.setText(GuiConfig.getValue(GuiConfig.OK));
 		contentPane.add(okButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		pack();
