@@ -12,12 +12,16 @@ import interfaces.NetworkTransfer;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkMockup implements Network, NetworkTransfer {
-	private MediatorNetwork med = null;
-	
+	private MediatorNetwork med;
+	private NetworkJoinThread joinThread;
+
 	public NetworkMockup(MediatorNetwork med) {
 		this.med = med;
 		
 		med.registerNetwork(this);
+		
+		joinThread = new NetworkJoinThread(med);
+		joinThread.start();
 	}
 	
 	@Override
@@ -25,7 +29,7 @@ public class NetworkMockup implements Network, NetworkTransfer {
 		service.setStatus(Status.TRANSFER_STARTED);
 		med.transferProgressNotify(service);
 
-		NetworkTask task = new NetworkTask(med, service);
+		NetworkTask task = new NetworkTask(med, joinThread, service);
 		task.execute();
 		
 		return true;

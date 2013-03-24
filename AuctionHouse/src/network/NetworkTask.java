@@ -14,16 +14,24 @@ import data.Service.Status;
 
 public class NetworkTask extends SwingWorker<Service, Service> {
 	private MediatorNetwork med;
+	private NetworkJoinThread joinThread;
 	private Service service;
 	
 	private final int DELAY = 100;
 	private final int COUNT = 100;
 
-	public NetworkTask(MediatorNetwork med, Service service) {
+	public NetworkTask(MediatorNetwork med, NetworkJoinThread joinThread, Service service) {
 		this.med = med;
+		this.joinThread = joinThread;
 		this.service = service;
 		
+		joinThread.registerJoin(this);
+		
 		service.setStatus(Status.TRANSFER_IN_PROGRESS);
+	}
+	
+	public String getServiceName() {
+		return service.getName();
 	}
 
 	@Override
@@ -69,6 +77,10 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 			service.setProgress(COUNT + 1);
 			service.setStatus(Status.TRANSFER_COMPLETE);
 			med.transferProgressNotify(service);
+		}
+		
+		synchronized (joinThread.getMonitor()) {
+			joinThread.getMonitor().notify();
 		}
 	}
 }
