@@ -98,7 +98,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			mainWindow.getAcceptOfferItem().hideItem();
 			mainWindow.getRefusetOfferItem().hideItem();
 
-			if (service.getStatus() != Status.INACTIVE && !accepted && column >= 2
+			if (service.getStatus() != Status.INACTIVE && column >= 2
 					&& service.getUsers() != null) {
 				mainWindow.getMakeOfferItem().showItem(pair);
 
