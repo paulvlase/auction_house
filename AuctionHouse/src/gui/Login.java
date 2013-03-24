@@ -34,6 +34,8 @@ public class Login extends JFrame implements ActionListener {
 	private JPanel				bottomPannel;
 	private JButton				signinButton;
 	private ButtonGroup			buttonGroup;
+	private JMenuItem			registerMenuItem;
+	private JMenu				file;
 
 	public Login(Gui gui) {
 		this.gui = gui;
@@ -54,6 +56,10 @@ public class Login extends JFrame implements ActionListener {
 		bottomPannel = new JPanel();
 		signinButton = new JButton();
 		buttonGroup = new ButtonGroup();
+		registerMenuItem = new JMenuItem();
+		file = new JMenu();
+
+		registerMenuItem.addActionListener(this);
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
@@ -78,6 +84,8 @@ public class Login extends JFrame implements ActionListener {
 			// languageMenu
 			{
 				languageMenu.setText(GuiConfig.getValue(GuiConfig.LANGUAGE));
+				registerMenuItem.setText(GuiConfig.getValue(GuiConfig.REGISTER));
+				file.setText(GuiConfig.getValue(GuiConfig.FILE));
 
 				for (int i = 0; i < GuiConfig.LANGUAGES.length; i++) {
 					String[] language = GuiConfig.LANGUAGES[i];
@@ -88,10 +96,11 @@ public class Login extends JFrame implements ActionListener {
 
 					languageMenu.add(menuItem);
 					buttonGroup.add(menuItem);
-
 				}
 			}
-			menuBar.add(languageMenu);
+			file.add(languageMenu);
+			file.add(registerMenuItem);
+			menuBar.add(file);
 		}
 		setJMenuBar(menuBar);
 
@@ -156,13 +165,12 @@ public class Login extends JFrame implements ActionListener {
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
 
-
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON64).getImage());
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON32).getImage());
 		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON16).getImage());
 		setIconImages(icons);
-		
+
 		setResizable(false);
 		setSize(310, 205);
 		setLocationRelativeTo(null);
@@ -211,11 +219,20 @@ public class Login extends JFrame implements ActionListener {
 			signInAction();
 			return;
 		}
-		
-		if(e.getSource() == usernameField){
+
+		if (e.getSource() == usernameField) {
 			signInAction();
 			return;
 		}
+		
+		if (e.getSource() == registerMenuItem){
+			registerAction();
+			return;
+		}
+	}
+
+	private void registerAction() {
+		
 	}
 
 	private void signInAction() {

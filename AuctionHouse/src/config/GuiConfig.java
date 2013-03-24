@@ -136,6 +136,21 @@ public class GuiConfig {
 	private static final String		TRANSFER_COMPLETE_VALUES[]			= { "Transfer complete",
 			"Transfer complet"											};
 
+	/* RegisterWindow */
+	private static final String		CHECK_VALUES[]						= { "Check", "Verifică" };
+	private static final String		EMAIL_VALUES[]						= { "Email", "Email" };
+	private static final String		REGISTER_VALUES[]					= { "Register",
+			"Înregistrare"												};
+	private static final String		USERNAME_ERROR_VALUES[]				= {
+			"The username is already taken.", "Numele de utilizator este deja utilizat." };
+	private static final String		FIRST_NAME_ERROR_VALUES[]			= {
+			"First name field seems to be empty, please fill it",
+			"Cămpul prenume este gol, completați-l vă rog"				};
+	private static final String		LAST_NAME_ERROR_VALUES[]			= {
+			"Last name field seems to be empty, please fill it",
+			"Cămpul nume este gol, completați-l vă rog"				};
+	private static final String		FILE_VALUES[]						= { "File", "Fișier" };
+
 	/* Login form */
 	public static final int			USERNAME							= 0;
 	public static final int			PASSWORD							= 1;
@@ -210,6 +225,15 @@ public class GuiConfig {
 	public static final int			TRANSFER_IN_PROGRESS				= 56;
 	public static final int			TRANSFER_COMPLETE					= 57;
 
+	/* RegisterWindow */
+	public static final int			CHECK								= 58;
+	public static final int			EMAIL								= 59;
+	public static final int			REGISTER							= 60;
+	public static final int			USERNAME_ERROR						= 61;
+	public static final int			FIRST_NAME_ERROR					= 62;
+	public static final int			LAST_NAME_ERROR						= 63;
+	public static final int			FILE								= 64;
+
 	/* Other settings for Profile editor */
 	public static final int			AVATAR_WIDTH						= 100;
 	public static final int			AVATAR_HEIGHT						= 100;
@@ -239,6 +263,9 @@ public class GuiConfig {
 	public static final String		PRICE_ICON16						= "resources/images/price16x16.png";
 	public static final String		PRICE_ICON48						= "resources/images/price48x48.png";
 	public static final String		PRICE_ICON64						= "resources/images/price64x64.png";
+	public static final String		REGISTER_ICON16						= "resources/images/register16x16.png";
+	public static final String		REGISTER_ICON32						= "resources/images/register32x32.png";
+	public static final String		REGISTER_ICON64						= "resources/images/register64x64.png";
 
 	private static final String		values[][]							= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,
@@ -255,7 +282,8 @@ public class GuiConfig {
 			EMPTY_SERVICE_NAME_VALUES, EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES,
 			PRICE_ERROR_VALUES, DONE_VALUES, CANCELED_VALUES, NEW_PRICE_VALUES, INACTIVE_VALUES,
 			ACTIVE_VALUES, TRANSFER_STARTED_VALUES, TRANSFER_IN_PROGRESS_VALUES,
-			TRANSFER_COMPLETE_VALUES									};
+			TRANSFER_COMPLETE_VALUES, CHECK_VALUES, EMAIL_VALUES, REGISTER_VALUES,
+			USERNAME_ERROR_VALUES, FIRST_NAME_ERROR_VALUES, LAST_NAME_ERROR_VALUES, FILE_VALUES };
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;

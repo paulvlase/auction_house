@@ -52,6 +52,9 @@ public class UserEntry implements Comparable<UserEntry> {
 		this.price = user.getPrice();
 	}
 
+	public UserEntry() {
+	}
+
 	public String getName() {
 		return name;
 	}

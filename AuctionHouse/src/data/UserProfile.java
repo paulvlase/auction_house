@@ -27,6 +27,9 @@ public class UserProfile {
 		this.password = password;
 	}
 
+	public UserProfile() {
+	}
+
 	public String getUsername() {
 		return username;
 	}
