@@ -224,7 +224,7 @@ public class WebServiceClientThread extends Thread {
 		return true;
 	}
 
-	public synchronized void refuseOffer(Pair<Service, Integer> pair) {
+	public synchronized boolean refuseOffer(Pair<Service, Integer> pair) {
 		Service service = pair.getKey();
 		int userIndex = pair.getValue();
 		ArrayList<UserEntry> users = service.getUsers();
@@ -237,7 +237,12 @@ public class WebServiceClientThread extends Thread {
 			user.setOffer(Offer.OFFER_REFUSED);
 			users.remove(userIndex);
 			
+			if (users.size() == 0) {
+				service.setUsers(null);
+			}
 			med.changeServiceNotify(service);
 		}
+		
+		return true;
 	}
 }

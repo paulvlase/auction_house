@@ -93,7 +93,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 
 	@Override
 	public boolean refuseOffer(Pair<Service, Integer> pair) {
-		return true;
+		return thread.refuseOffer(pair);
 	}
 
 	/* Seller */
