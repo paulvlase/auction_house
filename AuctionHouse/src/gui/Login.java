@@ -5,6 +5,8 @@ import interfaces.Gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -154,6 +156,13 @@ public class Login extends JFrame implements ActionListener {
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
 
+
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON64).getImage());
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON32).getImage());
+		icons.add(new ImageIcon(GuiConfig.AUCTION_ICON16).getImage());
+		setIconImages(icons);
+		
 		setResizable(false);
 		setSize(310, 205);
 		setLocationRelativeTo(null);
