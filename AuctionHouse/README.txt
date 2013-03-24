@@ -145,6 +145,14 @@ Cuprins:
     Credențiale utilizate în interfața grafică :
         Usernmae : unix140
         Password : marmota
+        
+6. Acces surse :
+    În dezvolatare surselor am folosit git, pe GitHub. Pentru a observa modul în
+    care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
+    
+    Username : IDPdummyAccount
+    Password : IDPdummyAccount1
+    
 6. Bonus :
 
     - Interfață bilingvă cu posibilitate de extindere
