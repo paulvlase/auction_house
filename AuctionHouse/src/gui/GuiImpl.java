@@ -14,11 +14,11 @@ import javax.swing.JOptionPane;
 import config.FilesConfig;
 import config.GuiConfig;
 import config.GlobalConfig.ServiceType;
-import config.GlobalConfig.UserType;
 import data.Pair;
 import data.Service;
 import data.LoginCred;
 import data.UserProfile;
+import data.UserProfile.UserRole;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 
@@ -122,11 +122,11 @@ public class GuiImpl implements Gui {
 			br.readLine();
 			String typeStr = br.readLine();
 
-			UserType type;
+			UserRole role;
 			if (typeStr.equals("SELLER")) {
-				type = UserType.SELLER;
+				role = UserRole.SELLER;
 			} else if (typeStr.equals("BUYER")) {
-				type = UserType.BUYER;
+				role = UserRole.BUYER;
 			} else {
 				System.out.println("Invalid user type");
 				try {
@@ -140,7 +140,7 @@ public class GuiImpl implements Gui {
 			br.readLine();
 			String password = br.readLine();
 
-			loginCred = new LoginCred(username, password, type);
+			loginCred = new LoginCred(username, password, role);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

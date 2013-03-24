@@ -11,7 +11,6 @@ import java.util.StringTokenizer;
 
 import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
-import config.GlobalConfig.UserType;
 import data.LoginCred;
 import data.Pair;
 import data.Service;

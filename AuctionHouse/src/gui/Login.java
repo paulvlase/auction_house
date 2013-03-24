@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import config.GlobalConfig.UserType;
 import config.GuiConfig;
 import data.LoginCred;
+import data.UserProfile.UserRole;
 
 /**
  * @author Ghennadi Procopciuc
@@ -214,7 +214,7 @@ public class Login extends JFrame implements ActionListener {
 	}
 
 	private void signInAction() {
-		UserType userType;
+		UserRole userRole;
 		if (usernameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
 					GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
@@ -228,13 +228,13 @@ public class Login extends JFrame implements ActionListener {
 		}
 
 		if (roleCb.getSelectedItem().toString().equals(GuiConfig.getValue(GuiConfig.BUYER))) {
-			userType = UserType.BUYER;
+			userRole = UserRole.BUYER;
 		} else {
-			userType = UserType.SELLER;
+			userRole = UserRole.SELLER;
 		}
 
 		LoginCred cred = new LoginCred(usernameField.getText(), new String(
-				passwordField.getPassword()), userType);
+				passwordField.getPassword()), userRole);
 		gui.logIn(cred);
 	}
 
