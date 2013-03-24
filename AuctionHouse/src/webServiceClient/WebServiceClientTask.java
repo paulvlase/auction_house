@@ -1,12 +1,19 @@
 package webServiceClient;
 
+import interfaces.Command;
+import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.swing.SwingWorker;
+
+import network.NetworkJoinThread;
 
 import data.LoginCred;
 import data.Pair;
@@ -22,7 +29,7 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceClientThread extends Thread {
+public class WebServiceClientTask extends SwingWorker<Command, Command> {
 	private boolean							running;
 
 	private Random							random;
@@ -33,7 +40,7 @@ public class WebServiceClientThread extends Thread {
 	private Hashtable<String, Service>		offers;
 	private Hashtable<String, UserProfile>	users;
 
-	public WebServiceClientThread(MediatorWeb med) {
+	public WebServiceClientTask(MediatorWeb med) {
 		this.med = med;
 
 		random = new Random();
@@ -47,8 +54,10 @@ public class WebServiceClientThread extends Thread {
 		users.put("unix140", new UserProfile("unix140", "Ghennadi",
 				"Procopciuc", UserRole.SELLER, "marmota"));
 	}
+	
 
-	public void run() {
+	@Override
+	protected Command doInBackground() throws Exception {		
 		int timeLimit = 2500;
 		running = true;
 
@@ -59,17 +68,35 @@ public class WebServiceClientThread extends Thread {
 				Thread.sleep(sleepTime);
 
 				if (med.getUserProfile().getRole() == UserRole.BUYER)
-					generateBuyerEvents();
+					publishBuyerEvents();
 				else
-					generateSellerEvents();
+					publishSellerEvents();
 
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
-	public void generateBuyerEvents() {
+	protected void process(List<Command> events) {
+		for (Command event:  events) {
+			event.execute();
+		}
+	}
+	
+	@Override
+	protected void done() {
+		System.out.println(Thread.currentThread());
+		if (isCancelled()) {
+			System.out.println("Cancelled !");
+		} else {
+			System.out.println("Done !");
+		}
+	}
+	
+	public void publishBuyerEvents() {
 		System.out.println("[webServiceClientThread:generateBuyerEvents()] Begin");
 		for (Map.Entry<String, Service> offer : offers.entrySet()) {
 			Service service = offer.getValue();
@@ -83,14 +110,14 @@ public class WebServiceClientThread extends Thread {
 
 			for (Integer i = 0; i < count; i++) {
 				Integer eventLimit = 1000;
-				Integer event = random.nextInt(eventLimit);
+				Integer n = random.nextInt(eventLimit);
 
-				if (event < 200) {
-					generateNoOffer(service);
-				} else if (event < 400) {
-					generateOfferMade(service);
-				} else if (event < 600) {
-					generateOfferRefused(service);
+				if (n < 200) {
+					publish(new NoOfferEvent(med, service));
+				} else if (n < 400) {
+					publish(new OfferMadeEvent(med, service));
+				} else if (n < 600) {
+					publish(new OfferRefusedEvent(med, service));
 				}
 			}
 		}
@@ -98,7 +125,7 @@ public class WebServiceClientThread extends Thread {
 		System.out.println("[webServiceClientThread:generateBuyerEvents()] End");
 	}
 
-	public void generateSellerEvents() {
+	public void publishSellerEvents() {
 		System.out.println("[webServiceClientThread:generateSellerEvents()] Begin");
 		for (Map.Entry<String, Service> offer : offers.entrySet()) {
 			Service service = offer.getValue();
@@ -112,148 +139,26 @@ public class WebServiceClientThread extends Thread {
 
 			for (Integer i = 0; i < count; i++) {
 				Integer eventLimit = 10000;
-				Integer event = random.nextInt(eventLimit);
+				Integer n = random.nextInt(eventLimit);
 
-				if (event < 200) {
-
-				} else if (event < 400) {
-					generateOfferMade(service);
-				} else if (event < 600) {
-					generateOfferAccepted(service);
-				} else if (event < 800) {
-					generateOfferRefused(service);
-				} else if (event < 10000) {
-					generateOfferExceeded(service);
+				if (n < 200) {
+					publish(new NoOfferEvent(med, service));
+				} else if (n < 400) {
+					publish(new OfferMadeEvent(med, service));
+				} else if (n < 600) {
+					publish(new OfferAcceptedEvent(med, service));
+				} else if (n < 800) {
+					publish(new OfferRefusedEvent(med, service));
+				} else if (n < 1000) {
+					publish(new OfferExceededEvent(med, service));
+				} else if (n < 1200) {
+					 publish(new TransferFailedEvent(med, service));
 				}
-				generateNoOffer(service);
-				generateOfferAccepted(service);
-
 			}
 		}
 		System.out.println("[webServiceClientThread:generateSellerEvents()] End");
 	}
-
-	/**
-	 * Genereaza un eveniment pentru lansarea unei oferte de catre un furnizor.
-	 */
-	private void generateNoOffer(Service service) {
-		Integer delay = 1000;
-		Integer timeLimit = 1000000;
-		Integer priceLimit = 100000;
-
-		String username = getRandomString(5 + random.nextInt(10));
-
-		Long time = date.getTime() + delay + random.nextInt(timeLimit);
-
-		Double price = random.nextInt(priceLimit) / 100.0;
-
-		UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
-
-		service.addUserEntry(user);
-		offers.put(service.getName(), service);
-
-		med.changeServiceNotify(service);
-	}
-
-	private void generateOfferMade(Service service) {
-		ArrayList<UserEntry> users = service.getUsers();
-
-		if (users != null) {
-			Integer userIndex = random.nextInt(users.size());
-
-			if (users.get(userIndex).getOffer() == Offer.OFFER_MADE
-					|| users.get(userIndex).getOffer() == Offer.OFFER_REFUSED)
-				return;
-
-			UserEntry user = users.get(userIndex);
-			Double price = user.getPrice();
-			if (price > 1) {
-				user.setPrice(price - 1);
-				user.setOffer(Offer.OFFER_MADE);
-			}
-
-			offers.put(service.getName(), service);
-
-			med.changeServiceNotify(service);
-		}
-	}
-
-	private void generateOfferAccepted(Service service) {
-		ArrayList<UserEntry> users = service.getUsers();
-
-		if (users != null) {
-			Integer userIndex = random.nextInt(users.size());
-
-			UserEntry user = users.get(userIndex);
-
-			/* TODO */
-			// if (user.getOffer() != Offer.OFFER_MADE) {
-			// return;
-			// }
-
-			user.setOffer(Offer.OFFER_ACCEPTED);
-
-			offers.put(service.getName(), service);
-
-			med.changeServiceNotify(service);
-		}
-	}
-
-	private void generateOfferRefused(Service service) {
-		ArrayList<UserEntry> users = service.getUsers();
-
-		if (users != null) {
-			Integer userIndex = random.nextInt(users.size());
-
-			UserEntry user = users.get(userIndex);
-
-			/* TODO */
-			if (user.getOffer() != Offer.OFFER_ACCEPTED) {
-				return;
-			}
-
-			user.setOffer(Offer.OFFER_REFUSED);
-
-			offers.put(service.getName(), service);
-
-			med.changeServiceNotify(service);
-		}
-	}
-
-	private void generateOfferExceeded(Service service) {
-		ArrayList<UserEntry> users = service.getUsers();
-
-		if (users != null) {
-			Integer userIndex = random.nextInt(users.size());
-
-			UserEntry user = users.get(userIndex);
-
-			if (user.getOffer() != Offer.OFFER_MADE) {
-				return;
-			}
-
-			user.setOffer(Offer.OFFER_EXCEDED);
-
-			offers.put(service.getName(), service);
-
-			med.changeServiceNotify(service);
-		}
-	}
-
-	private String getRandomString(int len) {
-		char[] str = new char[len];
-
-		for (int i = 0; i < len; i++) {
-			int c;
-			do {
-				c = 48 + random.nextInt(123 - 48);
-			} while ((c >= 91 && c <= 96) || (c >= 58 && c <= 64));
-			str[i] = (char) c;
-		}
-		System.out.println(new String(str));
-		return new String(str);
-	}
-
+	
 	public synchronized void stopThread() {
 		running = false;
 	}
@@ -261,7 +166,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean isRunning() {
 		return running;
 	}
-
+	
 	public UserProfile logIn(LoginCred cred) {
 		UserProfile profile;
 		System.out.println("[WebServiceClientThread:login()] Aici");
