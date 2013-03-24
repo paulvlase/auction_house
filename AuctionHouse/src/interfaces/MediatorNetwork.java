@@ -9,5 +9,4 @@ import data.Service;
  */
 public interface MediatorNetwork {
 	public void registerNetwork(Network net);
-	public boolean startTransfer(Service service);
 }

@@ -2,8 +2,6 @@ package interfaces;
 
 import java.util.ArrayList;
 
-import mediator.Servie;
-
 import data.LoginCred;
 import data.Pair;
 import data.Service;
@@ -47,6 +45,4 @@ public interface MediatorGui {
 	public int makeOffer();
 
 	public int dropAction();
-
-	boolean startTransfer(Pair<Service, Integer> pair);
 }

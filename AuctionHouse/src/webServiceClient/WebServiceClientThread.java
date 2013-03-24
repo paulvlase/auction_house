@@ -180,6 +180,11 @@ public class WebServiceClientThread extends Thread {
 		UserEntry user = users.get(pair.getValue());
 		user.setOffer(Offer.OFFER_ACCEPTED);
 
+		/* TODO: communicate with server */
+		
+		users.clear();
+		users.add(user);
+		
 		return true;
 	}
 

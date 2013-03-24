@@ -87,11 +87,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 
 	@Override
-	public boolean startTransfer(Pair<Service, Integer> pair) {
-		return net.startTransfer(pair);
-	}
-
-	@Override
 	public UserProfile getUserProfile() {
 		return profile;
 	}
@@ -131,7 +126,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		boolean bRet;
 		bRet = web.acceptOffer(pair);
 		if (bRet) {
-			net.startTransfer(pair);
+			net.startTransfer(pair.getKey());
 		}
 	}
 

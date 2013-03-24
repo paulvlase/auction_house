@@ -3,7 +3,6 @@ package interfaces;
 import java.util.ArrayList;
 
 import data.LoginCred;
-import data.Pair;
 import data.Service;
 import data.UserProfile;
 
@@ -31,5 +30,5 @@ public interface Gui {
 	public void dropOfferNotify(Service service);
 	
 	public void newUserNotify(Service service);
-	public void acceptOffer(Pair<Service, Integer> pair);
+	public void acceptOfferNotify(Service service);
 }
