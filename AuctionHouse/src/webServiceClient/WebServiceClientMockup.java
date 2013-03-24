@@ -22,58 +22,85 @@ import interfaces.WebServiceClient;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServiceClientMockup extends Thread implements WebServiceClient {
-	private MediatorWeb med;
-	private WebServiceClientTask task;
+	private MediatorWeb						med;
+	private WebServiceClientTask			task;
+
+	private Hashtable<String, UserProfile>	users;
 
 	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
-		
+
 		med.registerWebServiceClient(this);
-		
-		task = new WebServiceClientTask(med);
+
+		users = new Hashtable<String, UserProfile>();
+
+		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
+				UserRole.BUYER, "parola"));
+		users.put("unix140", new UserProfile("unix140", "Ghennadi",
+				"Procopciuc", UserRole.SELLER, "marmota"));
 	}
-	
+
 	public UserProfile logIn(LoginCred cred) {
-		task.execute();
-		return task.logIn(cred);
+		System.out.println("[WebServiceClientMockup:logIn()] Begin");
+
+		UserProfile profile = getUserProfile(cred.getUsername());
+		if (profile == null) {
+			return null;
+		}
+
+		if (!profile.getPassword().equals(cred.getPassword())) {
+			return null;
+		}
+
+		profile.setRole(cred.getRole());
+
+		if (profile != null) {
+			task = new WebServiceClientTask(med);
+			task.execute();
+		}
+
+		System.out.println("[WebServiceClientMockup:logIn()] End");
+		return profile;
 	}
-	
+
 	public void logOut() {
 		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
-		
+
 		try {
 			task.cancel(false);
-			task.get();
+			task = null;
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	
+
 	public UserProfile getUserProfile(String username) {
-		return task.getUserProfile(username);
+		return users.get(username);
 	}
-	
+
 	public boolean setUserProfile(UserProfile profile) {
-		return task.setUserProfile(profile);
+		users.put(profile.getUsername(), profile);
+		med.changeProfileNotify(profile);
+		return true;
 	}
 
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
 		return task.launchOffer(service);
 	}
-	
+
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
 		return task.launchOffers(services);
 	}
-	
+
 	public synchronized boolean dropOffer(Service service) {
 		return task.dropOffer(service);
 	}
-	
+
 	public synchronized boolean dropOffers(ArrayList<Service> services) {
 		return task.dropOffers(services);
 	}
-	
+
 	/* Buyer */
 	@Override
 	public boolean acceptOffer(Pair<Service, Integer> pair) {

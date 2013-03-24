@@ -12,10 +12,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
 import data.LoginCred;
 import data.Pair;
@@ -70,16 +72,26 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public synchronized Service getOffer(String serviceName) {
 		return offers.get(serviceName);
 	}
+	
+	public synchronized Hashtable<String, Service> getOffers() {
+		return offers;
+	}
+	
+	public synchronized void removeOffer(String serviceName) {
+		offers.remove(serviceName);
+	}
 
 	@Override
 	public boolean logIn(LoginCred cred) {
-		System.out.println("MediatorMockup:logIn()] Aici");
+		System.out.println("MediatorMockup:logIn()] Begin");
 		UserProfile profile = web.logIn(cred);
 
 		if (profile != null) {
 			this.profile = profile;
+			System.out.println("MediatorMockup:logIn()] End (profile != null)");
 			return true;
 		}
+		System.out.println("MediatorMockup:logIn()] End (profile == null)");
 		return false;
 	}
 
@@ -149,7 +161,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		if (profile == null)
 			return null;
 		
-		/*
+		
 		ArrayList<Service> services = null;
 		if (profile.getRole() == UserRole.BUYER)
 			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME,
@@ -166,8 +178,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 				Collections.sort(service.getUsers());
 			}
 		}
-		*/
-
+		
+		/*
 		ArrayList<Service> services = new ArrayList<Service>();
 		if(profile.getRole() == UserRole.SELLER){
 			ArrayList<UserEntry> users = new ArrayList<UserEntry>();
@@ -206,7 +218,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			//services.add(service1);
 			services.add(service2);
 			services.add(service3);				
-		}
+		}*/
 		
 		return services;
 	}

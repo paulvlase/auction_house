@@ -36,24 +36,12 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 
 	private MediatorWeb						med;
 
-	private Hashtable<String, Service>		offers;
-	private Hashtable<String, UserProfile>	users;
-
 	public WebServiceClientTask(MediatorWeb med) {
 		this.med = med;
 
 		random = new Random();
-
-		users = new Hashtable<String, UserProfile>();
-		offers = new Hashtable<String, Service>();
-
-		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
-				UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140", "Ghennadi",
-				"Procopciuc", UserRole.SELLER, "marmota"));
 	}
 	
-
 	@Override
 	protected Command doInBackground() throws Exception {		
 		int timeLimit = 2500;
@@ -96,12 +84,18 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 	
 	public void publishBuyerEvents() {
 		System.out.println("[webServiceClientThread:generateBuyerEvents()] Begin");
-		for (Map.Entry<String, Service> offer : offers.entrySet()) {
+		for (Map.Entry<String, Service> offer : med.getOffers().entrySet()) {
 			Service service = offer.getValue();
-
-			Integer countLimit = users.size() / 2;
-			if (countLimit < 2) {
+			ArrayList<UserEntry> users = service.getUsers();
+			
+			Integer countLimit;
+			if (users == null) {
 				countLimit = 2;
+			} else {
+				countLimit = users.size() / 2;
+				if (countLimit < 2) {
+					countLimit = 2;
+				}
 			}
 
 			Integer count = random.nextInt(countLimit);
@@ -125,8 +119,9 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 
 	public void publishSellerEvents() {
 		System.out.println("[webServiceClientThread:generateSellerEvents()] Begin");
-		for (Map.Entry<String, Service> offer : offers.entrySet()) {
+		for (Map.Entry<String, Service> offer : med.getOffers().entrySet()) {
 			Service service = offer.getValue();
+			ArrayList<UserEntry> users = service.getUsers();
 
 			Integer countLimit = users.size() / 2;
 
@@ -156,54 +151,12 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		}
 		System.out.println("[webServiceClientThread:generateSellerEvents()] End");
 	}
-	
-	public synchronized void stopThread() {
-		running = false;
-	}
-
-	public synchronized boolean isRunning() {
-		return running;
-	}
-	
-	public UserProfile logIn(LoginCred cred) {
-		UserProfile profile;
-		System.out.println("[WebServiceClientThread:login()] Aici");
-
-		profile = getUserProfile(cred.getUsername());
-		if (profile == null) {
-			return null;
-		}
-
-		if (!profile.getPassword().equals(cred.getPassword())) {
-			return null;
-		}
-
-		profile.setRole(cred.getRole());
-		System.out
-				.println("[WebServiceClientThread:login()] profile.getRole():"
-						+ profile.getRole());
-		return profile;
-	}
-
-	public void logOut() {
-		System.out.println("[WebServiceClientThread:logOut()] Bye bye");
-	}
-
-	public synchronized UserProfile getUserProfile(String username) {
-		return users.get(username);
-	}
-
-	public synchronized boolean setUserProfile(UserProfile profile) {
-		users.put(profile.getUsername(), profile);
-		med.changeProfileNotify(profile);
-		return true;
-	}
 
 	/* Common */
-	public synchronized boolean launchOffer(Service service) {
+	public boolean launchOffer(Service service) {
 		service.setStatus(Status.ACTIVE);
 		// service.setUsers(new ArrayList<UserEntry>());
-		offers.put(service.getName(), service);
+		med.putOffer(service);
 
 		med.changeServiceNotify(service);
 		System.out.println("[WebServiceClientMockup:addOffer] "
@@ -212,10 +165,10 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		return true;
 	}
 
-	public synchronized boolean launchOffers(ArrayList<Service> services) {
+	public boolean launchOffers(ArrayList<Service> services) {
 		for (Service service : services) {
 			service.setStatus(Status.ACTIVE);
-			offers.put(service.getName(), service);
+			med.putOffer(service);
 			
 			System.out.println("[WebServiceClientMockup:addOffers()] "
 					+ service.getName());
@@ -225,11 +178,11 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		return true;
 	}
 
-	public synchronized boolean dropOffer(Service service) {
+	public boolean dropOffer(Service service) {
 		service.setStatus(Status.INACTIVE);
 		service.setUsers(null);
 
-		offers.remove(service.getName());
+		med.removeOffer(service.getName());
 		System.out.println("[WebServiceClientMockup:dropOffer] "
 				+ service.getName());
 
@@ -237,11 +190,11 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		return true;
 	}
 
-	public synchronized boolean dropOffers(ArrayList<Service> services) {
+	public boolean dropOffers(ArrayList<Service> services) {
 		for (Service service : services) {
 			service.setStatus(Status.INACTIVE);
 			service.setStatus(null);
-			offers.remove(service.getName());
+			med.removeOffer(service.getName());
 			System.out.println("[WebServiceClientMockup:dropOffers] "
 					+ service.getName());
 		}
@@ -249,7 +202,7 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		return true;
 	}
 
-	public synchronized boolean acceptOffer(Pair<Service, Integer> pair) {
+	public boolean acceptOffer(Pair<Service, Integer> pair) {
 		Service service = pair.getKey();
 		ArrayList<UserEntry> users = service.getUsers();
 
@@ -299,7 +252,7 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 		if (users != null) {
 			UserEntry user = users.get(userIndex);
 			user.setOffer(Offer.OFFER_MADE);
-			offers.put(service.getName(), service);
+			med.putOffer(service);
 
 			med.changeServiceNotify(service);
 		}
@@ -322,7 +275,7 @@ public class WebServiceClientTask extends SwingWorker<Command, Command> {
 				service.setUsers(null);
 			}
 
-			offers.put(service.getName(), service);
+			med.putOffer(service);
 
 			System.out.println("[WebServiceClient:dropAuction()] Aici: "
 					+ users);
