@@ -27,8 +27,8 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	protected Service doInBackground() throws Exception {
 		System.out.println(Thread.currentThread());
 		
-		int DELAY = 1000;
-		int count = 10;
+		int DELAY = 100;
+		int count = 100;
 		int i = 0;
 		try {
 			while (i < count) {
