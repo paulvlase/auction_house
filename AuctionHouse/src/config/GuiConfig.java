@@ -170,11 +170,15 @@ public class GuiConfig {
 	/* Other settings for MainWindow */
 	public static final int			MINI_AVATAR_WIDTH					= 40;
 	public static final int			MINI_AVATAR_HEIGHT					= 40;
-	public static final String		ADD_ICON							= "resources/images/add.png";
+	public static final String		ADD_ICON16							= "resources/images/add16x16.png";
+	public static final String		ADD_ICON32							= "resources/images/add32x32.png";
+	public static final String		ADD_ICON48							= "resources/images/add48x48.png";
 	public static final String		LAUNCH_OFFER_ICON					= "resources/images/launch_offer.png";
 	public static final String		DROP_OFFER_ICON						= "resources/images/drop_offer.png";
 	public static final String		LOGOUT_ICON							= "resources/images/logout.png";
-	public static final String		PROFILE_ICON						= "resources/images/profile.png";
+	public static final String		PROFILE_ICON16						= "resources/images/profile16x16.png";
+	public static final String		PROFILE_ICON32						= "resources/images/profile32x32.png";
+	public static final String		PROFILE_ICON48						= "resources/images/profile48x48.png";
 	public static final String		EXIT_ICON							= "resources/images/exit.png";
 	public static final String		REFUSE_OFFER_ICON					= "resources/images/refuse_offer.png";
 	public static final String		ACCEPT_OFFER_ICON					= "resources/images/accept_offer.png";
