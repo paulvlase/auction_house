@@ -58,49 +58,179 @@ public class WebServiceClientThread extends Thread {
 
 				Thread.sleep(sleepTime);
 
-				for (Map.Entry<String, Service> offer : offers.entrySet()) {
-					Service service = offer.getValue();
+				if (med.getUserProfile().getRole() == UserRole.BUYER)
+					generateBuyerEvents();
+				else
+					generateSellerEvents();
 
-					int event = random.nextInt(1000);
-					System.out.println("event = " + event);
-					if (event < 200) {
-						String username = getRandomString(5 + Math.abs(random
-								.nextInt(16)));
-						Long time = date.getTime()
-								+ 10000 + Math.abs(random.nextInt(1000000));
-						Double price = Math.abs(random.nextInt(10000)) / 100.0;
-
-						UserEntry user = new UserEntry(username,
-								Offer.NO_OFFER, time, price);
-
-						service.addUserEntry(user);
-						med.changeServiceNotify(service);
-					} else if (event < 400) {
-						ArrayList<UserEntry> users = service.getUsers();
-
-						if (users != null) {
-							int userIndex;
-
-							do {
-								userIndex = Math.abs(random.nextInt(service
-										.getUsers().size()));
-							} while (users.get(userIndex).getOffer() == Offer.OFFER_MADE
-									&& users.get(userIndex).getOffer() == Offer.OFFER_REFUSED);
-
-							double price = users.get(userIndex).getPrice();
-							if (price > 1) {
-								users.get(userIndex).setOffer(Offer.OFFER_MADE);
-
-								users.get(userIndex).setPrice(price - 1);
-							}
-
-							med.changeServiceNotify(service);
-						}
-					}
-				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void generateBuyerEvents() {
+		for (Map.Entry<String, Service> offer : offers.entrySet()) {
+			Service service = offer.getValue();
+
+			Integer countLimit = users.size() / 2;
+			if (countLimit < 2) {
+				countLimit = 2;
+			}
+
+			Integer count = random.nextInt(countLimit);
+
+			for (Integer i = 0; i < count; i++) {
+				Integer eventLimit = 10000;
+				Integer event = random.nextInt(eventLimit);
+
+				if (event < 50) {
+					generateNoOffer(service);
+				} else if (event < 100) {
+					generateOfferMade(service);
+				} else if (event < 250) {
+					generateOfferRefused(service);
+				}
+			}
+		}
+	}
+
+	public void generateSellerEvents() {
+		for (Map.Entry<String, Service> offer : offers.entrySet()) {
+			Service service = offer.getValue();
+
+			Integer countLimit = users.size() / 2;
+			if (countLimit < 2) {
+				countLimit = 2;
+			}
+
+			Integer count = random.nextInt(countLimit);
+
+			for (Integer i = 0; i < count; i++) {
+				Integer eventLimit = 10000;
+				Integer event = random.nextInt(eventLimit);
+
+				if (event < 50) {
+					generateNoOffer(service);
+				} else if (event < 100) {
+					// generateUserLogoutEvent();
+				} else if (event < 150) {
+					generateOfferMade(service);
+				} else if (event < 250) {
+					generateOfferAccepted(service);
+				} else if (event < 300) {
+					generateOfferRefused(service);
+				} else if (event < 350) {
+					generateOfferExceeded(service);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Genereaza un eveniment pentru lansarea unei oferte de catre un furnizor.
+	 */
+	private void generateNoOffer(Service service) {
+		Integer delay = 1000;
+		Integer timeLimit = 1000000;
+		Integer priceLimit = 100000;
+
+		String username = getRandomString(5 + random.nextInt(10));
+
+		Long time = date.getTime() + delay + random.nextInt(timeLimit);
+
+		Double price = random.nextInt(priceLimit) / 100.0;
+
+		UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
+
+		service.addUserEntry(user);
+		offers.put(service.getName(), service);
+
+		med.changeServiceNotify(service);
+	}
+
+	private void generateOfferMade(Service service) {
+		ArrayList<UserEntry> users = service.getUsers();
+
+		if (users != null) {
+			Integer userIndex = random.nextInt(users.size());
+
+			if (users.get(userIndex).getOffer() == Offer.OFFER_MADE
+					|| users.get(userIndex).getOffer() == Offer.OFFER_REFUSED)
+				return;
+
+			UserEntry user = users.get(userIndex);
+			Double price = user.getPrice();
+			if (price > 1) {
+				user.setPrice(price - 1);
+				user.setOffer(Offer.OFFER_MADE);
+			}
+
+			offers.put(service.getName(), service);
+
+			med.changeServiceNotify(service);
+		}
+	}
+
+	private void generateOfferAccepted(Service service) {
+		ArrayList<UserEntry> users = service.getUsers();
+
+		if (users != null) {
+			Integer userIndex = random.nextInt(users.size());
+
+			UserEntry user = users.get(userIndex);
+
+			/* TODO */
+			// if (user.getOffer() != Offer.OFFER_MADE) {
+			// return;
+			// }
+
+			user.setOffer(Offer.OFFER_ACCEPTED);
+
+			offers.put(service.getName(), service);
+
+			med.changeServiceNotify(service);
+		}
+	}
+
+	private void generateOfferRefused(Service service) {
+		ArrayList<UserEntry> users = service.getUsers();
+
+		if (users != null) {
+			Integer userIndex = random.nextInt(users.size());
+
+			UserEntry user = users.get(userIndex);
+
+			/* TODO */
+			if (user.getOffer() != Offer.OFFER_ACCEPTED) {
+				return;
+			}
+
+			user.setOffer(Offer.OFFER_REFUSED);
+
+			offers.put(service.getName(), service);
+
+			med.changeServiceNotify(service);
+		}
+	}
+
+	private void generateOfferExceeded(Service service) {
+		ArrayList<UserEntry> users = service.getUsers();
+
+		if (users != null) {
+			Integer userIndex = random.nextInt(users.size());
+
+			UserEntry user = users.get(userIndex);
+
+			if (user.getOffer() != Offer.OFFER_MADE) {
+				return;
+			}
+
+			user.setOffer(Offer.OFFER_EXCEDED);
+
+			offers.put(service.getName(), service);
+
+			med.changeServiceNotify(service);
 		}
 	}
 
@@ -140,7 +270,9 @@ public class WebServiceClientThread extends Thread {
 		}
 
 		profile.setRole(cred.getRole());
-		System.out.println("[WebServiceClientThread:login()] profile.getRole():" + profile.getRole());
+		System.out
+				.println("[WebServiceClientThread:login()] profile.getRole():"
+						+ profile.getRole());
 		return profile;
 	}
 
@@ -174,9 +306,9 @@ public class WebServiceClientThread extends Thread {
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
 		for (Service service : services) {
 			service.setStatus(Status.ACTIVE);
-			// service.setUsers(new ArrayList<UserEntry>());
 			offers.put(service.getName(), service);
-			System.out.println("[WebServiceClientMockup:addOffers] "
+			
+			System.out.println("[WebServiceClientMockup:addOffers()] "
 					+ service.getName());
 		}
 		med.changeServicesNotify(services);
@@ -230,36 +362,36 @@ public class WebServiceClientThread extends Thread {
 		Service service = pair.getKey();
 		int userIndex = pair.getValue();
 		ArrayList<UserEntry> users = service.getUsers();
-		
+
 		System.out.println("[WebServiceClient:refuseOffer()] Aici");
 		if (users != null) {
 			/* TODO Will be implemented */
 			UserEntry user = users.get(userIndex);
-			
+
 			user.setOffer(Offer.OFFER_REFUSED);
 			users.remove(userIndex);
-			
+
 			if (users.size() == 0) {
 				service.setUsers(null);
 			}
 			med.changeServiceNotify(service);
 		}
-		
+
 		return true;
 	}
-	
+
 	/* Seller */
 	public boolean makeOffer(Pair<Service, Integer> pair) {
 		Service service = pair.getKey();
 		int userIndex = pair.getValue();
 		ArrayList<UserEntry> users = service.getUsers();
-		
+
 		System.out.println("[WebServiceClient:dropAuction()] Aici");
 		if (users != null) {
 			UserEntry user = users.get(userIndex);
 			user.setOffer(Offer.OFFER_MADE);
 			offers.put(service.getName(), service);
-		
+
 			med.changeServiceNotify(service);
 		}
 
@@ -270,22 +402,25 @@ public class WebServiceClientThread extends Thread {
 		Service service = pair.getKey();
 		int userIndex = pair.getValue();
 		ArrayList<UserEntry> users = service.getUsers();
-		
-		System.out.println("[WebServiceClient:dropAuction()] Aici");
+
 		if (users != null) {
 			UserEntry user = users.get(userIndex);
-			
+
 			user.setOffer(Offer.OFFER_REFUSED);
 			users.remove(userIndex);
-			
+
 			if (users.size() == 0) {
 				service.setUsers(null);
 			}
+
 			offers.put(service.getName(), service);
-			
+
+			System.out.println("[WebServiceClient:dropAuction()] Aici: "
+					+ users);
+
 			med.changeServiceNotify(service);
 		}
-		
+
 		return true;
 	}
 }

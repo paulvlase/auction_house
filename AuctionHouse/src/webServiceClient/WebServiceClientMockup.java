@@ -94,7 +94,6 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 
 	@Override
 	public boolean dropAuction(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
-		return thread.makeOffer(pair);
+		return thread.dropAuction(pair);
 	}
 }

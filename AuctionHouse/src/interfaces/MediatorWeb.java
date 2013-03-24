@@ -13,6 +13,8 @@ import data.UserProfile;
 public interface MediatorWeb {
 	public void registerWebServiceClient(WebServiceClient web);
 	
+	public UserProfile getUserProfile();
+	
 	public void changeServiceNotify(Service service);
 	public void changeServicesNotify(ArrayList<Service> services);
 	public void changeProfileNotify(UserProfile profile);
