@@ -5,10 +5,14 @@ import interfaces.Gui;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,6 +71,13 @@ public class PriceWindow extends JFrame implements ActionListener {
 		okButton.setText(GuiConfig.getValue(GuiConfig.OK));
 		contentPane.add(okButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(new ImageIcon(GuiConfig.PRICE_ICON64).getImage());
+		icons.add(new ImageIcon(GuiConfig.PRICE_ICON48).getImage());
+		icons.add(new ImageIcon(GuiConfig.PRICE_ICON16).getImage());
+		setIconImages(icons);
+		
 		pack();
 		setLocationRelativeTo(getOwner());
 	}
