@@ -2,6 +2,7 @@ package gui.items;
 
 import javax.swing.JMenuItem;
 
+import data.Pair;
 import data.Service;
 
 import gui.MainWindow;
@@ -20,6 +21,7 @@ public class RefuseOfferItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Refuse Request");
+		gui.refuseOffer(new Pair<Service, Integer>(service, row));
 	}
 
 }
