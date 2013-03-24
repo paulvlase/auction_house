@@ -2,7 +2,7 @@ package data;
 
 public class UserEntry implements Comparable<UserEntry>{
 	public enum Offer {
-		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED;
+		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, OFFER_EXCEDED;
 
 		public String toString() {
 			switch (ordinal()) {
@@ -14,6 +14,8 @@ public class UserEntry implements Comparable<UserEntry>{
 				return "Offer accepted";
 			case 3:
 				return "Offer refused";
+			case 4:
+				return "Offer exceded";
 			default:
 				break;
 			}
