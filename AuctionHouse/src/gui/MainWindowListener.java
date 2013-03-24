@@ -93,7 +93,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.SELLER) {
 			mainWindow.getLaunchRequestItem().hideItem();
-			mainWindow.getDropAuctionItem().hideItem();
+			mainWindow.getDropRequestItem().hideItem();
 			mainWindow.getMenuSeparator().setVisible(false);
 			mainWindow.getAcceptOfferItem().hideItem();
 			mainWindow.getRefusetOfferItem().hideItem();
