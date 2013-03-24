@@ -2,7 +2,6 @@ package network;
 
 import interfaces.MediatorNetwork;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.SwingWorker;

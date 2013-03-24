@@ -41,17 +41,13 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	public void logOut() {
 		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
 		
+
 		try {
-			task.stopThread();
-			task.cancel(true);
-			try {
-				task.get();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}		
+			task.cancel(false);
+			task.get();
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
 	}
 	
 	public UserProfile getUserProfile(String username) {
