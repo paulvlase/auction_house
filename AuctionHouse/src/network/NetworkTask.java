@@ -15,6 +15,9 @@ import data.Service.Status;
 public class NetworkTask extends SwingWorker<Service, Service> {
 	private MediatorNetwork med;
 	private Service service;
+	
+	private final int DELAY = 100;
+	private final int COUNT = 100;
 
 	public NetworkTask(MediatorNetwork med, Service service) {
 		this.med = med;
@@ -27,11 +30,9 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	protected Service doInBackground() throws Exception {
 		System.out.println(Thread.currentThread());
 		
-		int DELAY = 100;
-		int count = 100;
 		int i = 0;
 		try {
-			while (i < count) {
+			while (i < COUNT) {
 				i++;
 				Thread.sleep(DELAY);
 				service.setProgress(i);
@@ -49,6 +50,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 
 		for (Service service:  services) {
 			med.transferProgressNotify(service);
+			med.transferProgressNotify(service);
 		}
 	}
 
@@ -57,10 +59,16 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		System.out.println(Thread.currentThread());
 		if (isCancelled()) {
 			System.out.println("Cancelled !");
+			
+			service.setProgress(-1);
 			service.setStatus(Status.TRANSFER_FAILED);
+			med.transferProgressNotify(service);
 		} else {
 			System.out.println("Done !");
+			
+			service.setProgress(COUNT + 1);
 			service.setStatus(Status.TRANSFER_COMPLETE);
+			med.transferProgressNotify(service);
 		}
 	}
 }
