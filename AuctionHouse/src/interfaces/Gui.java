@@ -1,7 +1,6 @@
 package interfaces;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import data.LoginCred;
 import data.Pair;
@@ -31,6 +30,6 @@ public interface Gui {
 	public void refuseOffer(Pair<Service, Integer> pair);
 
 	public void changeServiceNotify(Service service);
-	public void changeServicesNotify(List<Service> services);
+	public void changeServicesNotify(ArrayList<Service> services);
 	public void changeProfileNotify(UserProfile profile);
 }

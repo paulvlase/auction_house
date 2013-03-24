@@ -1,7 +1,6 @@
 package interfaces;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import data.Service;
 import data.UserProfile;
@@ -15,6 +14,6 @@ public interface MediatorWeb {
 	public void registerWebServiceClient(WebServiceClient web);
 	
 	public void changeServiceNotify(Service service);
-	public void changeServicesNotify(List<Service> services);
+	public void changeServicesNotify(ArrayList<Service> services);
 	public void changeProfileNotify(UserProfile profile);
 }

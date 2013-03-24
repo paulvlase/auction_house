@@ -2,10 +2,9 @@ package webServiceClient;
 
 import interfaces.MediatorWeb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -77,7 +76,7 @@ public class WebServiceClientThread extends Thread {
 						service.addUserEntry(user);
 						med.changeServiceNotify(service);
 					} else if (event < 400) {
-						List<UserEntry> users = service.getUsers();
+						ArrayList<UserEntry> users = service.getUsers();
 
 						if (users != null) {
 							int userIndex;
@@ -228,7 +227,7 @@ public class WebServiceClientThread extends Thread {
 	public synchronized void refuseOffer(Pair<Service, Integer> pair) {
 		Service service = pair.getKey();
 		int userIndex = pair.getValue();
-		List<UserEntry> users = service.getUsers();
+		ArrayList<UserEntry> users = service.getUsers();
 		
 		if (users != null) {
 			/* TODO Will be implemented */

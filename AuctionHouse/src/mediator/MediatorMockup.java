@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import config.FilesConfig;
@@ -278,7 +277,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 
 	@Override
-	public void changeServicesNotify(List<Service> services) {
+	public void changeServicesNotify(ArrayList<Service> services) {
 		gui.changeServicesNotify(services);
 	}
 	

@@ -5,7 +5,7 @@ import interfaces.Network;
 import interfaces.NetworkTransfer;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
@@ -53,7 +53,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		return service;
 	}
 
-	protected void process(List<Service> services) {
+	protected void process(ArrayList<Service> services) {
 		System.out.println(Thread.currentThread());
 
 		for (Service service:  services) {

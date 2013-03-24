@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -169,7 +169,7 @@ public class GuiImpl implements Gui {
 	}
 
 	@Override
-	public void changeServicesNotify(List<Service> services) {
+	public void changeServicesNotify(ArrayList<Service> services) {
 		if (mainWindow != null)
 			mainWindow.changeServicesNotify(services);
 	}
