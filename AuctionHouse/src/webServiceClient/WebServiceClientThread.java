@@ -17,6 +17,11 @@ import data.Service.Status;
 import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
+/**
+ * WebServiceClient module implementation.
+ * 
+ * @author Paul Vlase <vlase.paul@gmail.com>
+ */
 public class WebServiceClientThread extends Thread {
 	private boolean running;
 
