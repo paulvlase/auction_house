@@ -487,9 +487,14 @@ public class MainWindow extends JFrame {
 		model.changeService(service.clone());
 	}
 
-	public void changeServicesNotify(ArrayList<Service> services) {
+	public void changeServicesNotify(List<Service> services) {
 		for (Service service : services) {
 			model.changeService(service.clone());
 		}
+	}
+
+	public void changeProfileNotify(UserProfile profile) {
+		setAvatar(profile.getAvatar());
+		setName(profile.getFirstName(), profile.getLastName());
 	}
 }
