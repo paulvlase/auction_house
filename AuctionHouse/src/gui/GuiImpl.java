@@ -114,7 +114,7 @@ public class GuiImpl implements Gui {
 	
 	public void newUserNotify(Service service) {
 		if (mainWindow != null) {
-			mainWindow.newUserNotify(service);
+			mainWindow.changeServiceNotify(service);
 		}
 	}	
 

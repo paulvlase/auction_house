@@ -41,6 +41,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import config.GuiConfig;
 import data.Service;
@@ -112,8 +113,11 @@ public class MainWindow extends JFrame {
 						.getValue(GuiConfig.BUYER) : GuiConfig.getValue(GuiConfig.SELLER),
 				GuiConfig.getValue(GuiConfig.OFFER_STATUS), GuiConfig.getValue(GuiConfig.TIME),
 				GuiConfig.getValue(GuiConfig.PRICE) };
+		MyTableCellRenderer cellRenderer = new MyTableCellRenderer();
+		cellRenderer.setHorizontalAlignment(JLabel.CENTER);
+
 		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)));
-		table = new MultiSpanCellTable(model, new MyTableCellRenderer());
+		table = new MultiSpanCellTable(model, cellRenderer);
 		menuBar = new JMenuBar();
 		menu = new JMenu();
 		addServiceItem = new AddServiceItem(this, gui);
@@ -259,7 +263,7 @@ public class MainWindow extends JFrame {
 				// logoutButton
 				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
 				signOutButton.setIcon(new ImageIcon(GuiConfig.LOGOUT_ICON));
-			    signOutButton.setHorizontalTextPosition(SwingConstants.LEFT);
+				signOutButton.setHorizontalTextPosition(SwingConstants.LEFT);
 				topPanel.add(signOutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0),
 						0, 0));
@@ -479,34 +483,13 @@ public class MainWindow extends JFrame {
 		return menuSeparator;
 	}
 
-	public void newUserNotify(Service service) {
-		System.out.println("Adds user ..");
-		model.addUser(service.clone());
+	public void changeServiceNotify(Service service) {
+		model.changeService(service.clone());
 	}
 
-	public void dropOfferNotify(Service service) {
-		model.removeService(service);
-		model.addService(service);
-	}
-
-	public void launchOffersNotify(ArrayList<Service> services) {
+	public void changeServicesNotify(ArrayList<Service> services) {
 		for (Service service : services) {
-			launchOfferNotify(service);
+			model.changeService(service.clone());
 		}
-	}
-
-	public void launchOfferNotify(Service service) {
-		model.removeService(service);
-		model.addService(service);
-	}
-
-	public void transferProgressNotify(Service service) {
-		model.removeService(service);
-		model.addService(service);
-	}
-
-	public void profileChangedNotify(UserProfile profile) {
-		setName(profile.getFirstName(), profile.getLastName());
-		setAvatar(new ImageIcon(profile.getAvatar()));
 	}
 }

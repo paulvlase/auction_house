@@ -161,9 +161,8 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.unlock();
 	}
 
-	public void addUser(Service service) {
+	public void changeService(Service service) {
 		mutex.lock();
-		System.out.println("Before Before : " + services.size());
 
 		removeService(service);
 		addService(service);
