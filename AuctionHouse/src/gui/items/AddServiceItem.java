@@ -5,11 +5,9 @@ import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-import javax.swing.JMenuItem;
-
-import data.Service;
-
 public class AddServiceItem  extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public AddServiceItem(MainWindow window, Gui gui) {
 		this.window = window;

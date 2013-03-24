@@ -70,10 +70,4 @@ public class Period {
 	public String toString() {
 		return days + "d " + hours + "h:" + minutes + "m:" + seconds + "s";
 	}
-
-	public static void main(String[] args) {
-		@SuppressWarnings("deprecation")
-		Period period = new Period(new Date(2013, 3, 3, 3, 0), new Date(2013, 3, 4, 4, 0));
-		System.out.println(period);
-	}
 }

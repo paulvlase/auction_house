@@ -37,7 +37,6 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 			if(column < 0 || row < 0){
 				return;
 			}
-			System.out.println("Selected Row : " + row + " Column : " + column);
 			buildPopupMenu(mainWindow.getModel().getServiceFromRow(row), column);
 			mainWindow.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 		}
@@ -45,6 +44,7 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 	private void buildPopupMenu(Pair<Service, Integer> pair, Integer column) {
 		Service service = pair.getKey();
+		Integer userIndex  = pair.getValue();
 		Boolean accepted = false;
 		if (service.getUsers() != null) {
 			for (UserEntry userEntry : service.getUsers()) {
@@ -100,7 +100,13 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 			if (service.getStatus() != Status.INACTIVE && !accepted && column >= 2) {
 				mainWindow.getMakeOfferItem().showItem(pair);
-				mainWindow.getDropAuctionItem().showItem(pair);
+				
+				if(service.getUsers().get(userIndex).getOffer() == Offer.OFFER_EXCEDED){
+					mainWindow.getDropAuctionItem().showItem(pair);
+				}else{
+					mainWindow.getDropAuctionItem().hideItem();					
+				}
+				
 			} else {
 				mainWindow.getMakeOfferItem().hideItem();
 				mainWindow.getDropAuctionItem().hideItem();

@@ -168,10 +168,6 @@ public class Login extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 	}
 
-	public static void main(String[] args) {
-		new Login(null).setVisible(true);
-	}
-
 	private void updateLanguage() {
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
 

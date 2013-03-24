@@ -15,8 +15,6 @@ public class UserProfile {
 	private byte[]		avatar;
 	private String		location;
 
-	// Add Image here, maybe later
-
 	public enum UserRole {
 		BUYER, SELLER
 	}

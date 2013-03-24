@@ -138,17 +138,17 @@ public class MainWindow extends JFrame {
 
 		// JPopupMenu
 		{
-			launchRequestItem.setText("Launch Offer Request");
+			launchRequestItem.setText(GuiConfig.getValue(GuiConfig.LAUNCH_OFFER));
 			launchRequestItem.setIcon(new ImageIcon(GuiConfig.LAUNCH_OFFER_ICON));
-			dropRequestItem.setText("Drop Offer Request");
+			dropRequestItem.setText(GuiConfig.getValue(GuiConfig.DROP_OFFER));
 			dropRequestItem.setIcon(new ImageIcon(GuiConfig.DROP_OFFER_ICON));
-			acceptOfferItem.setText("Accept Offer");
+			acceptOfferItem.setText(GuiConfig.getValue(GuiConfig.ACCEPT_OFFER));
 			acceptOfferItem.setIcon(new ImageIcon(GuiConfig.ACCEPT_OFFER_ICON));
-			refusetOfferItem.setText("Refuse Offer");
+			refusetOfferItem.setText(GuiConfig.getValue(GuiConfig.REFUSE_OFFER));
 			refusetOfferItem.setIcon(new ImageIcon(GuiConfig.REFUSE_OFFER_ICON));
-			makeOfferItem.setText("Make Offer");
+			makeOfferItem.setText(GuiConfig.getValue(GuiConfig.MAKE_OFFER));
 			makeOfferItem.setIcon(new ImageIcon(GuiConfig.MAKE_OFFER_ICON));
-			dropAuctionItem.setText("Drop auction");
+			dropAuctionItem.setText(GuiConfig.getValue(GuiConfig.DROP_AUCTION));
 			dropAuctionItem.setIcon(new ImageIcon(GuiConfig.DROP_AUCTION_ICON));
 
 			popupMenu.add(launchRequestItem);
@@ -301,18 +301,10 @@ public class MainWindow extends JFrame {
 		return listener;
 	}
 
-	public void addServices(ArrayList<Service> services) {
-		System.out.println("TODO");
-	}
-
 	public void addService(Service service) {
 		model.addService(service);
 	}
-
-	public void removeService(Service service) {
-		System.out.println("TODO");
-	}
-
+	
 	public void removeServices(ArrayList<Service> services) {
 		for (Service service : services) {
 			addService(service);
@@ -481,7 +473,6 @@ public class MainWindow extends JFrame {
 	}
 
 	public void changeServiceNotify(Service service) {
-		System.out.println("Got : " + service + service.getStatus());
 		model.changeService(service.clone());
 	}
 

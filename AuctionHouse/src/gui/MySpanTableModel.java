@@ -5,17 +5,13 @@ import gui.spantable.CellSpan;
 import gui.spantable.DefaultCellAttribute;
 import gui.spantable.Span;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
 import data.Pair;
@@ -44,11 +40,9 @@ public class MySpanTableModel extends AbstractTableModel {
 		data = Collections.synchronizedList(new ArrayList<List<Object>>());
 		cellAtt = new DefaultCellAttribute(0, getColumnCount());
 
-		System.out.println("From constructor ...");
 		for (Service service : services) {
 			addService(service, false);
 		}
-		System.out.println("Exit from constructor...");
 	}
 
 	public void addSpan(Span span) {

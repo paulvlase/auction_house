@@ -164,10 +164,8 @@ public class AddNewService extends JFrame {
 			return;
 		}
 
-		Double price = 0.0;
-
 		try {
-			price = Double.parseDouble(priceField.getText());
+			Double.parseDouble(priceField.getText());
 		} catch (NumberFormatException e2) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
 					JOptionPane.WARNING_MESSAGE);
@@ -184,11 +182,5 @@ public class AddNewService extends JFrame {
 	private void cancelButtonActionPerformed(ActionEvent e) {
 		setVisible(false);
 		dispose();
-	}
-
-	public static void main(String[] args) {
-		AddNewService service = new AddNewService(null);
-		service.setVisible(true);
-		service.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 }

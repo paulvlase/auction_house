@@ -1,7 +1,3 @@
-/*
- * Created by JFormDesigner on Fri Mar 22 22:12:33 EET 2013
- */
-
 package gui;
 
 import interfaces.Gui;
@@ -75,7 +71,6 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 
 	public ProfileWindow() {
 		initComponents();
-		setName("Ghennadi", "Procopciuc");
 	}
 
 	public ProfileWindow(Gui gui) {
@@ -418,9 +413,5 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 	@Override
 	public void hideWindow() {
 		setVisible(false);
-	}
-
-	public static void main(String[] args) {
-		new ProfileWindow().setVisible(true);
 	}
 }

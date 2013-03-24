@@ -1,15 +1,14 @@
 package gui.items;
 
-import javax.swing.JMenuItem;
-
-import data.Pair;
-import data.Service;
-
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
+import data.Pair;
+import data.Service;
 
 public class RefuseOfferItem extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public RefuseOfferItem(MainWindow window, Gui gui) {
 		this.window = window;

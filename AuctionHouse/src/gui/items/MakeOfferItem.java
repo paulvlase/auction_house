@@ -1,17 +1,15 @@
 package gui.items;
 
-import javax.swing.JMenuItem;
-
-import data.Pair;
-import data.Service;
-
 import gui.MainWindow;
 import gui.PriceWindow;
 import interfaces.Command;
 import interfaces.Gui;
+import data.Pair;
+import data.Service;
 
 public class MakeOfferItem extends GuiAbstractItem implements Command {
-	private Double price;
+
+	private static final long	serialVersionUID	= 1L;
 
 	public MakeOfferItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -24,10 +22,6 @@ public class MakeOfferItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		System.out.println("Make offer");
 		new PriceWindow(gui, new Pair<Service, Integer>(service, row)).setVisible(true);
-	}
-	
-	public void setPrice(Double price){
-		this.price = price;
 	}
 
 }
