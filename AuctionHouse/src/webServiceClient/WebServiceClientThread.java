@@ -45,7 +45,7 @@ public class WebServiceClientThread extends Thread {
 		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
 				UserRole.BUYER, "parola"));
 		users.put("unix140", new UserProfile("unix140", "Ghennadi",
-				"Procopciuc", UserRole.BUYER, "marmota"));
+				"Procopciuc", UserRole.SELLER, "marmota"));
 	}
 
 	public void run() {
@@ -138,6 +138,7 @@ public class WebServiceClientThread extends Thread {
 			return null;
 		}
 
+		profile.setRole(cred.getRole());
 		return profile;
 	}
 

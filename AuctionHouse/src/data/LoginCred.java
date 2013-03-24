@@ -1,6 +1,6 @@
 package data;
 
-import config.GlobalConfig.UserType;
+import data.UserProfile.UserRole;
 
 /**
  * Login credentials class.
@@ -10,12 +10,12 @@ import config.GlobalConfig.UserType;
 public class LoginCred {
 	private String username;
 	private String password;
-	private UserType type;
+	private UserRole role;
 	
-	public LoginCred(String username, String password, UserType type) {
+	public LoginCred(String username, String password, UserRole role) {
 		this.username = username;
 		this.password = password;
-		this.type = type;
+		this.role = role;
 	}
 
 	public String getUsername() {
@@ -26,7 +26,7 @@ public class LoginCred {
 		return password;
 	}
 
-	public UserType getType() {
-		return type;
+	public UserRole getRole() {
+		return role;
 	}
 }

@@ -1,16 +1,16 @@
 package data;
 
-import config.GlobalConfig.UserType;
+import data.UserProfile.UserRole;
 
 public class User {
 	private String username;
 	private String password;
-	private UserType type;
-	
-	public User(String username, String password, UserType type) {
+	private UserRole role;
+
+	public User(String username, String password, UserRole role) {
 		this.username = username;
 		this.password = password;
-		this.type = type;
+		this.role = role;
 	}
 
 	public String getUsername() {
@@ -21,7 +21,7 @@ public class User {
 		return password;
 	}
 
-	public UserType getType() {
-		return type;
+	public UserRole getRole() {
+		return role;
 	}
 }
