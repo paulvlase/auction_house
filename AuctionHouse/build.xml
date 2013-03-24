@@ -57,7 +57,7 @@
             <classpath refid="auctionHouse.classpath"/>
         </java>
     </target>
-    <target name="Main (1)">
+    <target name="Main">
         <java classname="app.Main" failonerror="true" fork="yes">
             <classpath refid="auctionHouse.classpath"/>
         </java>
