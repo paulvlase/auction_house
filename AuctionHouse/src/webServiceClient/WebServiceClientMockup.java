@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import data.LoginCred;
 import data.Pair;
@@ -22,78 +23,82 @@ import interfaces.WebServiceClient;
  */
 public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	private MediatorWeb med;
-	private WebServiceClientThread thread;
+	private WebServiceClientTask task;
 
 	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
 		
 		med.registerWebServiceClient(this);
 		
-		thread = new WebServiceClientThread(med);
-		thread.start();
+		task = new WebServiceClientTask(med);
+		task.execute();
 	}
 	
 	public UserProfile logIn(LoginCred cred) {
-		return thread.logIn(cred);
+		return task.logIn(cred);
 	}
 	
 	public void logOut() {
 		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
 		
 		try {
-			thread.stopThread();
-			thread.interrupt();
-			thread.join();
+			task.stopThread();
+			task.cancel(true);
+			try {
+				task.get();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}		
 	}
 	
 	public UserProfile getUserProfile(String username) {
-		return thread.getUserProfile(username);
+		return task.getUserProfile(username);
 	}
 	
 	public boolean setUserProfile(UserProfile profile) {
-		return thread.setUserProfile(profile);
+		return task.setUserProfile(profile);
 	}
 
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
-		return thread.launchOffer(service);
+		return task.launchOffer(service);
 	}
 	
 	public synchronized boolean launchOffers(ArrayList<Service> services) {
-		return thread.launchOffers(services);
+		return task.launchOffers(services);
 	}
 	
 	public synchronized boolean dropOffer(Service service) {
-		return thread.dropOffer(service);
+		return task.dropOffer(service);
 	}
 	
 	public synchronized boolean dropOffers(ArrayList<Service> services) {
-		return thread.dropOffers(services);
+		return task.dropOffers(services);
 	}
 	
 	/* Buyer */
 	@Override
 	public boolean acceptOffer(Pair<Service, Integer> pair) {
-		return thread.acceptOffer(pair);
+		return task.acceptOffer(pair);
 	}
 
 	@Override
 	public boolean refuseOffer(Pair<Service, Integer> pair) {
-		return thread.refuseOffer(pair);
+		return task.refuseOffer(pair);
 	}
 
 	/* Seller */
 	@Override
 	public boolean makeOffer(Pair<Service, Integer> pair) {
 		// TODO Auto-generated method stub
-		return thread.makeOffer(pair);
+		return task.makeOffer(pair);
 	}
 
 	@Override
 	public boolean dropAuction(Pair<Service, Integer> pair) {
-		return thread.dropAuction(pair);
+		return task.dropAuction(pair);
 	}
 }
