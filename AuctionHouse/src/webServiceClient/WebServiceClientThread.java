@@ -231,7 +231,9 @@ public class WebServiceClientThread extends Thread {
 		
 		if (users != null) {
 			/* TODO Will be implemented */
-			users.get(userIndex).setOffer(Offer.OFFER_REFUSED);
+			UserEntry user = users.get(userIndex);
+			
+			user.setOffer(Offer.OFFER_REFUSED);
 			users.remove(userIndex);
 			
 			med.changeServiceNotify(service);
