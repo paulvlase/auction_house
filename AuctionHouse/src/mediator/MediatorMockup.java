@@ -164,25 +164,46 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			}
 		}
 		*/
-		
-		ArrayList<Service> services = new ArrayList<Service>();
-		ArrayList<UserEntry> users = new ArrayList<UserEntry>();
 
-		UserEntry user1 = new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, new Date().getTime() + 123456876, 22.4);
-		UserEntry user2 = new UserEntry("Paul", Offer.TRANSFER_STARTED, new Date().getTime() + 223456876, 25.4);
-		//user2.setProgress(22);
-		UserEntry user3 = new UserEntry("Ana", Offer.OFFER_ACCEPTED, new Date().getTime() + 323456876, 2.1);
-		users.add(user1);
-		users.add(user2);
-		users.add(user3);
-		
-		Service service1 = new Service("service1", users, Status.ACTIVE);
-		
-		Service service2 = new Service("service2", null, Status.INACTIVE);
-		Service service3 = new Service("service3", null, Status.ACTIVE);
-		services.add(service1);
-		services.add(service2);
-		services.add(service3);
+		ArrayList<Service> services = new ArrayList<Service>();
+		if(profile.getRole() == UserRole.SELLER){
+			ArrayList<UserEntry> users = new ArrayList<UserEntry>();
+
+			UserEntry user1 = new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, new Date().getTime() + 123456876, 22.4);
+			UserEntry user2 = new UserEntry("Paul", Offer.TRANSFER_STARTED, new Date().getTime() + 223456876, 25.4);
+			//user2.setProgress(22);
+			UserEntry user3 = new UserEntry("Ana", Offer.OFFER_ACCEPTED, new Date().getTime() + 323456876, 2.1);
+			users.add(user1);
+			users.add(user2);
+			users.add(user3);
+			
+			Service service1 = new Service("service1", users, Status.ACTIVE);
+			
+			Service service2 = new Service("service2", null, Status.INACTIVE);
+			Service service3 = new Service("service3", null, Status.ACTIVE);
+			services.add(service1);
+			services.add(service2);
+			services.add(service3);			
+		} else {
+			ArrayList<UserEntry> users = new ArrayList<UserEntry>();
+
+			UserEntry user2 = new UserEntry("Ghennadi", Offer.OFFER_ACCEPTED, new Date().getTime() + 123456876, 22.4);
+			UserEntry user1 = new UserEntry("Paul", Offer.TRANSFER_STARTED, new Date().getTime() + 223456876, 25.4);
+			user1.setProgress(22);
+			UserEntry user3 = new UserEntry("Ana", Offer.OFFER_ACCEPTED, new Date().getTime() + 323456876, 2.1);
+			users.add(user1);
+			users.add(user2);
+			users.add(user3);
+			
+			Service service1 = new Service("service1", users, Status.ACTIVE);
+			service1.setProgress(22);
+			
+			Service service2 = new Service("service2", null, Status.INACTIVE);
+			Service service3 = new Service("service3", null, Status.ACTIVE);
+			services.add(service1);
+			services.add(service2);
+			services.add(service3);				
+		}
 		
 		return services;
 	}

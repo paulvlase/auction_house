@@ -25,6 +25,7 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -43,6 +44,8 @@ import javax.swing.UIManager;
 
 import config.GuiConfig;
 import data.Service;
+import data.UserEntry;
+import data.UserEntry.Offer;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
@@ -308,9 +311,19 @@ public class MainWindow extends JFrame {
 	}
 
 	public void addService(Service service) {
+		if (gui.getUserProfile().getRole() == UserRole.BUYER && service.getUsers() != null) {
+			System.out.println("-------------------");
+			Offer offer = service.getUsers().get(0).getOffer();
+			if (offer == Offer.TRANSFER_COMPLETE || offer == Offer.TRANSFER_FAILED
+					|| offer == Offer.TRANSFER_IN_PROGRESS || offer == Offer.TRANSFER_STARTED) {
+				UserEntry user = service.getUsers().get(0);
+				service.getUsers().clear();
+				service.getUsers().add(user);
+			}
+		}
 		model.addService(service);
 	}
-	
+
 	public void removeServices(ArrayList<Service> services) {
 		for (Service service : services) {
 			addService(service);
