@@ -208,12 +208,12 @@ public class MainWindow extends JFrame {
 
 				// addServiceItem
 				addServiceItem.setText(GuiConfig.getValue(GuiConfig.ADD_SERVICE));
-				addServiceItem.setIcon(new ImageIcon(GuiConfig.ADD_ICON));
+				addServiceItem.setIcon(new ImageIcon(GuiConfig.ADD_ICON16));
 				menu.add(addServiceItem);
 
 				// profileItem
 				profileItem.setText(GuiConfig.getValue(GuiConfig.PROFILE));
-				profileItem.setIcon(new ImageIcon(GuiConfig.PROFILE_ICON));
+				profileItem.setIcon(new ImageIcon(GuiConfig.PROFILE_ICON16));
 				menu.add(profileItem);
 
 				// logoutItem

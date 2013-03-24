@@ -2,6 +2,9 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 
 import config.GuiConfig;
@@ -133,6 +136,14 @@ public class AddNewService extends JFrame {
 		contentPane.add(bottomPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+
+
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(new ImageIcon(GuiConfig.ADD_ICON16).getImage());
+		icons.add(new ImageIcon(GuiConfig.ADD_ICON32).getImage());
+		icons.add(new ImageIcon(GuiConfig.ADD_ICON48).getImage());
+		setIconImages(icons);
 		pack();
 		setLocationRelativeTo(null);
 	}

@@ -22,6 +22,8 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -253,6 +255,15 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 		}
 		contentPane.add(panel1, new GridBagConstraints(1, 7, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		
+
+
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(new ImageIcon(GuiConfig.PROFILE_ICON16).getImage());
+		icons.add(new ImageIcon(GuiConfig.PROFILE_ICON32).getImage());
+		icons.add(new ImageIcon(GuiConfig.PROFILE_ICON48).getImage());
+		setIconImages(icons);
+		
 		setSize(435, 305);
 		setTitle(GuiConfig.getValue(GuiConfig.PROFILE_TITLE));
 		setLocationRelativeTo(getOwner());
