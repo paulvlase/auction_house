@@ -1,14 +1,12 @@
 package gui.items;
 
-import javax.swing.JMenuItem;
-
-import data.Service;
-
+import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
-import gui.MainWindow;
 
 public class DropRequestItem extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public DropRequestItem(MainWindow window, Gui gui) {
 		this.window = window;

@@ -5,17 +5,13 @@ import gui.spantable.CellSpan;
 import gui.spantable.DefaultCellAttribute;
 import gui.spantable.Span;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
 import data.Pair;

@@ -1,16 +1,14 @@
 package gui.items;
 
-import javax.swing.JMenuItem;
-
-import data.Pair;
-import data.Service;
-import data.UserEntry;
-
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
+import data.Pair;
+import data.Service;
 
 public class AcceptOfferItem extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public AcceptOfferItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -23,9 +21,6 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		System.out.println("Accept Request");
 		Service service = new Service(this.service);
-//		UserEntry user = new UserEntry(service.getUsers().get(row));
-//		service.getUsers().clear();
-//		service.getUsers().add(user);
 		gui.acceptOffer(new Pair<Service, Integer>(service, row));
 	}
 }

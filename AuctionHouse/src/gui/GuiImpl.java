@@ -1,26 +1,24 @@
 package gui;
 
+import interfaces.Gui;
+import interfaces.MediatorGui;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
 import config.FilesConfig;
 import config.GuiConfig;
-import config.GlobalConfig.ServiceType;
+import data.LoginCred;
 import data.Pair;
 import data.Service;
-import data.LoginCred;
 import data.UserProfile;
 import data.UserProfile.UserRole;
-import interfaces.Gui;
-import interfaces.MediatorGui;
 
 /**
  * Gui module implementation.

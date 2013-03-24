@@ -1,17 +1,15 @@
 package gui.items;
 
-import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JMenuItem;
-
-import data.Service;
-
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+
 public class ExitItem extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public ExitItem(MainWindow window, Gui gui) {
 		this.window = window;

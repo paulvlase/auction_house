@@ -7,6 +7,8 @@ import interfaces.Command;
 import interfaces.Gui;
 
 public class SignOutButton extends JButton implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 	MainWindow window;
 	Gui gui;
 	
