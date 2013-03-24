@@ -35,7 +35,7 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column) {
 
-		if (column == 2) {
+		if (column == 2 || column == 3) {
 			if (value instanceof Integer) {
 				Integer i = (Integer) value;
 				String text = GuiConfig.getValue(GuiConfig.DONE);

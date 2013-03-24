@@ -18,6 +18,7 @@ import data.Pair;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
+import data.UserEntry.Offer;
 
 public class MySpanTableModel extends AbstractTableModel {
 
@@ -131,6 +132,19 @@ public class MySpanTableModel extends AbstractTableModel {
 		}
 
 		if (service.getStatus() == Status.ACTIVE && users != null) {
+			Integer counter = 0;
+			for (UserEntry user : users) {
+				counter ++;
+				if (user.getOffer() == Offer.TRANSFER_COMPLETE
+						|| user.getOffer() == Offer.TRANSFER_FAILED
+						|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS
+						|| user.getOffer() == Offer.TRANSFER_STARTED) {
+
+					/* Service name span */
+					addSpan(new Span(data.size() - users.size() + counter - 1 , 2, 1, 4));
+				}
+			}
+			
 			/* Service name span */
 			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
 			/* Status span */

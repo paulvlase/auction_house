@@ -115,7 +115,7 @@ public class WebServiceClientThread extends Thread {
 				Integer event = random.nextInt(eventLimit);
 
 				if (event < 200) {
-					generateNoOffer(service);
+
 				} else if (event < 400) {
 					generateOfferMade(service);
 				} else if (event < 600) {
@@ -125,6 +125,9 @@ public class WebServiceClientThread extends Thread {
 				} else if (event < 10000) {
 					generateOfferExceeded(service);
 				}
+				generateNoOffer(service);
+				generateOfferAccepted(service);
+
 			}
 		}
 		System.out.println("[webServiceClientThread:generateSellerEvents()] End");
