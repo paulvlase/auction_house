@@ -484,6 +484,7 @@ public class MainWindow extends JFrame {
 	}
 
 	public void changeServiceNotify(Service service) {
+		System.out.println("Got : " + service + service.getStatus());
 		model.changeService(service.clone());
 	}
 
