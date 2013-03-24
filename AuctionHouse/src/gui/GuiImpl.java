@@ -158,6 +158,11 @@ public class GuiImpl implements Gui {
 		med.acceptOffer(pair);
 	}
 	
+	//@Override
+	//public void removeOffer(Service service) {
+	//	return med.removeOffer(service);
+	//}
+	
 	@Override
 	public void changeServiceNotify(Service service) {
 		if (mainWindow != null)
@@ -183,13 +188,11 @@ public class GuiImpl implements Gui {
 
 	@Override
 	public boolean makeOffer(Pair<Service, Integer> pair, Double price) {
-		// TODO Auto-generated method stub
 		return med.makeOffer(pair, price);
 	}
 
 	@Override
 	public boolean dropAuction(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
 		return med.dropAuction(pair);
 	}
 }
