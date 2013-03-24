@@ -4,23 +4,44 @@
 
 package gui;
 
-import java.awt.*;
+import interfaces.Gui;
+
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import config.GuiConfig;
+import data.Pair;
+import data.Service;
 
 /**
  * @author Ghennadi Procopciuc
  */
 public class PriceWindow extends JFrame implements ActionListener {
-	private static final long	serialVersionUID	= 1L;
-	private JLabel				priceLabel;
-	private JTextField			priceField;
-	private JButton				okButton;
+	private static final long		serialVersionUID	= 1L;
+	private JLabel					priceLabel;
+	private JTextField				priceField;
+	private JButton					okButton;
+	private Pair<Service, Integer>	pair;
+	private Gui						gui;
 
 	public PriceWindow() {
 		initComponents();
+	}
+
+	public PriceWindow(Gui gui, Pair<Service, Integer> pair) {
+		this();
+		this.pair = pair;
+		this.gui = gui;
 	}
 
 	private void initComponents() {
@@ -40,6 +61,7 @@ public class PriceWindow extends JFrame implements ActionListener {
 
 		// label1
 		priceLabel.setText("New price");
+		priceField.addActionListener(this);
 		contentPane.add(priceLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		contentPane.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
@@ -49,13 +71,26 @@ public class PriceWindow extends JFrame implements ActionListener {
 		okButton.setText("OK");
 		contentPane.add(okButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		pack();
 		setLocationRelativeTo(getOwner());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == okButton) {
-			System.out.println("Ok button");
+		Double price = 0.0;
+
+		if (e.getSource() == okButton || e.getSource() == priceField) {
+			try {
+				price = Double.parseDouble(priceField.getText());
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 		}
+
+		gui.makeOffer(pair, price);
+		setVisible(false);
+		dispose();
 	}
 }

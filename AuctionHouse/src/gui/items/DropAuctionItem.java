@@ -3,12 +3,12 @@ package gui.items;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
-
-import javax.swing.JMenuItem;
-
+import data.Pair;
 import data.Service;
 
 public class DropAuctionItem extends GuiAbstractItem implements Command {
+
+	private static final long	serialVersionUID	= 1L;
 
 	public DropAuctionItem(MainWindow window, Gui gui) {
 		this.window = window;
@@ -19,6 +19,6 @@ public class DropAuctionItem extends GuiAbstractItem implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("Drop Auction");
+		gui.dropAuction(new Pair<Service, Integer>(service, row));
 	}
 }
