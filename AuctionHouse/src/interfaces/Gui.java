@@ -24,7 +24,10 @@ public interface Gui {
 	
 	public boolean setUserProfile(UserProfile profile);
 	
+	public boolean registerUser(UserProfile profile);
+	
 	public boolean verifyUsername(String username);
+	
 	
 	public ArrayList<Service> loadOffers();
 	

@@ -26,6 +26,8 @@ public interface MediatorGui {
 
 	public boolean setUserProfile(UserProfile profile);
 	
+	public boolean registerUser(UserProfile profile);
+	
 	public boolean verifyUsername(String username);
 
 	/* Common */

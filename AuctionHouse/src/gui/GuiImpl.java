@@ -78,6 +78,10 @@ public class GuiImpl implements Gui {
 		return med.setUserProfile(profile);
 	}
 	
+	public boolean registerUser(UserProfile profile) {
+		return med.registerUser(profile);
+	}
+	
 	public boolean verifyUsername(String username) {
 		return med.verifyUsername(username);
 	}
