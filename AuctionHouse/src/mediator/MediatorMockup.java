@@ -18,7 +18,6 @@ import data.UserEntry;
 import data.UserProfile;
 import data.Service.Status;
 import data.UserEntry.Offer;
-import data.UserProfile.UserRole;
 import interfaces.Gui;
 import interfaces.MediatorGui;
 import interfaces.MediatorNetwork;
@@ -70,6 +69,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public boolean logIn(LoginCred cred) {
+		System.out.println("MediatorMockup:logIn()] Aici");
 		UserProfile profile = web.logIn(cred);
 
 		if (profile != null) {
@@ -128,19 +128,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		if (bRet) {
 			net.startTransfer(pair.getKey());
 		}
-	}
-
-	/* Seller */
-	@Override
-	public int makeOffer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int dropAction() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public static Date create(int day, int month, int year, int hourofday, int minute, int second) {
@@ -285,5 +272,20 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public void changeProfileNotify(UserProfile profile) {
 		gui.changeProfileNotify(profile);
 	}
-	
+
+	/* Seller */
+	@Override
+	public boolean makeOffer(Pair<Service, Integer> pair, Double price) {
+		Service service = pair.getKey();
+		Integer userIndex = pair.getValue();
+		
+		service.getUsers().get(userIndex).setPrice(price);
+		return web.makeOffer(pair);
+	}
+
+	@Override
+	public boolean dropAuction(Pair<Service, Integer> pair) {
+		// TODO Auto-generated method stub
+		return web.dropAuction(pair);
+	}
 }

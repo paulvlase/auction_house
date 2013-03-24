@@ -128,6 +128,7 @@ public class WebServiceClientThread extends Thread {
 
 	public UserProfile logIn(LoginCred cred) {
 		UserProfile profile;
+		System.out.println("[WebServiceClientThread:login()] Aici");
 
 		profile = getUserProfile(cred.getUsername());
 		if (profile == null) {
@@ -139,6 +140,7 @@ public class WebServiceClientThread extends Thread {
 		}
 
 		profile.setRole(cred.getRole());
+		System.out.println("[WebServiceClientThread:login()] profile.getRole():" + profile.getRole());
 		return profile;
 	}
 
@@ -218,7 +220,6 @@ public class WebServiceClientThread extends Thread {
 		user.setOffer(Offer.OFFER_ACCEPTED);
 
 		/* TODO: communicate with server */
-
 		users.clear();
 		users.add(user);
 
@@ -245,5 +246,24 @@ public class WebServiceClientThread extends Thread {
 		}
 		
 		return true;
+	}
+	
+	/* Seller */
+	public boolean makeOffer(Pair<Service, Integer> pair) {
+		Service service = pair.getKey();
+		Integer userIndex = pair.getValue();
+		UserEntry user = service.getUsers().get(userIndex);
+		
+		user.setOffer(Offer.OFFER_MADE);		
+		offers.put(service.getName(), service);
+		
+		med.changeServiceNotify(service);
+		
+		return false;
+	}
+
+	public boolean dropAuction(Pair<Service, Integer> pair) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

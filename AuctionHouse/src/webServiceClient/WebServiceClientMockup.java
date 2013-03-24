@@ -34,18 +34,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 	
 	public UserProfile logIn(LoginCred cred) {
-		UserProfile profile;
-		
-		profile = getUserProfile(cred.getUsername());
-		if (profile == null) {
-			return null;
-		}
-		
-		if (!profile.getPassword().equals(cred.getPassword())) {
-			return null;
-		}
-		
-		return profile;
+		return thread.logIn(cred);
 	}
 	
 	public void logOut() {
@@ -98,14 +87,14 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 
 	/* Seller */
 	@Override
-	public int makeOffer() {
+	public boolean makeOffer(Pair<Service, Integer> pair) {
 		// TODO Auto-generated method stub
-		return 0;
+		return thread.makeOffer(pair);
 	}
 
 	@Override
-	public int dropAction() {
+	public boolean dropAuction(Pair<Service, Integer> pair) {
 		// TODO Auto-generated method stub
-		return 0;
+		return thread.makeOffer(pair);
 	}
 }

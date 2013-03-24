@@ -28,7 +28,10 @@ public interface Gui {
 
 	public void acceptOffer(Pair<Service, Integer> pair);
 	public void refuseOffer(Pair<Service, Integer> pair);
-
+	
+	public boolean makeOffer(Pair<Service, Integer> pair, Double price);
+	public boolean dropAuction(Pair<Service, Integer> pair);
+	
 	public void changeServiceNotify(Service service);
 	public void changeServicesNotify(ArrayList<Service> services);
 	public void changeProfileNotify(UserProfile profile);

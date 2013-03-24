@@ -53,8 +53,6 @@ public class GuiImpl implements Gui {
 		if (med.logIn(cred)) {
 			login.hideWindow();
 
-			// TODO: autentificare reusita, afisez fereastra pentru
-			// cumparator, vanzator
 			System.out.println("[GuiImpl:logIn] Signed in");
 
 			mainWindow = new MainWindow(this);
@@ -183,5 +181,17 @@ public class GuiImpl implements Gui {
 	@Override
 	public void refuseOffer(Pair<Service, Integer> pair) {
 		med.refuseOffer(pair);	
+	}
+
+	@Override
+	public boolean makeOffer(Pair<Service, Integer> pair, Double price) {
+		// TODO Auto-generated method stub
+		return med.makeOffer(pair, price);
+	}
+
+	@Override
+	public boolean dropAuction(Pair<Service, Integer> pair) {
+		// TODO Auto-generated method stub
+		return med.dropAuction(pair);
 	}
 }

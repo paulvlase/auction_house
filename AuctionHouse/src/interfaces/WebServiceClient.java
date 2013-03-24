@@ -31,6 +31,6 @@ public interface WebServiceClient {
 	public boolean refuseOffer(Pair<Service, Integer> pair);
 	
 	/* Seller */
-	public int makeOffer();
-	public int dropAction();
+	public boolean makeOffer(Pair<Service, Integer> pair);
+	public boolean dropAuction(Pair<Service, Integer> pair);
 }
