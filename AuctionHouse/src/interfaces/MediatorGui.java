@@ -21,9 +21,12 @@ public interface MediatorGui {
 
 	public void logOut();
 
+	
 	public UserProfile getUserProfile();
 
 	public boolean setUserProfile(UserProfile profile);
+	
+	public boolean verifyUsername(String username);
 
 	/* Common */
 	public ArrayList<Service> loadOffers();

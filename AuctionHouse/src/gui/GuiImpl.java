@@ -77,6 +77,11 @@ public class GuiImpl implements Gui {
 	public boolean setUserProfile(UserProfile profile) {
 		return med.setUserProfile(profile);
 	}
+	
+	public boolean verifyUsername(String username) {
+		return med.verifyUsername(username);
+	}
+	
 
 	public boolean launchOffer(Service service) {
 		return med.launchOffer(service);

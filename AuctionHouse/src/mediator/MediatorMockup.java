@@ -111,6 +111,11 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public boolean setUserProfile(UserProfile profile) {
 		return web.setUserProfile(profile);
 	}
+	
+	@Override
+	public boolean verifyUsername(String username) {
+		return web.verifyUsername(username);
+	}
 
 	/* Common */
 	@Override

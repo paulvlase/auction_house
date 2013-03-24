@@ -83,6 +83,12 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		med.changeProfileNotify(profile);
 		return true;
 	}
+	
+	public boolean verifyUsername(String username) {
+		if (users.get(username) != null)
+			return true;
+		return false;
+	}
 
 	/* Common */
 	public synchronized boolean launchOffer(Service service) {
