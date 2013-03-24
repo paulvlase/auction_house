@@ -1,11 +1,9 @@
 package network;
 
 import interfaces.MediatorNetwork;
-import interfaces.Network;
-import interfaces.NetworkTransfer;
 
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -35,16 +33,14 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	}
 
 	@Override
-	protected Service doInBackground() throws Exception {
-		System.out.println(Thread.currentThread());
-		
+	protected Service doInBackground() throws Exception {		
 		int i = 0;
 		try {
 			while (i < COUNT) {
 				i++;
 				Thread.sleep(DELAY);
 				service.setProgress(i);
-				
+
 				publish(service);
 			}
 		} catch (InterruptedException e) {
@@ -53,9 +49,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		return service;
 	}
 
-	protected void process(ArrayList<Service> services) {
-		System.out.println(Thread.currentThread());
-
+	protected void process(List<Service> services) {
 		for (Service service:  services) {
 			med.changeServiceNotify(service);
 		}

@@ -229,6 +229,7 @@ public class WebServiceClientThread extends Thread {
 		int userIndex = pair.getValue();
 		ArrayList<UserEntry> users = service.getUsers();
 		
+		System.out.println("[WebServiceClient:refuseOffer()] Aici");
 		if (users != null) {
 			/* TODO Will be implemented */
 			UserEntry user = users.get(userIndex);

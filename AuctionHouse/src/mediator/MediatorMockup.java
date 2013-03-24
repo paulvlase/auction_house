@@ -268,6 +268,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public void refuseOffer(Pair<Service, Integer> pair) {
+		System.out.println("[MediatorMockup:refuseOffer()] Aici");
 		web.refuseOffer(pair);
 	}
 

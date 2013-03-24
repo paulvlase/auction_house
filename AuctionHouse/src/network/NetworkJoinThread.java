@@ -4,11 +4,6 @@ import interfaces.MediatorNetwork;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.SwingWorker;
-
-import data.Service;
 
 public class NetworkJoinThread extends Thread {
 	MediatorNetwork med;
@@ -30,7 +25,6 @@ public class NetworkJoinThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Cine m-a trezit baaa?");
 			makeJoin();
 		}
 	}

@@ -182,7 +182,6 @@ public class GuiImpl implements Gui {
 
 	@Override
 	public void refuseOffer(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
-		
+		med.refuseOffer(pair);	
 	}
 }
