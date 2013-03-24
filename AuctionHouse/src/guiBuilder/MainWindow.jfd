@@ -158,6 +158,13 @@
              <string>text</string>
              <string>Logout</string>
             </void>
+            <void method="setProperty">
+             <string>icon</string>
+             <object class="com.jformdesigner.model.SwingIcon">
+              <int>1</int>
+              <string>C:\Users\Ghennadi\git\auction_house\AuctionHouse\resources\images\logout.png</string>
+             </object>
+            </void>
             <void property="name">
              <string>logoutButton</string>
             </void>

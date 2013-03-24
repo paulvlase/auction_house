@@ -94,6 +94,7 @@ public class MainWindow extends JFrame {
 
 				//---- logoutButton ----
 				logoutButton.setText("Logout");
+				logoutButton.setIcon(new ImageIcon("C:\\Users\\Ghennadi\\git\\auction_house\\AuctionHouse\\resources\\images\\logout.png"));
 				topPanel.add(logoutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 5, 0), 0, 0));

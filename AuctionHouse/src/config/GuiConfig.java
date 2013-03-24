@@ -172,7 +172,12 @@ public class GuiConfig {
 	public static final int			MINI_AVATAR_HEIGHT					= 40;
 	public static final String		ADD_ICON							= "resources/images/add.png";
 	public static final String		LAUNCH_OFFER_ICON					= "resources/images/launch_offer.png";
+	public static final String		DROP_OFFER_ICON						= "resources/images/drop_offer.png";
 	public static final String		LOGOUT_ICON							= "resources/images/logout.png";
+	public static final String		PROFILE_ICON						= "resources/images/profile.png";
+	public static final String		EXIT_ICON							= "resources/images/exit.png";
+	public static final String		REFUSE_OFFER_ICON					= "resources/images/refuse_offer.png";
+	public static final String		ACCEPT_OFFER_ICON					= "resources/images/accept_offer.png";
 
 	private static final String		values[][]							= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,

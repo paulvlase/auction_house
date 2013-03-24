@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -136,9 +137,13 @@ public class MainWindow extends JFrame {
 		// JPopupMenu
 		{
 			launchRequestItem.setText("Launch Offer Request");
+			launchRequestItem.setIcon(new ImageIcon(GuiConfig.LAUNCH_OFFER_ICON));
 			dropRequestItem.setText("Drop Offer Request");
+			dropRequestItem.setIcon(new ImageIcon(GuiConfig.DROP_OFFER_ICON));
 			acceptOfferItem.setText("Accept Offer");
+			acceptOfferItem.setIcon(new ImageIcon(GuiConfig.ACCEPT_OFFER_ICON));
 			refusetOfferItem.setText("Refuse Offer");
+			refusetOfferItem.setIcon(new ImageIcon(GuiConfig.REFUSE_OFFER_ICON));
 			makeOfferItem.setText("Make Offer");
 			dropAuctionItem.setText("Drop auction");
 
@@ -201,14 +206,17 @@ public class MainWindow extends JFrame {
 
 				// profileItem
 				profileItem.setText(GuiConfig.getValue(GuiConfig.PROFILE));
+				profileItem.setIcon(new ImageIcon(GuiConfig.PROFILE_ICON));
 				menu.add(profileItem);
 
 				// logoutItem
 				signOutItem.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
+				signOutItem.setIcon(new ImageIcon(GuiConfig.LOGOUT_ICON));
 				menu.add(signOutItem);
 
 				// exitItem
 				exitItem.setText(GuiConfig.getValue(GuiConfig.EXIT));
+				exitItem.setIcon(new ImageIcon(GuiConfig.EXIT_ICON));
 				menu.add(exitItem);
 			}
 			menuBar.add(menu);
@@ -247,6 +255,8 @@ public class MainWindow extends JFrame {
 
 				// logoutButton
 				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
+				signOutButton.setIcon(new ImageIcon(GuiConfig.LOGOUT_ICON));
+			    signOutButton.setHorizontalTextPosition(SwingConstants.LEFT);
 				topPanel.add(signOutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0),
 						0, 0));

@@ -40,7 +40,7 @@ class MyTableCellRenderer extends DefaultTableCellRenderer {
 					if (i == -1) {
 						text = "Canceled";
 					}
-				} else if (i < 100) {
+				} else if (i <= 100) {
 					bar.setIndeterminate(false);
 					bar.setValue(i);
 					return panel;
