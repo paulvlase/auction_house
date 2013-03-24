@@ -71,6 +71,18 @@ public class GuiConfig {
 	private static final String		TIME_VALUES[]						= { "Time", "Timp" };
 	private static final String		PRICE_VALUES[]						= { "Price", "Preț" };
 	private static final String		STATUS_VALUES[]						= { "Status", "Status" };
+	private static final String		LAUNCH_OFFER_VALUES[]				= { "Launch Offer Request",
+			"Lansează cerere ofertă"									};
+	private static final String		DROP_OFFER_VALUES[]					= { "Drop Offer Request",
+			"Renunță la ofertă"										};
+	private static final String		ACCEPT_OFFER_VALUES[]				= { "Accept Offer",
+			"Acceptă ofertă"											};
+	private static final String		REFUSE_OFFER_VALUES[]				= { "Refuse Offer",
+			"Refuză oferta"											};
+	private static final String		MAKE_OFFER_VALUES[]					= { "Make Offer",
+			"Fă o ofertă"												};
+	private static final String		DROP_AUCTION_VALUES[]				= { "Drop auction",
+			"Renunță la licitație"										};
 
 	/* Profile editor */
 	private static String			PROFILE_TITLE_VALUES[]				= {
@@ -137,26 +149,32 @@ public class GuiConfig {
 	public static final int			STATUS								= 24;
 	public static final int			BUYER_TITLE							= 25;
 	public static final int			SELLER_TITLE						= 26;
+	public static final int			LAUNCH_OFFER						= 27;
+	public static final int			DROP_OFFER							= 28;
+	public static final int			ACCEPT_OFFER						= 29;
+	public static final int			REFUSE_OFFER						= 30;
+	public static final int			MAKE_OFFER							= 31;
+	public static final int			DROP_AUCTION						= 32;
 
 	/* Profile editor */
-	public static final int			CHANGE_PICTURE						= 27;
-	public static final int			FIRST_NAME							= 28;
-	public static final int			LAST_NAME							= 29;
-	public static final int			NEW_PASSWORD						= 30;
-	public static final int			LOCATION							= 31;
-	public static final int			CANCEL								= 32;
-	public static final int			OK									= 33;
-	public static final int			PROFILE_TITLE						= 34;
-	public static final int			PASSWORD_ERROR						= 35;
-	public static final int			PASSWORD_MATCH_ERROR				= 36;
-	public static final int			FILE_CHOOSER_TILE					= 37;
+	public static final int			CHANGE_PICTURE						= 33;
+	public static final int			FIRST_NAME							= 34;
+	public static final int			LAST_NAME							= 35;
+	public static final int			NEW_PASSWORD						= 36;
+	public static final int			LOCATION							= 37;
+	public static final int			CANCEL								= 38;
+	public static final int			OK									= 39;
+	public static final int			PROFILE_TITLE						= 40;
+	public static final int			PASSWORD_ERROR						= 41;
+	public static final int			PASSWORD_MATCH_ERROR				= 42;
+	public static final int			FILE_CHOOSER_TILE					= 43;
 
 	/* AddNewService */
-	public static final int			NAME								= 38;
-	public static final int			EMPTY_SERVICE_NAME					= 39;
-	public static final int			EMPTY_SERVICE_NAME_ERROR			= 40;
-	public static final int			SERVICE_TWICE_ERROR					= 41;
-	public static final int			PRICE_ERROR							= 42;
+	public static final int			NAME								= 44;
+	public static final int			EMPTY_SERVICE_NAME					= 45;
+	public static final int			EMPTY_SERVICE_NAME_ERROR			= 46;
+	public static final int			SERVICE_TWICE_ERROR					= 47;
+	public static final int			PRICE_ERROR							= 48;
 
 	/* Other settings for Profile editor */
 	public static final int			AVATAR_WIDTH						= 100;
@@ -191,12 +209,13 @@ public class GuiConfig {
 			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
 			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,
 			PROFILE_VALUES, LOGOUT_VALUES, EXIT_VALUES, SERVICE_VALUES, OFFER_STATUS_VALUES,
-			TIME_VALUES, PRICE_VALUES, STATUS_VALUES, BUYER_TITLE_VALUES, SELLER_TITLE_VALUES,
-			CHANGE_PICTURE_VALUES, FIRST_NAME_VALUES, LAST_NAME_VALUES, NEW_PASSWORD_VALUES,
-			LOCATION_VALUES, CANCEL_VALUES, OK_VALUES, PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES,
-			PASSWORD_MATCH_ERROR_VALUES, FILE_CHOOSER_VALUES, NAME_VALUES,
-			EMPTY_SERVICE_NAME_VALUES, EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES,
-			PRICE_ERROR_VALUES											};
+			TIME_VALUES, PRICE_VALUES, STATUS_VALUES, LAUNCH_OFFER_VALUES, DROP_OFFER_VALUES,
+			ACCEPT_OFFER_VALUES, REFUSE_OFFER_VALUES, MAKE_OFFER_VALUES, DROP_AUCTION_VALUES,
+			BUYER_TITLE_VALUES, SELLER_TITLE_VALUES, CHANGE_PICTURE_VALUES, FIRST_NAME_VALUES,
+			LAST_NAME_VALUES, NEW_PASSWORD_VALUES, LOCATION_VALUES, CANCEL_VALUES, OK_VALUES,
+			PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES, PASSWORD_MATCH_ERROR_VALUES,
+			FILE_CHOOSER_VALUES, NAME_VALUES, EMPTY_SERVICE_NAME_VALUES,
+			EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES, PRICE_ERROR_VALUES };
 
 	public static int getLanguage() {
 		return CURRENT_LANGUAGE;
