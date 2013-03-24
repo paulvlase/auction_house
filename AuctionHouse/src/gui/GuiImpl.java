@@ -183,7 +183,7 @@ public class GuiImpl implements Gui {
 	}
 	
 	@Override
-	public void transferProgress(Service service) {
+	public void transferProgressNotify(Service service) {
 		if (mainWindow != null)
 			mainWindow.transferProgressNotify(service);
 	}
