@@ -312,4 +312,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public void profileChangedNotify(UserProfile profile) {
 		gui.profileChangedNotify(profile);
 	}
+	
+	@Override
+	public void offerMadeNotify(Service service) {
+		gui.offerMadeNotify(service);
+	}
+	
 }

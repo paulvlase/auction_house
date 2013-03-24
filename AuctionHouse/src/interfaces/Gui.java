@@ -35,4 +35,6 @@ public interface Gui {
 	
 	public void transferProgressNotify(Service service);
 	public void profileChangedNotify(UserProfile profile);
+	
+	public void offerMadeNotify(Service service);
 }

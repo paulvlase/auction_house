@@ -5,6 +5,7 @@ import interfaces.MediatorWeb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -70,6 +71,24 @@ public class WebServiceClientThread extends Thread {
 
 						service.addUserEntry(user);
 						med.newUserNotify(service);
+					}
+					else if (event < 400) {
+						List<UserEntry> users = service.getUsers();
+						int userIndex;
+						
+						do {
+							userIndex =  Math.abs(random.nextInt(service.getUsers().size()));
+						} while (users.get(userIndex).getOffer() == Offer.OFFER_MADE &&
+								users.get(userIndex).getOffer() == Offer.OFFER_REFUSED);
+						
+						double price = users.get(userIndex).getPrice();
+						if (price > 1) {
+							users.get(userIndex).setOffer(Offer.OFFER_MADE);
+
+							users.get(userIndex).setPrice(price - 1);
+						}
+						
+						med.offerMadeNotify(service);
 					}
 				}
 			}

@@ -20,4 +20,6 @@ public interface MediatorWeb {
 
 	public void newUserNotify(Service service);
 	public void profileChangedNotify(UserProfile profile);
+	
+	public void offerMadeNotify(Service service);
 }

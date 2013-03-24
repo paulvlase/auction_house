@@ -193,4 +193,10 @@ public class GuiImpl implements Gui {
 		if (mainWindow != null)
 			mainWindow.profileChangedNotify(profile);
 	}
+	
+	@Override
+	public void offerMadeNotify(Service service) {
+		if (mainWindow != null)
+			mainWindow.offerMadeNotify(service);		
+	}
 }
