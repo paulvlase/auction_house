@@ -70,6 +70,7 @@ public class WebServiceClientThread extends Thread {
 	}
 
 	public void generateBuyerEvents() {
+		System.out.println("[webServiceClientThread:generateBuyerEvents()] Begin");
 		for (Map.Entry<String, Service> offer : offers.entrySet()) {
 			Service service = offer.getValue();
 
@@ -81,50 +82,52 @@ public class WebServiceClientThread extends Thread {
 			Integer count = random.nextInt(countLimit);
 
 			for (Integer i = 0; i < count; i++) {
-				Integer eventLimit = 10000;
+				Integer eventLimit = 1000;
 				Integer event = random.nextInt(eventLimit);
 
-				if (event < 50) {
+				if (event < 200) {
 					generateNoOffer(service);
-				} else if (event < 100) {
+				} else if (event < 400) {
 					generateOfferMade(service);
-				} else if (event < 250) {
+				} else if (event < 600) {
 					generateOfferRefused(service);
 				}
 			}
 		}
+		
+		System.out.println("[webServiceClientThread:generateBuyerEvents()] End");
 	}
 
 	public void generateSellerEvents() {
+		System.out.println("[webServiceClientThread:generateSellerEvents()] Begin");
 		for (Map.Entry<String, Service> offer : offers.entrySet()) {
 			Service service = offer.getValue();
 
 			Integer countLimit = users.size() / 2;
-			if (countLimit < 2) {
-				countLimit = 2;
-			}
 
 			Integer count = random.nextInt(countLimit);
+			if (count < 2) {
+				count = 2;
+			}
 
 			for (Integer i = 0; i < count; i++) {
 				Integer eventLimit = 10000;
 				Integer event = random.nextInt(eventLimit);
 
-				if (event < 50) {
+				if (event < 200) {
 					generateNoOffer(service);
-				} else if (event < 100) {
-					// generateUserLogoutEvent();
-				} else if (event < 150) {
+				} else if (event < 400) {
 					generateOfferMade(service);
-				} else if (event < 250) {
+				} else if (event < 600) {
 					generateOfferAccepted(service);
-				} else if (event < 300) {
+				} else if (event < 800) {
 					generateOfferRefused(service);
-				} else if (event < 350) {
+				} else if (event < 10000) {
 					generateOfferExceeded(service);
 				}
 			}
 		}
+		System.out.println("[webServiceClientThread:generateSellerEvents()] End");
 	}
 
 	/**
