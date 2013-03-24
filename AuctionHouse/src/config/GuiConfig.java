@@ -236,6 +236,9 @@ public class GuiConfig {
 	public static final String		ACCEPT_OFFER_ICON					= "resources/images/accept_offer.png";
 	public static final String		MAKE_OFFER_ICON						= "resources/images/make_offer.png";
 	public static final String		DROP_AUCTION_ICON					= "resources/images/drop_offer.png";
+	public static final String		PRICE_ICON16						= "resources/images/price16x16.png";
+	public static final String		PRICE_ICON48						= "resources/images/price48x48.png";
+	public static final String		PRICE_ICON64						= "resources/images/price64x64.png";
 
 	private static final String		values[][]							= { USERNAME_VALUES,
 			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,

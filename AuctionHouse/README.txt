@@ -9,21 +9,21 @@ Procopciuc                                                                 Paul
 
 
 
-                      
-                      
-                      
-                      
+
+
+
+
                                      Tema 1
                                       IDP
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,7 +73,7 @@ Cuprins:
     src              Dosar cu sursele proiectului
     resources        Resurse aditionale necesare pentru rularea proiectului
     build.xml        Fișie de build
-    demands.list     Lista de oferte a cumpărătorului    
+    demands.list     Lista de oferte a cumpărătorului
     login.conf       Conturi utilizate în cadrul aplicației
     supplies.list    Lista de oferte a vânzătorului
 
@@ -90,11 +90,11 @@ Cuprins:
     //TODO : verifica
 
                                                                     [ pagina 3 ]
-                                                                    
+
 3. Organizarea surselor
 
     Proiectul este organizat în 11 pachete, după cum urmează :
-    
+
     app                 Punctul de lansare a proiectului
     config              Fișiere de configurare
     data                Clase utilizate pentru transferul mesajului între module
@@ -113,15 +113,15 @@ Cuprins:
     IDE               : Eclipse [Juno / Indigo]
     Plugin-uri        : EGit, JFormDesigner
     Testare           : mockup-uri scrise de noi
-    
+
     Pentru simula modulele : Network, Mediator și WebServiceClient am create 3
     module de mockup (a se vedea pachetele ce sunt răspunzătoare de aceste
     module). În cadrul acestor module am apelat la SwingWorkers, care ne ajută
     în generarea datelor într-un mod aleator.
 
 5. Implementare
-    
-        În cursul implementării am încercat să urmăm enunțul, iar acolo unde ni 
+
+        În cursul implementării am încercat să urmăm enunțul, iar acolo unde ni
     s-a părut că am putea aduce îmbunătățiri, am mai adăugat funcționalități. La
     capitolul interfață grafică am renunțat ușor la modelul prezentat în enunț
     în care lista de furnizori era afișată sub forma unui JList în favoarea unui
@@ -135,12 +135,16 @@ Cuprins:
     - MVC (Crearea și controlarea interfeței grafice)
     - Mediator (A se vedea modulul mediator)
     - Commander (webServiceClient, clasele din pachetul guiItems)
-    
+
     Comunicarea între module se face cu ajutorul unor notificări. Pachetele
     prin intermediul cărora se transmit date sunt prezente în pachetul data.
 
     //TODO Utilizator github
     //TODO adresa proiect online
+
+    Credențiale utilizate în interfața grafică :
+        Usernmae : unix140
+        Password : marmota
 6. Bonus :
 
     - Interfață bilingvă cu posibilitate de extindere
