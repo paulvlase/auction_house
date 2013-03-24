@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.util.List;
+
 import data.Service;
 
 /**
@@ -9,5 +11,6 @@ import data.Service;
  */
 public interface MediatorNetwork {
 	public void registerNetwork(Network net);
-	public void transferProgressNotify(Service service);
+
+	public void changeServiceNotify(Service service);
 }

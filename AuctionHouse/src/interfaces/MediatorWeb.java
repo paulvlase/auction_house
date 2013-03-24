@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import data.Service;
 import data.UserProfile;
@@ -13,13 +14,7 @@ import data.UserProfile;
 public interface MediatorWeb {
 	public void registerWebServiceClient(WebServiceClient web);
 	
-
-	public void launchOfferNotify(Service service);
-	public void launchOffersNotify(ArrayList<Service> services);
-	public void dropOfferNotify(Service service);
-
-	public void newUserNotify(Service service);
-	public void profileChangedNotify(UserProfile profile);
-	
-	public void offerMadeNotify(Service service);
+	public void changeServiceNotify(Service service);
+	public void changeServicesNotify(List<Service> services);
+	public void changeProfileNotify(UserProfile profile);
 }

@@ -75,7 +75,7 @@ public class WebServiceClientThread extends Thread {
 								Offer.NO_OFFER, time, price);
 
 						service.addUserEntry(user);
-						med.newUserNotify(service);
+						med.changeServiceNotify(service);
 					} else if (event < 400) {
 						List<UserEntry> users = service.getUsers();
 
@@ -95,7 +95,7 @@ public class WebServiceClientThread extends Thread {
 								users.get(userIndex).setPrice(price - 1);
 							}
 
-							med.offerMadeNotify(service);
+							med.changeServiceNotify(service);
 						}
 					}
 				}
@@ -152,7 +152,7 @@ public class WebServiceClientThread extends Thread {
 
 	public synchronized boolean setUserProfile(UserProfile profile) {
 		users.put(profile.getUsername(), profile);
-		med.profileChangedNotify(profile);
+		med.changeProfileNotify(profile);
 		return true;
 	}
 
@@ -162,7 +162,7 @@ public class WebServiceClientThread extends Thread {
 		// service.setUsers(new ArrayList<UserEntry>());
 		offers.put(service.getName(), service);
 
-		med.launchOfferNotify(service);
+		med.changeServiceNotify(service);
 		System.out.println("[WebServiceClientMockup:addOffer] "
 				+ service.getName());
 
@@ -177,7 +177,7 @@ public class WebServiceClientThread extends Thread {
 			System.out.println("[WebServiceClientMockup:addOffers] "
 					+ service.getName());
 		}
-		med.launchOffersNotify(services);
+		med.changeServicesNotify(services);
 
 		return true;
 	}
@@ -190,7 +190,7 @@ public class WebServiceClientThread extends Thread {
 		System.out.println("[WebServiceClientMockup:dropOffer] "
 				+ service.getName());
 
-		med.dropOfferNotify(service);
+		med.changeServiceNotify(service);
 		return true;
 	}
 
@@ -225,7 +225,17 @@ public class WebServiceClientThread extends Thread {
 		return true;
 	}
 
-	public synchronized boolean refuseOffer(Pair<Service, Integer> pair) {
-		return true;
+	public synchronized void refuseOffer(Pair<Service, Integer> pair) {
+		Service service = pair.getKey();
+		int userIndex = pair.getValue();
+		List<UserEntry> users = service.getUsers();
+		
+		if (users != null) {
+			/* TODO Will be implemented */
+			users.get(userIndex).setOffer(Offer.OFFER_REFUSED);
+			users.remove(userIndex);
+			
+			med.changeServiceNotify(service);
+		}
 	}
 }

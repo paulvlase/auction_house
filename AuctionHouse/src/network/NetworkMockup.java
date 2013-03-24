@@ -27,7 +27,7 @@ public class NetworkMockup implements Network, NetworkTransfer {
 	@Override
 	public boolean startTransfer(Service service) {
 		service.setStatus(Status.TRANSFER_STARTED);
-		med.transferProgressNotify(service);
+		med.changeServiceNotify(service);
 
 		NetworkTask task = new NetworkTask(med, joinThread, service);
 		task.execute();

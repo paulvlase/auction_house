@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import data.LoginCred;
 import data.Pair;
@@ -25,16 +26,11 @@ public interface Gui {
 	public boolean launchOffers(ArrayList<Service> services);
 	public boolean dropOffer(Service service);
 	public boolean dropOffers(ArrayList<Service> services);
-	
-	public void launchOfferNotify(Service service);
-	public void launchOffersNotify(ArrayList<Service> service);
-	public void dropOfferNotify(Service service);
-	
-	public void newUserNotify(Service service);
+
 	public void acceptOffer(Pair<Service, Integer> pair);
-	
-	public void transferProgressNotify(Service service);
-	public void profileChangedNotify(UserProfile profile);
-	
-	public void offerMadeNotify(Service service);
+	public void refuseOffer(Pair<Service, Integer> pair);
+
+	public void changeServiceNotify(Service service);
+	public void changeServicesNotify(List<Service> services);
+	public void changeProfileNotify(UserProfile profile);
 }

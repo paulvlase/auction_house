@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import config.FilesConfig;
@@ -155,37 +156,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	/* MediatorWeb */
 	@Override
-	public void newUserNotify(Service service) {
-		if(service.getUsers() != null){
-			Collections.sort(service.getUsers());
-		}
-		gui.newUserNotify(service);
-	}
-
-	public void launchOfferNotify(Service service) {
-		if(service.getUsers() != null){
-			Collections.sort(service.getUsers());
-		}
-		gui.launchOfferNotify(service);
-	}
-
-	public void launchOffersNotify(ArrayList<Service> services) {
-		for (Service service: services) {
-			if(service.getUsers() != null){
-				Collections.sort(service.getUsers());
-			}
-		}
-		gui.launchOffersNotify(services);
-	}
-
-	public void dropOfferNotify(Service service) {
-		if(service.getUsers() != null){
-			Collections.sort(service.getUsers());
-		}
-		gui.dropOfferNotify(service);
-	}
-
-	@Override
 	public ArrayList<Service> loadOffers() {
 		// if (profile == null)
 		// return null;
@@ -298,24 +268,23 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 
 	@Override
-	public int refuseOffer(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void refuseOffer(Pair<Service, Integer> pair) {
+		web.refuseOffer(pair);
 	}
 
 	@Override
-	public void transferProgressNotify(Service service) {
-		gui.transferProgressNotify(service);
+	public void changeServiceNotify(Service service) {
+		gui.changeServiceNotify(service);
 	}
 
 	@Override
-	public void profileChangedNotify(UserProfile profile) {
-		gui.profileChangedNotify(profile);
+	public void changeServicesNotify(List<Service> services) {
+		gui.changeServicesNotify(services);
 	}
 	
 	@Override
-	public void offerMadeNotify(Service service) {
-		gui.offerMadeNotify(service);
+	public void changeProfileNotify(UserProfile profile) {
+		gui.changeProfileNotify(profile);
 	}
 	
 }

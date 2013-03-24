@@ -57,8 +57,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 		System.out.println(Thread.currentThread());
 
 		for (Service service:  services) {
-			med.transferProgressNotify(service);
-			med.transferProgressNotify(service);
+			med.changeServiceNotify(service);
 		}
 	}
 
@@ -70,14 +69,14 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 			
 			service.setProgress(-1);
 			service.setStatus(Status.TRANSFER_FAILED);
-			med.transferProgressNotify(service);
 		} else {
 			System.out.println("Done !");
 			
 			service.setProgress(COUNT + 1);
 			service.setStatus(Status.TRANSFER_COMPLETE);
-			med.transferProgressNotify(service);
 		}
+		
+		med.changeServiceNotify(service);
 		
 		synchronized (joinThread.getMonitor()) {
 			joinThread.getMonitor().notify();

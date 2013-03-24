@@ -39,7 +39,7 @@ public interface MediatorGui {
 	/* Buyer */
 	public void acceptOffer(Pair<Service, Integer> pair);
 
-	public int refuseOffer(Pair<Service, Integer> pair);
+	public void refuseOffer(Pair<Service, Integer> pair);
 
 	/* Seller */
 	public int makeOffer();

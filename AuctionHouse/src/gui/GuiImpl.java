@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -98,27 +99,6 @@ public class GuiImpl implements Gui {
 	}
 	
 	/* Notify */
-	public void launchOfferNotify(Service service) {
-		mainWindow.launchOfferNotify(service);
-	}
-	
-	public void launchOffersNotify(ArrayList<Service> services) {
-		mainWindow.launchOffersNotify(services);
-	}
-
-	public void dropOfferNotify(Service service) {
-		if (mainWindow != null) {
-			mainWindow.dropOfferNotify(service);
-		}
-	}
-	
-	public void newUserNotify(Service service) {
-		if (mainWindow != null) {
-			mainWindow.changeServiceNotify(service);
-		}
-	}	
-
-	
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
 
@@ -183,20 +163,26 @@ public class GuiImpl implements Gui {
 	}
 	
 	@Override
-	public void transferProgressNotify(Service service) {
+	public void changeServiceNotify(Service service) {
 		if (mainWindow != null)
-			mainWindow.transferProgressNotify(service);
+			mainWindow.changeServiceNotify(service);
 	}
 
 	@Override
-	public void profileChangedNotify(UserProfile profile) {
+	public void changeServicesNotify(List<Service> services) {
 		if (mainWindow != null)
-			mainWindow.profileChangedNotify(profile);
+			mainWindow.changeServicesNotify(services);
 	}
-	
+
 	@Override
-	public void offerMadeNotify(Service service) {
+	public void changeProfileNotify(UserProfile profile) {
 		if (mainWindow != null)
-			mainWindow.offerMadeNotify(service);		
+			mainWindow.changeProfileNotify(profile);
+	}
+
+	@Override
+	public void refuseOffer(Pair<Service, Integer> pair) {
+		// TODO Auto-generated method stub
+		
 	}
 }
