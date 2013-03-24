@@ -45,15 +45,15 @@ Procopciuc                                                                 Paul
 
 
 
-
-
 Cuprins:
-    1.Continut arhiva ........................................................ 3
+    1.Continut arhivă ........................................................ 3
     2.Rulare ................................................................. 3
-        2.1 Compilarea surselor .............................................. 3
-        2.2 Executia programului ............................................. 3
-    3.Testare ................................................................ 4
-    4.Implementare ........................................................... 4
+    3.Organizarea surselor ................................................... 3
+    4.Testare ................................................................ 4
+    5.Implementare ........................................................... 4
+    5.Acces surse ............................................................ 5
+    5.Bonus .................................................................. 5
+
 
 
 
@@ -68,7 +68,7 @@ Cuprins:
 
 
                                                                     [ pagina 2 ]
-1.Conținut arhivă
+1. Conținut arhivă
 
     src              Dosar cu sursele proiectului
     resources        Resurse aditionale necesare pentru rularea proiectului
@@ -79,7 +79,7 @@ Cuprins:
 
     README           Fișierul curent
 
-2.Rulare
+2. Rulare
 
     Compilarea surselor :
     ant
@@ -143,7 +143,7 @@ Cuprins:
         Usernmae : unix140
         Password : marmota
 
-6. Acces surse :
+6. Acces surse
     În dezvolatare surselor am folosit git (GitHub). Pentru a observa modul în
     care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
 
@@ -152,7 +152,7 @@ Cuprins:
 
     Adresă proiect : https://github.com/paulvlase/auction_house
 
-7. Bonus :
+7. Bonus
 
     - Interfață bilingvă cu posibilitate de extindere (Opțiunea se accesează
       din fereastra Login, Language)
