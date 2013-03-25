@@ -264,6 +264,7 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 		
 		setSize(400, 300);
 		setLocationRelativeTo(getOwner());
+		setVisible(true);
 	}
 
 	private void checkUsername() {

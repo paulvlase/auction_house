@@ -232,7 +232,7 @@ public class Login extends JFrame implements ActionListener {
 	}
 
 	private void registerAction() {
-		
+		gui.registerUserStep1();
 	}
 
 	private void signInAction() {

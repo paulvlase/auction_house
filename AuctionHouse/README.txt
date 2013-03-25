@@ -1,5 +1,5 @@
-﻿Ghennadi                                                                   Vlase
-Procopciuc                                                                 Paul
+﻿Ghennadi                                                                   Paul
+Procopciuc                                                                 Vlase
 
 
 
@@ -163,7 +163,7 @@ Cuprins:
     - Fereastră de Login
     - Adăugarea avatarului în setări cu posibilitatea de încărcarea unei poze
     - Un utilizator poate accesa ambele conturi atât vânzător cât și producător
-
+    - Fereastră de înregistrare pentru utilizatori
 
 
 
