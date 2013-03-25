@@ -10,11 +10,4 @@ public interface GuiWindow {
 	public UserProfile getUserProfile();
 	
 	public boolean setUserProfile(UserProfile profile);
-	
-	
-	public void registerUserStep1();
-	
-	public boolean registerUser(UserProfile profile);
-	
-	public void registerUserStep3();
 }

@@ -24,7 +24,11 @@ public interface Gui {
 	
 	public boolean setUserProfile(UserProfile profile);
 	
+	public void registerUserStep1();
+	
 	public boolean registerUser(UserProfile profile);
+	
+	public void registerUserStep3();
 	
 	public boolean verifyUsername(String username);
 	
