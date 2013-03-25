@@ -84,11 +84,11 @@ public class GuiImpl implements Gui {
 		if (registerWindow == null) {
 			registerWindow =  new RegisterWindow(this);
 		}
-		registerWindow.setVisible(false);
+		registerWindow.setVisible(true);
 	}
 	
 	public boolean registerUser(UserProfile profile) {
-			return med.registerUser(profile);
+		return med.registerUser(profile);
 	}
 	
 	public void registerUserStep3() {
@@ -181,10 +181,10 @@ public class GuiImpl implements Gui {
 		med.acceptOffer(pair);
 	}
 	
-	//@Override
-	//public void removeOffer(Service service) {
-	//	return med.removeOffer(service);
-	//}
+//	@Override
+//	public void removeOffer(Service service) {
+//		return med.removeOffer(service);
+//	}
 	
 	@Override
 	public void changeServiceNotify(Service service) {
