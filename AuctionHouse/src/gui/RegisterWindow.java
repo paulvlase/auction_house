@@ -123,7 +123,6 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 			avatarLabel.addMouseListener(this);
 			avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
 			avatarLabel.setIcon(new ImageIcon(GuiConfig.DEFAULT_AVATAR));
-			avatarLabel.setBorder(new LineBorder(Color.black));
 			topPanel.add(avatarLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
 					0));
@@ -268,14 +267,14 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	}
 
 	private void checkUsername() {
-		System.out.println("Check username ...");
+		System.out.println("Check username ..." + usernameField.getText());
 		if (usernameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
 					GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		if (!gui.verifyUsername(usernameField.getText())) {
+		if (gui.verifyUsername(usernameField.getText())) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.USERNAME_ERROR),
 					GuiConfig.getValue(GuiConfig.USERNAME), JOptionPane.WARNING_MESSAGE);
 			return;
@@ -288,7 +287,7 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == registerButton) {
 			System.out.println("Register");
-			if (userProfile.getUsername().isEmpty()) {
+			if (userProfile.getUsername() == null) {
 				checkUsername();
 			}
 
@@ -324,6 +323,7 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 			userProfile.setLastName(lastnameField.getText());
 
 			gui.registerUser(userProfile);
+			gui.registerUserStep3();
 			setVisible(false);
 			dispose();
 		}
@@ -374,7 +374,7 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("temp-file-name", ".tmp");
-			ImageIO.write(rendered, "JPEG", tempFile);
+			ImageIO.write(rendered, "PNG", tempFile);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
