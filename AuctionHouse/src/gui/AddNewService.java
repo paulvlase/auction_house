@@ -164,16 +164,21 @@ public class AddNewService extends JFrame {
 			return;
 		}
 
+		String name = nameField.getText();
+		Double price = 0.0;
 		try {
-			Double.parseDouble(priceField.getText());
+			price = Double.parseDouble(priceField.getText());
 		} catch (NumberFormatException e2) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		mainWindow.addService(new Service(nameField.getText()));
-		mainWindow.getGui().launchOffer(new Service(nameField.getText()));
+		Long time = 10000000L;		
+		Service service = mainWindow.getGui().createService(name, time, price);
+		
+		mainWindow.addService(service);
+		mainWindow.getGui().publishService(service.clone());
 
 		setVisible(false);
 		dispose();

@@ -1,5 +1,6 @@
 package gui.items;
 
+import data.Service;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
@@ -17,7 +18,12 @@ public class DropRequestItem extends GuiAbstractItem implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("User : " + service.getUsers());
-		gui.dropOffer(service);
+		System.out.println("Drop offer");
+
+		if (service.isInactiveState()) {
+			service.setDropOfferState();
+
+			gui.publishService(service.clone());
+		}
 	}
 }

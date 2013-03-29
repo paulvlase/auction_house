@@ -2,16 +2,12 @@ package webServiceClient;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
+
+import network.NetworkAdapter;
 
 import data.LoginCred;
-import data.Pair;
 import data.Service;
-import data.UserEntry;
 import data.UserProfile;
-import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
@@ -23,21 +19,12 @@ import interfaces.WebServiceClient;
  */
 public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	private MediatorWeb						med;
-	private WebServiceClientTask			task;
-
-	private Hashtable<String, UserProfile>	users;
+	private WebServiceClientEvents			task;
 
 	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
 
 		med.registerWebServiceClient(this);
-
-		users = new Hashtable<String, UserProfile>();
-
-		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
-				UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140", "Ghennadi",
-				"Procopciuc", UserRole.SELLER, "marmota"));
 	}
 
 	public UserProfile logIn(LoginCred cred) {
@@ -55,7 +42,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		profile.setRole(cred.getRole());
 
 		if (profile != null) {
-			task = new WebServiceClientTask(med);
+			task = new WebServiceClientEvents(med);
 			task.execute();
 		}
 
@@ -75,66 +62,34 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 
 	public UserProfile getUserProfile(String username) {
-		return users.get(username);
+		return med.getUser(username);
 	}
 
 	public boolean setUserProfile(UserProfile profile) {
-		users.put(profile.getUsername(), profile);
+		med.putUser(profile);
 		med.changeProfileNotify(profile);
 		return true;
 	}
 	
 	public boolean registerUser(UserProfile profile) {
-		if (users.get(profile.getUsername()) != null)
+		if (med.getUser(profile.getUsername()) != null)
 			return false;
 	
-		users.put(profile.getUsername(), profile);
+		med.putUser(profile);
 		return true;
 	}
 	
 	public boolean verifyUsername(String username) {
-		if (users.get(username) != null)
+		if (med.getUser(username) != null)
 			return true;
 		return false;
 	}
-
-	/* Common */
-	public synchronized boolean launchOffer(Service service) {
-		return task.launchOffer(service);
+	
+	public void publishService(Service service) {
+		task.publishService(service);
 	}
-
-	public synchronized boolean launchOffers(ArrayList<Service> services) {
-		return task.launchOffers(services);
-	}
-
-	public synchronized boolean dropOffer(Service service) {
-		return task.dropOffer(service);
-	}
-
-	public synchronized boolean dropOffers(ArrayList<Service> services) {
-		return task.dropOffers(services);
-	}
-
-	/* Buyer */
-	@Override
-	public boolean acceptOffer(Pair<Service, Integer> pair) {
-		return task.acceptOffer(pair);
-	}
-
-	@Override
-	public boolean refuseOffer(Pair<Service, Integer> pair) {
-		return task.refuseOffer(pair);
-	}
-
-	/* Seller */
-	@Override
-	public boolean makeOffer(Pair<Service, Integer> pair) {
-		// TODO Auto-generated method stub
-		return task.makeOffer(pair);
-	}
-
-	@Override
-	public boolean dropAuction(Pair<Service, Integer> pair) {
-		return task.dropAuction(pair);
+	
+	public void publishServices(ArrayList<Service> services) {
+		task.publishServices(services);
 	}
 }

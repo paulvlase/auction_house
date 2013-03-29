@@ -1,7 +1,7 @@
-package webServiceClient;
+package network;
 
 import interfaces.Command;
-import interfaces.MediatorWeb;
+import interfaces.MediatorNetwork;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,12 +10,12 @@ import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class TransferFailedEvent implements Command {
-	private MediatorWeb		med;
+public class OfferExceededEvent implements Command {
+	private MediatorNetwork		med;
 	private Service			service;
 	private static Random	random	= new Random();
 
-	public TransferFailedEvent(MediatorWeb med, Service service) {
+	public OfferExceededEvent(MediatorNetwork med, Service service) {
 		this.med = med;
 		this.service = service;
 	}
@@ -27,18 +27,19 @@ public class TransferFailedEvent implements Command {
 		if (users == null || users.size() == 0) {
 			return;
 		}
+		
 		Integer userIndex = random.nextInt(users.size());
 
 		UserEntry user = users.get(userIndex);
 
-		if (user.getOffer() != Offer.TRANSFER_IN_PROGRESS
-				&& user.getOffer() != Offer.TRANSFER_STARTED) {
+		if (user.getOffer() != Offer.OFFER_MADE) {
 			return;
 		}
 
-		user.setOffer(Offer.TRANSFER_FAILED);
+		user.setOffer(Offer.OFFER_EXCEDED);
 
 		med.putOffer(service);
 		med.changeServiceNotify(service);
+
 	}
 }

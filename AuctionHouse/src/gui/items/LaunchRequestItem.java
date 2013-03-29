@@ -1,5 +1,6 @@
 package gui.items;
 
+import data.Service;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
@@ -18,6 +19,11 @@ public class LaunchRequestItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Launch Offer");
-		gui.launchOffer(service.clone());
+		
+		if (service.isInactiveState()) {
+			service.setLaunchOfferState();
+
+			gui.publishService(service.clone());
+		}
 	}
 }

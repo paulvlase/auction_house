@@ -3,7 +3,6 @@ package gui.items;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
-import data.Pair;
 import data.Service;
 
 public class AcceptOfferItem extends GuiAbstractItem implements Command {
@@ -20,7 +19,11 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		System.out.println("Accept Request");
-		Service service = new Service(this.service);
-		gui.acceptOffer(new Pair<Service, Integer>(service, row));
+
+		if (service.isInactiveState()) {
+			service.setAccceptOfferState(row);
+
+			gui.publishService(service.clone());
+		}
 	}
 }

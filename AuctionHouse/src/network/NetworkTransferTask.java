@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 import data.Service;
 import data.Service.Status;
 
-public class NetworkTask extends SwingWorker<Service, Service> {
+public class NetworkTransferTask extends SwingWorker<Service, Service> {
 	private MediatorNetwork med;
 	private NetworkJoinThread joinThread;
 	private Service service;
@@ -17,7 +17,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	private final int DELAY = 100;
 	private final int COUNT = 100;
 
-	public NetworkTask(MediatorNetwork med, NetworkJoinThread joinThread, Service service) {
+	public NetworkTransferTask(MediatorNetwork med, NetworkJoinThread joinThread, Service service) {
 		this.med = med;
 		this.joinThread = joinThread;
 		this.service = service;
@@ -39,7 +39,6 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 				i++;
 				Thread.sleep(DELAY);
 				service.setProgress(i);
-
 				publish(service);
 			}
 		} catch (InterruptedException e) {
@@ -51,6 +50,7 @@ public class NetworkTask extends SwingWorker<Service, Service> {
 	protected void process(List<Service> services) {
 		for (Service service:  services) {
 			med.changeServiceNotify(service);
+			System.out.println("[NetworkTransferTask:process()]");
 		}
 	}
 

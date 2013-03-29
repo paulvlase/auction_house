@@ -1,7 +1,7 @@
-package webServiceClient;
+package network;
 
 import interfaces.Command;
-import interfaces.MediatorWeb;
+import interfaces.MediatorNetwork;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,12 +10,12 @@ import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class OfferRefusedEvent implements Command {
-	private MediatorWeb		med;
+public class OfferAcceptedEvent implements Command {
+	private MediatorNetwork	med;
 	private Service			service;
 	private static Random	random	= new Random();
 
-	public OfferRefusedEvent(MediatorWeb med, Service service) {
+	public OfferAcceptedEvent(MediatorNetwork med, Service service) {
 		this.med = med;
 		this.service = service;
 	}
@@ -29,17 +29,18 @@ public class OfferRefusedEvent implements Command {
 		}
 
 		Integer userIndex = random.nextInt(users.size());
-
 		UserEntry user = users.get(userIndex);
 
-		/* TODO */
-		if (user.getOffer() != Offer.OFFER_ACCEPTED) {
-			return;
-		}
 
-		user.setOffer(Offer.OFFER_REFUSED);
+		user.setOffer(Offer.OFFER_ACCEPTED);
+		/* TODO stabilesc comunicatia cu cumparatorul. */
 
-		med.putOffer(service);
+		users.clear();
+		
+		user.setOffer(Offer.TRANSFER_STARTED);
+		users.add(user);
+
+		med.startTransfer(service);
 		med.changeServiceNotify(service);
 	}
 }

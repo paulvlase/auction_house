@@ -3,7 +3,6 @@ package gui.items;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
-import data.Pair;
 import data.Service;
 
 public class DropAuctionItem extends GuiAbstractItem implements Command {
@@ -19,6 +18,11 @@ public class DropAuctionItem extends GuiAbstractItem implements Command {
 
 	@Override
 	public void execute() {
-		gui.dropAuction(new Pair<Service, Integer>(service, row));
+		System.out.println("Drop auction");
+
+		if (service.isInactiveState()) {
+			service.setDropAuctionState(row);
+			gui.publishService(new Service(this.service));
+		}
 	}
 }

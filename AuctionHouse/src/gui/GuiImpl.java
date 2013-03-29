@@ -100,23 +100,6 @@ public class GuiImpl implements Gui {
 		return med.verifyUsername(username);
 	}
 	
-
-	public boolean launchOffer(Service service) {
-		return med.launchOffer(service);
-	}
-
-	public boolean launchOffers(ArrayList<Service> services) {
-		return med.launchOffers(services);
-	}
-
-	public boolean dropOffer(Service service) {
-		return med.dropOffer(service);
-	}
-
-	public boolean dropOffers(ArrayList<Service> services) {
-		return med.dropOffers(services);
-	}
-	
 	/* Notify */
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
@@ -175,21 +158,12 @@ public class GuiImpl implements Gui {
 	public ArrayList<Service> loadOffers(){
 		return med.loadOffers();
 	}
-
-	@Override
-	public void acceptOffer(Pair<Service, Integer> pair) {
-		med.acceptOffer(pair);
-	}
-	
-//	@Override
-//	public void removeOffer(Service service) {
-//		return med.removeOffer(service);
-//	}
 	
 	@Override
 	public void changeServiceNotify(Service service) {
-		if (mainWindow != null)
+		if (mainWindow != null) {
 			mainWindow.changeServiceNotify(service);
+		}
 	}
 
 	@Override
@@ -203,19 +177,14 @@ public class GuiImpl implements Gui {
 		if (mainWindow != null)
 			mainWindow.changeProfileNotify(profile);
 	}
-
+	
 	@Override
-	public void refuseOffer(Pair<Service, Integer> pair) {
-		med.refuseOffer(pair);	
+	public void publishService(Service service) {
+		med.publishService(service);
 	}
-
+	
 	@Override
-	public boolean makeOffer(Pair<Service, Integer> pair, Double price) {
-		return med.makeOffer(pair, price);
-	}
-
-	@Override
-	public boolean dropAuction(Pair<Service, Integer> pair) {
-		return med.dropAuction(pair);
+	public Service createService(String name, Long time, Double price) {
+		return med.createService(name, time, price);
 	}
 }

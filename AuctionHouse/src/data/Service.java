@@ -1,10 +1,15 @@
 package data;
 
+import interfaces.Command;
+import interfaces.MediatorNetwork;
+import interfaces.MediatorWeb;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import states.StateManager;
+
 import config.GuiConfig;
-import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
 /**
@@ -17,6 +22,7 @@ import data.UserProfile.UserRole;
  * users specified in <code>users</code> field will be ignored.
  * 
  * @author Ghennadi Procopciuc
+ * @author Paul Vlase
  * @see Status
  */
 public class Service implements Comparable<Service> {
@@ -25,6 +31,8 @@ public class Service implements Comparable<Service> {
 	private double					price;
 	private ArrayList<UserEntry>	users;
 	private Status					status;
+
+	private StateManager			stateMgr;
 
 	/**
 	 * This field will be used only with a TRANSFER_* status, otherwise it means
@@ -52,6 +60,8 @@ public class Service implements Comparable<Service> {
 		this.time = 0;
 		this.price = 0;
 		this.status = status;
+
+		System.out.println("constructor1: " + name);
 	}
 
 	public Service(Service service) {
@@ -59,11 +69,21 @@ public class Service implements Comparable<Service> {
 		this.users = service.getUsers();
 		this.time = service.getTime();
 		this.price = service.getPrice();
+		this.progress = service.getProgress();
 		this.status = service.getStatus();
+		this.stateMgr = service.getStateMgr();
+
+		System.out.println("constructor2: " + name);
 	}
 
 	public Service(String serviceName) {
 		this(serviceName, null, Status.INACTIVE);
+
+		System.out.println("constructor3: " + name);
+	}
+
+	public StateManager getStateMgr() {
+		return stateMgr;
 	}
 
 	/**
@@ -79,17 +99,24 @@ public class Service implements Comparable<Service> {
 	 */
 	public Service(String serviceName, Status status) {
 		this(serviceName, null, status);
+
+		System.out.println("constructor4: " + name);
 	}
 
-	public Service(String name, long time, double price, ArrayList<UserEntry> users, Status status,
-			int progress) {
-		super();
-		this.name = name;
-		this.time = time;
-		this.price = price;
-		this.users = users;
-		this.status = status;
-		this.progress = progress;
+	public void initState(MediatorNetwork mednet, MediatorWeb medweb) {
+		stateMgr = new StateManager(mednet, medweb);
+	}
+
+	public void executeNet() {
+		stateMgr.executeNet();
+	}
+
+	public void executeWeb() {
+		stateMgr.executeWeb();
+	}
+
+	public boolean isInactiveState() {
+		return stateMgr.isInactiveState();
 	}
 
 	public void addUserEntry(UserEntry user) {
@@ -161,11 +188,12 @@ public class Service implements Comparable<Service> {
 			break;
 		case TRANSFER_COMPLETE:
 		case TRANSFER_IN_PROGRESS:
-			row = new ArrayList<Object>(Arrays.asList("", "", user.getProgress(), "", "", ""));
+			row = new ArrayList<Object>(Arrays.asList("", "",
+					user.getProgress(), "", "", ""));
 			break;
 		default:
-			row = new ArrayList<Object>(Arrays.asList("", "", user.getName(), user.getOffer(),
-					user.getTime(), user.getPrice()));
+			row = new ArrayList<Object>(Arrays.asList("", "", user.getName(),
+					user.getOffer(), user.getTime(), user.getPrice()));
 			break;
 		}
 
@@ -211,8 +239,12 @@ public class Service implements Comparable<Service> {
 			break;
 		case TRANSFER_IN_PROGRESS:
 			if (role == UserRole.BUYER) {
+				System.out
+						.println("[Bag ceva in ea de viata]]]]]]]]] progress = "
+								+ progress);
 				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
+						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS),
+						progress, "", "", ""));
 				data.add(row);
 				break;
 			} else {
@@ -221,7 +253,8 @@ public class Service implements Comparable<Service> {
 		case TRANSFER_STARTED:
 			if (role == UserRole.BUYER) {
 				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "", "", ""));
+						GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "",
+						"", ""));
 				data.add(row);
 				break;
 			} else {
@@ -230,7 +263,8 @@ public class Service implements Comparable<Service> {
 		case TRANSFER_COMPLETE:
 			if (role == UserRole.BUYER) {
 				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE), progress, "", "", ""));
+						GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE),
+						progress, "", "", ""));
 				data.add(row);
 				break;
 			} else {
@@ -248,7 +282,7 @@ public class Service implements Comparable<Service> {
 	}
 
 	public Service clone() {
-		return new Service(name, time, price, users, status, progress);
+		return new Service(this);
 	}
 
 	@Override
@@ -268,5 +302,37 @@ public class Service implements Comparable<Service> {
 	@Override
 	public int compareTo(Service o) {
 		return getName().compareTo(o.getName());
+	}
+
+	public void setInactiveState() {
+		stateMgr.setInactiveState();
+	}
+
+	public void setAccceptOfferState(Integer userIndex) {
+		stateMgr.setAcceptOfferState(this, userIndex);
+	}
+
+	public void setDropAuctionState(Integer userIndex) {
+		stateMgr.setDropAuctionState(this, userIndex);
+	}
+
+	public void setDropOfferState() {
+		stateMgr.setDropOfferState(this);
+	}
+
+	public void setLaunchOfferState() {
+		stateMgr.setLaunchOfferState(this);
+	}
+
+	public void setRefuseOfferState(Integer userIndex) {
+		stateMgr.setRefuseOfferState(this, userIndex);
+	}
+
+	public void setRemoveOfferState() {
+		stateMgr.setRemoveOfferState(this);
+	}
+
+	public void setMakeOfferState(Integer userIndex, Double price) {
+		stateMgr.setMakeOfferState(this, userIndex, price);
 	}
 }

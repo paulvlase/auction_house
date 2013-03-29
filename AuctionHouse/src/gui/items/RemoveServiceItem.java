@@ -1,5 +1,6 @@
 package gui.items;
 
+import data.Service;
 import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
@@ -18,6 +19,11 @@ public class RemoveServiceItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		window.getModel().removeService(service);
-		//gui.removeOffer(service);
+		
+		if (service.isInactiveState()) {
+			service.setRemoveOfferState();
+
+			gui.publishService(service.clone());
+		}
 	}
 }

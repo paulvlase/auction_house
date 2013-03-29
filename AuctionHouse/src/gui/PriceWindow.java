@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import config.GuiConfig;
-import data.Pair;
 import data.Service;
 
 /**
@@ -31,16 +30,19 @@ public class PriceWindow extends JFrame implements ActionListener {
 	private JLabel					priceLabel;
 	private JTextField				priceField;
 	private JButton					okButton;
-	private Pair<Service, Integer>	pair;
 	private Gui						gui;
+	
+	private Service service;
+	private Integer userIndex;
 
 	public PriceWindow() {
 		initComponents();
 	}
 
-	public PriceWindow(Gui gui, Pair<Service, Integer> pair) {
+	public PriceWindow(Gui gui, Service service, Integer userIndex) {
 		this();
-		this.pair = pair;
+		this.service = service;
+		this.userIndex = userIndex;
 		this.gui = gui;
 	}
 
@@ -96,7 +98,9 @@ public class PriceWindow extends JFrame implements ActionListener {
 			}
 		}
 
-		gui.makeOffer(pair, price);
+		service.setMakeOfferState(userIndex, price);
+		gui.publishService(new Service(service));
+
 		setVisible(false);
 		dispose();
 	}

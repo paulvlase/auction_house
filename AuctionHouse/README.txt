@@ -131,7 +131,11 @@ Cuprins:
         Pentru a rezolva tema am apelat de pattern-urile prezentate în laborator:
     - MVC (Crearea și controlarea interfeței grafice)
     - Mediator (A se vedea modulul mediator)
-    - Commander (webServiceClient, clasele din pachetul guiItems)
+    - Commander (generarea evenimentelor pentru testate in Network si 
+    WebServiceClient clasele din pachetul guiItems)
+    - State (Prelucrarea pachetelor Service)
+    - Adapter (Pentru a putea publica si prelucra pachetele Service in
+    metoda process din SwingWorker) 
 
     Comunicarea între module se face cu ajutorul unor notificări. Pachetele
     prin intermediul cărora se transmit date sunt prezente în pachetul data.
