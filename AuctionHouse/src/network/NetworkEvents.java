@@ -42,8 +42,10 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 
 	@Override
 	protected Command doInBackground() throws Exception {
+		System.out.println("[NetworkEvents:doInBackground()] Begin");
+
 		int timeLimit = 2500;
-		System.out.println("[NetworkEvents:doInBackground()]");
+
 		try {
 			while (true) {
 				int sleepTime = 1000 + random.nextInt(timeLimit);
@@ -65,7 +67,6 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 
 	protected void process(List<Command> events) {
 		for (Command event : events) {
-			System.out.println("[NetworkEvents:process()]");
 			event.execute();
 		}
 	}
@@ -74,14 +75,15 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 	protected void done() {
 		System.out.println(Thread.currentThread());
 		if (isCancelled()) {
-			System.out.println("Cancelled !");
+			System.out.println("[NetworkEvents:done()] Cancelled !");
 		} else {
-			System.out.println("Done !");
+			System.out.println("[NetworkEvents:done()] Done !");
 		}
 	}
 
 	public void publishBuyerEvents() {
 		System.out.println("[NetworkEvents:generateBuyerEvents()] Begin");
+
 		for (Map.Entry<String, Service> offer : med.getOffers().entrySet()) {
 			Service service = offer.getValue();
 			ArrayList<UserEntry> users = service.getUsers();
@@ -95,8 +97,6 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 					countLimit = 2;
 				}
 			}
-			
-			System.out.println("countLimit = " + countLimit);
 
 			Integer count = random.nextInt(countLimit);
 
@@ -118,8 +118,8 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 
 	public void publishSellerEvents() {
 		System.out.println("[NetworkEvents:generateSellerEvents()] Begin");
-		System.out.println("count = " + med.getOffers().size());
-		
+		System.out.println("[NetworkEvents:generateSellerEvents()] med.getOffers.size() = " + med.getOffers().size());
+
 		for (Map.Entry<String, Service> offer : med.getOffers().entrySet()) {
 			Service service = offer.getValue();
 			ArrayList<UserEntry> users = service.getUsers();
@@ -133,8 +133,6 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 					countLimit = 2;
 				}
 			}
-
-			System.out.println("countLimit = " + countLimit);
 
 			Integer count = random.nextInt(countLimit);
 			
@@ -153,6 +151,7 @@ public class NetworkEvents extends SwingWorker<Command, Command> {
 				}
 			}
 		}
+
 		System.out.println("[NetworkEvents:generateSellerEvents()] End");
 	}
 
