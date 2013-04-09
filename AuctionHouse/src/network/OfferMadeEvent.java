@@ -41,7 +41,7 @@ public class OfferMadeEvent implements Command {
 			user.setOffer(Offer.OFFER_MADE);
 		}
 
-		med.putOffer(service);
+		service.setInactiveState();
 		med.changeServiceNotify(service);
 	}
 }

@@ -18,6 +18,7 @@ public interface MediatorNetwork {
 	public void changeServiceNotify(Service service);
 	
 	public void startTransfer(Service service);
+	public void stopTransfer(Service service);
 	
 	public void putOffer(Service service);
 	public Service getOffer(String serviceName);

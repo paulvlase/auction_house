@@ -38,7 +38,6 @@ public class OfferExceededEvent implements Command {
 
 		user.setOffer(Offer.OFFER_EXCEDED);
 
-		med.putOffer(service);
 		med.changeServiceNotify(service);
 
 	}
