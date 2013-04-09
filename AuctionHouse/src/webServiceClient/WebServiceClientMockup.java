@@ -51,7 +51,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 
 	public void logOut() {
-		System.out.println("[WebServiceClientMockup:logOut()] Bye bye");
+		System.out.println("[WebServiceClientMockup:logOut()] Begin");
 
 		try {
 			task.cancel(false);
@@ -59,6 +59,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("[WebServiceClientMockup:logOut()] End");
 	}
 
 	public UserProfile getUserProfile(String username) {

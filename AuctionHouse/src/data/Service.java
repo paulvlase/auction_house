@@ -114,6 +114,9 @@ public class Service implements Comparable<Service> {
 	public void executeWeb() {
 		stateMgr.executeWeb();
 	}
+	
+	public void executeGui() {
+	}
 
 	public boolean isInactiveState() {
 		return stateMgr.isInactiveState();

@@ -11,9 +11,8 @@ public class WebAdapter implements Command {
 	}
 	
 	public void execute() {
-		System.out.println("Execut in adaptor service = " + service.getName());
+		System.out.println("[WebAdapter:execute()] " + service.getName());
 		
 		service.executeWeb();
-		System.out.println("Aici nu ajung ?");
 	}
 }
