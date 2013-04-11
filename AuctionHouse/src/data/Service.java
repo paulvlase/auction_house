@@ -26,19 +26,19 @@ import data.UserProfile.UserRole;
  * @see Status
  */
 public class Service implements Comparable<Service> {
-	private String					name;
-	private long					time;
-	private double					price;
-	private ArrayList<UserEntry>	users;
-	private Status					status;
+	private String name;
+	private long time;
+	private double price;
+	private ArrayList<UserEntry> users;
+	private Status status;
 
-	private StateManager			stateMgr;
+	private StateManager stateMgr;
 
 	/**
 	 * This field will be used only with a TRANSFER_* status, otherwise it means
 	 * nothing.
 	 */
-	private int						progress;
+	private int progress;
 
 	/**
 	 * Service status :
@@ -53,6 +53,9 @@ public class Service implements Comparable<Service> {
 	public enum Status {
 		ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
 	};
+
+	public Service() {
+	}
 
 	public Service(String name, ArrayList<UserEntry> users, Status status) {
 		this.name = name;
@@ -114,7 +117,7 @@ public class Service implements Comparable<Service> {
 	public void executeWeb() {
 		stateMgr.executeWeb();
 	}
-	
+
 	public void executeGui() {
 	}
 
