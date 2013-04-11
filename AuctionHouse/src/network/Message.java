@@ -3,165 +3,132 @@ package network;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.sql.Array;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 
-import data.Service;
+public class Message implements Serializable {
 
-/**
- * Used for tranfers over network between clients and sellers.
- * 
- * --------------------------------------------- | size | MessageType |
- * ServiceName | [Data] | ---------------------------------------------
- * 
- * ------------------------------------------------ | Int | Int | char+ \0 |
- * [payload] | ------------------------------------------------
- * 
- * LAUNCH : size, LAUNCH, serviceName ACCEPT : size, ACCEPT, serviceName REFUSE
- * : size, REFUSE, serviceName DROP : size, DROP, serviceName TRANSFER_SIZE :
- * size, TRANSFER_SIZE, serviceName TRANSFER_CHUNK : size, TRANSFER_CHUNK,
- * serviceName, payload
- * 
- * It's recommended to fill buffer only once, from the leftmost member (above
- * figure) to the rightmost, otherwise unpredictable results can occur.
- * 
- * @author Ghennadi Procopciuc
- */
-public class Message {
-	private ByteArrayOutputStream outputStream;
-	private String destination;
+	private static final long serialVersionUID = 1L;
+
+	private MessageType type;
+	private String serviceName;
+	private String peer;
+	private Object payload;
 
 	private enum MessageType {
 		LAUNCH, ACCEPT, REFUSE, DROP, TRANSFER_SIZE, TRANSFER_CHUNCK;
-
-		public static MessageType getByOrdinal(Integer order) {
-			MessageType[] values = MessageType.values();
-
-			return values[order];
-		}
 	}
 
-	public Message(MessageType type, String destination) {
-		outputStream = new ByteArrayOutputStream();
-		this.destination = destination;
-
-		outputStream.write(intToByteArray(type.ordinal()), 0, 4);
+	public Message(MessageType type, String serviceName) {
+		this.type = type;
+		this.serviceName = serviceName;
 	}
 
-	public MessageType getMessageType() {
-		Integer typeId;
-		MessageType type;
-		byte array[];
-
-		array = outputStream.toByteArray();
-
-		if (array.length < Integer.SIZE / Byte.SIZE) {
-			System.err
-					.println("Buffers seems to be uninitialized or messageType wasn't set");
-			return null;
-		}
-
-		typeId = byteArrayToInt(Arrays.copyOfRange(array, 0, Integer.SIZE
-				/ Byte.SIZE));
-
-		return MessageType.getByOrdinal(typeId);
+	public Message(byte[] array) {
+		deserialize(array);
 	}
 
-	public void setServiceName(String serviceName) {
-		if (outputStream.size() < Integer.SIZE / Byte.SIZE) {
-			System.err.println("Type of message was not set");
-			return;
-		}
+	public byte[] serialize() {
+		byte[] result;
+		byte[] resultSize;
+		byte[] object;
 
-		outputStream.write(serviceName.getBytes(), 0, serviceName.length());
-		outputStream.write(new byte[] { '\0' }, 0, 1);
-	}
-
-	/**
-	 * Gets serviceName. Before calling this method make sure that your buffer
-	 * contains <code>serviceName</code> otherwise results may be unpredictable.
-	 * 
-	 * @return Service name
-	 */
-	public String getServiceName() {
-		String serviceName = null;
-		byte[] array;
-		Integer endOffset = 0;
-
-		if (outputStream.size() <= Integer.SIZE / Byte.SIZE) {
-			System.err.println("Service name field isn't completed yet");
-			return null;
-		}
-
-		array = outputStream.toByteArray();
-		for (int i = Integer.SIZE / Byte.SIZE; i < array.length; i++) {
-			if (array[i] == (byte) '\0') {
-				endOffset = i;
-				break;
-			}
-		}
-
-		if (endOffset == 0) {
-			System.err.println("Can't find end of serviceName");
-			return null;
-		}
-
-		return new String(Arrays.copyOfRange(array, Integer.SIZE / Byte.SIZE, endOffset));
-	}
-
-	/**
-	 * Sets buffer payload. Warning ! You should call this method once per
-	 * buffer, otherwise new payload will be appended to current content. Before
-	 * calling this function, make sure that your buffer has filled all fields
-	 * before <code>payload</code>. Usually <code>setSize</code> is called
-	 * after.
-	 * 
-	 * @param payload
-	 *            Payload that will be appended to buffer
-	 */
-	public void setPayload(byte[] payload) {
-		if (outputStream.size() <= Integer.SIZE / Byte.SIZE) {
-			System.err.println("Type of message or service name was not added");
-			return;
-		}
-
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o;
 		try {
-			outputStream.write(payload);
+			o = new ObjectOutputStream(b);
+			o.writeObject(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
 
-	public byte[] getPayload() {
-		byte[] result = null;
-		byte[] array;
-		String serviceName = getServiceName();
+		/* Object representation */
+		object = b.toByteArray();
 
-		/* Sanity check */
-		if (serviceName == null) {
-			return null;
+		result = new byte[b.size() + Integer.SIZE / Byte.SIZE];
+		resultSize = intToByteArray(result.length);
+
+		/* Package length */
+		for (int i = 0; i < resultSize.length; i++) {
+			result[i] = resultSize[i];
 		}
 
-		array = outputStream.toByteArray();
-
-		if (array.length <= Integer.SIZE / Byte.SIZE + serviceName.length()) {
-			System.err
-					.println("This buffer not contains a payload, it's to short");
-			return null;
+		for (int i = 0; i < object.length; i++) {
+			result[i + Integer.SIZE / Byte.SIZE] = object[i];
 		}
 
-		result = Arrays.copyOfRange(array, Integer.SIZE / Byte.SIZE
-				+ serviceName.length() + 1, array.length);
 		return result;
 	}
 
-	public String getDestination() {
-		return destination;
+	private void deserialize(byte[] array) {
+		ByteArrayInputStream b;
+		ObjectInputStream o;
+		Object obj = null;
+		byte object[];
+		
+		if (array.length <= 4) {
+			System.err.println("Corrupted package ...");
+			return;
+		}
+
+		object = new byte[array.length - Integer.SIZE / Byte.SIZE];
+
+		/* Skip first 4 bytes [package size] */
+		for (int i = 0; i < object.length; i++) {
+			object[i] = array[i + Integer.SIZE / Byte.SIZE];
+		}
+		
+		b = new ByteArrayInputStream(object);
+		try {
+			o = new ObjectInputStream(b);
+			obj = o.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		if(!(obj instanceof Message)){
+			System.out.println("Unknown class :| " + obj.getClass());
+		}
+		
+		/* Object clone */
+		this.type = ((Message)obj).getType();
+		this.serviceName = ((Message)obj).getServiceName();
+		this.peer = ((Message)obj).getPeer();
+		this.payload = ((Message)obj).getPayload();
 	}
 
-	public void setDestination(String destination) {
-		this.destination = destination;
+	public String getPeer() {
+		return peer;
+	}
+
+	public void setPeer(String peer) {
+		this.peer = peer;
+	}
+
+	public MessageType getType() {
+		return type;
+	}
+
+	public void setType(MessageType type) {
+		this.type = type;
+	}
+
+	public Object getPayload() {
+		return payload;
+	}
+
+	public void setPayload(Object payload) {
+		this.payload = payload;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	private static byte[] intToByteArray(int value) {
@@ -185,45 +152,16 @@ public class Message {
 
 		return result;
 	}
-
+	
 	@Override
 	public String toString() {
-		String result = "";
-		byte[] array = outputStream.toByteArray();
-		String serviceName = null;
-
-		result += "{size : " + outputStream.size();
-
-		if (array.length >= Integer.SIZE / Byte.SIZE) {
-			result += ", type : " + getMessageType();
-		}
-
-		if (array.length > Integer.SIZE / Byte.SIZE) {
-			serviceName = getServiceName();
-			result += ", name : " + serviceName;
-		}
-
-		if (serviceName != null) {
-			if (array.length > Integer.SIZE / Byte.SIZE + serviceName.length()) {
-				result += ", payload : " + Arrays.toString(getPayload());
-			}
-		}
-
-		result += "}";
-
-		result += " to " + getDestination();
-
-		return result;
+		return "type : " + type + 
+				", serviceName : " + serviceName +
+				", peer : " + peer +
+				", payload : " + Arrays.asList(payload);
 	}
 
 	public static void main(String[] args) {
-		// System.out.println("Integer size = " + Integer.SIZE / Byte.SIZE);
-		// System.out.println(byteArrayToInt(intToByteArray(666666)));
-		Message message = new Message(MessageType.ACCEPT, "Ghennadi");
-		System.out.println(message);
-		message.setServiceName("service1");
-		System.out.println(message);
-		message.setPayload("ana".getBytes());
-		System.out.println(message);
+		System.out.println(new Message(new Message(MessageType.LAUNCH, "service1").serialize()));
 	}
 }
