@@ -1,8 +1,9 @@
 package network;
 
-import java.net.Socket;
+import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import data.Service;
 import data.Service.Status;
@@ -16,13 +17,14 @@ import interfaces.NetworkTransfer;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkImpl implements NetworkMediator, NetworkTransfer {
-	private MediatorNetwork		med;
-	private NetworkJoinThread	joinThread;
+	private MediatorNetwork med;
+	private NetworkJoinThread joinThread;
 
-	private NetworkEvents		eventsTask;
-	
+	private NetworkEvents eventsTask;
+
 	private Hashtable<String, NetworkTransferTask> tasks;
-	private Hashtable<String, Socket> sockets;
+	private ConcurrentHashMap<String, ServerSocketChannel> userSocketMap;
+	private ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> socketMessageMap;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.med = med;
@@ -31,9 +33,29 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 
 		joinThread = new NetworkJoinThread(med);
 		joinThread.start();
-		
+
 		tasks = new Hashtable<String, NetworkTransferTask>();
-		sockets = new Hashtable<String, Socket>();
+
+		userSocketMap = new ConcurrentHashMap<String, ServerSocketChannel>();
+		socketMessageMap = new ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>>();
+	}
+
+	public ConcurrentHashMap<String, ServerSocketChannel> getUserSocketMap() {
+		return userSocketMap;
+	}
+
+	public void setUserSocketMap(
+			ConcurrentHashMap<String, ServerSocketChannel> userSocketMap) {
+		this.userSocketMap = userSocketMap;
+	}
+
+	public ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> getSocketMessageMap() {
+		return socketMessageMap;
+	}
+
+	public void setSocketMessageMap(
+			ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> socketMessageMap) {
+		this.socketMessageMap = socketMessageMap;
 	}
 
 	@Override
@@ -45,12 +67,12 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 		NetworkTransferTask task = new NetworkTransferTask(med, joinThread,
 				service);
 		task.execute();
-		
+
 		tasks.put(service.getName(), task);
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void stopTransfer(Service service) {
 		joinThread.stopTask(service);
