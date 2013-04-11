@@ -16,9 +16,6 @@ public class Message implements Serializable {
 	private MessageType type;
 	private String serviceName;
 
-	/**
-	 * Used only for ACCEPT type
-	 */
 	private String username;
 
 	/**
@@ -28,7 +25,7 @@ public class Message implements Serializable {
 	private Object payload;
 
 	public enum MessageType {
-		LAUNCH, ACCEPT, REFUSE,  MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
+		LAUNCH, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
 	}
 
 	public Message() {

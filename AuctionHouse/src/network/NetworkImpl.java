@@ -1,5 +1,6 @@
 package network;
 
+import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -23,8 +24,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 	private NetworkEvents eventsTask;
 
 	private Hashtable<String, NetworkTransferTask> tasks;
-	private ConcurrentHashMap<String, ServerSocketChannel> userSocketMap;
-	private ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> socketMessageMap;
+	private ConcurrentHashMap<String, SelectionKey> userKeyMap;
+	private ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.med = med;
@@ -36,26 +37,25 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 
 		tasks = new Hashtable<String, NetworkTransferTask>();
 
-		userSocketMap = new ConcurrentHashMap<String, ServerSocketChannel>();
-		socketMessageMap = new ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>>();
+		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
+		keyMessageMap = new ConcurrentHashMap<SelectionKey, ArrayList<Message>>();
 	}
 
-	public ConcurrentHashMap<String, ServerSocketChannel> getUserSocketMap() {
-		return userSocketMap;
+	public ConcurrentHashMap<String, SelectionKey> getUserKeyMap() {
+		return userKeyMap;
 	}
 
-	public void setUserSocketMap(
-			ConcurrentHashMap<String, ServerSocketChannel> userSocketMap) {
-		this.userSocketMap = userSocketMap;
+	public void setUserKeyMap(ConcurrentHashMap<String, SelectionKey> userKeyMap) {
+		this.userKeyMap = userKeyMap;
 	}
 
-	public ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> getSocketMessageMap() {
-		return socketMessageMap;
+	public ConcurrentHashMap<SelectionKey, ArrayList<Message>> getKeyMessageMap() {
+		return keyMessageMap;
 	}
 
-	public void setSocketMessageMap(
-			ConcurrentHashMap<ServerSocketChannel, ArrayList<Message>> socketMessageMap) {
-		this.socketMessageMap = socketMessageMap;
+	public void setKeyMessageMap(
+			ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap) {
+		this.keyMessageMap = keyMessageMap;
 	}
 
 	@Override
