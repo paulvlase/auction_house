@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Message implements Serializable {
@@ -14,11 +15,23 @@ public class Message implements Serializable {
 
 	private MessageType type;
 	private String serviceName;
+
+	/**
+	 * Used only for ACCEPT type
+	 */
+	private String username;
+
+	/**
+	 * User name of source / destination
+	 */
 	private String peer;
 	private Object payload;
 
-	private enum MessageType {
-		LAUNCH, ACCEPT, REFUSE, DROP, TRANSFER_SIZE, TRANSFER_CHUNCK;
+	public enum MessageType {
+		LAUNCH, ACCEPT, REFUSE,  MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
+	}
+
+	public Message() {
 	}
 
 	public Message(MessageType type, String serviceName) {
@@ -67,7 +80,7 @@ public class Message implements Serializable {
 		ObjectInputStream o;
 		Object obj = null;
 		byte object[];
-		
+
 		if (array.length <= 4) {
 			System.err.println("Corrupted package ...");
 			return;
@@ -79,7 +92,7 @@ public class Message implements Serializable {
 		for (int i = 0; i < object.length; i++) {
 			object[i] = array[i + Integer.SIZE / Byte.SIZE];
 		}
-		
+
 		b = new ByteArrayInputStream(object);
 		try {
 			o = new ObjectInputStream(b);
@@ -87,16 +100,16 @@ public class Message implements Serializable {
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		if(!(obj instanceof Message)){
+
+		if (!(obj instanceof Message)) {
 			System.out.println("Unknown class :| " + obj.getClass());
 		}
-		
+
 		/* Object clone */
-		this.type = ((Message)obj).getType();
-		this.serviceName = ((Message)obj).getServiceName();
-		this.peer = ((Message)obj).getPeer();
-		this.payload = ((Message)obj).getPayload();
+		this.type = ((Message) obj).getType();
+		this.serviceName = ((Message) obj).getServiceName();
+		this.peer = ((Message) obj).getPeer();
+		this.payload = ((Message) obj).getPayload();
 	}
 
 	public String getPeer() {
@@ -127,6 +140,14 @@ public class Message implements Serializable {
 		return serviceName;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
@@ -152,16 +173,21 @@ public class Message implements Serializable {
 
 		return result;
 	}
-	
+
+	public ArrayList<Message> asArrayList() {
+		ArrayList<Message> list = new ArrayList<Message>();
+		list.add(this);
+		return list;
+	}
+
 	@Override
 	public String toString() {
-		return "type : " + type + 
-				", serviceName : " + serviceName +
-				", peer : " + peer +
-				", payload : " + Arrays.asList(payload);
+		return "type : " + type + ", serviceName : " + serviceName
+				+ ", peer : " + peer + ", payload : " + Arrays.asList(payload);
 	}
 
 	public static void main(String[] args) {
-		System.out.println(new Message(new Message(MessageType.LAUNCH, "service1").serialize()));
+		System.out.println(new Message(new Message(MessageType.LAUNCH,
+				"service1").serialize()));
 	}
 }

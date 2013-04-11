@@ -1,5 +1,9 @@
 package states;
 
+import java.util.ArrayList;
+
+import network.Message;
+import network.Message_Deprecated;
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 import data.Service;
@@ -40,5 +44,26 @@ public class RemoveOfferState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		ArrayList<Message> list = null;
+		Boolean first = true;
+
+		for (UserEntry user : service.getUsers()) {
+			Message message = new Message();
+			message.setType(network.Message.MessageType.REFUSE);
+			message.setServiceName(service.getName());
+			message.setUsername(user.getUsername());
+
+			if (first) {
+				list = message.asArrayList();
+			} else {
+				list.add(message);
+			}
+		}
+
+		return list;
 	}
 }

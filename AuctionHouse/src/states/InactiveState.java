@@ -1,5 +1,9 @@
 package states;
 
+import java.util.ArrayList;
+
+import network.Message;
+import network.Message_Deprecated;
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 
@@ -18,5 +22,11 @@ public class InactiveState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		//Nothing to do, for intern usage
+		return null;
 	}
 }
