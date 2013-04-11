@@ -33,6 +33,7 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 	
 	private Object askWebServer(Object requestObj) {
+		System.out.println("[WebServiceClientMockup:askWebServer()] Begin");
 		Object responseObj = null;
 		
 		Socket socket = null;
@@ -40,10 +41,14 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		ObjectOutputStream oos = null;
 
 		try {
+			System.out.println("[WebServiceClientMockup:askWebServer()] Try block");
 			socket = new Socket(WebServiceClientConfig.IP, WebServiceClientConfig.PORT);
 
-			ois = new ObjectInputStream(socket.getInputStream());
+			System.out.println("[WebServiceClientMockup:askWebServer()] Before getting streams");
 			oos = new ObjectOutputStream(socket.getOutputStream());
+			System.out.println("[WebServiceClientMockup:askWebServer()] After getting streams");
+			ois = new ObjectInputStream(socket.getInputStream());
+			System.out.println("[WebServiceClientMockup:askWebServer()] Got Input stream");
 
 			System.out.println("Trimit");
 
@@ -83,16 +88,20 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		System.out.println("[WebServiceClientMockup:logIn()] Begin");
 		
 		LoginRequestMessage requestMsg = new LoginRequestMessage(cred);
+		System.out.println("[WebServiceClientMockup:logIn()] Before asking");
 		Object responseObj = askWebServer(requestMsg);
 
 		if (responseObj instanceof LoginResponseMessage) {
+			System.out.println("[WebServiceClientMockup:logIn()] Success");
 			return ((LoginResponseMessage) responseObj).getProfile();
 		} else if (responseObj instanceof ErrorMessage) {
+			System.out.println("[WebServiceClientMockup:logIn()] Exit");
 			return null;
 		} else {
 			System.out.println("[WebServiceClientMockup:logIn()] Unexpected response message");
 			return null;
 		}
+		
 	}
 
 	public void logOut() {

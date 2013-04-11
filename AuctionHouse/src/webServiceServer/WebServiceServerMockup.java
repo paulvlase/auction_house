@@ -56,7 +56,10 @@ public class WebServiceServerMockup implements Runnable {
 
 		while (true) {
 			try {
+
+				System.out.println("[WebServiceServerMockup:askWebServer()] Before accept");
 				Socket clientSocket = serverSocket.accept();
+				System.out.println("[WebServiceServerMockup:askWebServer()] Connection accepted");
 				
 				pool.execute(new WebServiceWorkerMockup(this, clientSocket));
 			} catch (IOException e) {

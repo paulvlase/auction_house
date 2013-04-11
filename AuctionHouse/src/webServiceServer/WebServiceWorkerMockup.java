@@ -59,10 +59,14 @@ public class WebServiceWorkerMockup implements Runnable {
 	public void run() {
 		ObjectInputStream ois = null;
 		ObjectOutputStream oos = null;
-		
+
+		System.out.println("[WebServiceWorkerMockup:run()] Started");
 		try {
+			System.out.println("[WebServiceWorkerMockup:run()] Before getting streams");
 			ois = new ObjectInputStream(clientSocket.getInputStream());
+			System.out.println("[WebServiceWorkerMockup:run()] Got input stream");
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
+			System.out.println("[WebServiceWorkerMockup:run()] Got output stream");
 
 			Object requestObj = ois.readObject();
 			Object responseObj;
