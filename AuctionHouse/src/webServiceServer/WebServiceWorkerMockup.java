@@ -62,10 +62,9 @@ public class WebServiceWorkerMockup implements Runnable {
 		
 		try {
 			ois = new ObjectInputStream(clientSocket.getInputStream());
-
+			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 
 			Object requestObj = ois.readObject();
-			ois.close();
 			Object responseObj;
 			System.out.println("New conn");
 			
@@ -79,9 +78,9 @@ public class WebServiceWorkerMockup implements Runnable {
 				log("Unknow command");
 				responseObj = null;
 			}
-			
-			oos = new ObjectOutputStream(clientSocket.getOutputStream());
+
 			oos.writeObject(responseObj);
+			oos.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

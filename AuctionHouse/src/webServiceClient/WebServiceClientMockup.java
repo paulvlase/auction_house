@@ -43,14 +43,13 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 			socket = new Socket(WebServiceClientConfig.IP, WebServiceClientConfig.PORT);
 
 			ois = new ObjectInputStream(socket.getInputStream());
-			ois.close();
+			oos = new ObjectOutputStream(socket.getOutputStream());
 
 			System.out.println("Trimit");
-			
+
 			oos.writeObject(requestObj);
-			
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			
+			oos.flush();
+
 			responseObj = ois.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
