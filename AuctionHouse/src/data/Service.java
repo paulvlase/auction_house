@@ -318,8 +318,8 @@ public class Service implements Comparable<Service> {
 		stateMgr.setAcceptOfferState(this, userIndex);
 	}
 
-	public void setDropAuctionState(Integer userIndex) {
-		stateMgr.setDropAuctionState(this, userIndex);
+	public void setDropAuctionState() {
+		stateMgr.setDropAuctionState(this);
 	}
 
 	public void setDropOfferState() {
