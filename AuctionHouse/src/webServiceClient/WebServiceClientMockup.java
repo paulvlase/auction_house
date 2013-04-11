@@ -1,5 +1,9 @@
 package webServiceClient;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -13,7 +17,7 @@ import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
 
 /**
- * WebServiceClient module implementation.
+ * WebServiceClient mockup module implementation.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
@@ -25,6 +29,49 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		this.med = med;
 
 		med.registerWebServiceClient(this);
+	}
+	
+	private String askWebServer(String request) {
+		String response = null;
+		
+		Socket socket = null;
+		DataInputStream dis = null;
+		DataOutputStream dos = null;
+		
+		try {
+			socket = new Socket("127.0.0.1", 3333);
+			
+			dis = new DataInputStream(socket.getInputStream());
+			dos = new DataOutputStream(socket.getOutputStream());
+
+			dos.writeUTF(request);
+			response = dis.readUTF();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (dos != null)
+					dos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (dis != null)
+					dis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (socket != null)
+					socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return response;
 	}
 
 	public UserProfile logIn(LoginCred cred) {
@@ -45,6 +92,9 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 			task = new WebServiceClientEvents(med);
 			task.execute();
 		}
+		
+		String response = askWebServer("GET LOGIN\n" + cred.getUsername() + "\n" + cred.getPassword());
+		System.out.println("[WebServiceClientMockup:logIn()] response: " + response);
 
 		System.out.println("[WebServiceClientMockup:logIn()] End");
 		return profile;

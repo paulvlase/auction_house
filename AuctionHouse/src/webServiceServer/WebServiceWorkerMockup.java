@@ -1,10 +1,12 @@
 package webServiceServer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 /**
- * WebServiceServer module implementation.
+ * WebServiceWorker mockup implementation.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
@@ -16,15 +18,43 @@ public class WebServiceWorkerMockup implements Runnable {
 		this.webServer = webServer;
 		this.clientSocket = clientSocket;
 	}
+
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		DataInputStream dis = null;
+		DataOutputStream dos = null;
+		
 		try {
-			System.out.println("Connection closed");
-			clientSocket.close();
+			dis = new DataInputStream(clientSocket.getInputStream());
+			dos = new DataOutputStream(clientSocket.getOutputStream());
+
+			String request = dis.readUTF();
+			System.out.println("request: " + request);
+			
+			dos.writeUTF("OK");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (dos != null)
+					dos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (dis != null)
+					dis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (clientSocket != null)
+					clientSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
