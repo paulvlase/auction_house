@@ -3,6 +3,10 @@ package states;
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 
+import java.util.ArrayList;
+
+import network.Message;
+
 public class InactiveState implements State {
 	public InactiveState() {
 		
@@ -18,5 +22,11 @@ public class InactiveState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		//Nothing to do, for intern usage
+		return null;
 	}
 }

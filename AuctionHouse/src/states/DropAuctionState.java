@@ -1,53 +1,71 @@
 package states;
 
-import java.util.ArrayList;
-
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
+
+import java.util.ArrayList;
+
+import network.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
 public class DropAuctionState implements State {
 	private Service service;
-	private Integer userIndex;
 
 	public DropAuctionState() {
 	}
-	
+
 	@Override
 	public void executeNet(MediatorNetwork mednet) {
 		ArrayList<UserEntry> users = service.getUsers();
 
 		if (users != null) {
-			UserEntry user = users.get(userIndex);
+			for (UserEntry user : users) {
+				user.setOffer(Offer.OFFER_REFUSED);
 
-			user.setOffer(Offer.OFFER_REFUSED);
-			users.remove(userIndex);
+				mednet.putOffer(service);
 
-			if (users.size() == 0) {
-				service.setUsers(null);
+				System.out.println("[WebServiceClient:dropAuction()] Aici: "
+						+ users);
 			}
 
-			mednet.putOffer(service);
-
-			System.out.println("[WebServiceClient:dropAuction()] Aici: "
-					+ users);
-
+			/* Remove all users */
+			service.setUsers(null);
 			mednet.changeServiceNotify(service);
 		}
 	}
-	
+
 	public void executeWeb(MediatorWeb medweb) {
-		
+
 	}
-	
-	public void setState(Service service, Integer userIndex) {
+
+	public void setState(Service service) {
 		this.service = service;
-		this.userIndex = userIndex;
 	}
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		ArrayList<Message> list = null;
+		Boolean first = true;
+
+		for (UserEntry user : service.getUsers()) {
+			Message message = new Message();
+			message.setType(network.Message.MessageType.REFUSE);
+			message.setServiceName(service.getName());
+			message.setUsername(user.getUsername());
+
+			if (first) {
+				list = message.asArrayList();
+			} else {
+				list.add(message);
+			}
+		}
+
+		return list;
 	}
 }

@@ -51,8 +51,8 @@ public class StateManager {
 		currentState = removeOfferState;
 	}
 	
-	public void setDropAuctionState(Service service, Integer userIndex) {
-		dropAuctionState.setState(service, userIndex);
+	public void setDropAuctionState(Service service) {
+		dropAuctionState.setState(service);
 		currentState = dropAuctionState;
 	}	
 	

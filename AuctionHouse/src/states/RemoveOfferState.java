@@ -2,6 +2,10 @@ package states;
 
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
+
+import java.util.ArrayList;
+
+import network.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -40,5 +44,26 @@ public class RemoveOfferState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		ArrayList<Message> list = null;
+		Boolean first = true;
+
+		for (UserEntry user : service.getUsers()) {
+			Message message = new Message();
+			message.setType(network.Message.MessageType.REFUSE);
+			message.setServiceName(service.getName());
+			message.setUsername(user.getUsername());
+
+			if (first) {
+				list = message.asArrayList();
+			} else {
+				list.add(message);
+			}
+		}
+
+		return list;
 	}
 }

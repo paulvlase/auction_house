@@ -1,9 +1,11 @@
 package states;
 
-import java.util.ArrayList;
-
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
+
+import java.util.ArrayList;
+
+import network.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -49,5 +51,16 @@ public class AcceptOfferState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		Message message = new Message();
+		message.setType(network.Message.MessageType.ACCEPT);
+		message.setServiceName(service.getName());
+		message.setUsername(service.getUsers().get(userIndex).getUsername());
+		message.setPeer(service.getUsers().get(userIndex).getUsername());
+		
+		return message.asArrayList();
 	}
 }

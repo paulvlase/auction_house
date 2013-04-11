@@ -1,9 +1,11 @@
 package states;
 
-import java.util.ArrayList;
-
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
+
+import java.util.ArrayList;
+
+import network.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -13,9 +15,9 @@ public class RefuseOfferState implements State {
 	private Integer userIndex;
 
 	public RefuseOfferState() {
-		
+
 	}
-	
+
 	@Override
 	public void executeNet(MediatorNetwork mednet) {
 		ArrayList<UserEntry> users = service.getUsers();
@@ -34,11 +36,11 @@ public class RefuseOfferState implements State {
 			mednet.changeServiceNotify(service);
 		}
 	}
-	
+
 	public void executeWeb(MediatorWeb medweb) {
-		
+
 	}
-	
+
 	public void setState(Service service, Integer userIndex) {
 		this.service = service;
 		this.userIndex = userIndex;
@@ -46,5 +48,17 @@ public class RefuseOfferState implements State {
 
 	public String getName() {
 		return "Inactive";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		Message message = new Message();
+		UserEntry user = service.getUsers().get(userIndex);
+
+		message.setType(network.Message.MessageType.REFUSE);
+		message.setServiceName(service.getName());
+		message.setUsername(user.getUsername());
+		
+		return message.asArrayList();
 	}
 }

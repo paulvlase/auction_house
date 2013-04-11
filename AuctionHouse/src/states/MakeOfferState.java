@@ -5,6 +5,7 @@ import interfaces.MediatorWeb;
 
 import java.util.ArrayList;
 
+import network.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -47,5 +48,19 @@ public class MakeOfferState implements State {
 	
 	public String getName() {
 		return "Offer Made";
+	}
+
+	@Override
+	public ArrayList<Message> asMessages() {
+		Message message = new Message();
+		UserEntry user = service.getUsers().get(userIndex);
+		
+		message.setType(network.Message.MessageType.MAKE_OFFER);
+		message.setServiceName(service.getName());
+		message.setUsername(user.getUsername());
+		message.setPeer(user.getUsername());
+		message.setPayload(price);
+		
+		return message.asArrayList();
 	}
 }
