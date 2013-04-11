@@ -1,5 +1,7 @@
 package data;
 
+import java.io.Serializable;
+
 import data.UserProfile.UserRole;
 
 /**
@@ -7,7 +9,8 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class LoginCred {
+public class LoginCred implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private String username;
 	private String password;
 	private UserRole role;

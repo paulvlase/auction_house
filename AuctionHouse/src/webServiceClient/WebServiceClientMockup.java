@@ -1,18 +1,20 @@
 package webServiceClient;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
-import network.NetworkAdapter;
+import config.WebServiceClientConfig;
+
+import webServiceServer.messages.ErrorMessage;
+import webServiceServer.messages.LoginRequestMessage;
+import webServiceServer.messages.LoginResponseMessage;
 
 import data.LoginCred;
 import data.Service;
 import data.UserProfile;
-import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
 import interfaces.WebServiceClient;
 
@@ -23,7 +25,6 @@ import interfaces.WebServiceClient;
  */
 public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	private MediatorWeb						med;
-	private WebServiceClientEvents			task;
 
 	public WebServiceClientMockup(MediatorWeb med) {
 		this.med = med;
@@ -31,34 +32,39 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 		med.registerWebServiceClient(this);
 	}
 	
-	private String askWebServer(String request) {
-		String response = null;
+	private Object askWebServer(Object requestObj) {
+		Object responseObj = null;
 		
 		Socket socket = null;
-		DataInputStream dis = null;
-		DataOutputStream dos = null;
-		
-		try {
-			socket = new Socket("127.0.0.1", 3333);
-			
-			dis = new DataInputStream(socket.getInputStream());
-			dos = new DataOutputStream(socket.getOutputStream());
+		ObjectInputStream ois = null;
+		ObjectOutputStream oos = null;
 
-			dos.writeUTF(request);
-			response = dis.readUTF();
+		try {
+			socket = new Socket(WebServiceClientConfig.IP, WebServiceClientConfig.PORT);
+
+			ois = new ObjectInputStream(socket.getInputStream());
+			ois.close();
+
+			System.out.println("Trimit");
+			
+			oos.writeObject(requestObj);
+			
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			
+			responseObj = ois.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (dos != null)
-					dos.close();
+				if (oos != null)
+					oos.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 			try {
-				if (dis != null)
-					dis.close();
+				if (ois != null)
+					ois.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -71,41 +77,29 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 			}
 		}
 		
-		return response;
+		return responseObj;
 	}
 
 	public UserProfile logIn(LoginCred cred) {
 		System.out.println("[WebServiceClientMockup:logIn()] Begin");
-
-		UserProfile profile = getUserProfile(cred.getUsername());
-		if (profile == null) {
-			return null;
-		}
-
-		if (!profile.getPassword().equals(cred.getPassword())) {
-			return null;
-		}
-
-		profile.setRole(cred.getRole());
-
-		if (profile != null) {
-			task = new WebServiceClientEvents(med);
-			task.execute();
-		}
 		
-		String response = askWebServer("GET LOGIN\n" + cred.getUsername() + "\n" + cred.getPassword());
-		System.out.println("[WebServiceClientMockup:logIn()] response: " + response);
+		LoginRequestMessage requestMsg = new LoginRequestMessage(cred);
+		Object responseObj = askWebServer(requestMsg);
 
-		System.out.println("[WebServiceClientMockup:logIn()] End");
-		return profile;
+		if (responseObj instanceof LoginResponseMessage) {
+			return ((LoginResponseMessage) responseObj).getProfile();
+		} else if (responseObj instanceof ErrorMessage) {
+			return null;
+		} else {
+			System.out.println("[WebServiceClientMockup:logIn()] Unexpected response message");
+			return null;
+		}
 	}
 
 	public void logOut() {
 		System.out.println("[WebServiceClientMockup:logOut()] Begin");
 
 		try {
-			task.cancel(false);
-			task = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,10 +131,8 @@ public class WebServiceClientMockup extends Thread implements WebServiceClient {
 	}
 	
 	public void publishService(Service service) {
-		task.publishService(service);
 	}
 	
 	public void publishServices(ArrayList<Service> services) {
-		task.publishServices(services);
 	}
 }

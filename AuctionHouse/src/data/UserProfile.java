@@ -1,12 +1,15 @@
 package data;
 
+import java.io.Serializable;
+
 /**
  * User profile class.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  * @author Ghennadi Procopciuc
  */
-public class UserProfile {
+public class UserProfile implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private String		username;
 	private String		firstName;
 	private String		lastName;
