@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import config.WebServiceServerConfig;
+
 /**
  * WebServiceServer module implementation.
  * 
@@ -17,16 +19,15 @@ public class WebServiceServerMockup implements Runnable {
 	
 	public static ExecutorService pool = Executors.newCachedThreadPool();
 
-	public WebServiceServerMockup(int port) {
-		this.port = port;
+	public WebServiceServerMockup() {
 	}
 
 	@Override
 	public void run() {
 		try {
-			this.serverSocket = new ServerSocket(this.port);
+			this.serverSocket = new ServerSocket(WebServiceServerConfig.PORT);
 		} catch (IOException e) {
-			System.err.println("Nu pot asculta pe portul: " + this.port + ".");
+			System.err.println("Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
 			return;
 		}
 
@@ -42,14 +43,7 @@ public class WebServiceServerMockup implements Runnable {
 	}
 
 	public static void main(String args[]) {
-		if (args.length != 1) {
-			System.err.println("Usage: java WebServiceServerMockup port");
-			return;
-		}
-
-		int port = Integer.parseInt(args[0]);
-
-		WebServiceServerMockup server = new WebServiceServerMockup(port);
+		WebServiceServerMockup server = new WebServiceServerMockup();
 
 		(new Thread(server)).start();
 	}
