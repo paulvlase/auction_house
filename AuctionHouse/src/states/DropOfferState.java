@@ -1,14 +1,14 @@
 package states;
 
+import interfaces.MediatorNetwork;
+import interfaces.MediatorWeb;
+
 import java.util.ArrayList;
 
 import network.Message;
-import network.Message_Deprecated;
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
 import data.Service;
-import data.UserEntry;
 import data.Service.Status;
+import data.UserEntry;
 
 public class DropOfferState implements State {
 	private Service service;

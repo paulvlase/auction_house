@@ -6,8 +6,6 @@ import interfaces.MediatorWeb;
 import java.util.ArrayList;
 
 import network.Message;
-import network.Message_Deprecated;
-
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;

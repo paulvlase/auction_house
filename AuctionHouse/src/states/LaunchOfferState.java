@@ -1,15 +1,14 @@
 package states;
 
+import interfaces.MediatorNetwork;
+import interfaces.MediatorWeb;
+
 import java.util.ArrayList;
 
 import network.Message;
-import network.Message_Deprecated;
-
 import data.Service;
-import data.UserEntry;
 import data.Service.Status;
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import data.UserEntry;
 
 public class LaunchOfferState implements State {
 	private Service service;
