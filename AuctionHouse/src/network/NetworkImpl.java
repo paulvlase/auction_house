@@ -1,5 +1,6 @@
 package network;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -21,6 +22,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 	private NetworkEvents		eventsTask;
 	
 	private Hashtable<String, NetworkTransferTask> tasks;
+	private Hashtable<String, Socket> sockets;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.med = med;
@@ -31,6 +33,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 		joinThread.start();
 		
 		tasks = new Hashtable<String, NetworkTransferTask>();
+		sockets = new Hashtable<String, Socket>();
 	}
 
 	@Override
