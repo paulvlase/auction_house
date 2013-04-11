@@ -32,13 +32,15 @@ public class UserEntry implements Comparable<UserEntry> {
 		};
 	}
 
+	private String  username;
 	private String	name;
 	private Offer	offer;
 	private Long	time;
 	private Double	price;
 	private Integer	progress;
 
-	public UserEntry(String name, Offer offer, Long time, Double price) {
+	public UserEntry(String username, String name, Offer offer, Long time, Double price) {
+		this.username = username;
 		this.name = name;
 		this.offer = offer;
 		this.time = time;
@@ -46,6 +48,7 @@ public class UserEntry implements Comparable<UserEntry> {
 	}
 
 	public UserEntry(UserEntry user) {
+		this.username = user.getUsername();
 		this.name = user.getName();
 		this.offer = user.getOffer();
 		this.time = user.getTime();
@@ -93,6 +96,14 @@ public class UserEntry implements Comparable<UserEntry> {
 
 	public void setProgress(Integer progress) {
 		this.progress = progress;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	@Override

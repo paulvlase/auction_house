@@ -60,7 +60,7 @@ public class NewOfferEvent implements Command {
 							+ random.nextInt(timeLimit);
 					Double price = random.nextInt(priceLimit) / 100.0;
 
-					UserEntry userEntry = new UserEntry(username,
+					UserEntry userEntry = new UserEntry(username, "Pocus",
 							Offer.NO_OFFER, time, price);
 
 					service.addUserEntry(userEntry);

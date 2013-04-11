@@ -46,7 +46,7 @@ public class LogInEvent implements Command {
 				Long time = date.getTime() + delay + random.nextInt(timeLimit);
 				Double price = random.nextInt(priceLimit) / 100.0;
 
-				UserEntry user = new UserEntry(username, Offer.NO_OFFER, time, price);
+				UserEntry user = new UserEntry(username, "Bogus", Offer.NO_OFFER, time, price);
 
 				service.addUserEntry(user);
 				med.changeServiceNotify(service);
