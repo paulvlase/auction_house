@@ -123,10 +123,14 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 
 	@Override
 	public void logOut() {
-		System.out.println("[MockupMediator:logOut()] Bye bye");
-		profile = null;
+		System.out.println("[MockupMediator:logOut()] Begin");
+
 		web.logOut();
 		net.logOut();
+		
+		profile = null;
+		
+		System.out.println("[MockupMediator:logOut()] End");
 	}
 
 	@Override

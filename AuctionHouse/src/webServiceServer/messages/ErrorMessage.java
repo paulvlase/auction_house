@@ -13,4 +13,8 @@ public class ErrorMessage implements Serializable {
 	public String getMsg() {
 		return msg;
 	}
+	
+	public String toString() {
+		return getMsg();
+	}
 }

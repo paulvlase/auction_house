@@ -1,6 +1,5 @@
 package webServiceServer;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,18 +22,20 @@ import webServiceServer.messages.LogoutResponseMessage;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServiceWorkerMockup implements Runnable {
-	public WebServiceServerMockup webServer;
-	public Socket clientSocket;
+	public WebServiceServerMockup	webServer;
+	public Socket					clientSocket;
 
-	public WebServiceWorkerMockup(WebServiceServerMockup webServer, Socket clientSocket) {
+	public WebServiceWorkerMockup(WebServiceServerMockup webServer,
+			Socket clientSocket) {
 		this.webServer = webServer;
 		this.clientSocket = clientSocket;
 	}
-	
+
 	private void log(String str) {
-		System.out.println("[" + clientSocket.getInetAddress() + "]" + str );
+		System.out.println("[" + clientSocket.getInetAddress() + ":"
+				+ clientSocket.getPort() + "] " + str);
 	}
-	
+
 	private Object login(LoginRequestMessage msg) {
 		LoginCred cred = msg.getCred();
 
@@ -48,11 +49,14 @@ public class WebServiceWorkerMockup implements Runnable {
 		}
 
 		profile.setRole(cred.getRole());
+		
+		webServer.putOnlineUser(profile);
 		return new LoginResponseMessage(profile);
 	}
-	
-	private LogoutResponseMessage logout(LogoutRequestMessage msg) {
-		return null;
+
+	private Object logout(LogoutRequestMessage msg) {
+		webServer.removeOnlineUser(msg.getUsername());
+		return new LogoutResponseMessage();
 	}
 
 	@Override
@@ -62,16 +66,13 @@ public class WebServiceWorkerMockup implements Runnable {
 
 		System.out.println("[WebServiceWorkerMockup:run()] Started");
 		try {
-			System.out.println("[WebServiceWorkerMockup:run()] Before getting streams");
 			ois = new ObjectInputStream(clientSocket.getInputStream());
-			System.out.println("[WebServiceWorkerMockup:run()] Got input stream");
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			System.out.println("[WebServiceWorkerMockup:run()] Got output stream");
 
 			Object requestObj = ois.readObject();
 			Object responseObj;
 			System.out.println("New conn");
-			
+
 			if (requestObj instanceof LoginRequestMessage) {
 				log("Login message");
 				responseObj = login((LoginRequestMessage) requestObj);
@@ -94,14 +95,14 @@ public class WebServiceWorkerMockup implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				if (ois != null)
 					ois.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				if (clientSocket != null)
 					clientSocket.close();

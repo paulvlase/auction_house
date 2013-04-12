@@ -20,13 +20,15 @@ import data.UserProfile.UserRole;
 public class WebServiceServerMockup implements Runnable {
 	private ServerSocket	serverSocket;
 
-	private ConcurrentHashMap<String, UserProfile>	users;	
+	private ConcurrentHashMap<String, UserProfile>	users;
+	private ConcurrentHashMap<String, UserProfile> onlineUsers;
 	
 	private static ExecutorService pool = Executors.newCachedThreadPool();
 
 	public WebServiceServerMockup() {
 		users = new ConcurrentHashMap<String, UserProfile>();
-
+		onlineUsers = new ConcurrentHashMap<String, UserProfile>();
+		
 		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
 				UserRole.BUYER, "parola"));
 		users.put("unix140", new UserProfile("unix140", "Ghennadi",
@@ -43,6 +45,18 @@ public class WebServiceServerMockup implements Runnable {
 
 	public void removeUser(String username) {
 		users.remove(username);
+	}
+	
+	public void putOnlineUser(UserProfile user) {
+		onlineUsers.put(user.getUsername(), user);
+	}
+
+	public UserProfile getOnlineUser(String username) {
+		return onlineUsers.get(username);
+	}
+
+	public void removeOnlineUser(String username) {
+		onlineUsers.remove(username);
 	}
 
 	@Override
