@@ -12,13 +12,13 @@ import data.Service;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceClientEvents extends Thread {
-	private WebServiceClientMockup	web;
+public class WebClientEvents extends Thread {
+	private WebClientMockup	web;
 	private Object					monitor;
 
 	private ArrayList<Command>		events;
 
-	public WebServiceClientEvents(WebServiceClientMockup web) {
+	public WebClientEvents(WebClientMockup web) {
 		this.web = web;
 
 		events = new ArrayList<Command>();

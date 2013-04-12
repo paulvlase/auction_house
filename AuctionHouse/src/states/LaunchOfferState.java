@@ -21,13 +21,15 @@ public class LaunchOfferState implements State {
 		System.out.println("LaunchOfferState(): executeNet");
 	}
 
-	public void executeWeb(MediatorWeb medweb) {
-		System.out.println("LaunchOfferState(): executeWeb");
-		service.setStatus(Status.ACTIVE);
+	public void executeWeb(WebService web) {
+		System.out.println("[LaunchOfferState:executeWeb()] Begin");
 
+		service.setStatus(Status.ACTIVE);
 		service.setInactiveState();
 
 		medweb.changeServiceNotify(service);
+
+		System.out.println("[LaunchOfferState:executeWeb()] End");
 	}
 
 	public void setState(Service service) {

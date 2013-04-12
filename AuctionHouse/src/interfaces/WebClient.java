@@ -11,7 +11,7 @@ import data.UserProfile;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public interface WebServiceClient {
+public interface WebClient {
 	public UserProfile logIn(LoginCred cred);
 	public void logOut();
 	

@@ -13,24 +13,24 @@ import data.LoginCred;
 import data.Service;
 import data.UserProfile;
 import interfaces.MediatorWeb;
-import interfaces.WebServiceClient;
+import interfaces.WebClient;
 
 /**
- * WebServiceClient mockup module implementation.
+ * WebClient mockup module implementation.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceClientMockup extends Thread implements WebServiceClient {
+public class WebClientMockup extends Thread implements WebClient, WebService {
 	private MediatorWeb						med;
 	
-	private WebServiceClientEvents			thread;
+	private WebClientEvents			thread;
 
-	public WebServiceClientMockup(MediatorWeb med) {
+	public WebClientMockup(MediatorWeb med) {
 		this.med = med;
 
-		med.registerWebServiceClient(this);
+		med.registerWebClient(this);
 		
-		thread = new WebServiceClientEvents(this);
+		thread = new WebClientEvents(this);
 		thread.start();
 	}
 

@@ -12,7 +12,7 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface MediatorWeb {
-	public void registerWebServiceClient(WebServiceClient web);
+	public void registerWebServiceClient(WebClient web);
 	
 	public UserProfile getUserProfile();
 

@@ -5,7 +5,7 @@ import interfaces.MediatorGui;
 import interfaces.MediatorNetwork;
 import interfaces.MediatorWeb;
 import interfaces.NetworkMediator;
-import interfaces.WebServiceClient;
+import interfaces.WebClient;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,7 +34,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		MediatorWeb {
 	private Gui								gui;
 	private NetworkMediator					net;
-	private WebServiceClient				web;
+	private WebClient				web;
 
 	private UserProfile						profile;
 
@@ -63,7 +63,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	}
 
 	@Override
-	public void registerWebServiceClient(WebServiceClient web) {
+	public void registerWebServiceClient(WebClient web) {
 		this.web = web;
 	}
 
