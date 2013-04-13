@@ -1,6 +1,7 @@
 package data;
 
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 
 import data.UserProfile.UserRole;
 
@@ -14,6 +15,7 @@ public class LoginCred implements Serializable {
 	private String username;
 	private String password;
 	private UserRole role;
+	private InetSocketAddress address;
 	
 	public LoginCred(String username, String password, UserRole role) {
 		this.username = username;
@@ -31,5 +33,13 @@ public class LoginCred implements Serializable {
 
 	public UserRole getRole() {
 		return role;
+	}
+	
+	public InetSocketAddress getAddress() {
+		return address;
+	}
+	
+	public void setAddress(InetSocketAddress address) {
+		this.address = address;
 	}
 }
