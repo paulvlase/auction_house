@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import data.Service;
 import data.Service.Status;
+import data.UserProfile;
 import interfaces.MediatorNetwork;
 import interfaces.NetworkMediator;
 import interfaces.NetworkService;
@@ -19,7 +20,7 @@ import interfaces.NetworkTransfer;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkService {
-	private MediatorNetwork med;
+	private MediatorNetwork mediator;
 	private NetworkJoinThread joinThread;
 
 	private NetworkEvents eventsTask;
@@ -31,7 +32,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	private Server driver;
 
 	public NetworkImpl(MediatorNetwork med) {
-		this.med = med;
+		this.mediator = med;
 
 		med.registerNetwork(this);
 
@@ -73,15 +74,19 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public boolean startTransfer(Service service) {
 		System.out.println("startTransfer");
 		service.setStatus(Status.TRANSFER_STARTED);
-		med.changeServiceNotify(service);
+		mediator.changeServiceNotify(service);
 
-		NetworkTransferTask task = new NetworkTransferTask(med, joinThread,
+		NetworkTransferTask task = new NetworkTransferTask(mediator, joinThread,
 				service);
 		task.execute();
 
 		tasks.put(service.getName(), task);
 
 		return true;
+	}
+	
+	public UserProfile getUserProfile(){
+		return mediator.getUserProfile();
 	}
 
 	@Override
@@ -90,7 +95,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	public void logIn() {
-		eventsTask = new NetworkEvents(med);
+		eventsTask = new NetworkEvents(mediator);
 		eventsTask.execute();
 	}
 
