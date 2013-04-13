@@ -37,7 +37,9 @@ public class LaunchOfferState implements State {
 		// TODO
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
+		responseObj.getService().setStatus(Status.ACTIVE);
 		web.notifyNetwork(responseObj.getService());
+
 
 		System.out.println("[LaunchOfferState:executeWeb()] End");
 	}

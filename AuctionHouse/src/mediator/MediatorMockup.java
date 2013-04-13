@@ -356,6 +356,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	@Override
 	public void notifyNetwork(Service service) {
+		gui.changeServiceNotify(service);
 		net.publishService(service);
 	}
 }

@@ -81,7 +81,7 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object launchOffer(LaunchOfferRequest req) {
-		System.out.println("[WebServerMockup: begin()] Begin");
+		System.out.println("[WebServerMockup: launchOffer()] Begin");
 
 		Service service = req.getService();
 		ArrayList<UserEntry> userEntries;
@@ -112,7 +112,7 @@ public class WebServerMockup implements Runnable {
 
 		service.setUsers(userEntries);
 
-		System.out.println("[WebServerMockup: begin()] End");
+		System.out.println("[WebServerMockup: launchOffer()] End");
 		return new LaunchOfferResponse(service);
 	}
 
