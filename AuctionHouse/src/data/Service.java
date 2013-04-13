@@ -62,8 +62,6 @@ public class Service implements Comparable<Service> {
 		this.time = 0;
 		this.price = 0;
 		this.status = status;
-
-		System.out.println("constructor1: " + name);
 	}
 
 	public Service(Service service) {
@@ -74,14 +72,10 @@ public class Service implements Comparable<Service> {
 		this.progress = service.getProgress();
 		this.status = service.getStatus();
 		this.stateMgr = service.getStateMgr();
-
-		System.out.println("constructor2: " + name);
 	}
 
 	public Service(String serviceName) {
 		this(serviceName, null, Status.INACTIVE);
-
-		System.out.println("constructor3: " + name);
 	}
 
 	public StateManager getStateMgr() {
@@ -101,8 +95,6 @@ public class Service implements Comparable<Service> {
 	 */
 	public Service(String serviceName, Status status) {
 		this(serviceName, null, status);
-
-		System.out.println("constructor4: " + name);
 	}
 
 	public void initState(NetworkService net, WebService web) {
