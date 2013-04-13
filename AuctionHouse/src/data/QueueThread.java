@@ -8,13 +8,15 @@ public abstract class QueueThread<K, T> extends Thread {
 	private Object									monitor;
 	protected ConcurrentHashMap<K, ArrayList<T>>	queue;
 	private Boolean									running;
-	
-	public QueueThread(){
+
+	public QueueThread() {
 		queue = new ConcurrentHashMap<K, ArrayList<T>>();
 	}
 
 	@Override
 	public void run() {
+		running = true;
+
 		while (running) {
 			try {
 				synchronized (monitor) {
@@ -29,7 +31,7 @@ public abstract class QueueThread<K, T> extends Thread {
 			process();
 		}
 	}
-	
+
 	public boolean haveToProcess() {
 		if (queue == null) {
 			return false;
