@@ -11,6 +11,7 @@ import webServer.messages.SetProfileRequest;
 import data.LoginCred;
 import data.Service;
 import data.UserProfile;
+import data.UserProfile.UserRole;
 import interfaces.MediatorWeb;
 import interfaces.WebClient;
 import interfaces.WebService;
@@ -108,6 +109,16 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 	}
 	
 	public void notifyNetwork(Service service) {
-		
+		med.notifyNetwork(service);
+	}
+	
+	@Override
+	public String getUsername() {
+		return med.getUserProfile().getUsername();
+	}
+	
+	@Override
+	public UserRole getUserRole() {
+		return med.getUserProfile().getRole();
 	}
 }

@@ -353,4 +353,9 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public InetSocketAddress getNetworkAddress() {
 		return net.getAddress();
 	}
+	
+	@Override
+	public void notifyNetwork(Service service) {
+		net.publishService(service);
+	}
 }

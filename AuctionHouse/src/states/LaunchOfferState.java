@@ -6,6 +6,8 @@ import interfaces.WebService;
 import java.util.ArrayList;
 
 import webClient.Util;
+import webServer.messages.LaunchOfferRequest;
+import webServer.messages.LaunchOfferResponse;
 
 import data.Message;
 import data.Service;
@@ -33,9 +35,9 @@ public class LaunchOfferState implements State {
 		service.setInactiveState();
 
 		// TODO
-		Service service = (Service) Util.askWebServer(this);
-		web.notifyNetwork(service);
-		//web.changeServiceNotify(service);
+		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
+		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
+		web.notifyNetwork(responseObj.getService());
 
 		System.out.println("[LaunchOfferState:executeWeb()] End");
 	}

@@ -32,6 +32,7 @@ public interface MediatorWeb {
 	public void changeServiceNotify(Service service);
 	public void changeServicesNotify(ArrayList<Service> service);
 	public void changeProfileNotify(UserProfile profile);
+	public void notifyNetwork(Service service);
 
 	public void stopTransfer(Service service);
 	public InetSocketAddress getNetworkAddress();

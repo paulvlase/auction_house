@@ -93,6 +93,7 @@ public class WebServerMockup implements Runnable {
 		if (req.getUserRole() == UserRole.BUYER) {
 			userEntries = sellers.get(service.getName());
 
+			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			ArrayList<UserEntry> buyersUserEntries = buyers.get(service.getName());
 			buyersUserEntries.add(userEntry);
 
@@ -100,6 +101,7 @@ public class WebServerMockup implements Runnable {
 		} else {
 			userEntries = buyers.get(service.getName());
 
+			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			ArrayList<UserEntry> sellersUserEntries = sellers.get(service.getName());
 			sellersUserEntries.add(userEntry);
 

@@ -185,4 +185,10 @@ MediatorWeb{
 		return null;
 	}
 
+	@Override
+	public void notifyNetwork(Service service) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

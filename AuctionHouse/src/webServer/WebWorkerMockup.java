@@ -53,17 +53,17 @@ public class WebWorkerMockup implements Runnable {
 			} else if (requestObj instanceof LaunchOfferRequest) {
 				log("Launch offer request");
 				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
-			} else if (requestObj instanceof GetProfileRequest) {
+			} else if (requestObj instanceof DropOfferRequest) {
+				log("Drop offer request");
+				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
+			}else if (requestObj instanceof GetProfileRequest) {
 				log("Get profile offer request");
 				responseObj = webServer.getProfile((GetProfileRequest) requestObj);
 			} else if (requestObj instanceof SetProfileRequest) {
 				log("Set profile offer request");
 				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
-			} else if (requestObj instanceof DropOfferRequest) {
-				log("Drop offer request");
-				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
 			} else {
-				log("Unknow request");
+				log("Unknow request " + requestObj);
 				responseObj = null;
 			}
 
