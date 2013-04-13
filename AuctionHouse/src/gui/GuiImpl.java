@@ -163,30 +163,15 @@ public class GuiImpl implements Gui {
 	@Override
 	public void changeServiceNotify(Service service) {
 		if (mainWindow != null) {
-			/*
-			 SwingUtilities.invokeLater(new Runnable() {
-				    public void run() {
-				      // Here, we can safely update the GUI
-				      // because we'll be called from the
-				      // event dispatch thread
-				      statusLabel.setText("Query: " + queryNo);
-				    }
-				  });
-			*/
-			mainWindow.changeServiceNotify(service);
+			 SwingUtilities.invokeLater(new GuiServiceRunnable(mainWindow, service));
 		}
 	}
 
 	@Override
-	public void changeServicesNotify(ArrayList<Service> services) {
-		if (mainWindow != null)
-			mainWindow.changeServicesNotify(services);
-	}
-
-	@Override
 	public void changeProfileNotify(UserProfile profile) {
-		if (mainWindow != null)
-			mainWindow.changeProfileNotify(profile);
+		if (mainWindow != null) {
+			 SwingUtilities.invokeLater(new GuiProfileRunnable(mainWindow, profile));
+		}
 	}
 	
 	@Override

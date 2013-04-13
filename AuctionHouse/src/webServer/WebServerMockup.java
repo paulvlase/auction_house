@@ -77,7 +77,7 @@ public class WebServerMockup implements Runnable {
 
 	public Object logout(LogoutRequest requestMsg) {
 		onlineUsers.remove(requestMsg.getCred().getUsername());
-		return null;
+		return new OkResponse();
 	}
 
 	public Object launchOffer(LaunchOfferRequest req) {

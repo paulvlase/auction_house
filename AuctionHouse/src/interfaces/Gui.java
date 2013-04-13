@@ -30,7 +30,6 @@ public interface Gui {
 	public void publishService(Service service);
 
 	public void changeServiceNotify(Service service);	
-	public void changeServicesNotify(ArrayList<Service> services);	
 	public void changeProfileNotify(UserProfile profile);
 	
 	public Service createService(String name, Long time, Double price);

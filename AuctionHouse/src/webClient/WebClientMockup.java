@@ -31,8 +31,6 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		this.med = med;
 
 		med.registerWebClient(this);
-
-		thread = new WebClientEvents(this);
 	}
 
 	public UserProfile logIn(LoginCred cred) {
@@ -49,6 +47,8 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		if (responseObj instanceof LoginResponse) {
 			System.out.println("[WebServiceClientMockup:logIn()] Success");
 			
+			this.cred = cred;
+			thread = new WebClientEvents(this);
 			thread.start();
 			return ((LoginResponse) responseObj).getUserProfile();
 		} else {
@@ -64,6 +64,8 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 
 		Object responseObj = Util.askWebServer(requestMsg);
 
+		thread.stopRunning();
+		
 		System.out
 					.println("[WebServiceClientMockup:logOut()] Success");
 	}

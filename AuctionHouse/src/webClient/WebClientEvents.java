@@ -16,6 +16,7 @@ import data.Service;
 public class WebClientEvents extends Thread {
 	private WebService			web;
 	private Object				monitor;
+	private Boolean				running;
 
 	private ArrayList<Command>	events;
 
@@ -28,7 +29,9 @@ public class WebClientEvents extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		running = true;
+
+		while (running) {
 			try {
 				synchronized (monitor) {
 					monitor.wait();
@@ -37,6 +40,14 @@ public class WebClientEvents extends Thread {
 				e.printStackTrace();
 			}
 			process();
+		}
+	}
+	
+	public synchronized void stopRunning() {
+		running = false;
+
+		synchronized (monitor) {
+			monitor.notify();
 		}
 	}
 

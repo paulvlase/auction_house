@@ -309,11 +309,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	}
 
 	@Override
-	public void changeServicesNotify(ArrayList<Service> services) {
-		gui.changeServicesNotify(services);
-	}
-
-	@Override
 	public void changeProfileNotify(UserProfile profile) {
 		gui.changeProfileNotify(profile);
 	}

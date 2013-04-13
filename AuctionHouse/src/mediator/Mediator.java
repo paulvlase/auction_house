@@ -48,12 +48,6 @@ MediatorWeb{
 	}
 
 	@Override
-	public void changeServicesNotify(ArrayList<Service> service) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void changeProfileNotify(UserProfile profile) {
 		// TODO Auto-generated method stub
 		
