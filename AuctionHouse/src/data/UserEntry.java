@@ -1,6 +1,5 @@
 package data;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 public class UserEntry implements Comparable<UserEntry> {

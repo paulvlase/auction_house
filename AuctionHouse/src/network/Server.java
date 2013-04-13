@@ -3,7 +3,6 @@ package network;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -15,8 +14,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import data.Message;
 import data.Message.MessageType;
@@ -292,7 +289,6 @@ public class Server extends Thread {
 	}
 
 	private void connect(SelectionKey key) throws IOException {
-		ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
 		System.out.print("CONNECT: ");
 
 		SocketChannel socketChannel = (SocketChannel) key.channel();
