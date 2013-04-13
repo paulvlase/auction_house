@@ -1,5 +1,6 @@
 package network;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -76,5 +77,11 @@ public class NetworkMockup implements NetworkMediator, NetworkTransfer {
 	@Override
 	public void publishServices(ArrayList<Service> services) {
 		eventsTask.publishServices(services);
+	}
+
+	@Override
+	public InetSocketAddress getAddress() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

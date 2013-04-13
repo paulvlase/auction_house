@@ -121,6 +121,13 @@ public class UserEntry implements Comparable<UserEntry> {
 		return this.price.compareTo(o.getPrice());
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		UserEntry userEntry = (UserEntry) obj;
+		return username.equals(userEntry.getName());
+	}
+
 	public InetSocketAddress getAddress() {
 		return address;
 	}

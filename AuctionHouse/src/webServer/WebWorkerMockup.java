@@ -7,11 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import webServer.messages.DropOfferRequest;
+import webServer.messages.LaunchOfferRequest;
+import webServer.messages.LaunchOfferResponse;
 import webServer.messages.LogoutRequest;
 
 import data.LoginCred;
 import data.Service;
 import data.UserProfile;
+import data.UserProfile.UserRole;
 
 /**
  * WebServiceWorker mockup implementation.
@@ -20,10 +24,9 @@ import data.UserProfile;
  */
 public class WebWorkerMockup implements Runnable {
 	public WebServerMockup	webServer;
-	public Socket					clientSocket;
+	public Socket			clientSocket;
 
-	public WebWorkerMockup(WebServerMockup webServer,
-			Socket clientSocket) {
+	public WebWorkerMockup(WebServerMockup webServer, Socket clientSocket) {
 		this.webServer = webServer;
 		this.clientSocket = clientSocket;
 	}
@@ -44,18 +47,14 @@ public class WebWorkerMockup implements Runnable {
 		}
 
 		profile.setRole(cred.getRole());
-		
-		webServer.putOnlineUser(profile);
+
+		webServer.putOnlineUser(cred.getUsername(), cred.getAddress());
 		return profile;
 	}
 
 	private Object logout(LogoutRequest requestMsg) {
 		webServer.removeOnlineUser(requestMsg.getCred().getUsername());
 		return null;
-	}
-	
-	private Object serveService(Service service) {
-		return service;
 	}
 
 	@Override
@@ -78,9 +77,12 @@ public class WebWorkerMockup implements Runnable {
 			} else if (requestObj instanceof LogoutRequest) {
 				log("Logout message");
 				responseObj = logout((LogoutRequest) requestObj);
-			} else if (requestObj instanceof Service) {
-				log("Service message");
-				responseObj = serveService((Service) requestObj);
+			} else if (requestObj instanceof LaunchOfferRequest) {
+				log("Launch offer message");
+				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
+			} else if (requestObj instanceof DropOfferRequest) {
+				log("Drop offermessage");
+				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
 			} else {
 				log("Unknow command");
 				responseObj = null;

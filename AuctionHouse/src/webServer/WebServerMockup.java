@@ -10,7 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import webServer.messages.DropOfferRequest;
+import webServer.messages.LaunchOfferRequest;
+import webServer.messages.LaunchOfferResponse;
+import webServer.messages.OkResponse;
+
 import config.WebServiceServerConfig;
+import data.Service;
+import data.UserEntry;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
@@ -20,25 +27,26 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServerMockup implements Runnable {
-	private ServerSocket	serverSocket;
+	private ServerSocket											serverSocket;
 
-	private ConcurrentHashMap<String, UserProfile>	users;
-	private ConcurrentHashMap<String, InetSocketAddress> onlineUsers;
-	private ConcurrentHashMap<String, ArrayList<InetSocketAddress>> seller;
-	private ConcurrentHashMap<String, ArrayList<InetSocketAddress>> buyers;
-	
-	private static ExecutorService pool = Executors.newCachedThreadPool();
+	private ConcurrentHashMap<String, UserProfile>					users;
+	private ConcurrentHashMap<String, InetSocketAddress>			onlineUsers;
+	private ConcurrentHashMap<String, ArrayList<UserEntry>>	sellers;
+	private ConcurrentHashMap<String, ArrayList<UserEntry>>	buyers;
+
+	private static ExecutorService									pool	= Executors.newCachedThreadPool();
 
 	public WebServerMockup() {
 		users = new ConcurrentHashMap<String, UserProfile>();
 		onlineUsers = new ConcurrentHashMap<String, InetSocketAddress>();
+
+		sellers = new ConcurrentHashMap<String, ArrayList<UserEntry>>();
+		buyers = new ConcurrentHashMap<String, ArrayList<UserEntry>>();
 		
-		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
-				UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140", "Ghennadi",
-				"Procopciuc", UserRole.SELLER, "marmota"));
+		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase", UserRole.BUYER, "parola"));
+		users.put("unix140", new UserProfile("unix140", "Ghennadi", "Procopciuc", UserRole.SELLER, "marmota"));
 	}
-	
+
 	public void putUser(UserProfile user) {
 		users.put(user.getUsername(), user);
 	}
@@ -50,17 +58,72 @@ public class WebServerMockup implements Runnable {
 	public void removeUser(String username) {
 		users.remove(username);
 	}
-	
-	public void putOnlineUser(UserProfile user) {
-		onlineUsers.put(user.getUsername(), user);
+
+	public void putOnlineUser(String username, InetSocketAddress address) {
+		onlineUsers.put(username, address);
 	}
 
-	public UserProfile getOnlineUser(String username) {
+	public InetSocketAddress getOnlineUser(String username) {
 		return onlineUsers.get(username);
 	}
 
 	public void removeOnlineUser(String username) {
 		onlineUsers.remove(username);
+	}
+	
+	public Object launchOffer(LaunchOfferRequest req) {
+		System.out.println("[WebServerMockup: begin()] Begin");
+
+		Service service = req.getService();
+		ArrayList<UserEntry> userEntries;
+		
+		UserEntry userEntry = new UserEntry();
+		userEntry.setName(req.getUsername());
+		userEntry.setAddress(onlineUsers.get(req.getUsername()));
+		
+		if (req.getUserRole() == UserRole.BUYER) {
+			userEntries = sellers.get(service.getName());
+			
+			ArrayList<UserEntry> buyersUserEntries = buyers.get(service.getName());
+			buyersUserEntries.add(userEntry);
+			
+			buyers.put(service.getName(), buyersUserEntries);
+		} else {
+			userEntries = buyers.get(service.getName());
+			
+			ArrayList<UserEntry> sellersUserEntries = sellers.get(service.getName());
+			sellersUserEntries.add(userEntry);
+			
+			sellers.put(service.getName(), sellersUserEntries);
+		}
+		
+		service.setUsers(userEntries);
+
+		System.out.println("[WebServerMockup: begin()] End");
+		return new LaunchOfferResponse(service);
+	}
+	
+	public Object dropOffer(DropOfferRequest req) {
+		System.out.println("[WebServerMockup: drop()] Begin");
+		
+		UserEntry userEntry = new UserEntry();
+		userEntry.setName(req.getUsername());
+		userEntry.setAddress(onlineUsers.get(req.getUsername()));
+		
+		if (req.getUserRole() == UserRole.BUYER) {	
+			ArrayList<UserEntry> buyersUserEntries = buyers.get(req.getServiceName());
+			buyersUserEntries.remove(userEntry);
+			
+			buyers.put(req.getServiceName(), buyersUserEntries);
+		} else {
+			ArrayList<UserEntry> sellersUserEntries = sellers.get(req.getServiceName());
+			sellersUserEntries.remove(userEntry);
+			
+			sellers.put(req.getServiceName(), sellersUserEntries);
+		}
+
+		System.out.println("[WebServerMockup: drop()] End");
+		return new OkResponse();
 	}
 
 	@Override
@@ -78,7 +141,7 @@ public class WebServerMockup implements Runnable {
 				System.out.println("[WebServiceServerMockup:askWebServer()] Before accept");
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("[WebServiceServerMockup:askWebServer()] Connection accepted");
-				
+
 				pool.execute(new WebWorkerMockup(this, clientSocket));
 			} catch (IOException e) {
 				System.err.println("EROARE: Conectare client");

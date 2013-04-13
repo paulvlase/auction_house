@@ -110,6 +110,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	@Override
 	public boolean logIn(LoginCred cred) {
 		System.out.println("MediatorMockup:logIn()] Begin");
+		cred.setAddress(net.getAddress());
 		UserProfile profile = web.logIn(cred);
 
 		if (profile != null) {
@@ -359,6 +360,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	
 	@Override
 	public InetSocketAddress getNetworkAddress() {
-		net.getAddress();
+		return net.getAddress();
 	}
 }

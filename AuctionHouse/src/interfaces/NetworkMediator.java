@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -19,4 +20,6 @@ public interface NetworkMediator {
 	
 	public void  publishService(Service service);
 	public void  publishServices(ArrayList<Service> services);
+	
+	public InetSocketAddress getAddress();
 }
