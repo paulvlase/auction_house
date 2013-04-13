@@ -1,8 +1,10 @@
-package webServiceServer;
+package webServer;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -17,17 +19,19 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceServerMockup implements Runnable {
+public class WebServerMockup implements Runnable {
 	private ServerSocket	serverSocket;
 
 	private ConcurrentHashMap<String, UserProfile>	users;
-	private ConcurrentHashMap<String, UserProfile> onlineUsers;
+	private ConcurrentHashMap<String, InetSocketAddress> onlineUsers;
+	private ConcurrentHashMap<String, ArrayList<InetSocketAddress>> seller;
+	private ConcurrentHashMap<String, ArrayList<InetSocketAddress>> buyers;
 	
 	private static ExecutorService pool = Executors.newCachedThreadPool();
 
-	public WebServiceServerMockup() {
+	public WebServerMockup() {
 		users = new ConcurrentHashMap<String, UserProfile>();
-		onlineUsers = new ConcurrentHashMap<String, UserProfile>();
+		onlineUsers = new ConcurrentHashMap<String, InetSocketAddress>();
 		
 		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
 				UserRole.BUYER, "parola"));
@@ -75,7 +79,7 @@ public class WebServiceServerMockup implements Runnable {
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("[WebServiceServerMockup:askWebServer()] Connection accepted");
 				
-				pool.execute(new WebServiceWorkerMockup(this, clientSocket));
+				pool.execute(new WebWorkerMockup(this, clientSocket));
 			} catch (IOException e) {
 				System.err.println("EROARE: Conectare client");
 			}
@@ -83,7 +87,7 @@ public class WebServiceServerMockup implements Runnable {
 	}
 
 	public static void main(String args[]) {
-		WebServiceServerMockup server = new WebServiceServerMockup();
+		WebServerMockup server = new WebServerMockup();
 
 		(new Thread(server)).start();
 	}

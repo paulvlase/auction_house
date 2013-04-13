@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import network.Message;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 public interface State {
 	public void executeNet(NetworkService net);

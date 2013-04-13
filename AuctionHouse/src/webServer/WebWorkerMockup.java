@@ -1,4 +1,4 @@
-package webServiceServer;
+package webServer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,25 +7,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import data.LoginCred;
-import data.UserProfile;
+import webServer.messages.LogoutRequest;
 
-import webServiceServer.messages.ErrorMessage;
-import webServiceServer.messages.LoginRequestMessage;
-import webServiceServer.messages.LoginResponseMessage;
-import webServiceServer.messages.LogoutRequestMessage;
-import webServiceServer.messages.LogoutResponseMessage;
+import data.LoginCred;
+import data.Service;
+import data.UserProfile;
 
 /**
  * WebServiceWorker mockup implementation.
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebServiceWorkerMockup implements Runnable {
-	public WebServiceServerMockup	webServer;
+public class WebWorkerMockup implements Runnable {
+	public WebServerMockup	webServer;
 	public Socket					clientSocket;
 
-	public WebServiceWorkerMockup(WebServiceServerMockup webServer,
+	public WebWorkerMockup(WebServerMockup webServer,
 			Socket clientSocket) {
 		this.webServer = webServer;
 		this.clientSocket = clientSocket;
@@ -36,27 +33,29 @@ public class WebServiceWorkerMockup implements Runnable {
 				+ clientSocket.getPort() + "] " + str);
 	}
 
-	private Object login(LoginRequestMessage msg) {
-		LoginCred cred = msg.getCred();
-
+	private Object login(LoginCred cred) {
 		UserProfile profile = webServer.getUser(cred.getUsername());
 		if (profile == null) {
-			return new ErrorMessage("Wrong username or password");
+			return null;
 		}
 
 		if (!profile.getPassword().equals(cred.getPassword())) {
-			return new ErrorMessage("Wrong username or password");
+			return null;
 		}
 
 		profile.setRole(cred.getRole());
 		
 		webServer.putOnlineUser(profile);
-		return new LoginResponseMessage(profile);
+		return profile;
 	}
 
-	private Object logout(LogoutRequestMessage msg) {
-		webServer.removeOnlineUser(msg.getUsername());
-		return new LogoutResponseMessage();
+	private Object logout(LogoutRequest requestMsg) {
+		webServer.removeOnlineUser(requestMsg.getCred().getUsername());
+		return null;
+	}
+	
+	private Object serveService(Service service) {
+		return service;
 	}
 
 	@Override
@@ -73,12 +72,15 @@ public class WebServiceWorkerMockup implements Runnable {
 			Object responseObj;
 			System.out.println("New conn");
 
-			if (requestObj instanceof LoginRequestMessage) {
+			if (requestObj instanceof LoginCred) {
 				log("Login message");
-				responseObj = login((LoginRequestMessage) requestObj);
-			} else if (requestObj instanceof LogoutResponseMessage) {
+				responseObj = login((LoginCred) requestObj);
+			} else if (requestObj instanceof LogoutRequest) {
 				log("Logout message");
-				responseObj = logout((LogoutRequestMessage) requestObj);
+				responseObj = logout((LogoutRequest) requestObj);
+			} else if (requestObj instanceof Service) {
+				log("Service message");
+				responseObj = serveService((Service) requestObj);
 			} else {
 				log("Unknow command");
 				responseObj = null;

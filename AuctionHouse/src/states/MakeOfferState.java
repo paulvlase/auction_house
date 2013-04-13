@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class MakeOfferState implements State {
 		
 	}
 	
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		System.out.println("[MakeOfferState:executeNet()] Begin");
 		ArrayList<UserEntry> users = service.getUsers();
 
@@ -30,13 +30,14 @@ public class MakeOfferState implements State {
 			user.setPrice(price);
 
 			service.setInactiveState();
-			mednet.changeServiceNotify(service);
+			// TODO
+			//net.changeServiceNotify(service);
 		}
 		
 		System.out.println("[MakeOfferState:executeNet()] End");
 	}
 	
-	public void executeWeb(MediatorWeb medweb) {
+	public void executeWeb(WebService web) {
 
 	}
 

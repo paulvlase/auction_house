@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class AcceptOfferState implements State {
 	}
 	
 	@Override
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		synchronized (service) {
 			ArrayList<UserEntry> users = service.getUsers();
 
@@ -34,13 +34,14 @@ public class AcceptOfferState implements State {
 			
 			users.clear();
 			users.add(user);
-			
-			mednet.startTransfer(service);
+
+			// TODO
+			//net.startTransfer(service);
 		}
 	}
 
 	
-	public void executeWeb(MediatorWeb medweb) {
+	public void executeWeb(WebService web) {
 		
 	}
 	

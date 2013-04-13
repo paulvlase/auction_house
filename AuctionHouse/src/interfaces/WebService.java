@@ -1,5 +1,7 @@
 package interfaces;
 
-public interface WebService {
+import data.Service;
 
+public interface WebService {
+	public void notifyNetwork(Service service);
 }

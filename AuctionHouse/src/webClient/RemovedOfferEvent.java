@@ -1,4 +1,4 @@
-package webServiceClient;
+package webClient;
 
 import interfaces.Command;
 import interfaces.MediatorWeb;

@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class RefuseOfferState implements State {
 	}
 
 	@Override
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		ArrayList<UserEntry> users = service.getUsers();
 
 		System.out.println("[RefuseOfferState:executeNet()]");
@@ -33,11 +33,12 @@ public class RefuseOfferState implements State {
 			if (users.size() == 0) {
 				service.setUsers(null);
 			}
-			mednet.changeServiceNotify(service);
+			//TODO
+			//net.changeServiceNotify(service);
 		}
 	}
 
-	public void executeWeb(MediatorWeb medweb) {
+	public void executeWeb(WebService web) {
 
 	}
 

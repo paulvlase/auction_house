@@ -1,4 +1,4 @@
-package webServiceClient;
+package webClient;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -17,20 +17,22 @@ public class DropOfferState implements State {
 
 	}
 
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		service.setStatus(Status.INACTIVE);
 		service.setUsers(null);
 
-		mednet.removeOffer(service.getName());
+		// TODO
+		//net.removeOffer(service.getName());
 		System.out
 				.println("[DropOfferState:executeNet()] " + service.getName());
 
 		service.setInactiveState();
-		mednet.stopTransfer(service);
-		mednet.changeServiceNotify(service);
+		// TODO
+		//net.stopTransfer(service);
+		//net.changeServiceNotify(service);
 	}
 
-	public void executeWeb(MediatorWeb medweb) {
+	public void executeWeb(WebService web) {
 
 	}
 

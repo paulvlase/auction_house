@@ -10,6 +10,7 @@ import interfaces.WebClient;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -34,7 +35,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		MediatorWeb {
 	private Gui								gui;
 	private NetworkMediator					net;
-	private WebClient				web;
+	private WebClient						web;
 
 	private UserProfile						profile;
 
@@ -63,7 +64,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	}
 
 	@Override
-	public void registerWebServiceClient(WebClient web) {
+	public void registerWebClient(WebClient web) {
 		this.web = web;
 	}
 
@@ -349,12 +350,15 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		service.setTime(time);
 		service.setPrice(price);
 		
-		service.initState(this, this);
-		
 		return service;
 	}
 	
 	public void startTransfer(Service service) {
 		net.startTransfer(service);
+	}
+	
+	@Override
+	public InetSocketAddress getNetworkAddress() {
+		net.getAddress();
 	}
 }

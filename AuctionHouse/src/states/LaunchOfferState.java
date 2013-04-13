@@ -1,9 +1,11 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
+
+import webClient.Util;
 
 import network.Message;
 import data.Service;
@@ -17,8 +19,10 @@ public class LaunchOfferState implements State {
 
 	}
 
-	public void executeNet(MediatorNetwork mednet) {
-		System.out.println("LaunchOfferState(): executeNet");
+	public void executeNet(NetworkService net) {
+		System.out.println("[LaunchOfferState:executeNet()] Begin");
+		
+		System.out.println("[LaunchOfferState:executeNet()] End");
 	}
 
 	public void executeWeb(WebService web) {
@@ -27,7 +31,10 @@ public class LaunchOfferState implements State {
 		service.setStatus(Status.ACTIVE);
 		service.setInactiveState();
 
-		medweb.changeServiceNotify(service);
+		// TODO
+		Service service = (Service) Util.askWebServer(this);
+		web.notifyNetwork(service);
+		//web.changeServiceNotify(service);
 
 		System.out.println("[LaunchOfferState:executeWeb()] End");
 	}

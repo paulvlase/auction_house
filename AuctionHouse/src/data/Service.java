@@ -1,8 +1,7 @@
 package data;
 
-import interfaces.Command;
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,8 +105,8 @@ public class Service implements Comparable<Service> {
 		System.out.println("constructor4: " + name);
 	}
 
-	public void initState(MediatorNetwork mednet, MediatorWeb medweb) {
-		stateMgr = new StateManager(mednet, medweb);
+	public void initState(NetworkService net, WebService web) {
+		stateMgr = new StateManager(net, web);
 	}
 
 	public void executeNet() {

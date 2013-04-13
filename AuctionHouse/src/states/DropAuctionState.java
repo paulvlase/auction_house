@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -17,14 +17,15 @@ public class DropAuctionState implements State {
 	}
 
 	@Override
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		ArrayList<UserEntry> users = service.getUsers();
 
 		if (users != null) {
 			for (UserEntry user : users) {
 				user.setOffer(Offer.OFFER_REFUSED);
 
-				mednet.putOffer(service);
+				// TODO
+				//net.putOffer(service);
 
 				System.out.println("[WebServiceClient:dropAuction()] Aici: "
 						+ users);
@@ -32,11 +33,12 @@ public class DropAuctionState implements State {
 
 			/* Remove all users */
 			service.setUsers(null);
-			mednet.changeServiceNotify(service);
+			// TODO
+			//net.changeServiceNotify(service);
 		}
 	}
 
-	public void executeWeb(MediatorWeb medweb) {
+	public void executeWeb(WebService web) {
 
 	}
 

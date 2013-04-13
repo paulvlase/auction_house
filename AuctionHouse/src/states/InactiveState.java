@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -12,12 +12,12 @@ public class InactiveState implements State {
 		
 	}
 	
-	public void executeNet(MediatorNetwork mednet) {
-		System.out.println("[InactiveState: executeNet()] ");
+	public void executeNet(NetworkService net) {
+		System.out.println("[InactiveState: executeNet()] Begin");
 	}
 	
-	public void executeWeb(MediatorWeb medweb) {
-		System.out.println("[InactiveState: executeWeb()] ");
+	public void executeWeb(WebService web) {
+		System.out.println("[InactiveState: executeWeb()] End");
 	}
 
 	public String getName() {

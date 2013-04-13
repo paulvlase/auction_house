@@ -1,7 +1,8 @@
-package webServiceClient;
+package webClient;
 
 import interfaces.Command;
 import interfaces.MediatorWeb;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -13,12 +14,12 @@ import data.Service;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebClientEvents extends Thread {
-	private WebClientMockup	web;
-	private Object					monitor;
+	private WebService			web;
+	private Object				monitor;
 
-	private ArrayList<Command>		events;
+	private ArrayList<Command>	events;
 
-	public WebClientEvents(WebClientMockup web) {
+	public WebClientEvents(WebService web) {
 		this.web = web;
 
 		events = new ArrayList<Command>();
@@ -45,7 +46,7 @@ public class WebClientEvents extends Thread {
 		for (Command event : events) {
 			event.execute();
 		}
-		
+
 		System.out.println("[WebServiceClientEvents:process()] Begin");
 
 	}
@@ -53,25 +54,25 @@ public class WebClientEvents extends Thread {
 	public synchronized void publishService(Service service) {
 		System.out.println("[WebServiceClientEvents:publishService()] Begin");
 
-		events.add(new WebAdapter(service));
+		events.add(new WebAdapter(service, web));
 
 		synchronized (monitor) {
 			monitor.notify();
 		}
-		
+
 		System.out.println("[WebServiceClientEvents:publishService()] End");
 	}
 
 	public synchronized void publishServices(ArrayList<Service> services) {
 		System.out.println("[WebServiceClientEvents:publishServices()] Begin");
 		for (Service service : services) {
-			events.add(new WebAdapter(service));
+			events.add(new WebAdapter(service, web));
 		}
 
 		synchronized (monitor) {
 			monitor.notify();
 		}
-		
+
 		System.out.println("[WebServiceClientEvents:publishServices()] End");
 	}
 }

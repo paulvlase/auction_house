@@ -1,7 +1,7 @@
 package states;
 
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class RemoveOfferState implements State {
 	}
 	
 	@Override
-	public void executeNet(MediatorNetwork mednet) {
+	public void executeNet(NetworkService net) {
 		if (service.getUsers() == null) {
 			return;
 		}
@@ -32,10 +32,11 @@ public class RemoveOfferState implements State {
 		}
 	}
 	
-	public void executeWeb(MediatorWeb medweb) {
-		System.out.println("[RemoveOfferState:executeWeb()] begin");
-		medweb.removeOffer(service.getName());
-		System.out.println("[RemoveOfferState:executeWeb()] end");
+	public void executeWeb(WebService web) {
+		System.out.println("[RemoveOfferState:executeWeb()] Begin");
+		//TODO
+		//web.removeOffer(service.getName());
+		System.out.println("[RemoveOfferState:executeWeb()] End");
 	}
 	
 	public void setState(Service service) {

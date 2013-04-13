@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -12,7 +13,7 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface MediatorWeb {
-	public void registerWebServiceClient(WebClient web);
+	public void registerWebClient(WebClient web);
 	
 	public UserProfile getUserProfile();
 
@@ -33,4 +34,5 @@ public interface MediatorWeb {
 	public void changeProfileNotify(UserProfile profile);
 
 	public void stopTransfer(Service service);
+	public InetSocketAddress getNetworkAddress();
 }

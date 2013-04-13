@@ -1,8 +1,8 @@
 package states;
 
 import data.Service;
-import interfaces.MediatorNetwork;
-import interfaces.MediatorWeb;
+import interfaces.NetworkService;
+import interfaces.WebService;
 
 public class StateManager {
 	private InactiveState inactiveState;
@@ -17,10 +17,10 @@ public class StateManager {
 
 	private State currentState;
 	
-	private MediatorNetwork mednet;
-	private MediatorWeb     medweb;
+	private NetworkService net;
+	private WebService     web;
 	
-	public StateManager(MediatorNetwork mednet, MediatorWeb medweb) {
+	public StateManager(NetworkService net, WebService web) {
 		inactiveState = new InactiveState();
 		makeOfferState = new MakeOfferState();
 		removeOfferState = new RemoveOfferState();
@@ -33,8 +33,8 @@ public class StateManager {
 
 		currentState = inactiveState;
 		
-		this.mednet = mednet;
-		this.medweb = medweb;
+		this.net = net;
+		this.web = web;
 	}
 	
 	public void setInactiveState() {
@@ -89,10 +89,10 @@ public class StateManager {
 	}
 	
 	public void executeNet() {
-		currentState.executeNet(mednet);
+		currentState.executeNet(net);
 	}
 	
 	public void executeWeb() {
-		currentState.executeWeb(medweb);
+		currentState.executeWeb(web);
 	}
 }

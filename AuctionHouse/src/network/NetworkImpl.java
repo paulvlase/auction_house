@@ -1,7 +1,6 @@
 package network;
 
 import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,6 +9,7 @@ import data.Service;
 import data.Service.Status;
 import interfaces.MediatorNetwork;
 import interfaces.NetworkMediator;
+import interfaces.NetworkService;
 import interfaces.NetworkTransfer;
 
 /**
@@ -17,15 +17,17 @@ import interfaces.NetworkTransfer;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class NetworkImpl implements NetworkMediator, NetworkTransfer {
+public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkService {
 	private MediatorNetwork med;
 	private NetworkJoinThread joinThread;
 
 	private NetworkEvents eventsTask;
 
 	private Hashtable<String, NetworkTransferTask> tasks;
+	
 	private ConcurrentHashMap<String, SelectionKey> userKeyMap;
-	private ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
+
+	private Server driver;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.med = med;
@@ -38,7 +40,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 		tasks = new Hashtable<String, NetworkTransferTask>();
 
 		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
-		keyMessageMap = new ConcurrentHashMap<SelectionKey, ArrayList<Message>>();
+
+		Server driver = driver.getAddress();
 	}
 
 	public ConcurrentHashMap<String, SelectionKey> getUserKeyMap() {
@@ -47,15 +50,6 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer {
 
 	public void setUserKeyMap(ConcurrentHashMap<String, SelectionKey> userKeyMap) {
 		this.userKeyMap = userKeyMap;
-	}
-
-	public ConcurrentHashMap<SelectionKey, ArrayList<Message>> getKeyMessageMap() {
-		return keyMessageMap;
-	}
-
-	public void setKeyMessageMap(
-			ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap) {
-		this.keyMessageMap = keyMessageMap;
 	}
 
 	@Override
