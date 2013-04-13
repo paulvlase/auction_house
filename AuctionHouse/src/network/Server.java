@@ -48,6 +48,8 @@ public class Server extends Thread {
 			serverSocketChannel.socket().bind(null);
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
+			System.out.println("[Server] Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
+
 			serverChannels = new ArrayList<ServerSocketChannel>();
 			socketChannels = new ArrayList<SocketChannel>();
 
@@ -82,6 +84,7 @@ public class Server extends Thread {
 		ServerSocketChannel serverSocketChannel;
 		Message message;
 
+		System.out.println("[Server, accept()] Accept a connection");
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
@@ -231,7 +234,7 @@ public class Server extends Thread {
 	}
 
 	public void sendData(Message message, String username, InetSocketAddress address) {
-
+		System.out.println("[Server, sendData()] Begin");
 		ConcurrentHashMap<String, SelectionKey> userKeyMap;
 		ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages;
 
@@ -282,15 +285,17 @@ public class Server extends Thread {
 		SocketChannel socketChannel = null;
 		Boolean bRet;
 
+		System.out.println("[Server, initiateConnect()] Begin");
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
+			System.out.println("[Server, initiateConnect()] Connect to : " + destination);
 			bRet = socketChannel.connect(destination);
 
 			if (bRet) {
-				System.out.println("[initiateConnect()] Connection established");
+				System.out.println("[Server, initiateConnect()] Connection established");
 			} else {
-				System.out.println("[initiateConnect()] Connection will be finish later");
+				System.out.println("[Server, initiateConnect()] Connection will be finish later");
 			}
 
 			socketChannel.register(selector, SelectionKey.OP_CONNECT);
@@ -308,6 +313,8 @@ public class Server extends Thread {
 		if (!socketChannel.finishConnect()) {
 			System.err.println("Eroare finishConnect");
 		}
+
+		System.out.println("[Server, connect] Connection finished");
 
 		/* Check if we know who is at the other end of the connection */
 		if (network.getUserKeyMap().containsKey(key)) {
@@ -349,13 +356,22 @@ public class Server extends Thread {
 					SelectionKey key = it.next();
 					it.remove();
 
+					if (!key.isValid()) {
+						System.out.println("[Server, run] Key isn't valid");
+						continue;
+					}
+					
 					if (key.isAcceptable()) {
+						System.out.println("[Server, run] accept");
 						accept(key);
 					} else if (key.isReadable()) {
+						System.out.println("[Server, run] read");
 						read(key);
 					} else if (key.isWritable()) {
+						System.out.println("[Server, run] write");
 						write(key);
 					} else if (key.isConnectable()) {
+						System.out.println("[Server, run] connect");
 						connect(key);
 					}
 				}
