@@ -189,6 +189,7 @@ public class Service implements Comparable<Service>, Serializable {
 		ArrayList<Object> row = new ArrayList<Object>();
 
 		System.out.println("[Service: getActiveRow()] user: " + user);
+		System.out.println("[Service: getActiveRow()] user offer : " + user.getOffer());
 		switch (user.getOffer()) {
 		case TRANSFER_STARTED:
 			row = new ArrayList<Object>(Arrays.asList("", "", 0, "", "", ""));

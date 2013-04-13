@@ -157,9 +157,9 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public void publishService(Service service) {
-		System.out.println("Service : " + service);
+		System.out.println("[NetworkImpl, publishService] Service : " + service);
 		ArrayList<Message> messages = service.asMessages();
-		System.out.println("Messages : " + messages);
+		System.out.println("[NetworkImpl, publishService] Messages : " + messages);
 
 		for (int i = 0; i < messages.size(); i++) {
 			Message message = messages.get(i);
