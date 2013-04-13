@@ -1,6 +1,10 @@
 package network;
 
-import java.io.ObjectOutputStream.PutField;
+import interfaces.MediatorNetwork;
+import interfaces.NetworkMediator;
+import interfaces.NetworkService;
+import interfaces.NetworkTransfer;
+
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
@@ -11,10 +15,6 @@ import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserProfile;
-import interfaces.MediatorNetwork;
-import interfaces.NetworkMediator;
-import interfaces.NetworkService;
-import interfaces.NetworkTransfer;
 
 /**
  * Network module implementation.
@@ -157,7 +157,9 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public void publishService(Service service) {
+		System.out.println("Service : " + service);
 		ArrayList<Message> messages = service.asMessages();
+		System.out.println("Messages : " + messages);
 
 		for (int i = 0; i < messages.size(); i++) {
 			Message message = messages.get(i);
