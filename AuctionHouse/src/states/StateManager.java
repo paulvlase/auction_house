@@ -1,7 +1,9 @@
 package states;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import data.Message;
 import data.Service;
 import interfaces.NetworkService;
 import interfaces.WebService;
@@ -91,5 +93,9 @@ public class StateManager implements Serializable{
 	
 	public void executeWeb(WebService web) {
 		currentState.executeWeb(web);
+	}
+	
+	public ArrayList<Message> asMessages() {
+		return currentState.asMessages();
 	}
 }

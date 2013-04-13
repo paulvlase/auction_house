@@ -341,4 +341,8 @@ public class Service implements Comparable<Service>, Serializable {
 	public void setMakeOfferState(Integer userIndex, Double price) {
 		stateMgr.setMakeOfferState(this, userIndex, price);
 	}
+	
+	public ArrayList<Message> asMessages() {
+		return stateMgr.asMessages();
+	}
 }
