@@ -12,9 +12,6 @@ import webServer.messages.LoginRequest;
 import webServer.messages.LogoutRequest;
 import webServer.messages.SetProfileRequest;
 
-import data.LoginCred;
-import data.UserProfile;
-
 /**
  * WebServiceWorker mockup implementation.
  * 
@@ -48,23 +45,25 @@ public class WebWorkerMockup implements Runnable {
 			System.out.println("New conn");
 
 			if (requestObj instanceof LoginRequest) {
-				log("Login message");
+				log("Login request");
 				responseObj = webServer.login((LoginRequest) requestObj);
 			} else if (requestObj instanceof LogoutRequest) {
-				log("Logout message");
+				log("Logout request");
 				responseObj = webServer.logout((LogoutRequest) requestObj);
 			} else if (requestObj instanceof LaunchOfferRequest) {
-				log("Launch offer message");
+				log("Launch offer request");
 				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
 			} else if (requestObj instanceof GetProfileRequest) {
+				log("Get profile offer request");
 				responseObj = webServer.getProfile((GetProfileRequest) requestObj);
-			} else if (requestObj instanceof GetProfileRequest) {
+			} else if (requestObj instanceof SetProfileRequest) {
+				log("Set profile offer request");
 				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
 			} else if (requestObj instanceof DropOfferRequest) {
-				log("Drop offermessage");
+				log("Drop offer request");
 				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
 			} else {
-				log("Unknow command");
+				log("Unknow request");
 				responseObj = null;
 			}
 
