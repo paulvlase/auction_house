@@ -52,6 +52,10 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		this.userKeyMap = userKeyMap;
 	}
 
+	public NetworkEvents getEventsTask() {
+		return eventsTask;
+	}
+
 	@Override
 	public boolean startTransfer(Service service) {
 		System.out.println("startTransfer");
