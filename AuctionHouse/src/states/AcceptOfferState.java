@@ -5,7 +5,7 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
-import network.Message;
+import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -57,7 +57,7 @@ public class AcceptOfferState implements State {
 	@Override
 	public ArrayList<Message> asMessages() {
 		Message message = new Message();
-		message.setType(network.Message.MessageType.ACCEPT);
+		message.setType(data.Message.MessageType.ACCEPT);
 		message.setServiceName(service.getName());
 		message.setUsername(service.getUsers().get(userIndex).getUsername());
 		message.setPeer(service.getUsers().get(userIndex).getUsername());

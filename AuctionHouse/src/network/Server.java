@@ -18,7 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import network.Message.MessageType;
+import data.Message;
+import data.Message.MessageType;
+
 
 public class Server extends Thread {
 	// private static final Integer MAX_POOL_THREADS = 5;
@@ -111,7 +113,7 @@ public class Server extends Thread {
 			return;
 		}
 
-		networkEvents.publishMessage(key, message);
+		networkEvents.enqueue(key, message);
 	}
 
 	private void read(SelectionKey key) throws Exception {

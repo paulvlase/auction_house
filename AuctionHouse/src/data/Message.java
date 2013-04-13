@@ -1,4 +1,4 @@
-package network;
+package data;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

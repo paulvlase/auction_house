@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import webClient.Util;
 
-import network.Message;
+import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
@@ -54,7 +54,7 @@ public class LaunchOfferState implements State {
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
-			message.setType(network.Message.MessageType.LAUNCH);
+			message.setType(data.Message.MessageType.LAUNCH);
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 			message.setPeer(user.getUsername());

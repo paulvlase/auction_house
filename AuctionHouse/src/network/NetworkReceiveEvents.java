@@ -3,55 +3,25 @@ package network;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
+import data.Message;
+import data.QueueThread;
 import data.Service;
 import data.UserEntry;
+import data.Message.MessageType;
 import data.UserEntry.Offer;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
-import network.Message.MessageType;
-
 /**
  * @author Ghennadi Procopciuc
  */
-public class NetworkReceiveEvents extends Thread {
-	private Object												monitor;
-	private ConcurrentHashMap<SelectionKey, ArrayList<Message>>	keyMessageMap;
-	private NetworkImpl											network;
+public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
+	private NetworkImpl	network;
 
 	public NetworkReceiveEvents(NetworkImpl network) {
-		keyMessageMap = new ConcurrentHashMap<SelectionKey, ArrayList<Message>>();
-		monitor = new Object();
 
 		this.network = network;
-	}
-
-	@Override
-	public void run() {
-		while (true) {
-			try {
-				synchronized (monitor) {
-					monitor.wait();
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			process();
-		}
-	}
-
-	private boolean haveToProcess() {
-		if (keyMessageMap == null) {
-			return false;
-		}
-
-		if (keyMessageMap.elements().hasMoreElements()) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -267,14 +237,14 @@ public class NetworkReceiveEvents extends Thread {
 
 	}
 
-	private void process() {
+	protected void process() {
 		System.out.println("[WebServiceClientEvents:process()] Begin");
 
 		if (!haveToProcess()) {
 			return;
 		}
 
-		for (Entry<SelectionKey, ArrayList<Message>> entry : keyMessageMap.entrySet()) {
+		for (Entry<SelectionKey, ArrayList<Message>> entry : queue.entrySet()) {
 			for (Message message : entry.getValue()) {
 				messageProcess(entry.getKey(), message);
 			}
@@ -282,18 +252,5 @@ public class NetworkReceiveEvents extends Thread {
 
 		System.out.println("[WebServiceClientEvents:process()] Begin");
 
-	}
-
-	public synchronized void publishMessage(SelectionKey key, Message message) {
-		System.out.println("[WebServiceClientEvents:publishService()] Begin");
-
-		keyMessageMap.putIfAbsent(key, new ArrayList<Message>());
-		keyMessageMap.get(key).add(message);
-
-		synchronized (monitor) {
-			monitor.notify();
-		}
-
-		System.out.println("[WebServiceClientEvents:publishService()] End");
 	}
 }
