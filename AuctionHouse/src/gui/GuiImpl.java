@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import config.FilesConfig;
 import config.GuiConfig;
@@ -162,6 +163,16 @@ public class GuiImpl implements Gui {
 	@Override
 	public void changeServiceNotify(Service service) {
 		if (mainWindow != null) {
+			/*
+			 SwingUtilities.invokeLater(new Runnable() {
+				    public void run() {
+				      // Here, we can safely update the GUI
+				      // because we'll be called from the
+				      // event dispatch thread
+				      statusLabel.setText("Query: " + queryNo);
+				    }
+				  });
+			*/
 			mainWindow.changeServiceNotify(service);
 		}
 	}

@@ -48,20 +48,19 @@ public class DropOfferState implements State {
 	@Override
 	public ArrayList<Message> asMessages() {
 		System.out.println("[DropOfferState] asMessages");
-		ArrayList<Message> list = null;
-		Boolean first = true;
+		ArrayList<Message> list = new ArrayList<Message>();
 
+		if (service.getUsers() == null) {
+			return list;
+		}
+		
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
 			message.setType(data.Message.MessageType.REFUSE);
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 
-			if (first) {
-				list = message.asArrayList();
-			} else {
-				list.add(message);
-			}
+			list.add(message);
 		}
 
 		return list;
