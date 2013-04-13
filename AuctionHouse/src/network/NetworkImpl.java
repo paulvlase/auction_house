@@ -1,5 +1,6 @@
 package network;
 
+import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -41,7 +42,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
 
-		Server driver = driver.getAddress();
+		driver = new Server(this);
+	}
+	
+	public InetSocketAddress getAddress() {
+		return driver.getAddress();
 	}
 
 	public ConcurrentHashMap<String, SelectionKey> getUserKeyMap() {
