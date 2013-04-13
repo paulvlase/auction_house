@@ -32,7 +32,6 @@ public class LaunchOfferState implements State {
 		System.out.println("[LaunchOfferState:executeWeb()] Begin");
 
 		service.setStatus(Status.ACTIVE);
-		service.setInactiveState();
 
 		// TODO
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
@@ -54,10 +53,10 @@ public class LaunchOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
-		ArrayList<Message> list = null;
-		Boolean first = true;
+		ArrayList<Message> list = new ArrayList<Message>();
 
 		System.out.println("[LaunchOfferState] asMessages");
+		
 		/**
 		 * There is no one who offer this service
 		 */
@@ -72,11 +71,7 @@ public class LaunchOfferState implements State {
 			message.setUsername(user.getUsername());
 			message.setDestination(user.getUsername());
 
-			if (first) {
-				list = message.asArrayList();
-			} else {
-				list.add(message);
-			}
+			list.add(message);
 		}
 
 		return list;
