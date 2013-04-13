@@ -3,6 +3,7 @@ package data;
 import interfaces.NetworkService;
 import interfaces.WebService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,7 +25,8 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase
  * @see Status
  */
-public class Service implements Comparable<Service> {
+public class Service implements Comparable<Service>, Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private String name;
 	private long time;
 	private double price;
