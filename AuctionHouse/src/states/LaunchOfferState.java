@@ -16,7 +16,7 @@ import data.UserEntry;
 
 public class LaunchOfferState implements State {
 	private static final long	serialVersionUID	= 1L;
-	private Service service;
+	private Service				service;
 
 	public LaunchOfferState() {
 
@@ -24,7 +24,7 @@ public class LaunchOfferState implements State {
 
 	public void executeNet(NetworkService net) {
 		System.out.println("[LaunchOfferState:executeNet()] Begin");
-		
+
 		System.out.println("[LaunchOfferState:executeNet()] End");
 	}
 
@@ -55,12 +55,19 @@ public class LaunchOfferState implements State {
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
+		/**
+		 * There is no one who offer this service
+		 */
+		if (service.getUsers() == null) {
+			return new ArrayList<Message>();
+		}
+
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
 			message.setType(data.Message.MessageType.LAUNCH);
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
-			message.setPeer(user.getUsername());
+			message.setDestination(user.getUsername());
 
 			if (first) {
 				list = message.asArrayList();

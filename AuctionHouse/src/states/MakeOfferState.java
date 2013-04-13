@@ -60,7 +60,7 @@ public class MakeOfferState implements State {
 		message.setType(data.Message.MessageType.MAKE_OFFER);
 		message.setServiceName(service.getName());
 		message.setUsername(user.getUsername());
-		message.setPeer(user.getUsername());
+		message.setDestination(user.getUsername());
 		message.setPayload(price);
 		
 		return message.asArrayList();

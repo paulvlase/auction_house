@@ -1,6 +1,7 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class QueueThread<K, T> extends Thread {
@@ -56,6 +57,15 @@ public abstract class QueueThread<K, T> extends Thread {
 		}
 	}
 
+	public void enqueue(K key, Collection<T> values){
+		queue.putIfAbsent(key, new ArrayList<T>());
+		queue.get(key).addAll(values);
+
+		synchronized (monitor) {
+			monitor.notify();
+		}
+	}
+	
 	public synchronized void stopRunning() {
 		running = false;
 

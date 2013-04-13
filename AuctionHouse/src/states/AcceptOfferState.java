@@ -61,7 +61,7 @@ public class AcceptOfferState implements State {
 		message.setType(data.Message.MessageType.ACCEPT);
 		message.setServiceName(service.getName());
 		message.setUsername(service.getUsers().get(userIndex).getUsername());
-		message.setPeer(service.getUsers().get(userIndex).getUsername());
+		message.setDestination(service.getUsers().get(userIndex).getUsername());
 		
 		return message.asArrayList();
 	}

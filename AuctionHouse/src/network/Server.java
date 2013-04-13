@@ -18,26 +18,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import data.Message;
 import data.Message.MessageType;
 
-
 public class Server extends Thread {
 	// private static final Integer MAX_POOL_THREADS = 5;
 
-	private NetworkImpl network;
+	private NetworkImpl									network;
 
-	private boolean running;
-	private Selector selector;
-	private ServerSocketChannel serverSocketChannel;
-	private ArrayList<ServerSocketChannel> serverChannels;
-	private ArrayList<SocketChannel> socketChannels;
+	private boolean										running;
+	private Selector									selector;
+	private ServerSocketChannel							serverSocketChannel;
+	private ArrayList<ServerSocketChannel>				serverChannels;
+	private ArrayList<SocketChannel>					socketChannels;
 
 	// private static ExecutorService pool = Executors.newCachedThreadPool();
-	private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
-	private ByteBuffer wBuffer = ByteBuffer.allocate(8192);
+	private ByteBuffer									rBuffer	= ByteBuffer.allocate(8192);
+	private ByteBuffer									wBuffer	= ByteBuffer.allocate(8192);
 
-	private Hashtable<SelectionKey, ArrayList<byte[]>> writeBuffers;
-	private Hashtable<SelectionKey, byte[]> readBuffers;
+	private Hashtable<SelectionKey, ArrayList<byte[]>>	writeBuffers;
+	private Hashtable<SelectionKey, byte[]>				readBuffers;
 
-	private LinkedList<ChangeRequest> changeRequestQueue;
+	private LinkedList<ChangeRequest>					changeRequestQueue;
 
 	public Server(NetworkImpl network) {
 		this.network = network;
@@ -70,8 +69,7 @@ public class Server extends Thread {
 		}
 
 		ServerSocket socket = serverSocketChannel.socket();
-		return new InetSocketAddress(socket.getInetAddress(),
-				socket.getLocalPort());
+		return new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
 	}
 
 	public synchronized void startRunning() {
@@ -91,9 +89,9 @@ public class Server extends Thread {
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
 
-			message = new Message();
-			message.setType(MessageType.GET_USERNAME);
-			sendData(key, message.serialize());
+			// message = new Message();
+			// message.setType(MessageType.GET_USERNAME);
+			// sendData(key, message.serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -127,9 +125,7 @@ public class Server extends Thread {
 		}
 
 		if (numRead <= 0) {
-			System.out
-					.println("[NIOTCPServer] S-a inchis socket-ul asociat cheii "
-							+ key);
+			System.out.println("[NIOTCPServer] S-a inchis socket-ul asociat cheii " + key);
 			key.channel().close();
 			key.cancel();
 			return;
@@ -144,9 +140,8 @@ public class Server extends Thread {
 		}
 
 		byte[] currentBuf = this.rBuffer.array();
-		System.out.println("[NIOTCPServer] S-au citit " + numRead
-				+ " bytes de pe socket-ul asociat cheii " + key + " : "
-				+ currentBuf);
+		System.out.println("[NIOTCPServer] S-au citit " + numRead + " bytes de pe socket-ul asociat cheii " + key
+				+ " : " + currentBuf);
 
 		byte[] newBuf = new byte[rbuflen + numRead];
 
@@ -166,18 +161,14 @@ public class Server extends Thread {
 		// Citire dimensiune cerere
 		if (i + 4 >= newBuf.length)
 			return;
-		length = ((128 + (int) newBuf[i]) << 24)
-				+ ((128 + (int) newBuf[i + 1]) << 16)
-				+ ((128 + (int) newBuf[i + 2]) << 8)
-				+ (128 + (int) newBuf[i + 3]);
-		System.out.println("[NIOTCPServer] S-a primit o cerere lungime = "
-				+ length + ")");
+		length = ((128 + (int) newBuf[i]) << 24) + ((128 + (int) newBuf[i + 1]) << 16)
+				+ ((128 + (int) newBuf[i + 2]) << 8) + (128 + (int) newBuf[i + 3]);
+		System.out.println("[NIOTCPServer] S-a primit o cerere lungime = " + length + ")");
 		i += 4;
 
 		// Citeste obiectul serializat
 		if (i + length <= newBuf.length) {
-			Message message = new Message(Arrays.copyOfRange(newBuf, 4,
-					length + 4));
+			Message message = new Message(Arrays.copyOfRange(newBuf, 4, length + 4));
 
 			appendMessage(message, key);
 
@@ -215,8 +206,8 @@ public class Server extends Thread {
 				this.wBuffer.flip();
 
 				int numWritten = socketChannel.write(this.wBuffer);
-				System.out.println("[NIOTCPServer] Am scris " + numWritten
-						+ " bytes pe socket-ul asociat cheii " + key);
+				System.out
+						.println("[NIOTCPServer] Am scris " + numWritten + " bytes pe socket-ul asociat cheii " + key);
 
 				if (numWritten < bbuf.length) {
 					byte[] newBuf = new byte[bbuf.length - numWritten];
@@ -233,24 +224,41 @@ public class Server extends Thread {
 
 			if (wbuf.size() == 0) {
 				synchronized (this.changeRequestQueue) {
-					this.changeRequestQueue.add(new ChangeRequest(key,
-							SelectionKey.OP_READ));
+					this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_READ));
 				}
 			}
+		}
+	}
+
+	public void sendData(Message message, String username, InetSocketAddress address) {
+
+		ConcurrentHashMap<String, SelectionKey> userKeyMap;
+		ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages;
+
+		userKeyMap = network.getUserKeyMap();
+		userUnsentMessages = network.getUserUnsentMessages();
+
+		if (!userKeyMap.containsKey(message.getDestination())) {
+			/* Initiate a new connection and save all messages */
+			initiateConnect(address);
+			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
+			userUnsentMessages.get(message.getDestination()).add(message);
+		} else {
+			sendData(message, message.getDestination());
 		}
 	}
 
 	public void sendData(Message message, String username) {
 		sendData(network.getUserKeyMap().get(username), message.serialize());
 	}
-	
-	public void sendData(Message message, SelectionKey key){
+
+	public void sendData(Message message, SelectionKey key) {
 		sendData(key, message.serialize());
 	}
 
 	public void sendData(SelectionKey key, byte[] data) {
-		System.out.println("[NIOTCPServer] Se doreste scrierea a "
-				+ data.length + " bytes pe socket-ul asociat cheii " + key);
+		System.out.println("[NIOTCPServer] Se doreste scrierea a " + data.length + " bytes pe socket-ul asociat cheii "
+				+ key);
 
 		ArrayList<byte[]> wbuf = null;
 
@@ -263,8 +271,7 @@ public class Server extends Thread {
 
 			wbuf.add(data);
 			synchronized (this.changeRequestQueue) {
-				this.changeRequestQueue.add(new ChangeRequest(key,
-						SelectionKey.OP_READ | SelectionKey.OP_WRITE));
+				this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_READ | SelectionKey.OP_WRITE));
 			}
 		}
 
@@ -273,11 +280,18 @@ public class Server extends Thread {
 
 	public boolean initiateConnect(InetSocketAddress destination) {
 		SocketChannel socketChannel = null;
+		Boolean bRet;
 
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			socketChannel.connect(destination);
+			bRet = socketChannel.connect(destination);
+
+			if (bRet) {
+				System.out.println("[initiateConnect()] Connection established");
+			} else {
+				System.out.println("[initiateConnect()] Connection will be finish later");
+			}
 
 			socketChannel.register(selector, SelectionKey.OP_CONNECT);
 		} catch (IOException e) {
@@ -289,12 +303,36 @@ public class Server extends Thread {
 	}
 
 	private void connect(SelectionKey key) throws IOException {
-		System.out.print("CONNECT: ");
 
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		if (!socketChannel.finishConnect()) {
 			System.err.println("Eroare finishConnect");
 		}
+
+		/* Check if we know who is at the other end of the connection */
+		if (network.getUserKeyMap().containsKey(key)) {
+			String username = null;
+			for (String user : network.getUserKeyMap().keySet()) {
+				if (network.getUserKeyMap().get(user).equals(key)) {
+					username = user;
+					break;
+				}
+			}
+
+			ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
+			if (unsentMessages.contains(username)) {
+				network.getSendEvents().enqueue(key, unsentMessages.get(username));
+			}
+		} else {
+			// TODO : Make & send an username request
+			System.err.println("Something wrong went ...");
+		}
+
+		Message message = new Message();
+		message.setType(MessageType.SEND_USERNAME);
+
+		// TODO : Maybe first you should set interests
+		sendData(key, message.serialize());
 
 		// TODO : Check this
 		key.interestOps(SelectionKey.OP_WRITE);
@@ -307,8 +345,7 @@ public class Server extends Thread {
 			while (isRunning()) {
 				selector.select();
 
-				for (Iterator<SelectionKey> it = selector.selectedKeys()
-						.iterator(); it.hasNext();) {
+				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = it.next();
 					it.remove();
 
@@ -325,9 +362,7 @@ public class Server extends Thread {
 
 				synchronized (changeRequestQueue) {
 					while ((creq = this.changeRequestQueue.poll()) != null) {
-						System.out
-								.println("[NIOTCPServer] Schimb operatiile cheii "
-										+ creq.key + " la " + creq.newOps);
+						System.out.println("[NIOTCPServer] Schimb operatiile cheii " + creq.key + " la " + creq.newOps);
 						creq.key.interestOps(creq.newOps);
 					}
 				}

@@ -11,18 +11,16 @@ import java.util.Arrays;
 
 public class Message implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
 
-	private MessageType type;
-	private String serviceName;
+	private MessageType			type;
+	private String				serviceName;
 
-	private String username;
+	private String				username;
 
-	/**
-	 * User name of source / destination
-	 */
-	private String peer;
-	private Object payload;
+	private String				source;
+	private String				destination;
+	private Object				payload;
 
 	public enum MessageType {
 		LAUNCH, LAUNCH_RESPONSE, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
@@ -105,16 +103,9 @@ public class Message implements Serializable {
 		/* Object clone */
 		this.type = ((Message) obj).getType();
 		this.serviceName = ((Message) obj).getServiceName();
-		this.peer = ((Message) obj).getPeer();
+		this.source = ((Message) obj).getSource();
+		this.destination = ((Message) obj).getDestination();
 		this.payload = ((Message) obj).getPayload();
-	}
-
-	public String getPeer() {
-		return peer;
-	}
-
-	public void setPeer(String peer) {
-		this.peer = peer;
 	}
 
 	public MessageType getType() {
@@ -149,9 +140,24 @@ public class Message implements Serializable {
 		this.serviceName = serviceName;
 	}
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
 	private static byte[] intToByteArray(int value) {
-		return new byte[] { (byte) (value >>> (3 * Byte.SIZE)),
-				(byte) (value >>> (2 * Byte.SIZE)),
+		return new byte[] { (byte) (value >>> (3 * Byte.SIZE)), (byte) (value >>> (2 * Byte.SIZE)),
 				(byte) (value >>> Byte.SIZE), (byte) value };
 	}
 
@@ -179,12 +185,11 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "type : " + type + ", serviceName : " + serviceName
-				+ ", peer : " + peer + ", payload : " + Arrays.asList(payload);
+		return "type : " + type + ", serviceName : " + serviceName + ", source : " + source + ", destination : "
+				+ destination + ", payload : " + Arrays.asList(payload);
 	}
 
 	public static void main(String[] args) {
-		System.out.println(new Message(new Message(MessageType.LAUNCH,
-				"service1").serialize()));
+		System.out.println(new Message(new Message(MessageType.LAUNCH, "service1").serialize()));
 	}
 }

@@ -1,11 +1,13 @@
 package network;
 
+import java.io.ObjectOutputStream.PutField;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 
+import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserProfile;
@@ -20,17 +22,18 @@ import interfaces.NetworkTransfer;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkService {
-	private MediatorNetwork mediator;
-	private NetworkJoinThread joinThread;
+	private MediatorNetwork									mediator;
+	private NetworkJoinThread								joinThread;
 
-	private NetworkReceiveEvents receiveEvents;
-	private NetworkSendEvents sendEvents;
+	private NetworkReceiveEvents							receiveEvents;
+	private NetworkSendEvents								sendEvents;
 
-	private Hashtable<String, NetworkTransferTask> tasks;
-	
-	private ConcurrentHashMap<String, SelectionKey> userKeyMap;
+	private Hashtable<String, NetworkTransferTask>			tasks;
 
-	private Server driver;
+	private ConcurrentHashMap<String, SelectionKey>			userKeyMap;
+	private ConcurrentHashMap<String, ArrayList<Message>>	userUnsentMessages;
+
+	private Server											driver;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.mediator = med;
@@ -43,10 +46,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		tasks = new Hashtable<String, NetworkTransferTask>();
 
 		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
+		userUnsentMessages = new ConcurrentHashMap<String, ArrayList<Message>>();
 
 		driver = new Server(this);
 	}
-	
+
 	public InetSocketAddress getAddress() {
 		return driver.getAddress();
 	}
@@ -77,28 +81,51 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		service.setStatus(Status.TRANSFER_STARTED);
 		mediator.changeServiceNotify(service);
 
-		NetworkTransferTask task = new NetworkTransferTask(mediator, joinThread,
-				service);
+		NetworkTransferTask task = new NetworkTransferTask(mediator, joinThread, service);
 		task.execute();
 
 		tasks.put(service.getName(), task);
 
 		return true;
 	}
-	
-	public UserProfile getUserProfile(){
+
+	public UserProfile getUserProfile() {
 		return mediator.getUserProfile();
 	}
-	
-	public void registerConnection(String username, SelectionKey key){
+
+	public void registerConnection(String username, SelectionKey key) {
 		userKeyMap.put(username, key);
 	}
-	
-	public Service getService(String serviceName){
+
+	public Service getService(String serviceName) {
 		return mediator.getOffer(serviceName);
 	}
-	
-	public void changeServiceNotify(Service service){
+
+	public ConcurrentHashMap<String, ArrayList<Message>> getUserUnsentMessages() {
+		return userUnsentMessages;
+	}
+
+	public void setUserUnsentMessages(ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages) {
+		this.userUnsentMessages = userUnsentMessages;
+	}
+
+	public NetworkReceiveEvents getReceiveEvents() {
+		return receiveEvents;
+	}
+
+	public void setReceiveEvents(NetworkReceiveEvents receiveEvents) {
+		this.receiveEvents = receiveEvents;
+	}
+
+	public NetworkSendEvents getSendEvents() {
+		return sendEvents;
+	}
+
+	public void setSendEvents(NetworkSendEvents sendEvents) {
+		this.sendEvents = sendEvents;
+	}
+
+	public void changeServiceNotify(Service service) {
 		mediator.changeServiceNotify(service);
 	}
 
@@ -110,7 +137,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public void logIn() {
 		receiveEvents = new NetworkReceiveEvents(this);
 		sendEvents = new NetworkSendEvents(this);
-		
+
 		receiveEvents.start();
 		sendEvents.start();
 	}
@@ -130,11 +157,16 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public void publishService(Service service) {
-		//TODO : Process send messages
+		ArrayList<Message> messages = service.asMessages();
+
+		for (int i = 0; i < messages.size(); i++) {
+			Message message = messages.get(i);
+			driver.sendData(message, message.getDestination(), service.getUsers().get(i).getAddress());
+		}
 	}
 
 	@Override
 	public void publishServices(ArrayList<Service> services) {
-		//TODO : Process send messages
+		// TODO : Process send messages
 	}
 }
