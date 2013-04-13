@@ -1,8 +1,11 @@
 package data;
 
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 
-public class UserEntry implements Comparable<UserEntry> {
+public class UserEntry implements Comparable<UserEntry>, Serializable {
+	private static final long	serialVersionUID	= 1L;
+
 	public enum Offer {
 		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, OFFER_EXCEDED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, OFFER_DROP;
 
