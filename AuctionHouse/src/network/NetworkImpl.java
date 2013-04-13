@@ -61,6 +61,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		return eventsTask;
 	}
 
+	public Server getDriver() {
+		return driver;
+	}
+
+	public void setDriver(Server driver) {
+		this.driver = driver;
+	}
+
 	@Override
 	public boolean startTransfer(Service service) {
 		System.out.println("startTransfer");
