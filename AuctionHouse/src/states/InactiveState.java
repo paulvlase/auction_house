@@ -29,7 +29,8 @@ public class InactiveState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[InactiveOfferState] asMessages");
 		//Nothing to do, for intern usage
-		return null;
+		return new ArrayList<Message>();
 	}
 }

@@ -53,6 +53,7 @@ public class DropAuctionState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[DropAuctionState] asMessages");
 		ArrayList<Message> list = null;
 		Boolean first = true;
 

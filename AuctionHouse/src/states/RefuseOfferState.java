@@ -54,6 +54,7 @@ public class RefuseOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[RefuseOfferState] asMessages");
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);
 

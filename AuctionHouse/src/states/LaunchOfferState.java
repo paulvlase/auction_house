@@ -55,6 +55,7 @@ public class LaunchOfferState implements State {
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
+		System.out.println("[LaunchOfferState] asMessages");
 		/**
 		 * There is no one who offer this service
 		 */

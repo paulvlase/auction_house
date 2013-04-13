@@ -57,6 +57,7 @@ public class AcceptOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[AcceptOfferState] asMessages");
 		Message message = new Message();
 		message.setType(data.Message.MessageType.ACCEPT);
 		message.setServiceName(service.getName());

@@ -50,6 +50,7 @@ public class RemoveOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[RemoveOfferState] asMessages");
 		ArrayList<Message> list = null;
 		Boolean first = true;
 

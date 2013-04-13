@@ -47,6 +47,7 @@ public class DropOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[DropOfferState] asMessages");
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
