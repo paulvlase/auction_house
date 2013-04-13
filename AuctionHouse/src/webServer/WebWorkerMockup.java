@@ -8,6 +8,7 @@ import java.net.Socket;
 import webServer.messages.DropOfferRequest;
 import webServer.messages.GetProfileRequest;
 import webServer.messages.LaunchOfferRequest;
+import webServer.messages.LoginRequest;
 import webServer.messages.LogoutRequest;
 import webServer.messages.SetProfileRequest;
 
@@ -29,29 +30,7 @@ public class WebWorkerMockup implements Runnable {
 	}
 
 	private void log(String str) {
-		System.out.println("[" + clientSocket.getInetAddress() + ":"
-				+ clientSocket.getPort() + "] " + str);
-	}
-
-	private Object login(LoginCred cred) {
-		UserProfile profile = webServer.getUser(cred.getUsername());
-		if (profile == null) {
-			return null;
-		}
-
-		if (!profile.getPassword().equals(cred.getPassword())) {
-			return null;
-		}
-
-		profile.setRole(cred.getRole());
-
-		webServer.putOnlineUser(cred.getUsername(), cred.getAddress());
-		return profile;
-	}
-
-	private Object logout(LogoutRequest requestMsg) {
-		webServer.removeOnlineUser(requestMsg.getCred().getUsername());
-		return null;
+		System.out.println("[" + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + "] " + str);
 	}
 
 	@Override
@@ -70,14 +49,14 @@ public class WebWorkerMockup implements Runnable {
 
 			if (requestObj instanceof LoginCred) {
 				log("Login message");
-				responseObj = login((LoginCred) requestObj);
+				responseObj = webServer.login((LoginRequest) requestObj);
 			} else if (requestObj instanceof LogoutRequest) {
 				log("Logout message");
-				responseObj = logout((LogoutRequest) requestObj);
+				responseObj = webServer.logout((LogoutRequest) requestObj);
 			} else if (requestObj instanceof LaunchOfferRequest) {
 				log("Launch offer message");
 				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
-			} else if (requestObj instanceof GetProfileRequest) { 
+			} else if (requestObj instanceof GetProfileRequest) {
 				responseObj = webServer.getProfile((GetProfileRequest) requestObj);
 			} else if (requestObj instanceof GetProfileRequest) {
 				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
