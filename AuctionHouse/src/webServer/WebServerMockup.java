@@ -87,8 +87,11 @@ public class WebServerMockup implements Runnable {
 		ArrayList<UserEntry> userEntries;
 
 		UserEntry userEntry = new UserEntry();
-		userEntry.setName(req.getUsername());
+		userEntry.setUsername(req.getUsername());
+		UserProfile profile = users.get(req.getUsername());
+		userEntry.setName(profile.getFirstName() + " " + profile.getLastName());
 		userEntry.setAddress(onlineUsers.get(req.getUsername()));
+	
 
 		if (req.getUserRole() == UserRole.BUYER) {
 			sellers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
@@ -100,6 +103,7 @@ public class WebServerMockup implements Runnable {
 
 			buyers.put(service.getName(), buyersUserEntries);
 		} else {
+			userEntry.setTime(service.getTime());
 			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			userEntries = buyers.get(service.getName());
 

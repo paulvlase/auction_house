@@ -70,7 +70,7 @@ public class LaunchOfferState implements State {
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 			message.setDestination(user.getUsername());
-
+			System.out.println("[LaunchOfferState: asMessages()] " + user.getUsername());
 			list.add(message);
 		}
 
