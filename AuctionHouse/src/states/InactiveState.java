@@ -5,7 +5,8 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
-import network.Message;
+import data.Message;
+
 
 public class InactiveState implements State {
 	public InactiveState() {

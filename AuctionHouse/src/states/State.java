@@ -2,7 +2,8 @@ package states;
 
 import java.util.ArrayList;
 
-import network.Message;
+import data.Message;
+
 
 import interfaces.NetworkService;
 import interfaces.WebService;

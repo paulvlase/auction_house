@@ -108,14 +108,21 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	public void logIn() {
-		receiveEvents = new NetworkReceiveEvents(mediator);
-		receiveEvents.execute();
+		receiveEvents = new NetworkReceiveEvents(this);
+		sendEvents = new NetworkSendEvents(this);
+		
+		receiveEvents.start();
+		sendEvents.start();
 	}
 
+	/**
+	 * Stop receiving or sending messages
+	 */
 	public void logOut() {
 		try {
-			receiveEvents.cancel(false);
-			receiveEvents = null;
+			receiveEvents.stopRunning();
+			sendEvents.stopRunning();
+			sendEvents = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,11 +130,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public void publishService(Service service) {
-		receiveEvents.publishService(service);
+		//TODO : Process send messages
 	}
 
 	@Override
 	public void publishServices(ArrayList<Service> services) {
-		receiveEvents.publishServices(services);
+		//TODO : Process send messages
 	}
 }

@@ -5,7 +5,7 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
-import network.Message;
+import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
@@ -54,7 +54,7 @@ public class RemoveOfferState implements State {
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
-			message.setType(network.Message.MessageType.REFUSE);
+			message.setType(data.Message.MessageType.REFUSE);
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 
