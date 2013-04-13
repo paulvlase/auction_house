@@ -31,8 +31,7 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class MediatorMockup implements MediatorGui, MediatorNetwork,
-		MediatorWeb {
+public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
 	private Gui								gui;
 	private NetworkMediator					net;
 	private WebClient						web;
@@ -47,10 +46,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		offers = new Hashtable<String, Service>();
 		users = new Hashtable<String, UserProfile>();
 
-		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase",
-				UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140", "Ghennadi",
-				"Procopciuc", UserRole.SELLER, "marmota"));
+		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase", UserRole.BUYER, "parola"));
+		users.put("unix140", new UserProfile("unix140", "Ghennadi", "Procopciuc", UserRole.SELLER, "marmota"));
 	}
 
 	@Override
@@ -89,7 +86,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	public synchronized void removeOffer(String serviceName) {
 		offers.remove(serviceName);
 	}
-	
+
 	/* Metode pentru accesul la cache-ul de utilizatori. */
 	public void putUser(UserProfile user) {
 		users.put(user.getUsername(), user);
@@ -129,9 +126,9 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 
 		web.logOut();
 		net.logOut();
-		
+
 		profile = null;
-		
+
 		System.out.println("[MockupMediator:logOut()] End");
 	}
 
@@ -155,8 +152,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		return web.verifyUsername(username);
 	}
 
-	public static Date create(int day, int month, int year, int hourofday,
-			int minute, int second) {
+	public static Date create(int day, int month, int year, int hourofday, int minute, int second) {
 		if (day == 0 && month == 0 && year == 0)
 			return null;
 		Calendar cal = Calendar.getInstance();
@@ -173,12 +169,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 
 		ArrayList<Service> services = null;
 		if (profile.getRole() == UserRole.BUYER)
-			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME,
-					ServiceType.DEMAND);
+			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
 
 		if (profile.getRole() == UserRole.SELLER) {
-			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME,
-					ServiceType.SUPPLY);
+			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
 			launchOffers(services);
 		}
 
@@ -228,17 +222,17 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 
 		return services;
 	}
-	
+
 	public void launchOffers(ArrayList<Service> services) {
 
-		for (Integer i = 0; i< services.size(); i++ ) {
+		for (Integer i = 0; i < services.size(); i++) {
 			Service service = services.get(i);
-			
+
 			service.setLaunchOfferState();
-			
+
 			System.out.println("prostie");
 			service.executeNet();
-			
+
 			services.set(i, service);
 		}
 
@@ -280,8 +274,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		return createService(name, time, price);
 	}
 
-	private ArrayList<Service> loadServicesFile(String filename,
-			ServiceType type) {
+	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
 		ArrayList<Service> services = new ArrayList<Service>();
 
 		File demandsFile = new File(filename);
@@ -327,11 +320,12 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 	public void changeProfileNotify(UserProfile profile) {
 		gui.changeProfileNotify(profile);
 	}
-	
+
 	@Override
 	public void stopTransfer(Service service) {
 		net.stopTransfer(service);
-}
+	}
+
 	@Override
 	public void publishService(Service service) {
 		// TODO Auto-generated method stub
@@ -339,25 +333,25 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork,
 		net.publishService(service);
 		web.publishService(service);
 	}
-	
+
 	@Override
 	public void publishServices(ArrayList<Service> services) {
 		net.publishServices(services);
 		web.publishServices(services);
 	}
-	
+
 	public Service createService(String name, Long time, Double price) {
 		Service service = new Service(name);
 		service.setTime(time);
 		service.setPrice(price);
-		
+
 		return service;
 	}
-	
+
 	public void startTransfer(Service service) {
 		net.startTransfer(service);
 	}
-	
+
 	@Override
 	public InetSocketAddress getNetworkAddress() {
 		return net.getAddress();

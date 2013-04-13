@@ -29,12 +29,12 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class NetworkEvents extends SwingWorker<Command, Command> {
+public class NetworkSendEvents extends SwingWorker<Command, Command> {
 	private Random			random;
 
 	private MediatorNetwork	med;
 
-	public NetworkEvents(MediatorNetwork med) {
+	public NetworkSendEvents(MediatorNetwork med) {
 		this.med = med;
 
 		random = new Random();

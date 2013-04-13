@@ -102,7 +102,7 @@ public class Server extends Thread {
 
 	private void appendMessage(Message message, SelectionKey key) {
 		ConcurrentHashMap<String, SelectionKey> userKeyMap;
-		NetworkEvents networkEvents = network.getEventsTask();
+		NetworkReceiveEvents networkEvents = network.getEventsTask();
 
 		userKeyMap = network.getUserKeyMap();
 
@@ -243,6 +243,10 @@ public class Server extends Thread {
 
 	public void sendData(Message message, String username) {
 		sendData(network.getUserKeyMap().get(username), message.serialize());
+	}
+	
+	public void sendData(Message message, SelectionKey key){
+		sendData(key, message.serialize());
 	}
 
 	public void sendData(SelectionKey key, byte[] data) {

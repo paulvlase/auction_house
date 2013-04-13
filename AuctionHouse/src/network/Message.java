@@ -25,7 +25,7 @@ public class Message implements Serializable {
 	private Object payload;
 
 	public enum MessageType {
-		LAUNCH, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
+		LAUNCH, LAUNCH_RESPONSE, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
 	}
 
 	public Message() {

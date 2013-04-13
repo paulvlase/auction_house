@@ -135,6 +135,16 @@ public class Service implements Comparable<Service> {
 	public ArrayList<UserEntry> getUsers() {
 		return users;
 	}
+	
+	public UserEntry getUser(String username){
+		for (UserEntry user : users) {
+			if(user.getUsername().equals(username)){
+				return user;
+			}
+		}
+		
+		return null;
+	}
 
 	public void setUsers(ArrayList<UserEntry> users) {
 		this.users = users;

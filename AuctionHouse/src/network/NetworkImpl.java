@@ -23,7 +23,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	private MediatorNetwork mediator;
 	private NetworkJoinThread joinThread;
 
-	private NetworkEvents eventsTask;
+	private NetworkReceiveEvents receiveEvents;
+	private NetworkSendEvents sendEvents;
 
 	private Hashtable<String, NetworkTransferTask> tasks;
 	
@@ -58,8 +59,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		this.userKeyMap = userKeyMap;
 	}
 
-	public NetworkEvents getEventsTask() {
-		return eventsTask;
+	public NetworkReceiveEvents getEventsTask() {
+		return receiveEvents;
 	}
 
 	public Server getDriver() {
@@ -92,6 +93,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public void registerConnection(String username, SelectionKey key){
 		userKeyMap.put(username, key);
 	}
+	
+	public Service getService(String serviceName){
+		return mediator.getOffer(serviceName);
+	}
+	
+	public void changeServiceNotify(Service service){
+		mediator.changeServiceNotify(service);
+	}
 
 	@Override
 	public void stopTransfer(Service service) {
@@ -99,14 +108,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	public void logIn() {
-		eventsTask = new NetworkEvents(mediator);
-		eventsTask.execute();
+		receiveEvents = new NetworkReceiveEvents(mediator);
+		receiveEvents.execute();
 	}
 
 	public void logOut() {
 		try {
-			eventsTask.cancel(false);
-			eventsTask = null;
+			receiveEvents.cancel(false);
+			receiveEvents = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,11 +123,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public void publishService(Service service) {
-		eventsTask.publishService(service);
+		receiveEvents.publishService(service);
 	}
 
 	@Override
 	public void publishServices(ArrayList<Service> services) {
-		eventsTask.publishServices(services);
+		receiveEvents.publishServices(services);
 	}
 }
