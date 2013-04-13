@@ -1,5 +1,8 @@
 package data;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+
 public class UserEntry implements Comparable<UserEntry> {
 	public enum Offer {
 		NO_OFFER, OFFER_MADE, OFFER_ACCEPTED, OFFER_REFUSED, OFFER_EXCEDED, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, OFFER_DROP;
@@ -38,6 +41,8 @@ public class UserEntry implements Comparable<UserEntry> {
 	private Long	time;
 	private Double	price;
 	private Integer	progress;
+	// FIXME: Delete it
+	private InetSocketAddress address; 
 
 	public UserEntry(String username, String name, Offer offer, Long time, Double price) {
 		this.username = username;
@@ -114,5 +119,13 @@ public class UserEntry implements Comparable<UserEntry> {
 	@Override
 	public int compareTo(UserEntry o) {
 		return this.price.compareTo(o.getPrice());
+	}
+
+	public InetSocketAddress getAddress() {
+		return address;
+	}
+	
+	public void setAddress(InetSocketAddress address) {
+		this.address = address;
 	}
 }
