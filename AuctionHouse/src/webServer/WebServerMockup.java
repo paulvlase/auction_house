@@ -15,6 +15,7 @@ import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
 import webServer.messages.LoginRequest;
+import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
 import webServer.messages.SetProfileRequest;
@@ -52,21 +53,26 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object login(LoginRequest req) {
+		System.out.println("[WebServerMockup: login()] Begin");
 		LoginCred cred = req.getLoginCred();
 
 		UserProfile profile = users.get(cred.getUsername());
 		if (profile == null) {
+			System.out.println("[WebServerMockup: login()] Username not found");
 			return null;
 		}
 
 		if (!profile.getPassword().equals(cred.getPassword())) {
+			System.out.println("[WebServerMockup: login()] Wrong username or password");
 			return null;
 		}
 
 		profile.setRole(cred.getRole());
 
 		onlineUsers.put(cred.getUsername(), cred.getAddress());
-		return profile;
+		
+		System.out.println("[WebServerMockup: login()] Success");
+		return new LoginResponse(profile);
 	}
 
 	public Object logout(LogoutRequest requestMsg) {
