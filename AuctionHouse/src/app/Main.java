@@ -5,7 +5,7 @@ import gui.GuiImpl;
 import javax.swing.UIManager;
 
 import mediator.MediatorMockup;
-import network.NetworkMockup;
+import network.NetworkImpl;
 import webClient.WebClientMockup;
 
 public class Main {
@@ -23,7 +23,7 @@ public class Main {
 
 		MediatorMockup med = new MediatorMockup();
 		GuiImpl gui = new GuiImpl(med);
-		NetworkMockup net = new NetworkMockup(med);
+		NetworkImpl net = new NetworkImpl(med);
 		WebClientMockup web = new WebClientMockup(med);
 
 		med.start();
