@@ -1,9 +1,11 @@
 package webServer.messages;
 
-import data.Service;
+import java.io.Serializable;
+
 import data.UserProfile.UserRole;
 
-public class DropOfferRequest {
+public class DropOfferRequest implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private String username;
 	private UserRole role;
 	private String serviceName;

@@ -1,5 +1,8 @@
 package webServer.messages;
 
-public class OkResponse {
+import java.io.Serializable;
+
+public class OkResponse  implements Serializable{
+	private static final long	serialVersionUID	= 1L;
 
 }

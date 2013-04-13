@@ -1,8 +1,11 @@
 package webServer.messages;
 
+import java.io.Serializable;
+
 import data.Service;
 
-public class LaunchOfferResponse {
+public class LaunchOfferResponse implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private Service service;
 
 	public LaunchOfferResponse(Service service) {

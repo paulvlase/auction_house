@@ -1,9 +1,12 @@
 package webServer.messages;
 
+import java.io.Serializable;
+
 import data.Service;
 import data.UserProfile.UserRole;
 
-public class LaunchOfferRequest {
+public class LaunchOfferRequest implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	public String username;
 	public UserRole role;
 	public Service service;
