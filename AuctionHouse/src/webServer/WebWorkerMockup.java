@@ -47,7 +47,7 @@ public class WebWorkerMockup implements Runnable {
 			Object responseObj;
 			System.out.println("New conn");
 
-			if (requestObj instanceof LoginCred) {
+			if (requestObj instanceof LoginRequest) {
 				log("Login message");
 				responseObj = webServer.login((LoginRequest) requestObj);
 			} else if (requestObj instanceof LogoutRequest) {
