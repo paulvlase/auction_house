@@ -102,19 +102,16 @@ public class Server extends Thread {
 
 	private void appendMessage(Message message, SelectionKey key) {
 		ConcurrentHashMap<String, SelectionKey> userKeyMap;
-		ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
+		NetworkEvents networkEvents = network.getEventsTask();
 
 		userKeyMap = network.getUserKeyMap();
-		// TODO: Update this
-		//keyMessageMap = network.getKeyMessageMap();
 
 		if (message.getType() == MessageType.SEND_USERNAME) {
 			userKeyMap.putIfAbsent(message.getUsername(), key);
-			keyMessageMap.putIfAbsent(key, new ArrayList<Message>());
 			return;
 		}
 
-		keyMessageMap.get(key).add(message);
+		networkEvents.publishMessage(key, message);
 	}
 
 	private void read(SelectionKey key) throws Exception {
@@ -299,9 +296,6 @@ public class Server extends Thread {
 
 		// TODO : Check this
 		key.interestOps(SelectionKey.OP_WRITE);
-
-		keyMessageMap = network.getKeyMessageMap();
-		keyMessageMap.putIfAbsent(key, new ArrayList<Message>());
 	}
 
 	public void run() {
