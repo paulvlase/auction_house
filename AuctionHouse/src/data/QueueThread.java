@@ -11,6 +11,7 @@ public abstract class QueueThread<K, T> extends Thread {
 
 	public QueueThread() {
 		queue = new ConcurrentHashMap<K, ArrayList<T>>();
+		monitor = new Object();
 	}
 
 	@Override
