@@ -3,7 +3,8 @@ package webClient;
 import java.util.ArrayList;
 
 import webServer.messages.LogoutRequest;
-import webServer.messages.ProfileRequest;
+import webServer.messages.GetProfileRequest;
+import webServer.messages.SetProfileRequest;
 
 import data.LoginCred;
 import data.Service;
@@ -67,14 +68,16 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 
 	public UserProfile getUserProfile(String username) {
 		// TODO
-		Object responseObj = Util.askWebServer(new ProfileRequest(username));
+		Object requestObj = new GetProfileRequest(username);
+		Object responseObj = Util.askWebServer(requestObj);
 		
 		return (UserProfile) responseObj;
 	}
 
 	public boolean setUserProfile(UserProfile profile) {
 		// TODO
-		med.putUser(profile);
+		Object requestObj = new SetProfileRequest(profile);
+		Object responseObj = Util.askWebServer(requestObj);
 		med.changeProfileNotify(profile);
 		return true;
 	}
