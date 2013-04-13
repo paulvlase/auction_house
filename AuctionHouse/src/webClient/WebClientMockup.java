@@ -2,6 +2,8 @@ package webClient;
 
 import java.util.ArrayList;
 
+import webServer.messages.LoginRequest;
+import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.GetProfileRequest;
 import webServer.messages.SetProfileRequest;
@@ -30,25 +32,24 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		med.registerWebClient(this);
 
 		thread = new WebClientEvents(this);
-		thread.start();
 	}
 
 	public UserProfile logIn(LoginCred cred) {
 		System.out.println("[WebServiceClientMockup:logIn()] Begin");
 
-		Object responseObj = Util.askWebServer(cred);
+		Object requestObj = new LoginRequest(cred);
+		Object responseObj = Util.askWebServer(requestObj);
 
 		if (responseObj == null) {
 			System.out
 			.println("[WebServiceClientMockup:logIn()] Error");
 			return null;
 		}
-		if (responseObj instanceof UserProfile) {
+		if (responseObj instanceof LoginResponse) {
 			System.out.println("[WebServiceClientMockup:logIn()] Success");
 			
-			this.cred = cred;
-			//return ((UserProfile) responseObj).getProfile();
-			return ((UserProfile) responseObj);
+			thread.start();
+			return ((LoginResponse) responseObj).getUserProfile();
 		} else {
 			System.out
 					.println("[WebServiceClientMockup:logIn()] Unexpected response message");
