@@ -9,6 +9,8 @@ import data.Message;
 
 
 public class InactiveState implements State {
+	private static final long	serialVersionUID	= 1L;
+
 	public InactiveState() {
 		
 	}

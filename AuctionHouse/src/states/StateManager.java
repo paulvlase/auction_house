@@ -1,10 +1,13 @@
 package states;
 
+import java.io.Serializable;
+
 import data.Service;
 import interfaces.NetworkService;
 import interfaces.WebService;
 
-public class StateManager {
+public class StateManager implements Serializable{
+	private static final long	serialVersionUID	= 1L;
 	private InactiveState inactiveState;
 	private MakeOfferState makeOfferState;
 	private RemoveOfferState removeOfferState;

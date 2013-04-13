@@ -11,6 +11,7 @@ import data.Service.Status;
 import data.UserEntry;
 
 public class DropOfferState implements State {
+	private static final long	serialVersionUID	= 1L;
 	private Service service;
 
 	public DropOfferState() {

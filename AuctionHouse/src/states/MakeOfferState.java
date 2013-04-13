@@ -11,6 +11,7 @@ import data.UserEntry;
 import data.UserEntry.Offer;
 
 public class MakeOfferState implements State {
+	private static final long	serialVersionUID	= 1L;
 	private Service service;
 	private Integer userIndex;
 	private Double price;

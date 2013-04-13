@@ -11,6 +11,7 @@ import data.UserEntry;
 import data.UserEntry.Offer;
 
 public class RefuseOfferState implements State {
+	private static final long	serialVersionUID	= 1L;
 	private Service service;
 	private Integer userIndex;
 
