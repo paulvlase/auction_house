@@ -88,6 +88,10 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public UserProfile getUserProfile(){
 		return mediator.getUserProfile();
 	}
+	
+	public void registerConnection(String username, SelectionKey key){
+		userKeyMap.put(username, key);
+	}
 
 	@Override
 	public void stopTransfer(Service service) {
@@ -111,7 +115,6 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	@Override
 	public void publishService(Service service) {
 		eventsTask.publishService(service);
-
 	}
 
 	@Override
