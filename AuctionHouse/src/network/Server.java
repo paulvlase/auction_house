@@ -105,7 +105,8 @@ public class Server extends Thread {
 		ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
 
 		userKeyMap = network.getUserKeyMap();
-		keyMessageMap = network.getKeyMessageMap();
+		// TODO: Update this
+		//keyMessageMap = network.getKeyMessageMap();
 
 		if (message.getType() == MessageType.SEND_USERNAME) {
 			userKeyMap.putIfAbsent(message.getUsername(), key);
