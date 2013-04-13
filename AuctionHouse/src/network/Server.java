@@ -2,6 +2,8 @@ package network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -19,7 +21,7 @@ import java.util.concurrent.Executors;
 import network.Message.MessageType;
 
 public class Server extends Thread {
-	private static final Integer MAX_POOL_THREADS = 5;
+	// private static final Integer MAX_POOL_THREADS = 5;
 
 	private NetworkImpl network;
 
@@ -29,7 +31,7 @@ public class Server extends Thread {
 	private ArrayList<ServerSocketChannel> serverChannels;
 	private ArrayList<SocketChannel> socketChannels;
 
-	private static ExecutorService pool = Executors.newCachedThreadPool();
+	// private static ExecutorService pool = Executors.newCachedThreadPool();
 	private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
 	private ByteBuffer wBuffer = ByteBuffer.allocate(8192);
 
@@ -63,6 +65,16 @@ public class Server extends Thread {
 		}
 	}
 
+	public InetSocketAddress getAddress() {
+		if (serverSocketChannel == null) {
+			return null;
+		}
+
+		ServerSocket socket = serverSocketChannel.socket();
+		return new InetSocketAddress(socket.getInetAddress(),
+				socket.getLocalPort());
+	}
+
 	public synchronized void startRunning() {
 		this.running = true;
 		this.start();
@@ -72,14 +84,13 @@ public class Server extends Thread {
 		SocketChannel socketChannel;
 		ServerSocketChannel serverSocketChannel;
 		Message message;
-		
+
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
-			
 
 			message = new Message();
 			message.setType(MessageType.GET_USERNAME);
@@ -88,20 +99,20 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	private void appendMessage(Message message, SelectionKey key){
+
+	private void appendMessage(Message message, SelectionKey key) {
 		ConcurrentHashMap<String, SelectionKey> userKeyMap;
 		ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
-		
+
 		userKeyMap = network.getUserKeyMap();
 		keyMessageMap = network.getKeyMessageMap();
-		
-		if(message.getType() == MessageType.SEND_USERNAME){
+
+		if (message.getType() == MessageType.SEND_USERNAME) {
 			userKeyMap.putIfAbsent(message.getUsername(), key);
 			keyMessageMap.putIfAbsent(key, new ArrayList<Message>());
 			return;
 		}
-		
+
 		keyMessageMap.get(key).add(message);
 	}
 
@@ -170,9 +181,9 @@ public class Server extends Thread {
 		if (i + length <= newBuf.length) {
 			Message message = new Message(Arrays.copyOfRange(newBuf, 4,
 					length + 4));
-			
+
 			appendMessage(message, key);
-			
+
 			i += length;
 		} else
 			i -= 4;
@@ -231,8 +242,8 @@ public class Server extends Thread {
 			}
 		}
 	}
-	
-	public void sendData(Message message, String username){
+
+	public void sendData(Message message, String username) {
 		sendData(network.getUserKeyMap().get(username), message.serialize());
 	}
 
@@ -259,6 +270,39 @@ public class Server extends Thread {
 		this.selector.wakeup();
 	}
 
+	public boolean initiateConnect(InetSocketAddress destination) {
+		SocketChannel socketChannel = null;
+
+		try {
+			socketChannel = SocketChannel.open();
+			socketChannel.configureBlocking(false);
+			socketChannel.connect(destination);
+
+			socketChannel.register(selector, SelectionKey.OP_CONNECT);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	private void connect(SelectionKey key) throws IOException {
+		ConcurrentHashMap<SelectionKey, ArrayList<Message>> keyMessageMap;
+		System.out.print("CONNECT: ");
+
+		SocketChannel socketChannel = (SocketChannel) key.channel();
+		if (!socketChannel.finishConnect()) {
+			System.err.println("Eroare finishConnect");
+		}
+
+		// TODO : Check this
+		key.interestOps(SelectionKey.OP_WRITE);
+
+		keyMessageMap = network.getKeyMessageMap();
+		keyMessageMap.putIfAbsent(key, new ArrayList<Message>());
+	}
+
 	public void run() {
 		ChangeRequest creq;
 
@@ -277,6 +321,8 @@ public class Server extends Thread {
 						read(key);
 					} else if (key.isWritable()) {
 						write(key);
+					} else if (key.isConnectable()) {
+						connect(key);
 					}
 				}
 
