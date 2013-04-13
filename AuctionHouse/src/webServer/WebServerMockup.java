@@ -5,16 +5,17 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import webServer.messages.DropOfferRequest;
+import webServer.messages.GetProfileRequest;
+import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
 import webServer.messages.OkResponse;
-
+import webServer.messages.SetProfileRequest;
 import config.WebServiceServerConfig;
 import data.Service;
 import data.UserEntry;
@@ -123,6 +124,18 @@ public class WebServerMockup implements Runnable {
 		}
 
 		System.out.println("[WebServerMockup: drop()] End");
+		return new OkResponse();
+	}
+	
+	public Object getProfile(GetProfileRequest req) {
+		UserProfile profile = users.get(req.getUsername());
+		return new GetProfileResponse(profile);
+	}
+	
+	public Object setProfile(SetProfileRequest req) {
+		UserProfile profile = req.getUserProfile();
+
+		users.put(profile.getUsername(), profile);
 		return new OkResponse();
 	}
 

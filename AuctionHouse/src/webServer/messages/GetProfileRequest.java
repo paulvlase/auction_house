@@ -1,9 +1,9 @@
 package webServer.messages;
 
-public class ProfileRequest {
+public class GetProfileRequest {
 	private String username;
 
-	public ProfileRequest(String username) {
+	public GetProfileRequest(String username) {
 		this.username = username;
 	}
 	

@@ -1,21 +1,18 @@
 package webServer;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import webServer.messages.DropOfferRequest;
+import webServer.messages.GetProfileRequest;
 import webServer.messages.LaunchOfferRequest;
-import webServer.messages.LaunchOfferResponse;
 import webServer.messages.LogoutRequest;
+import webServer.messages.SetProfileRequest;
 
 import data.LoginCred;
-import data.Service;
 import data.UserProfile;
-import data.UserProfile.UserRole;
 
 /**
  * WebServiceWorker mockup implementation.
@@ -80,6 +77,10 @@ public class WebWorkerMockup implements Runnable {
 			} else if (requestObj instanceof LaunchOfferRequest) {
 				log("Launch offer message");
 				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
+			} else if (requestObj instanceof GetProfileRequest) { 
+				responseObj = webServer.getProfile((GetProfileRequest) requestObj);
+			} else if (requestObj instanceof GetProfileRequest) {
+				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
 			} else if (requestObj instanceof DropOfferRequest) {
 				log("Drop offermessage");
 				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
