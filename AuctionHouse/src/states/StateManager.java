@@ -17,10 +17,7 @@ public class StateManager {
 
 	private State currentState;
 	
-	private NetworkService net;
-	private WebService     web;
-	
-	public StateManager(NetworkService net, WebService web) {
+	public StateManager() {
 		inactiveState = new InactiveState();
 		makeOfferState = new MakeOfferState();
 		removeOfferState = new RemoveOfferState();
@@ -32,9 +29,6 @@ public class StateManager {
 		dropOfferState = new DropOfferState();
 
 		currentState = inactiveState;
-		
-		this.net = net;
-		this.web = web;
 	}
 	
 	public void setInactiveState() {
@@ -88,11 +82,11 @@ public class StateManager {
 		return currentState == inactiveState;
 	}
 	
-	public void executeNet() {
+	public void executeNet(NetworkService net) {
 		currentState.executeNet(net);
 	}
 	
-	public void executeWeb() {
+	public void executeWeb(WebService web) {
 		currentState.executeWeb(web);
 	}
 }

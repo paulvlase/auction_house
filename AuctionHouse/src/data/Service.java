@@ -62,6 +62,7 @@ public class Service implements Comparable<Service> {
 		this.time = 0;
 		this.price = 0;
 		this.status = status;
+		this.stateMgr = new StateManager();
 	}
 
 	public Service(Service service) {
@@ -97,16 +98,12 @@ public class Service implements Comparable<Service> {
 		this(serviceName, null, status);
 	}
 
-	public void initState(NetworkService net, WebService web) {
-		stateMgr = new StateManager(net, web);
+	public void executeNet(NetworkService net) {
+		stateMgr.executeNet(net);
 	}
 
-	public void executeNet() {
-		stateMgr.executeNet();
-	}
-
-	public void executeWeb() {
-		stateMgr.executeWeb();
+	public void executeWeb(WebService web) {
+		stateMgr.executeWeb(web);
 	}
 
 	public void executeGui() {

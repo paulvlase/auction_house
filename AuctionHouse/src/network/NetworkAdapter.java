@@ -14,6 +14,6 @@ public class NetworkAdapter implements Command {
 	}
 	
 	public void execute() {
-		service.executeNet();
+		service.executeNet(net);
 	}
 }

@@ -230,9 +230,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 			service.setLaunchOfferState();
 
-			System.out.println("prostie");
-			service.executeNet();
-
 			services.set(i, service);
 		}
 
