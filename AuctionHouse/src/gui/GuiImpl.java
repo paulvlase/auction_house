@@ -28,7 +28,7 @@ import data.UserProfile.UserRole;
  */
 public class GuiImpl implements Gui {
 	private MediatorGui	med;
-	private Login		login;
+	private LoginWindow		login;
 	private MainWindow	mainWindow;
 	private RegisterWindow registerWindow;
 
@@ -36,7 +36,7 @@ public class GuiImpl implements Gui {
 		this.med = med;
 		med.registerGui(this);
 
-		login = new Login(this);
+		login = new LoginWindow(this);
 	}
 
 	public void start() {
@@ -90,6 +90,7 @@ public class GuiImpl implements Gui {
 	
 	public void registerUserStep1() {
 		login.hideWindow();
+
 		if (registerWindow == null) {
 			registerWindow =  new RegisterWindow(this);
 		}
