@@ -22,7 +22,6 @@ import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
 import data.LoginCred;
 import data.Service;
-import data.Service.Status;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
@@ -41,14 +40,9 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	/* Folosite doar pentru mockup. */
 	private Hashtable<String, Service>		offers;
-	private Hashtable<String, UserProfile>	users;
 
 	public MediatorMockup() {
 		offers = new Hashtable<String, Service>();
-		users = new Hashtable<String, UserProfile>();
-
-		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase", UserRole.BUYER, "parola"));
-		users.put("unix140", new UserProfile("unix140", "Ghennadi", "Procopciuc", UserRole.SELLER, "marmota"));
 	}
 
 	@Override
@@ -86,23 +80,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	public synchronized void removeOffer(String serviceName) {
 		offers.remove(serviceName);
-	}
-
-	/* Metode pentru accesul la cache-ul de utilizatori. */
-	public void putUser(UserProfile user) {
-		users.put(user.getUsername(), user);
-	}
-
-	public UserProfile getUser(String username) {
-		return users.get(username);
-	}
-
-	public Hashtable<String, UserProfile> getUsers() {
-		return users;
-	}
-
-	public void removeUser(String username) {
-		users.remove(username);
 	}
 
 	@Override
