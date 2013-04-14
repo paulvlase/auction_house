@@ -1,6 +1,7 @@
 package network;
 
 import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
@@ -33,6 +34,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	 *            Message
 	 */
 	private void messageProcess(SelectionKey key, Message message) {
+		System.out.println("[NetworkReceiveEvents, messageProcess] Message " + message.getType());
 		switch (message.getType()) {
 		case GET_USERNAME:
 			processGetUsername(key, message);
@@ -68,7 +70,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	}
 
 	private void processGetUsername(SelectionKey key, Message message) {
-		System.out.println("[processGetUsername()] Begin");
+		System.out.println("[NetworkReceiveEvents: processGetUsername] Begin");
 		NetworkDriver driver = network.getDriver();
 
 		/* Message build */
@@ -81,7 +83,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 	private void processSendUsername(SelectionKey key, Message message) {
 		System.out.println("[processSendUsername()] Begin");
-		network.registerConnection(message.getUsername(), key);
+		network.registerConnection(message.getUsername(), (SocketChannel) key.channel());
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			// Send new offer
 			Service service = network.getService(message.getServiceName());
 			if (service == null) {
-				System.err.println("Unknown service : " + message.getServiceName());
+				System.err.println("[NetworkReceiveEvents: processLaunch] Unknown service : " + message.getServiceName());
 				return;
 			}
 

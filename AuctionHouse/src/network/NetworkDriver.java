@@ -93,27 +93,29 @@ public class NetworkDriver extends Thread {
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
-			
+
 			System.out.println("[NetworkDriver: accept] Done");
 
-			/* Check if we know who is at the other end of the connection */
-			if (network.getUserKeyMap().containsKey(key)) {
-				String username = null;
-				for (String user : network.getUserKeyMap().keySet()) {
-					if (network.getUserKeyMap().get(user).equals(key)) {
-						username = user;
-						break;
-					}
-				}
-
-				ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
-				if (unsentMessages.contains(username)) {
-					network.getSendEvents().enqueue(key, unsentMessages.get(username));
-				}
-			} else {
-				// TODO : Make & send an username request
-				System.err.println("[NetworkDriver: connect] Something wrong went ...");
-			}
+			// /* Check if we know who is at the other end of the connection */
+			// if (network.getUserKeyMap().containsKey(key)) {
+			// String username = null;
+			// for (String user : network.getUserKeyMap().keySet()) {
+			// if (network.getUserKeyMap().get(user).equals(key)) {
+			// username = user;
+			// break;
+			// }
+			// }
+			//
+			// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
+			// network.getUserUnsentMessages();
+			// if (unsentMessages.contains(username)) {
+			// network.getSendEvents().enqueue(key,
+			// unsentMessages.get(username));
+			// }
+			// } else {
+			// // TODO : Make & send an username request
+			// System.err.println("[NetworkDriver: connect] Something wrong went ...");
+			// }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,21 +124,26 @@ public class NetworkDriver extends Thread {
 	}
 
 	private void appendMessage(Message message, SelectionKey key) {
-		ConcurrentHashMap<String, SelectionKey> userKeyMap;
+		ConcurrentHashMap<String, SocketChannel> userChanelMap;
 		NetworkReceiveEvents networkEvents = network.getEventsTask();
 
-		userKeyMap = network.getUserKeyMap();
+		userChanelMap = network.getUserChanelMap();
 
 		if (message.getType() == MessageType.SEND_USERNAME) {
 			String username = message.getSource();
 			System.out.println("[NetworkDriver: appendMessage] SEND_USERNAME received from " + username);
-			userKeyMap.putIfAbsent(username, key);
-			
-			
-			ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
-			if (unsentMessages.contains(username)) {
-				network.getSendEvents().enqueue(key, unsentMessages.get(username));
-			}
+			userChanelMap.putIfAbsent(username, (SocketChannel) key.channel());
+
+			// TODO : Seems to be an impossible case
+			// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
+			// network.getUserUnsentMessages();
+			// System.out.println("[NetworkDriver, appendMessages] Unsent messages : "
+			// + unsentMessages);
+			// if (unsentMessages.contains(username)) {
+			// System.out.println("[NetworkDriver, appendMessages] Enqueue some messages to send queue");
+			// network.getSendEvents().enqueue(key,
+			// unsentMessages.get(username));
+			// }
 
 			return;
 		}
@@ -294,16 +301,16 @@ public class NetworkDriver extends Thread {
 
 	public void sendData(Message message, String username, InetSocketAddress address) {
 		System.out.println("[NetworkDriver, sendData()] Begin");
-		ConcurrentHashMap<String, SelectionKey> userKeyMap;
+		ConcurrentHashMap<String, SocketChannel> userChanelMap;
 		ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages;
 
-		userKeyMap = network.getUserKeyMap();
+		userChanelMap = network.getUserChanelMap();
 		userUnsentMessages = network.getUserUnsentMessages();
 
-		if (!userKeyMap.containsKey(message.getDestination())) {
+		if (!userChanelMap.containsKey(message.getDestination())) {
 			System.out.println("[NetworkDriver: sendData] Initiate a new connection with " + message.getDestination());
 			/* Initiate a new connection and save all messages */
-			initiateConnect(address);
+			initiateConnect(address, username);
 			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
 			userUnsentMessages.get(message.getDestination()).add(message);
 		} else {
@@ -312,7 +319,7 @@ public class NetworkDriver extends Thread {
 	}
 
 	public void sendData(Message message, String username) {
-		sendData(network.getUserKeyMap().get(username), message.serialize());
+		sendData(network.getUserChanelMap().get(username).keyFor(selector), message.serialize());
 	}
 
 	public void sendData(Message message, SelectionKey key) {
@@ -344,7 +351,7 @@ public class NetworkDriver extends Thread {
 		this.selector.wakeup();
 	}
 
-	public boolean initiateConnect(InetSocketAddress destination) {
+	public boolean initiateConnect(InetSocketAddress destination, String username) {
 		SocketChannel socketChannel = null;
 		Boolean bRet;
 
@@ -352,7 +359,7 @@ public class NetworkDriver extends Thread {
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			System.out.println("[NetworkDriver: initiateConnect] Connect to : " + destination);
+			System.out.println("[NetworkDriver: initiateConnect] Connect to : " + destination + " " + username);
 			bRet = socketChannel.connect(destination);
 
 			if (bRet) {
@@ -361,6 +368,10 @@ public class NetworkDriver extends Thread {
 				System.out.println("[NetworkDriver: initiateConnect] Connection will be finish later");
 			}
 
+			System.out.println("Map : " + network.getUserChanelMap());
+			System.out.println("Username : " + username);
+			System.out.println("Key : " + socketChannel.keyFor(selector));
+			network.getUserChanelMap().putIfAbsent(username, socketChannel);
 			System.out.println("[NetworkDriver: initiateConnect] Before registering new interest");
 			// socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
@@ -398,36 +409,37 @@ public class NetworkDriver extends Thread {
 		}
 
 		System.out.println("[NetworkDriver: connect] Connection finished");
-
-		// /* Check if we know who is at the other end of the connection */
-		// if (network.getUserKeyMap().containsKey(key)) {
-		// String username = null;
-		// for (String user : network.getUserKeyMap().keySet()) {
-		// if (network.getUserKeyMap().get(user).equals(key)) {
-		// username = user;
-		// break;
-		// }
-		// }
-		//
-		// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
-		// network.getUserUnsentMessages();
-		// if (unsentMessages.contains(username)) {
-		// network.getSendEvents().enqueue(key, unsentMessages.get(username));
-		// }
-		// } else {
-		// // TODO : Make & send an username request
-		// System.err.println("[NetworkDriver: connect] Something wrong went ...");
-		// }
+		key.interestOps(SelectionKey.OP_WRITE);
 
 		Message message = new Message();
 		message.setType(MessageType.SEND_USERNAME);
 		message.setSource(network.getUserProfile().getUsername());
 
-		// TODO : Maybe first you should set interests
 		sendData(key, message.serialize());
 
-		// TODO : Check this
-		key.interestOps(SelectionKey.OP_WRITE);
+		System.out.println("[NetworkDriver: finishConnect] Chanel = " + key.channel());
+		System.out.println("[NetworkDriver: finishConnect] KeyMap = " + network.getUserChanelMap());
+		/* Check if we know who is at the other end of the connection */
+		if (network.getUserChanelMap().containsValue(key.channel())) {
+			String username = null;
+			for (String user : network.getUserChanelMap().keySet()) {
+				if (network.getUserChanelMap().get(user).equals(key.channel())) {
+					username = user;
+					break;
+				}
+			}
+
+			/* Send all pending messages */
+			ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
+			System.out.println("[NetworkDriver: finishConnect] Unsent messages list = " + unsentMessages);
+			if (unsentMessages.contains(username)) {
+				System.out.println("[NetworkDriver: finishConnect] Send pending messages");
+				network.getSendEvents().enqueue(key, unsentMessages.get(username));
+			}
+		} else {
+			// TODO : Make & send an username request
+			System.err.println("[NetworkDriver: finishConnect] Something wrong went ...");
+		}
 	}
 
 	public void run() {
@@ -443,10 +455,12 @@ public class NetworkDriver extends Thread {
 						ChangeRequest change = (ChangeRequest) changes.next();
 						switch (change.type) {
 						case ChangeRequest.CHANGEOPS:
+							System.out.println("[NetworkDriver, run] CHANGEOPS = " + change.ops);
 							SelectionKey key = change.socket.keyFor(selector);
 							key.interestOps(change.ops);
 							break;
 						case ChangeRequest.REGISTER:
+							System.out.println("[NetworkDriver, run] REGISTER = " + change.ops);
 							change.socket.register(selector, change.ops);
 							break;
 						}
@@ -503,7 +517,7 @@ public class NetworkDriver extends Thread {
 							break;
 						case ChangeRequest.REGISTER:
 							change.socket.register(this.selector, change.ops);
-							System.out.println("NetworkDriver: run] ChangeRequest.REGISTER");
+							System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
 							break;
 						}
 					}

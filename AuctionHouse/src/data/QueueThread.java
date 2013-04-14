@@ -12,6 +12,7 @@ public abstract class QueueThread<K, T> extends Thread {
 	private String threadName;
 
 	public QueueThread(String threadName) {
+		this.monitor = new Object();
 		this.threadName = threadName;
 	}
 	

@@ -7,6 +7,7 @@ import interfaces.NetworkTransfer;
 
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	private Hashtable<String, NetworkTransferTask>			tasks;
 
-	private ConcurrentHashMap<String, SelectionKey>			userKeyMap;
+	private ConcurrentHashMap<String, SocketChannel>			userChanelMap;
 	private ConcurrentHashMap<String, ArrayList<Message>>	userUnsentMessages;
 
 	private NetworkDriver											driver;
@@ -45,7 +46,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 		tasks = new Hashtable<String, NetworkTransferTask>();
 
-		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
+		userChanelMap = new ConcurrentHashMap<String, SocketChannel>();
 		userUnsentMessages = new ConcurrentHashMap<String, ArrayList<Message>>();
 
 		driver = new NetworkDriver(this);
@@ -53,14 +54,6 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	public InetSocketAddress getAddress() {
 		return driver.getAddress();
-	}
-
-	public ConcurrentHashMap<String, SelectionKey> getUserKeyMap() {
-		return userKeyMap;
-	}
-
-	public void setUserKeyMap(ConcurrentHashMap<String, SelectionKey> userKeyMap) {
-		this.userKeyMap = userKeyMap;
 	}
 
 	public NetworkReceiveEvents getEventsTask() {
@@ -93,8 +86,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		return mediator.getUserProfile();
 	}
 
-	public void registerConnection(String username, SelectionKey key) {
-		userKeyMap.put(username, key);
+	public void registerConnection(String username, SocketChannel chanel) {
+		userChanelMap.put(username, chanel);
 	}
 
 	public Service getService(String serviceName) {
@@ -123,6 +116,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	public void setSendEvents(NetworkSendEvents sendEvents) {
 		this.sendEvents = sendEvents;
+	}
+
+	public ConcurrentHashMap<String, SocketChannel> getUserChanelMap() {
+		return userChanelMap;
+	}
+
+	public void setUserChanelMap(ConcurrentHashMap<String, SocketChannel> userChanelMap) {
+		this.userChanelMap = userChanelMap;
 	}
 
 	public void changeServiceNotify(Service service) {
