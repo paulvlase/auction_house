@@ -1,6 +1,7 @@
 *.class
 
 # Package Files #
+!log4j-1.2.17.jar
 *.jar
 *.war
 *.ear
