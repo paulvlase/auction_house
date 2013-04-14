@@ -9,14 +9,19 @@ public abstract class QueueThread<K, T> extends Thread {
 	private Object									monitor;
 	protected ConcurrentHashMap<K, ArrayList<T>>	queue;
 	private Boolean									running;
+	private String threadName;
 
-	public QueueThread() {
-		queue = new ConcurrentHashMap<K, ArrayList<T>>();
-		monitor = new Object();
+	public QueueThread(String threadName) {
+		this.threadName = threadName;
+	}
+	
+	public QueueThread(){
+		this("");
 	}
 
 	@Override
 	public void run() {
+		System.out.println("[" + threadName + "] Start running");
 		running = true;
 
 		while (running) {
@@ -69,8 +74,18 @@ public abstract class QueueThread<K, T> extends Thread {
 	public synchronized void stopRunning() {
 		running = false;
 
+		System.out.println("[" + threadName + "] Stop running");
+		
 		synchronized (monitor) {
 			monitor.notify();
 		}
+	}
+
+	public String getThreadName() {
+		return threadName;
+	}
+
+	public void setThreadName(String threadName) {
+		this.threadName = threadName;
 	}
 }
