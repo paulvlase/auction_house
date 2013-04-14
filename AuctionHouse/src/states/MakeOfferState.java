@@ -53,7 +53,7 @@ public class MakeOfferState implements State {
 	}
 
 	@Override
-	public ArrayList<Message> asMessages() {
+	public ArrayList<Message> asMessages(NetworkService net) {
 		System.out.println("[MakeOfferState] asMessages");
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);

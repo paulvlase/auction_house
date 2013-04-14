@@ -85,6 +85,8 @@ public abstract class QueueThread<K, T> extends Thread {
 	protected abstract void process();
 
 	public synchronized void enqueue(K key, T value) {
+		System.out.println("[QueueThread : enqueue] Before " + value);
+		System.out.println("[QueueThread : enqueue] Before " + key);
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 

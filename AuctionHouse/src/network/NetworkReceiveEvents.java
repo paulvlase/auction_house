@@ -116,13 +116,31 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			Message newMessage = new Message();
 			newMessage.setType(MessageType.LAUNCH_RESPONSE);
 			newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
-					Offer.OFFER_MADE, service.getTime(), service.getPrice()));
+					Offer.NO_OFFER, service.getTime(), service.getPrice()));
 			newMessage.setUsername(user.getUsername());
 
 			newMessage.setServiceName(message.getServiceName());
 
+			UserEntry userEntry = (UserEntry)message.getPayload();
+			userEntry.setPrice(service.getPrice());
+			
 			System.out.println("[NetworkReceiveEvents: processLaunch] Send data ...");
 			driver.sendData(newMessage, key);
+			
+			/* Notify mediator about changes */
+
+			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs before " + service.getUsers());
+			
+			if(service.getUsers() == null){
+				service.setUsers(new ArrayList<UserEntry>());
+			}
+			service.getUsers().remove(userEntry);
+			service.getUsers().add(userEntry);
+			
+			//service.addUserEntry(userEntry);
+
+			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs after " + service.getUsers());
+			network.changeServiceNotify(service);
 		} else {
 			System.out.println("[NetworkReceiveEvents: processLaunch] Buyer Case");
 			// An seller make me an new offer
@@ -193,9 +211,11 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		// userEntry = (UserEntry) message.getPayload();
 		// }
 
-		System.out.println("[NetworkReceiveEvent: processLaunchResponse] UserEntry : " + userEntry);
+		System.out.println("[NetworkReceiveEvent: processLaunchResponse] Before users : " + newService.getUsers());
 		newService.getUsers().remove(userEntry);
 		newService.getUsers().add(userEntry);
+		System.out.println("[NetworkReceiveEvent: processLaunchResponse] After users : " + newService.getUsers());
+		
 
 		// UserEntry serviceUser = newService.getUser(userEntry.getUsername());
 		// if (serviceUser == null) {

@@ -1,5 +1,7 @@
 package data;
 
+import interfaces.MediatorNetwork;
+import interfaces.NetworkMediator;
 import interfaces.NetworkService;
 import interfaces.WebService;
 
@@ -344,7 +346,7 @@ public class Service implements Comparable<Service>, Serializable {
 		stateMgr.setMakeOfferState(this, userIndex, price);
 	}
 	
-	public ArrayList<Message> asMessages() {
-		return stateMgr.asMessages();
+	public ArrayList<Message> asMessages(NetworkService net) {
+		return stateMgr.asMessages(net);
 	}
 }

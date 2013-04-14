@@ -1,5 +1,7 @@
 package interfaces;
 
-public interface NetworkService {
+import data.UserProfile;
 
+public interface NetworkService {
+	public UserProfile getUserProfile();
 }

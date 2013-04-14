@@ -13,6 +13,8 @@ import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
+import data.UserEntry.Offer;
+import data.UserProfile;
 
 public class LaunchOfferState implements State {
 	private static final long	serialVersionUID	= 1L;
@@ -38,8 +40,9 @@ public class LaunchOfferState implements State {
 
 		responseObj.getService().setStatus(Status.ACTIVE);
 
-		System.out.println("[LaunchOfferState: executeWeb] service.getStatus(): " + responseObj.getService().getStatus());
-		
+		System.out.println("[LaunchOfferState: executeWeb] service.getStatus(): "
+				+ responseObj.getService().getStatus());
+
 		web.notifyNetwork(responseObj.getService());
 
 		System.out.println("[LaunchOfferState: executeWeb] End");
@@ -54,7 +57,9 @@ public class LaunchOfferState implements State {
 	}
 
 	@Override
-	public ArrayList<Message> asMessages() {
+	public ArrayList<Message> asMessages(NetworkService net) {
+		UserProfile profile = net.getUserProfile();
+
 		System.out.println("[LaunchOfferState: asMessages] ");
 		ArrayList<Message> list = new ArrayList<Message>();
 
@@ -71,6 +76,8 @@ public class LaunchOfferState implements State {
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 			message.setDestination(user.getUsername());
+			message.setPayload(new UserEntry(profile.getUsername(), profile.getFirstName() + " "
+					+ profile.getLastName(), Offer.NO_OFFER, service.getTime(), service.getPrice()));
 			System.out.println("[LaunchOfferState: asMessages] user.getUsername(): " + user.getUsername());
 			list.add(message);
 		}
