@@ -135,18 +135,22 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	public void logIn() {
+		System.out.println("[NetworkImpl: logIn] Begin");
 		receiveEvents = new NetworkReceiveEvents(this);
 		sendEvents = new NetworkSendEvents(this);
 
-		driver.start();
+		driver.startRunning();
 		receiveEvents.start();
 		sendEvents.start();
+		
+		System.out.println("[NetworkImpl: logIn] End");
 	}
 
 	/**
 	 * Stop receiving or sending messages
 	 */
 	public void logOut() {
+		System.out.println("[NetworkImpl: logOut] Begin");
 		try {
 			driver.stopRunning();
 			receiveEvents.stopRunning();
@@ -158,6 +162,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("[NetworkImpl: logOut] End");
 	}
 
 	@Override

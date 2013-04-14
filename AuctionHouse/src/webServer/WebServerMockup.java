@@ -53,17 +53,17 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object login(LoginRequest req) {
-		System.out.println("[WebServerMockup: login()] Begin");
+		System.out.println("[WebServerMockup: login] Begin");
 		LoginCred cred = req.getLoginCred();
 
 		UserProfile profile = users.get(cred.getUsername());
 		if (profile == null) {
-			System.out.println("[WebServerMockup: login()] Username not found");
+			System.out.println("[WebServerMockup: login] Username not found");
 			return null;
 		}
 
 		if (!profile.getPassword().equals(cred.getPassword())) {
-			System.out.println("[WebServerMockup: login()] Wrong username or password");
+			System.out.println("[WebServerMockup: login] Wrong username or password");
 			return null;
 		}
 
@@ -71,7 +71,7 @@ public class WebServerMockup implements Runnable {
 
 		onlineUsers.put(cred.getUsername(), cred.getAddress());
 		
-		System.out.println("[WebServerMockup: login()] Success");
+		System.out.println("[WebServerMockup: login] Success");
 		return new LoginResponse(profile);
 	}
 
@@ -81,7 +81,7 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object launchOffer(LaunchOfferRequest req) {
-		System.out.println("[WebServerMockup: launchOffer()] Begin");
+		System.out.println("[WebServerMockup: launchOffer] Begin");
 
 		Service service = req.getService();
 		ArrayList<UserEntry> userEntries;
@@ -116,12 +116,12 @@ public class WebServerMockup implements Runnable {
 
 		service.setUsers(userEntries);
 
-		System.out.println("[WebServerMockup: launchOffer()] End");
+		System.out.println("[WebServerMockup: launchOffer] End");
 		return new LaunchOfferResponse(service);
 	}
 
 	public Object dropOffer(DropOfferRequest req) {
-		System.out.println("[WebServerMockup: drop()] Begin");
+		System.out.println("[WebServerMockup: drop] Begin");
 
 		UserEntry userEntry = new UserEntry();
 		userEntry.setName(req.getUsername());
@@ -139,7 +139,7 @@ public class WebServerMockup implements Runnable {
 			sellers.put(req.getServiceName(), sellersUserEntries);
 		}
 
-		System.out.println("[WebServerMockup: drop()] End");
+		System.out.println("[WebServerMockup: drop] End");
 		return new OkResponse();
 	}
 
@@ -160,20 +160,20 @@ public class WebServerMockup implements Runnable {
 		try {
 			this.serverSocket = new ServerSocket(WebServiceServerConfig.PORT);
 		} catch (IOException e) {
-			System.err.println("Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
+			System.err.println("[WebServerMockup: run] Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
 			return;
 		}
 
 		while (true) {
 			try {
 
-				System.out.println("[WebServiceServerMockup:askWebServer()] Before accept");
+				System.out.println("[WebServerMockup: run] Before accept");
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("[WebServiceServerMockup:askWebServer()] Connection accepted");
+				System.out.println("[WebServerMockup: run] Connection accepted");
 
 				pool.execute(new WebWorkerMockup(this, clientSocket));
 			} catch (IOException e) {
-				System.err.println("EROARE: Conectare client");
+				System.err.println("[WebServerMockup: run] EROARE: Conectare client");
 			}
 		}
 	}

@@ -285,17 +285,17 @@ public class Server extends Thread {
 		SocketChannel socketChannel = null;
 		Boolean bRet;
 
-		System.out.println("[Server, initiateConnect()] Begin");
+		System.out.println("[Server: initiateConnect] Begin");
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			System.out.println("[Server, initiateConnect()] Connect to : " + destination);
+			System.out.println("[Server: initiateConnect] Connect to : " + destination);
 			bRet = socketChannel.connect(destination);
 
 			if (bRet) {
-				System.out.println("[Server, initiateConnect()] Connection established");
+				System.out.println("[Server: initiateConnect] Connection established");
 			} else {
-				System.out.println("[Server, initiateConnect()] Connection will be finish later");
+				System.out.println("[Server: initiateConnect] Connection will be finish later");
 			}
 
 			socketChannel.register(selector, SelectionKey.OP_CONNECT);
@@ -314,13 +314,13 @@ public class Server extends Thread {
 		try {
 			socketChannel.finishConnect();
 		} catch (Exception e) {
-			System.err.println("Eroare finishConnect");
+			System.err.println("[Server: connect] ERROR: finishConnect");
 			e.printStackTrace();
 			key.cancel();
 			return;
 		}
 
-		System.out.println("[Server, connect] Connection finished");
+		System.out.println("[Server: connect] Connection finished");
 
 		/* Check if we know who is at the other end of the connection */
 		if (network.getUserKeyMap().containsKey(key)) {
@@ -338,7 +338,7 @@ public class Server extends Thread {
 			}
 		} else {
 			// TODO : Make & send an username request
-			System.err.println("Something wrong went ...");
+			System.err.println("[Server: connect] Something wrong went ...");
 		}
 
 		Message message = new Message();
