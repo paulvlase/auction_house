@@ -12,6 +12,8 @@ public class GuiServiceRunnable implements Runnable {
 	}
 	
 	public void run() {
+		System.out.println("[GuiServiceRunnable: run] service.getName(): " + service.getName());
+		System.out.println("[GuiServiceRunnable: run] service.getStatus(): " + service.getStatus());
 		mainWindow.changeServiceNotify(service);
 	}
 }

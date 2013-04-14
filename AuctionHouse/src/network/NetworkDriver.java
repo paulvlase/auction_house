@@ -420,6 +420,7 @@ public class NetworkDriver extends Thread {
 							break;
 						case ChangeRequest.REGISTER:
 							change.socket.register(this.selector, change.ops);
+							System.out.println("NetworkDriver: run] ChangeRequest.REGISTER");
 							break;
 						}
 					}

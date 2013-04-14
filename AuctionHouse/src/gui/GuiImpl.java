@@ -54,9 +54,14 @@ public class GuiImpl implements Gui {
 			login.hideWindow();
 
 			System.out.println("[GuiImpl:logIn] Signed in");
-
-			mainWindow = new MainWindow(this);
+			
+			ArrayList<Service> service = med.loadOffers();
+			
+			mainWindow = new MainWindow(this, service);
 			mainWindow.showWindow();
+			
+			if (med.getUserProfile().getRole() == UserRole.SELLER)
+				med.launchOffers(service);
 		} else {
 			// autentificare esuata, afisare dialog
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
@@ -162,9 +167,14 @@ public class GuiImpl implements Gui {
 	
 	@Override
 	public void changeServiceNotify(Service service) {
+		System.out.println("GuiImpl: changeServiceNotify] Begin");
+		
 		if (mainWindow != null) {
-			 SwingUtilities.invokeLater(new GuiServiceRunnable(mainWindow, service));
+			System.out.println("[GuiImpl: changeServiceNotify] SwingUtilities.invokeLater()");
+			SwingUtilities.invokeLater(new GuiServiceRunnable(mainWindow, service));
 		}
+		
+		System.out.println("GuiImpl: changeServiceNotify] End");
 	}
 
 	@Override

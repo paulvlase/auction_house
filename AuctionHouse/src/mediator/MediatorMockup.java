@@ -112,6 +112,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		if (profile != null) {
 			this.profile = profile;
+			
+			//TODO: net.init();
 			net.logIn();
 			System.out.println("MediatorMockup:logIn()] End (profile != null)");
 			return true;
@@ -173,7 +175,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		if (profile.getRole() == UserRole.SELLER) {
 			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
-			launchOffers(services);
 		}
 
 		for (Service service : services) {
@@ -312,9 +313,11 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	
 	@Override
 	public void notifyNetwork(Service service) {
+		System.out.println("[MediatorMockup: notifyNetwork] service.getName(): " + service.getName());
 		Service serviceClone = service.clone();
+		System.out.println("[MediatorMockup: notifyNetwork] serviceClone.getstatus(): " + serviceClone.getStatus());
 		serviceClone.setUsers(null);
-		
+
 		gui.changeServiceNotify(serviceClone);
 		net.publishService(service);
 	}

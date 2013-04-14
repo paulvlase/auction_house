@@ -23,24 +23,26 @@ public class LaunchOfferState implements State {
 	}
 
 	public void executeNet(NetworkService net) {
-		System.out.println("[LaunchOfferState:executeNet()] Begin");
+		System.out.println("[LaunchOfferState: executeNet] Begin");
 
-		System.out.println("[LaunchOfferState:executeNet()] End");
+		System.out.println("[LaunchOfferState: executeNet] End");
 	}
 
 	public void executeWeb(WebService web) {
-		System.out.println("[LaunchOfferState:executeWeb()] Begin");
-
-		service.setStatus(Status.ACTIVE);
+		System.out.println("[LaunchOfferState: executeWeb] Begin");
+		System.out.println("[LaunchOfferState: executeWeb] service.getName(): " + service.getName());
 
 		// TODO
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
+
 		responseObj.getService().setStatus(Status.ACTIVE);
+
+		System.out.println("[LaunchOfferState: executeWeb] service.getStatus(): " + responseObj.getService().getStatus());
+		
 		web.notifyNetwork(responseObj.getService());
 
-
-		System.out.println("[LaunchOfferState:executeWeb()] End");
+		System.out.println("[LaunchOfferState: executeWeb] End");
 	}
 
 	public void setState(Service service) {
@@ -53,10 +55,9 @@ public class LaunchOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
+		System.out.println("[LaunchOfferState: asMessages] ");
 		ArrayList<Message> list = new ArrayList<Message>();
 
-		System.out.println("[LaunchOfferState] asMessages");
-		
 		/**
 		 * There is no one who offer this service
 		 */
@@ -70,7 +71,7 @@ public class LaunchOfferState implements State {
 			message.setServiceName(service.getName());
 			message.setUsername(user.getUsername());
 			message.setDestination(user.getUsername());
-			System.out.println("[LaunchOfferState: asMessages()] " + user.getUsername());
+			System.out.println("[LaunchOfferState: asMessages] user.getUsername(): " + user.getUsername());
 			list.add(message);
 		}
 
