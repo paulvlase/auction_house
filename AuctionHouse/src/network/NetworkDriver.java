@@ -226,8 +226,9 @@ public class NetworkDriver extends Thread {
 			}
 
 			if (wbuf.size() == 0) {
-				synchronized (this.changeRequestQueue) {
-					this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_READ));
+				synchronized (changeRequestQueue) {
+//					this.changeRequestQueue.add(new ChangeRequest(key, key.interestOps() | SelectionKey.OP_WRITE));
+					this.changeRequestQueue.add(new ChangeRequest(socketChannel, ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
 				}
 			}
 		}
@@ -273,8 +274,9 @@ public class NetworkDriver extends Thread {
 			}
 
 			wbuf.add(data);
-			synchronized (this.changeRequestQueue) {
-				this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_READ | SelectionKey.OP_WRITE));
+			synchronized (changeRequestQueue) {
+				//this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_READ | SelectionKey.OP_WRITE));
+				this.changeRequestQueue.add(new ChangeRequest((SocketChannel)key.channel(), ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
 			}
 		}
 
@@ -298,8 +300,15 @@ public class NetworkDriver extends Thread {
 				System.out.println("[NetworkDriver: initiateConnect] Connection will be finish later");
 			}
 
-			socketChannel.register(selector, SelectionKey.OP_CONNECT);
+			System.out.println("[NetworkDriver: initiateConnect] Before registering new interest");
+			// socketChannel.register(selector, SelectionKey.OP_CONNECT);
+			synchronized (changeRequestQueue) {
+				changeRequestQueue.add(new ChangeRequest(socketChannel, ChangeRequest.REGISTER, SelectionKey.OP_WRITE));
+			}
+
+			System.out.println("[NetworkDriver: initiateConnect] Before wakeup");
 			selector.wakeup();
+			System.out.println("[NetworkDriver: initiateConnect] Wakeup was sent");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -356,22 +365,23 @@ public class NetworkDriver extends Thread {
 
 		try {
 			while (isRunning()) {
-				System.out.println("[NetworkDriver: run] Listening on " + getAddress().getPort());
+				// System.out.println("[NetworkDriver: run] Listening on " +
+				// getAddress().getPort());
 				selector.select();
-				
-				System.out.println("[NetworkDriver: run]  After select");
+
+				// System.out.println("[NetworkDriver: run]  After select");
 
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = it.next();
 					it.remove();
 
 					System.out.println("[NetworkDriver: run]  for's body");
-					
+
 					if (!key.isValid()) {
 						System.out.println("[NetworkDriver, run] Key isn't valid");
 						continue;
 					}
-					
+
 					if (key.isAcceptable()) {
 						System.out.println("[NetworkDriver, run] accept");
 						accept(key);
@@ -388,11 +398,28 @@ public class NetworkDriver extends Thread {
 				}
 
 				synchronized (changeRequestQueue) {
-					while ((creq = this.changeRequestQueue.poll()) != null) {
-						System.out.println("[NIOTCPServer] Schimb operatiile cheii " + creq.key + " la " + creq.newOps);
-						creq.key.interestOps(creq.newOps);
+					// while ((creq = this.changeRequestQueue.poll()) != null) {
+					// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
+					// + creq.key + " la " + creq.newOps);
+					// creq.key.interestOps(creq.newOps);
+					// }
+
+					Iterator changes = this.changeRequestQueue.iterator();
+					while (changes.hasNext()) {
+						ChangeRequest change = (ChangeRequest) changes.next();
+						switch (change.type) {
+						case ChangeRequest.CHANGEOPS:
+							SelectionKey key = change.socket.keyFor(this.selector);
+							key.interestOps(change.ops);
+							break;
+						case ChangeRequest.REGISTER:
+							change.socket.register(this.selector, change.ops);
+							break;
+						}
 					}
+					this.changeRequestQueue.clear();
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
