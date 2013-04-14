@@ -56,7 +56,8 @@ public class Message implements Serializable {
 		object = b.toByteArray();
 
 		result = new byte[b.size() + Integer.SIZE / Byte.SIZE];
-		resultSize = intToByteArray(result.length);
+		resultSize = intToByteArray(b.size());
+		System.out.println("[Message: serialize] Message length = " + b.size());
 
 		/* Package length */
 		for (int i = 0; i < resultSize.length; i++) {
@@ -159,22 +160,6 @@ public class Message implements Serializable {
 	private static byte[] intToByteArray(int value) {
 		return new byte[] { (byte) (value >>> (3 * Byte.SIZE)), (byte) (value >>> (2 * Byte.SIZE)),
 				(byte) (value >>> Byte.SIZE), (byte) value };
-	}
-
-	private static Integer byteArrayToInt(byte[] array) {
-		Integer result = 0;
-
-		if (array.length != Integer.SIZE / Byte.SIZE) {
-			System.err.println("Integer size = 4, no more, no less");
-			return 0;
-		}
-
-		for (int i = 0; i < array.length; i++) {
-			result <<= Byte.SIZE;
-			result |= array[i];
-		}
-
-		return result;
 	}
 
 	public ArrayList<Message> asArrayList() {

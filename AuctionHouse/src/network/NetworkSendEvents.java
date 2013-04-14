@@ -18,6 +18,7 @@ public class NetworkSendEvents extends QueueThread<SelectionKey, Message> {
 	private NetworkImpl	network;
 
 	public NetworkSendEvents(NetworkImpl network) {
+		super("NetworkSendEvents");
 		this.network = network;
 	}
 

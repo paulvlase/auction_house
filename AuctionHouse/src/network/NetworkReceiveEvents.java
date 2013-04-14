@@ -20,7 +20,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	private NetworkImpl	network;
 
 	public NetworkReceiveEvents(NetworkImpl network) {
-
+		super("NetworkReceiveEvents");
 		this.network = network;
 	}
 
