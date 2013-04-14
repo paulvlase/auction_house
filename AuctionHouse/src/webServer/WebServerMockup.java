@@ -18,6 +18,7 @@ import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
+import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 import config.WebServiceServerConfig;
 import data.LoginCred;
@@ -64,6 +65,11 @@ public class WebServerMockup implements Runnable {
 
 		if (!profile.getPassword().equals(cred.getPassword())) {
 			System.out.println("[WebServerMockup: login] Wrong username or password");
+			return null;
+		}
+		
+		if (onlineUsers.get(cred.getUsername()) != null) {
+			System.out.println("[WebServerMockup: login] Already logged");
 			return null;
 		}
 
@@ -148,6 +154,13 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object setProfile(SetProfileRequest req) {
+		UserProfile profile = req.getUserProfile();
+
+		users.put(profile.getUsername(), profile);
+		return new OkResponse();
+	}
+	
+	public Object registerProfile(RegisterProfileRequest req) {
 		UserProfile profile = req.getUserProfile();
 
 		users.put(profile.getUsername(), profile);

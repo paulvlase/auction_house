@@ -2,10 +2,12 @@ package webClient;
 
 import java.util.ArrayList;
 
+import webServer.messages.GetProfileResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.GetProfileRequest;
+import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 
 import data.LoginCred;
@@ -71,33 +73,32 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 	}
 
 	public UserProfile getUserProfile(String username) {
-		// TODO
 		Object requestObj = new GetProfileRequest(med.getLoginCred(), username);
 		Object responseObj = Util.askWebServer(requestObj);
 		
-		return (UserProfile) responseObj;
+		return ((GetProfileResponse) responseObj).getProfile();
 	}
 
 	public boolean setUserProfile(UserProfile profile) {
-		// TODO
 		Object requestObj = new SetProfileRequest(med.getLoginCred(), profile);
 		Object responseObj = Util.askWebServer(requestObj);
 		med.changeProfileNotify(profile);
+		
 		return true;
 	}
 
 	public boolean registerUser(UserProfile profile) {
-		// TODO
-		if (med.getUser(profile.getUsername()) != null)
+		if (verifyUsername(profile.getUsername()))
 			return false;
 
-		med.putUser(profile);
+		Object requestObj = new RegisterProfileRequest(profile);
+		Object responseObj = Util.askWebServer(requestObj);
+
 		return true;
 	}
 
 	public boolean verifyUsername(String username) {
-		// TODO
-		if (med.getUser(username) != null)
+		if (getUserProfile(username) != null)
 			return true;
 		return false;
 	}
@@ -105,7 +106,8 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 	public void publishService(Service service) {
 		thread.publishService(service);
 	}
-
+	
+	@Override
 	public void publishServices(ArrayList<Service> services) {
 		thread.publishServices(services);
 	}
