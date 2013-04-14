@@ -3,6 +3,7 @@ package mediator;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import data.LoginCred;
 import data.Service;
@@ -72,7 +73,7 @@ MediatorWeb{
 	}
 
 	@Override
-	public Hashtable<String, Service> getOffers() {
+	public ConcurrentHashMap<String, Service> getOffers() {
 		// TODO Auto-generated method stub
 		return null;
 	}

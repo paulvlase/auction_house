@@ -15,8 +15,9 @@ public class Main {
 	static Logger logger = Logger.getLogger(Main.class);
 
 	public static void main(String[] args) {
-		
 		PropertyConfigurator.configure("log4j.properties");
+ 
+		logger.error("[Main: main] Begin");
 		
 		try {
 			UIManager

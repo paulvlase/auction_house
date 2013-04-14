@@ -3,6 +3,7 @@ package interfaces;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import data.LoginCred;
 import data.Service;
@@ -22,7 +23,7 @@ public interface MediatorWeb {
 	/* Doar pentru mockup. */
 	public void putOffer(Service service);
 	public Service getOffer(String serviceName);
-	public Hashtable<String, Service> getOffers();
+	public ConcurrentHashMap<String, Service> getOffers();
 	public void removeOffer(String serviceName);
 
 	public void changeServiceNotify(Service service);
