@@ -55,13 +55,14 @@ public class GuiImpl implements Gui {
 
 			System.out.println("[GuiImpl:logIn] Signed in");
 			
-			ArrayList<Service> service = med.loadOffers();
-			
-			mainWindow = new MainWindow(this, service);
+			mainWindow = new MainWindow(this);
 			mainWindow.showWindow();
 			
+			ArrayList<Service> services = med.loadOffers();
+			changeServicesNotify(services);
+			
 			if (med.getUserProfile().getRole() == UserRole.SELLER)
-				med.launchOffers(service);
+				med.launchOffers(services);
 		} else {
 			// autentificare esuata, afisare dialog
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.WRONG_USR_PASS),
@@ -175,6 +176,16 @@ public class GuiImpl implements Gui {
 		}
 		
 		System.out.println("GuiImpl: changeServiceNotify] End");
+	}
+	
+	public void changeServicesNotify(ArrayList<Service> services) {
+		System.out.println("GuiImpl: changeServicesNotify] Begin");
+		
+		for (Service service: services) {
+			changeServiceNotify(service);
+		}
+		
+		System.out.println("GuiImpl: changeServicesNotify] End");
 	}
 
 	@Override
