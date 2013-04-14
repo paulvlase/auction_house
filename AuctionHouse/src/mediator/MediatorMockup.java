@@ -295,6 +295,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public void notifyNetwork(Service service) {
 		System.out.println("[MediatorMockup: notifyNetwork] service.getName(): " + service.getName());
 		Service serviceClone = service.clone();
+		offers.put(service.getName(), serviceClone);
 		System.out.println("[MediatorMockup: notifyNetwork] serviceClone.getstatus(): " + serviceClone.getStatus());
 		serviceClone.setUsers(null);
 
@@ -304,7 +305,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public LoginCred getLoginCred() {
-		// TODO Auto-generated method stub
 		return cred;
 	}
 }

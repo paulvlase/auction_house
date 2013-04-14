@@ -4,12 +4,20 @@ import gui.GuiImpl;
 
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import mediator.MediatorMockup;
 import network.NetworkImpl;
 import webClient.WebClientMockup;
 
 public class Main {
+	static Logger logger = Logger.getLogger(Main.class);
+
 	public static void main(String[] args) {
+		
+		PropertyConfigurator.configure("log4j.properties");
+		
 		try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

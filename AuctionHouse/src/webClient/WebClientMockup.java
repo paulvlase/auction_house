@@ -67,7 +67,13 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		Object responseObj = Util.askWebServer(requestMsg);
 
 		thread.stopRunning();
-		
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		thread = null;
+
 		System.out
 					.println("[WebServiceClientMockup:logOut()] Success");
 	}
