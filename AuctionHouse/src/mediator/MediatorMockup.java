@@ -17,6 +17,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+
+import app.Main;
 
 import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
@@ -31,6 +37,8 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
+	static Logger logger = Logger.getLogger(MediatorMockup.class);
+
 	private Gui								gui;
 	private NetworkMediator					net;
 	private WebClient						web;
@@ -39,10 +47,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	private UserProfile						profile;
 
 	/* Folosite doar pentru mockup. */
-	private Hashtable<String, Service>		offers;
+	private ConcurrentHashMap<String, Service>		offers;
 
 	public MediatorMockup() {
-		offers = new Hashtable<String, Service>();
+		offers = new ConcurrentHashMap<String, Service>();
 	}
 
 	@Override
@@ -74,11 +82,11 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		return offers.get(serviceName);
 	}
 
-	public synchronized Hashtable<String, Service> getOffers() {
+	public ConcurrentHashMap<String, Service> getOffers() {
 		return offers;
 	}
 
-	public synchronized void removeOffer(String serviceName) {
+	public void removeOffer(String serviceName) {
 		offers.remove(serviceName);
 	}
 
@@ -92,6 +100,12 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			this.cred = cred;
 			this.profile = profile;
 
+			FileAppender fileAppender = (FileAppender) Logger.getRootLogger().getAppender("F");
+			fileAppender.setFile("logs/pvlase.log");
+			fileAppender.activateOptions();
+
+			logger.error("[MediatorMockup] Logged in");
+			
 			// TODO: net.init();
 			net.logIn();
 			System.out.println("MediatorMockup:logIn()] End (profile != null)");
@@ -110,6 +124,17 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		cred = null;
 		profile = null;
+		
+		logger.error("Logged out");
+		
+		FileAppender fileAppender = (FileAppender) Logger.getRootLogger().getAppender("F");
+		fileAppender.setFile("logs/default.log");
+		fileAppender.activateOptions();
+		
+		//TODO: Remove this.
+		logger.error("Test");
+
+		logger.error("[MediatorMockup] Logged in");
 
 		System.out.println("[MockupMediator:logOut()] End");
 	}

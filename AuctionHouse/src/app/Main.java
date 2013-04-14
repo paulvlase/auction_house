@@ -18,6 +18,8 @@ public class Main {
 
 		PropertyConfigurator.configure("log4j.properties");
 
+		logger.error("[Main: main] Begin");
+
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
