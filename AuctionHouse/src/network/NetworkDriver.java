@@ -80,17 +80,21 @@ public class NetworkDriver extends Thread {
 	}
 
 	protected void accept(SelectionKey key) {
+		System.out.println("[NetworkDriver: accept] Begin");
+
 		SocketChannel socketChannel;
 		ServerSocketChannel serverSocketChannel;
 		Message message;
 
-		System.out.println("[NetworkDriver, accept()] Accept a connection");
+		System.out.println("[NetworkDriver: accept] Accept a connection");
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
+			
+			System.out.println("[NetworkDriver: accept] Done");
 
 			// message = new Message();
 			// message.setType(MessageType.GET_USERNAME);
@@ -98,6 +102,8 @@ public class NetworkDriver extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("[NetworkDriver: accept] End");
+
 	}
 
 	private void appendMessage(Message message, SelectionKey key) {

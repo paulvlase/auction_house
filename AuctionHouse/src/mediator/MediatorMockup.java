@@ -283,7 +283,6 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	@Override
 	public void publishService(Service service) {
 		// TODO Auto-generated method stub
-		System.out.println("Public aici in mediator");
 		net.publishService(service);
 		web.publishService(service);
 	}
