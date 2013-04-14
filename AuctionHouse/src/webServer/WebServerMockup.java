@@ -67,6 +67,11 @@ public class WebServerMockup implements Runnable {
 			System.out.println("[WebServerMockup: login] Wrong username or password");
 			return null;
 		}
+		
+		if (onlineUsers.get(cred.getUsername()) != null) {
+			System.out.println("[WebServerMockup: login] Already logged");
+			return null;
+		}
 
 		profile.setRole(cred.getRole());
 
