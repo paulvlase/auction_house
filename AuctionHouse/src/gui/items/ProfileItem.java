@@ -18,7 +18,7 @@ public class ProfileItem extends GuiAbstractItem implements Command {
 
 	@Override
 	public void execute() {
-		new ProfileWindow(gui).showWindow();
+		new ProfileWindow(gui).setVisible(true);
 	}
 
 }

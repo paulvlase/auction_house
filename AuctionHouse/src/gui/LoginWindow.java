@@ -1,6 +1,7 @@
 package gui;
 
 import interfaces.Gui;
+import interfaces.ClearWindow;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,7 @@ import data.UserProfile.UserRole;
  * @author Ghennadi Procopciuc
  */
 
-public class LoginWindow extends JFrame implements ActionListener {
+public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
 
 	private Gui					gui;
@@ -259,12 +260,9 @@ public class LoginWindow extends JFrame implements ActionListener {
 				passwordField.getPassword()), userRole);
 		gui.logIn(cred);
 	}
-
-	public void showWindow() {
-		setVisible(true);
-	}
-
-	public void hideWindow() {
-		setVisible(false);
+	
+	@Override
+	public void clear() {
+		passwordField.setText("");
 	}
 }

@@ -28,7 +28,7 @@ import data.UserProfile.UserRole;
  */
 public class GuiImpl implements Gui {
 	private MediatorGui	med;
-	private LoginWindow		login;
+	private LoginWindow		loginWindow;
 	private MainWindow	mainWindow;
 	private RegisterWindow registerWindow;
 
@@ -36,14 +36,14 @@ public class GuiImpl implements Gui {
 		this.med = med;
 		med.registerGui(this);
 
-		login = new LoginWindow(this);
+		loginWindow = new LoginWindow(this);
 	}
 
 	public void start() {
 		LoginCred cred = loadLoginFile();
 
 		if (cred == null) {
-			login.showWindow();
+			loginWindow.setVisible(true);
 		} else {
 			logIn(cred);
 		}
@@ -51,12 +51,13 @@ public class GuiImpl implements Gui {
 
 	public void logIn(LoginCred cred) {
 		if (med.logIn(cred)) {
-			login.hideWindow();
+			loginWindow.setVisible(false);
+			loginWindow.clear();
 
 			System.out.println("[GuiImpl: logIn] Signed in");
 			
 			mainWindow = new MainWindow(this);
-			mainWindow.showWindow();
+			mainWindow.setVisible(true);
 			
 			ArrayList<Service> services = med.loadOffers();
 			changeServicesNotify(services);
@@ -75,7 +76,7 @@ public class GuiImpl implements Gui {
 		med.logOut();
 
 		mainWindow.setVisible(false);
-		login.showWindow();
+		loginWindow.setVisible(true);
 		
 		System.out.println("[GuiImpl: logOut] End");
 	}
@@ -89,7 +90,7 @@ public class GuiImpl implements Gui {
 	}
 	
 	public void registerUserStep1() {
-		login.hideWindow();
+		loginWindow.setVisible(false);
 
 		if (registerWindow == null) {
 			registerWindow =  new RegisterWindow(this);
@@ -103,7 +104,7 @@ public class GuiImpl implements Gui {
 	
 	public void registerUserStep3() {
 		registerWindow.setVisible(false);
-		login.showWindow();
+		loginWindow.setVisible(true);
 }
 	
 	public boolean verifyUsername(String username) {

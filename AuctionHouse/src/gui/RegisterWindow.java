@@ -1,5 +1,6 @@
 package gui;
 
+import interfaces.ClearWindow;
 import interfaces.Gui;
 
 import java.awt.Color;
@@ -41,7 +42,7 @@ import data.UserProfile;
 /**
  * @author Ghennadi Procopciuc
  */
-public class RegisterWindow extends JFrame implements ActionListener, MouseListener {
+public class RegisterWindow extends JFrame implements ActionListener, MouseListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
@@ -415,5 +416,9 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
+	public void clear() {
 	}
 }

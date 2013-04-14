@@ -1,7 +1,7 @@
 package gui;
 
 import interfaces.Gui;
-import interfaces.Window;
+import interfaces.ClearWindow;
 
 import java.awt.Container;
 import java.awt.Graphics2D;
@@ -41,7 +41,7 @@ import config.GuiConfig;
 /**
  * @author Ghennadi Procopciuc
  */
-public class ProfileWindow extends JFrame implements ActionListener, MouseListener, Window {
+public class ProfileWindow extends JFrame implements ActionListener, MouseListener, ClearWindow {
 
 	private static final long	serialVersionUID	= 1L;
 
@@ -397,21 +397,11 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 	}
 
 	@Override
-	public void showWindow() {
-		setVisible(true);
-	}
-
-	@Override
-	public void clearWindow() {
+	public void clear() {
 		newPasswordField.setText("");
 		newPasswordRetype.setText("");
 		firstnameField.setText("");
 		lastnameField.setText("");
 		locationField.setText("");
-	}
-
-	@Override
-	public void hideWindow() {
-		setVisible(false);
 	}
 }

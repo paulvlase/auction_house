@@ -13,6 +13,7 @@ import gui.items.RemoveServiceItem;
 import gui.items.SignOutButton;
 import gui.items.SignOutItem;
 import gui.spantable.MultiSpanCellTable;
+import interfaces.ClearWindow;
 import interfaces.Gui;
 
 import java.awt.Color;
@@ -53,7 +54,7 @@ import data.UserProfile.UserRole;
  * @author Ghennadi Procopciuc
  */
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ClearWindow {
 
 	private static final long	serialVersionUID	= 1L;
 
@@ -338,10 +339,6 @@ public class MainWindow extends JFrame {
 		this.services = services;
 	}
 
-	public void showWindow() {
-		setVisible(true);
-	}
-
 	public JButton getSignOutButton() {
 		return signOutButton;
 	}
@@ -512,5 +509,10 @@ public class MainWindow extends JFrame {
 	public void changeProfileNotify(UserProfile profile) {
 		setAvatar(profile.getAvatar());
 		setName(profile.getFirstName(), profile.getLastName());
+	}
+	
+	@Override
+	public void clear() {
+		
 	}
 }
