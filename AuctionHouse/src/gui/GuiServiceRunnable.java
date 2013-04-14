@@ -1,19 +1,27 @@
 package gui;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Service;
 
 public class GuiServiceRunnable implements Runnable {
+	private static Logger logger = Logger.getLogger(GuiServiceRunnable.class);
+
 	private Service service;
 	private MainWindow mainWindow;
 	
 	public GuiServiceRunnable(MainWindow mainWindow, Service service) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.service = service;
 		this.mainWindow = mainWindow;
 	}
 	
 	public void run() {
-		System.out.println("[GuiServiceRunnable: run] service.getName(): " + service.getName());
-		System.out.println("[GuiServiceRunnable: run] service.getStatus(): " + service.getStatus());
+		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service.getStatus(): " + service.getStatus());
+
 		mainWindow.changeServiceNotify(service);
 	}
 }

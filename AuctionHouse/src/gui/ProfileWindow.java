@@ -36,14 +36,16 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 
 /**
  * @author Ghennadi Procopciuc
  */
 public class ProfileWindow extends JFrame implements ActionListener, MouseListener, ClearWindow {
-
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(ProfileWindow.class);
 
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
@@ -70,17 +72,21 @@ public class ProfileWindow extends JFrame implements ActionListener, MouseListen
 	private Gui					gui;
 
 	public ProfileWindow() {
+		// TODO: logger.setLevel(Level.OFF);
 		initComponents();
 	}
 
 	public ProfileWindow(Gui gui) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.gui = gui;
 		initComponents();
 		initData();
 	}
 
 	private void initData() {
-		System.out.println(gui.getUserProfile());
+		logger.debug("gui.getUserProfile(): " + gui.getUserProfile());
+
 		if (gui.getUserProfile().getAvatar() != null) {
 			setAvatar(new ImageIcon(gui.getUserProfile().getAvatar()));
 		}

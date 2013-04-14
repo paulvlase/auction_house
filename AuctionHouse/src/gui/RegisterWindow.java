@@ -3,7 +3,6 @@ package gui;
 import interfaces.ClearWindow;
 import interfaces.Gui;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -33,8 +32,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.log4j.Logger;
 
 import config.GuiConfig;
 import data.UserProfile;
@@ -44,6 +44,8 @@ import data.UserProfile;
  */
 public class RegisterWindow extends JFrame implements ActionListener, MouseListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(RegisterWindow.class);
+
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
 	private JPanel				panel1;
@@ -71,6 +73,8 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	private Gui					gui;
 
 	public RegisterWindow(Gui gui) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		userProfile = new UserProfile();
 		userProfile.setAvatar(getBytesFromImageIcon(new ImageIcon(GuiConfig.DEFAULT_AVATAR)));
 		this.gui = gui;
@@ -268,7 +272,8 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	}
 
 	private void checkUsername() {
-		System.out.println("Check username ..." + usernameField.getText());
+		logger.debug("Check username ..." + usernameField.getText());
+
 		if (usernameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_USERNAME_ERROR),
 					GuiConfig.getValue(GuiConfig.EMPTY_USERNAME), JOptionPane.WARNING_MESSAGE);
@@ -287,7 +292,8 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == registerButton) {
-			System.out.println("Register");
+			logger.info("Register");
+
 			if (userProfile.getUsername() == null) {
 				checkUsername();
 			}
