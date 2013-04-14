@@ -7,11 +7,15 @@ import interfaces.Gui;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 
-public class ExitItem extends GuiAbstractItem implements Command {
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
+public class ExitItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(ExitItem.class);
 
 	public ExitItem(MainWindow window, Gui gui) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.window = window;
 		this.gui = gui;
 
@@ -20,7 +24,7 @@ public class ExitItem extends GuiAbstractItem implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("Exit Action");
+		logger.debug("Exit Action");
 		gui.logOut();
 
 		/* Dispose main window */
