@@ -1,10 +1,12 @@
 package webClient;
 
 import interfaces.Command;
-import interfaces.MediatorWeb;
 import interfaces.WebService;
 
 import java.util.ArrayList;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import data.Service;
 
@@ -14,6 +16,8 @@ import data.Service;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebClientEvents extends Thread {
+	static Logger logger = Logger.getLogger(WebClientEvents.class);
+
 	private WebService			web;
 	private Object				monitor;
 	private Boolean				running;
@@ -21,6 +25,7 @@ public class WebClientEvents extends Thread {
 	private ArrayList<Command>	events;
 
 	public WebClientEvents(WebService web) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.web = web;
 
 		events = new ArrayList<Command>();
@@ -52,17 +57,17 @@ public class WebClientEvents extends Thread {
 	}
 
 	private void process() {
-		System.out.println("[WebServiceClientEvents:process()] Begin");
+		logger.debug("Begin");
 
 		for (Command event : events) {
 			event.execute();
 		}
 
-		System.out.println("[WebServiceClientEvents:process()] End");
+		logger.debug("End");
 	}
 
 	public synchronized void publishService(Service service) {
-		System.out.println("[WebServiceClientEvents:publishService()] Begin");
+		logger.debug("Begin");
 
 		events.add(new WebAdapter(service, web));
 
@@ -70,11 +75,12 @@ public class WebClientEvents extends Thread {
 			monitor.notify();
 		}
 
-		System.out.println("[WebServiceClientEvents:publishService()] End");
+		logger.debug("End");
 	}
 
 	public synchronized void publishServices(ArrayList<Service> services) {
-		System.out.println("[WebServiceClientEvents:publishServices()] Begin");
+		logger.debug("Begin");
+
 		for (Service service : services) {
 			events.add(new WebAdapter(service, web));
 		}
@@ -83,6 +89,6 @@ public class WebClientEvents extends Thread {
 			monitor.notify();
 		}
 
-		System.out.println("[WebServiceClientEvents:publishServices()] End");
+		logger.debug("End");
 	}
 }
