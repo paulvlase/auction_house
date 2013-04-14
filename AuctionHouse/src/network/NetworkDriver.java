@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import data.Message;
 import data.Message.MessageType;
 
-public class Server extends Thread {
+public class NetworkDriver extends Thread {
 	// private static final Integer MAX_POOL_THREADS = 5;
 
 	private NetworkImpl									network;
@@ -38,7 +38,7 @@ public class Server extends Thread {
 
 	private LinkedList<ChangeRequest>					changeRequestQueue;
 
-	public Server(NetworkImpl network) {
+	public NetworkDriver(NetworkImpl network) {
 		this.network = network;
 
 		try {
@@ -48,7 +48,7 @@ public class Server extends Thread {
 			serverSocketChannel.socket().bind(null);
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-			System.out.println("[Server] Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
+			System.out.println("[NetworkDriver] Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
 
 			serverChannels = new ArrayList<ServerSocketChannel>();
 			socketChannels = new ArrayList<SocketChannel>();
@@ -84,7 +84,7 @@ public class Server extends Thread {
 		ServerSocketChannel serverSocketChannel;
 		Message message;
 
-		System.out.println("[Server, accept()] Accept a connection");
+		System.out.println("[NetworkDriver, accept()] Accept a connection");
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
@@ -234,7 +234,7 @@ public class Server extends Thread {
 	}
 
 	public void sendData(Message message, String username, InetSocketAddress address) {
-		System.out.println("[Server, sendData()] Begin");
+		System.out.println("[NetworkDriver, sendData()] Begin");
 		ConcurrentHashMap<String, SelectionKey> userKeyMap;
 		ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages;
 
@@ -285,17 +285,17 @@ public class Server extends Thread {
 		SocketChannel socketChannel = null;
 		Boolean bRet;
 
-		System.out.println("[Server: initiateConnect] Begin");
+		System.out.println("[NetworkDriver: initiateConnect] Begin");
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			System.out.println("[Server: initiateConnect] Connect to : " + destination);
+			System.out.println("[NetworkDriver: initiateConnect] Connect to : " + destination);
 			bRet = socketChannel.connect(destination);
 
 			if (bRet) {
-				System.out.println("[Server: initiateConnect] Connection established");
+				System.out.println("[NetworkDriver: initiateConnect] Connection established");
 			} else {
-				System.out.println("[Server: initiateConnect] Connection will be finish later");
+				System.out.println("[NetworkDriver: initiateConnect] Connection will be finish later");
 			}
 
 			socketChannel.register(selector, SelectionKey.OP_CONNECT);
@@ -314,13 +314,13 @@ public class Server extends Thread {
 		try {
 			socketChannel.finishConnect();
 		} catch (Exception e) {
-			System.err.println("[Server: connect] ERROR: finishConnect");
+			System.err.println("[NetworkDriver: connect] ERROR: finishConnect");
 			e.printStackTrace();
 			key.cancel();
 			return;
 		}
 
-		System.out.println("[Server: connect] Connection finished");
+		System.out.println("[NetworkDriver: connect] Connection finished");
 
 		/* Check if we know who is at the other end of the connection */
 		if (network.getUserKeyMap().containsKey(key)) {
@@ -338,7 +338,7 @@ public class Server extends Thread {
 			}
 		} else {
 			// TODO : Make & send an username request
-			System.err.println("[Server: connect] Something wrong went ...");
+			System.err.println("[NetworkDriver: connect] Something wrong went ...");
 		}
 
 		Message message = new Message();
@@ -356,33 +356,33 @@ public class Server extends Thread {
 
 		try {
 			while (isRunning()) {
-				System.out.println("[Server: run] Listening on " + getAddress().getPort());
+				System.out.println("[NetworkDriver: run] Listening on " + getAddress().getPort());
 				selector.select();
 				
-				System.out.println("[Server: run]  After select");
+				System.out.println("[NetworkDriver: run]  After select");
 
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = it.next();
 					it.remove();
 
-					System.out.println("[Server: run]  for's body");
+					System.out.println("[NetworkDriver: run]  for's body");
 					
 					if (!key.isValid()) {
-						System.out.println("[Server, run] Key isn't valid");
+						System.out.println("[NetworkDriver, run] Key isn't valid");
 						continue;
 					}
 					
 					if (key.isAcceptable()) {
-						System.out.println("[Server, run] accept");
+						System.out.println("[NetworkDriver, run] accept");
 						accept(key);
 					} else if (key.isReadable()) {
-						System.out.println("[Server, run] read");
+						System.out.println("[NetworkDriver, run] read");
 						read(key);
 					} else if (key.isWritable()) {
-						System.out.println("[Server, run] write");
+						System.out.println("[NetworkDriver, run] write");
 						write(key);
 					} else if (key.isConnectable()) {
-						System.out.println("[Server, run] connect");
+						System.out.println("[NetworkDriver, run] connect");
 						connect(key);
 					}
 				}

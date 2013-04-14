@@ -69,7 +69,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 	private void processGetUsername(SelectionKey key, Message message) {
 		System.out.println("[processGetUsername()] Begin");
-		Server driver = network.getDriver();
+		NetworkDriver driver = network.getDriver();
 
 		/* Message build */
 		Message newMessage = new Message();

@@ -33,7 +33,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	private ConcurrentHashMap<String, SelectionKey>			userKeyMap;
 	private ConcurrentHashMap<String, ArrayList<Message>>	userUnsentMessages;
 
-	private Server											driver;
+	private NetworkDriver											driver;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.mediator = med;
@@ -48,7 +48,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		userKeyMap = new ConcurrentHashMap<String, SelectionKey>();
 		userUnsentMessages = new ConcurrentHashMap<String, ArrayList<Message>>();
 
-		driver = new Server(this);
+		driver = new NetworkDriver(this);
 	}
 
 	public InetSocketAddress getAddress() {
@@ -67,11 +67,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		return receiveEvents;
 	}
 
-	public Server getDriver() {
+	public NetworkDriver getDriver() {
 		return driver;
 	}
 
-	public void setDriver(Server driver) {
+	public void setDriver(NetworkDriver driver) {
 		this.driver = driver;
 	}
 
@@ -156,7 +156,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			receiveEvents.stopRunning();
 			sendEvents.stopRunning();
 			
-			driver = new Server(this);
+			driver = new NetworkDriver(this);
 			receiveEvents = null;
 			sendEvents = null;
 		} catch (Exception e) {
