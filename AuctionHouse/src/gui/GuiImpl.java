@@ -53,7 +53,7 @@ public class GuiImpl implements Gui {
 		if (med.logIn(cred)) {
 			login.hideWindow();
 
-			System.out.println("[GuiImpl:logIn] Signed in");
+			System.out.println("[GuiImpl: logIn] Signed in");
 			
 			mainWindow = new MainWindow(this);
 			mainWindow.showWindow();
@@ -71,11 +71,13 @@ public class GuiImpl implements Gui {
 	}
 
 	public void logOut() {
-		System.out.println("[GuiImpl:logOut()] Bye bye");
+		System.out.println("[GuiImpl: logOut] Begin");
 		med.logOut();
 
 		mainWindow.setVisible(false);
 		login.showWindow();
+		
+		System.out.println("[GuiImpl: logOut] End");
 	}
 	
 	public UserProfile getUserProfile() {
