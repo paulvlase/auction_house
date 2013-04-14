@@ -35,10 +35,12 @@ public abstract class QueueThread<K, T> extends Thread {
 		K key = entry.getKey();
 		T value = entry.getValue().get(0);
 
+		System.out.println("[QueueThread : getJob] Before " + queue);
 		queue.get(key).remove(0);
 		if (queue.get(key).size() == 0) {
 			queue.remove(key);
 		}
+		System.out.println("[QueueThread : getJob] After " + queue);
 
 		return new Pair<K, T>(key, value);
 	}
@@ -82,7 +84,7 @@ public abstract class QueueThread<K, T> extends Thread {
 
 	protected abstract void process();
 
-	public void enqueue(K key, T value) {
+	public synchronized void enqueue(K key, T value) {
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 

@@ -12,19 +12,17 @@ import network.NetworkImpl;
 import webClient.WebClientMockup;
 
 public class Main {
-	static Logger logger = Logger.getLogger(Main.class);
+	static Logger	logger	= Logger.getLogger(Main.class);
 
 	public static void main(String[] args) {
-		
+
 		PropertyConfigurator.configure("log4j.properties");
-		
+
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			try {
-				UIManager
-						.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 			} catch (Exception e1) {
 			}
 		}
