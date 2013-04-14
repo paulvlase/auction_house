@@ -27,7 +27,7 @@ public class DropOfferState implements State {
 		System.out
 				.println("[DropOfferState:executeNet()] " + service.getName());
 
-		service.setInactiveState();
+		service.setPendingState();
 		// TODO
 		//net.stopTransfer(service);
 		//net.changeServiceNotify(service);

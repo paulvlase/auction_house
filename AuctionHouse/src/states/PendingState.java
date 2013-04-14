@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import data.Message;
 
 
-public class InactiveState implements State {
+public class PendingState implements State {
 	private static final long	serialVersionUID	= 1L;
 
-	public InactiveState() {
+	public PendingState() {
 		
 	}
 	

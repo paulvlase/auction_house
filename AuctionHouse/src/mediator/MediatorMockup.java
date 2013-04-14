@@ -92,7 +92,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public boolean logIn(LoginCred cred) {
-		System.out.println("MediatorMockup:logIn()] Begin");
+		logger.debug("MediatorMockup:logIn()] Begin");
 		cred.setAddress(net.getAddress());
 		UserProfile profile = web.logIn(cred);
 
@@ -104,14 +104,16 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			fileAppender.setFile("logs/pvlase.log");
 			fileAppender.activateOptions();
 
-			logger.error("[MediatorMockup] Logged in");
-			
+			logger.error("Logged in");
+			logger.error("Hallo");
+
 			// TODO: net.init();
 			net.logIn();
-			System.out.println("MediatorMockup:logIn()] End (profile != null)");
+			
+			logger.debug("End (profile != null)");
 			return true;
 		}
-		System.out.println("MediatorMockup:logIn()] End (profile == null)");
+		logger.debug("End (profile == null)");
 		return false;
 	}
 

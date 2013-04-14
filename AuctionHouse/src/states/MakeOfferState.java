@@ -30,7 +30,7 @@ public class MakeOfferState implements State {
 			user.setOffer(Offer.OFFER_MADE);
 			user.setPrice(price);
 
-			service.setInactiveState();
+			service.setPendingState();
 			// TODO
 			//net.changeServiceNotify(service);
 		}

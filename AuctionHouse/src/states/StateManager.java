@@ -10,7 +10,7 @@ import interfaces.WebService;
 
 public class StateManager implements Serializable{
 	private static final long	serialVersionUID	= 1L;
-	private InactiveState inactiveState;
+	private PendingState pendingState;
 	private MakeOfferState makeOfferState;
 	private RemoveOfferState removeOfferState;
 	private DropAuctionState dropAuctionState;
@@ -23,7 +23,7 @@ public class StateManager implements Serializable{
 	private State currentState;
 	
 	public StateManager() {
-		inactiveState = new InactiveState();
+		pendingState = new PendingState();
 		makeOfferState = new MakeOfferState();
 		removeOfferState = new RemoveOfferState();
 		dropAuctionState = new DropAuctionState();
@@ -33,11 +33,11 @@ public class StateManager implements Serializable{
 		launchOfferState = new LaunchOfferState();
 		dropOfferState = new DropOfferState();
 
-		currentState = inactiveState;
+		currentState = pendingState;
 	}
 	
-	public void setInactiveState() {
-		currentState = inactiveState;
+	public void setPendingState() {
+		currentState = pendingState;
 	}
 	
 	public void setMakeOfferState(Service service, Integer userIndex, Double price) {
@@ -84,7 +84,7 @@ public class StateManager implements Serializable{
 	}
 	
 	public boolean isInactiveState() {
-		return currentState == inactiveState;
+		return currentState == pendingState;
 	}
 	
 	public void executeNet(NetworkService net) {

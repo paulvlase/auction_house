@@ -19,8 +19,8 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class AttributiveCellTableModel extends DefaultTableModel {
-
 	private static final long	serialVersionUID	= 1L;
+
 	protected CellAttribute		cellAtt;
 	private ArrayList<Span>		spans;
 

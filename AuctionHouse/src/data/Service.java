@@ -312,8 +312,8 @@ public class Service implements Comparable<Service>, Serializable {
 		return getName().compareTo(o.getName());
 	}
 
-	public void setInactiveState() {
-		stateMgr.setInactiveState();
+	public void setPendingState() {
+		stateMgr.setPendingState();
 	}
 
 	public void setAccceptOfferState(Integer userIndex) {
