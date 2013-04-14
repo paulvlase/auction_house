@@ -231,14 +231,29 @@ public class NetworkDriver extends Thread {
 
 		/* Read serialized object */
 		if (i + length <= newBuf.length) {
-			Message message = new Message(Arrays.copyOfRange(newBuf, 0, length + 4));
-
-			System.out.println("[NetworkDriver: read] Message received : " + message);
-			appendMessage(message, key);
-
-			i += length;
-		} else
 			i -= 4;
+			while(true){
+				if (i + 4 >= newBuf.length) {
+					break;
+				}
+				
+				/* Get length */
+				length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
+				if(i + length + 4 > newBuf.length){
+					break;
+				}
+				
+				Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
+
+				System.out.println("[NetworkDriver: read] Message received : " + message);
+				appendMessage(message, key);
+				
+				i += 4 + length;
+
+			}
+		} else {
+			i -= 4;
+		}
 
 		byte[] finalBuf = null;
 		if (i > 0) {
@@ -324,6 +339,10 @@ public class NetworkDriver extends Thread {
 
 	public void sendData(Message message, SelectionKey key) {
 		sendData(key, message.serialize());
+	}
+	
+	public void sendData(Message message, SocketChannel chanel) {
+		sendData(message, chanel.keyFor(selector));
 	}
 
 	public void sendData(SelectionKey key, byte[] data) {
@@ -432,9 +451,10 @@ public class NetworkDriver extends Thread {
 			/* Send all pending messages */
 			ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
 			System.out.println("[NetworkDriver: finishConnect] Unsent messages list = " + unsentMessages);
-			if (unsentMessages.contains(username)) {
+			System.out.println("[NetworkDriver: finishConnect] Username : " + username);
+			if (unsentMessages.containsKey(username)) {
 				System.out.println("[NetworkDriver: finishConnect] Send pending messages");
-				network.getSendEvents().enqueue(key, unsentMessages.get(username));
+				network.getSendEvents().enqueue(socketChannel, unsentMessages.get(username));
 			}
 		} else {
 			// TODO : Make & send an username request
@@ -500,29 +520,29 @@ public class NetworkDriver extends Thread {
 					}
 				}
 
-				synchronized (changeRequestQueue) {
-					// while ((creq = this.changeRequestQueue.poll()) != null) {
-					// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
-					// + creq.key + " la " + creq.newOps);
-					// creq.key.interestOps(creq.newOps);
-					// }
-
-					Iterator changes = this.changeRequestQueue.iterator();
-					while (changes.hasNext()) {
-						ChangeRequest change = (ChangeRequest) changes.next();
-						switch (change.type) {
-						case ChangeRequest.CHANGEOPS:
-							SelectionKey key = change.socket.keyFor(this.selector);
-							key.interestOps(change.ops);
-							break;
-						case ChangeRequest.REGISTER:
-							change.socket.register(this.selector, change.ops);
-							System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
-							break;
-						}
-					}
-					this.changeRequestQueue.clear();
-				}
+//				synchronized (changeRequestQueue) {
+//					// while ((creq = this.changeRequestQueue.poll()) != null) {
+//					// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
+//					// + creq.key + " la " + creq.newOps);
+//					// creq.key.interestOps(creq.newOps);
+//					// }
+//
+//					Iterator changes = this.changeRequestQueue.iterator();
+//					while (changes.hasNext()) {
+//						ChangeRequest change = (ChangeRequest) changes.next();
+//						switch (change.type) {
+//						case ChangeRequest.CHANGEOPS:
+//							SelectionKey key = change.socket.keyFor(this.selector);
+//							key.interestOps(change.ops);
+//							break;
+//						case ChangeRequest.REGISTER:
+//							change.socket.register(this.selector, change.ops);
+//							System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
+//							break;
+//						}
+//					}
+//					this.changeRequestQueue.clear();
+//				}
 
 			}
 		} catch (Exception e) {

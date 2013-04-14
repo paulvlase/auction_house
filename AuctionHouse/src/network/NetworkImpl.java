@@ -138,7 +138,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public void logIn() {
 		System.out.println("[NetworkImpl: logIn] Begin");
 		receiveEvents = new NetworkReceiveEvents(this);
-		sendEvents = new NetworkSendEvents(this);
+		sendEvents = new NetworkSendEvents(this.getDriver());
 
 		driver.startRunning();
 		receiveEvents.start();

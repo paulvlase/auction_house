@@ -2,6 +2,9 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class QueueThread<K, T> extends Thread {
@@ -9,15 +12,40 @@ public abstract class QueueThread<K, T> extends Thread {
 	private Object									monitor;
 	protected ConcurrentHashMap<K, ArrayList<T>>	queue;
 	private Boolean									running;
-	private String threadName;
+	private String									threadName;
 
 	public QueueThread(String threadName) {
 		this.monitor = new Object();
 		this.threadName = threadName;
+		queue = new ConcurrentHashMap<K, ArrayList<T>>();
+	}
+
+	public QueueThread() {
+		this("");
+	}
+
+	public Map.Entry<K, T> getJob() {
+		Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
+
+		if (!it.hasNext()) {
+			return null;
+		}
+
+		Map.Entry<K, ArrayList<T>> entry = it.next();
+		K key = entry.getKey();
+		T value = entry.getValue().get(0);
+
+		queue.get(key).remove(0);
+		if (queue.get(key).size() == 0) {
+			queue.remove(key);
+		}
+
+		return new Pair<K, T>(key, value);
 	}
 	
-	public QueueThread(){
-		this("");
+	public Map.Entry<K, T> getRandomJob() {
+		System.err.println("Unimplemented method");
+		return null;
 	}
 
 	@Override
@@ -63,7 +91,7 @@ public abstract class QueueThread<K, T> extends Thread {
 		}
 	}
 
-	public void enqueue(K key, Collection<T> values){
+	public void enqueue(K key, Collection<T> values) {
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).addAll(values);
 
@@ -71,12 +99,12 @@ public abstract class QueueThread<K, T> extends Thread {
 			monitor.notify();
 		}
 	}
-	
+
 	public synchronized void stopRunning() {
 		running = false;
 
 		System.out.println("[" + threadName + "] Stop running");
-		
+
 		synchronized (monitor) {
 			monitor.notify();
 		}
