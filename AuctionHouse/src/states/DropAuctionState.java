@@ -5,6 +5,9 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.UserEntry;
@@ -12,9 +15,12 @@ import data.UserEntry.Offer;
 
 public class DropAuctionState implements State {
 	private static final long	serialVersionUID	= 1L;
+	static Logger logger = Logger.getLogger(DropAuctionState.class);
+
 	private Service service;
 
 	public DropAuctionState() {
+		// TODO: logger.setLevel(Level.OFF);
 	}
 
 	@Override
@@ -28,8 +34,7 @@ public class DropAuctionState implements State {
 				// TODO
 				//net.putOffer(service);
 
-				System.out.println("[WebServiceClient:dropAuction()] Aici: "
-						+ users);
+				logger.info("users: " + users);
 			}
 
 			/* Remove all users */
@@ -53,7 +58,8 @@ public class DropAuctionState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
-		System.out.println("[DropAuctionState] asMessages");
+		logger.debug("Begin");
+
 		ArrayList<Message> list = null;
 		Boolean first = true;
 

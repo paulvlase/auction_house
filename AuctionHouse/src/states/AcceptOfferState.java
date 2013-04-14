@@ -5,6 +5,9 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.UserEntry;
@@ -12,11 +15,13 @@ import data.UserEntry.Offer;
 
 public class AcceptOfferState implements State {
 	private static final long	serialVersionUID	= 1L;
+	static Logger logger = Logger.getLogger(AcceptOfferState.class);
+
 	private Service service;
 	private Integer userIndex;
 
 	public AcceptOfferState() {
-		
+		// TODO: logger.setLevel(Level.OFF);	
 	}
 	
 	@Override
@@ -57,7 +62,8 @@ public class AcceptOfferState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages() {
-		System.out.println("[AcceptOfferState] asMessages");
+		logger.debug("Begin");
+
 		Message message = new Message();
 		message.setType(data.Message.MessageType.ACCEPT);
 		message.setServiceName(service.getName());
