@@ -1,19 +1,18 @@
 package network;
 
-import java.nio.channels.*;
+import java.nio.channels.SocketChannel;
 
 public class ChangeRequest {
-	public SelectionKey key;
-	public SocketChannel socketChannel;
-	public int newOps;
+	public static final int REGISTER = 1;
+	public static final int CHANGEOPS = 2;
 	
-	public ChangeRequest(SelectionKey key, int newOps) {
-		this.key = key;
-		this.newOps = newOps;
-		this.socketChannel = null;
-	}
+	public SocketChannel socket;
+	public int type;
+	public int ops;
 	
-	public ChangeRequest(SocketChannel socketChannel) {
-		this.socketChannel = socketChannel;
+	public ChangeRequest(SocketChannel socket, int type, int ops) {
+		this.socket = socket;
+		this.type = type;
+		this.ops = ops;
 	}
 }
