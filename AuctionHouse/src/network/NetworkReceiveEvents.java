@@ -3,7 +3,9 @@ package network;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 import data.Message;
 import data.QueueThread;
@@ -18,11 +20,13 @@ import data.UserProfile.UserRole;
  * @author Ghennadi Procopciuc
  */
 public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
-	private NetworkImpl	network;
+	private NetworkImpl		network;
+	private NetworkDriver	driver;
 
 	public NetworkReceiveEvents(NetworkImpl network) {
 		super("NetworkReceiveEvents");
 		this.network = network;
+		driver = network.getDriver();
 	}
 
 	/**
@@ -95,12 +99,17 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	private void processLaunch(SelectionKey key, Message message) {
 		String serviceName = message.getServiceName();
 
+		System.out.println("[NetworkReceiveEvents: processLaunch] Start : " + message);
+
 		UserProfile user = network.getUserProfile();
 		if (user.getRole() == UserRole.SELLER) {
+			System.out.println("[NetworkReceiveEvents: processLaunch] SELLER Case");
+
 			// Send new offer
 			Service service = network.getService(message.getServiceName());
 			if (service == null) {
-				System.err.println("[NetworkReceiveEvents: processLaunch] Unknown service : " + message.getServiceName());
+				System.err.println("[NetworkReceiveEvents: processLaunch] Unknown service : "
+						+ message.getServiceName());
 				return;
 			}
 
@@ -109,7 +118,13 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
 					Offer.OFFER_MADE, service.getTime(), service.getPrice()));
 			newMessage.setUsername(user.getUsername());
+
+			newMessage.setServiceName(message.getServiceName());
+
+			System.out.println("[NetworkReceiveEvents: processLaunch] Send data ...");
+			driver.sendData(newMessage, key);
 		} else {
+			System.out.println("[NetworkReceiveEvents: processLaunch] Buyer Case");
 			// An seller make me an new offer
 			// Update price from payload
 
@@ -140,11 +155,15 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 				serviceUser.setOffer(Offer.OFFER_MADE);
 			}
 
-			network.changeServiceNotify(newService);
+			// network.changeServiceNotify(newService);
+			// TODO : Send response to launch
+			// Message newMessage = new Message();
 		}
 	}
 
 	private void processLaunchResponse(SelectionKey key, Message message) {
+		System.out.println("[NetworkReceiveEvent: processLaunchResponse] Message : " + message);
+
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
 			System.err.println("Unknown service : " + message.getServiceName());
@@ -152,26 +171,43 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		}
 
 		Service newService = service.clone();
-		UserEntry userEntry = service.getUser(message.getUsername());
-		if (userEntry == null) {
-			System.err.println("User not found : " + userEntry.getUsername());
-			System.out.println("Check if webService can help us ...");
-			// TODO : userEntry =
-			// webService.getUserProfile(userEntry.getUsername)
-			// Check if new userEntry is not null
-			// Add new userEntry to service
-		}
+		UserEntry userEntry = null;
 
-		UserEntry serviceUser = newService.getUser(userEntry.getUsername());
-		if (serviceUser == null) {
-			newService.addUserEntry(userEntry);
+		/* If no users register for this service */
+		if (service.getUsers() != null) {
+			userEntry = service.getUser(message.getUsername());
 		} else {
-			UserEntry messageUserEntry = (UserEntry) message.getPayload();
-			serviceUser.setPrice(messageUserEntry.getPrice());
-			serviceUser.setTime(messageUserEntry.getTime());
-			serviceUser.setOffer(Offer.OFFER_MADE);
+			newService.setUsers(new ArrayList<UserEntry>());
 		}
 
+		userEntry = (UserEntry) message.getPayload();
+
+		// if (userEntry == null) {
+		// System.err.println("User not found : " + userEntry.getUsername());
+		// System.out.println("Check if webService can help us ...");
+		// // TODO : userEntry =
+		// // webService.getUserProfile(userEntry.getUsername)
+		// // Check if new userEntry is not null
+		// // Add new userEntry to service
+		//
+		// userEntry = (UserEntry) message.getPayload();
+		// }
+
+		System.out.println("[NetworkReceiveEvent: processLaunchResponse] UserEntry : " + userEntry);
+		newService.getUsers().remove(userEntry);
+		newService.getUsers().add(userEntry);
+
+		// UserEntry serviceUser = newService.getUser(userEntry.getUsername());
+		// if (serviceUser == null) {
+		// newService.addUserEntry(userEntry);
+		// } else {
+		// UserEntry messageUserEntry = (UserEntry) message.getPayload();
+		// serviceUser.setPrice(messageUserEntry.getPrice());
+		// serviceUser.setTime(messageUserEntry.getTime());
+		// serviceUser.setOffer(Offer.OFFER_MADE);
+		// }
+
+		System.out.println("[NetworkReceiveEvent: processLaunchResponse] New Service : " + newService);
 		network.changeServiceNotify(newService);
 	}
 
@@ -239,20 +275,23 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 	}
 
-	protected void process() {
-		System.out.println("[WebServiceClientEvents:process()] Begin");
+	protected synchronized void process() {
 
-		if (!haveToProcess()) {
+//		if (!haveToProcess()) {
+//			return;
+//		}
+
+//		for (Entry<SelectionKey, ArrayList<Message>> entry : new ArrayList<>(queue.entrySet())) {
+//			for (Message message : entry.getValue()) {
+//				messageProcess(entry.getKey(), message);
+//			}
+//		}
+
+		Map.Entry<SelectionKey, Message> job = getJob();
+		if(job == null){
 			return;
 		}
-
-		for (Entry<SelectionKey, ArrayList<Message>> entry : queue.entrySet()) {
-			for (Message message : entry.getValue()) {
-				messageProcess(entry.getKey(), message);
-			}
-		}
-
-		System.out.println("[WebServiceClientEvents:process()] Begin");
-
+		
+		messageProcess(job.getKey(), job.getValue());
 	}
 }

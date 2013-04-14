@@ -24,7 +24,7 @@ public class NetworkSendEvents extends QueueThread<SocketChannel, Message> {
 		this.driver = driver;
 	}
 
-	protected void process(List<Command> events) {
+	protected synchronized void process(List<Command> events) {
 	}
 	
 	public void enqueue(SocketChannel chanel, Service service) {
@@ -32,7 +32,7 @@ public class NetworkSendEvents extends QueueThread<SocketChannel, Message> {
 	}
 
 	@Override
-	protected void process() {
+	protected synchronized void process() {
 		Map.Entry<SocketChannel, Message> job = getJob();
 		if(job == null){
 			return;

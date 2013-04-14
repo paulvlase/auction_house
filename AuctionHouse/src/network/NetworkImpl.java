@@ -31,10 +31,10 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	private Hashtable<String, NetworkTransferTask>			tasks;
 
-	private ConcurrentHashMap<String, SocketChannel>			userChanelMap;
+	private ConcurrentHashMap<String, SocketChannel>		userChanelMap;
 	private ConcurrentHashMap<String, ArrayList<Message>>	userUnsentMessages;
 
-	private NetworkDriver											driver;
+	private NetworkDriver									driver;
 
 	public NetworkImpl(MediatorNetwork med) {
 		this.mediator = med;
@@ -143,7 +143,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		driver.startRunning();
 		receiveEvents.start();
 		sendEvents.start();
-		
+
 		System.out.println("[NetworkImpl: logIn] End");
 	}
 
@@ -156,14 +156,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			driver.stopRunning();
 			receiveEvents.stopRunning();
 			sendEvents.stopRunning();
-			
+
 			driver = new NetworkDriver(this);
 			receiveEvents = null;
 			sendEvents = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("[NetworkImpl: logOut] End");
 	}
 

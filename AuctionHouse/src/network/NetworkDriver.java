@@ -159,10 +159,13 @@ public class NetworkDriver extends Thread {
 			return 0;
 		}
 
-		for (int i = 0; i < array.length; i++) {
-			result <<= Byte.SIZE;
-			result |= array[i];
-		}
+		result = ((128 + (int) array[0]) << (3 * Byte.SIZE)) + ((128 + (int) array[1]) << (2 * Byte.SIZE))
+				+ ((128 + (int) array[2]) << Byte.SIZE) + (128 + (int) array[3]);
+
+		// for (int i = 0; i < array.length; i++) {
+		// result <<= Byte.SIZE;
+		// result |= array[i];
+		// }
 
 		return result;
 	}
@@ -220,40 +223,71 @@ public class NetworkDriver extends Thread {
 			return;
 		}
 
-		// length = ((128 + (int) newBuf[i]) << 24) + ((128 + (int) newBuf[i +
-		// 1]) << 16)
-		// + ((128 + (int) newBuf[i + 2]) << 8) + (128 + (int) newBuf[i + 3]);
-		length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
-		System.out.println("[NetworkDriver: read] Request length = " + length);
-		i += 4;
-
-		System.out.println("[NetworkDriver: read] " + (i + length) + " <= " + newBuf.length);
-
-		/* Read serialized object */
-		if (i + length <= newBuf.length) {
-			i -= 4;
-			while(true){
-				if (i + 4 >= newBuf.length) {
-					break;
-				}
-				
-				/* Get length */
-				length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
-				if(i + length + 4 > newBuf.length){
-					break;
-				}
-				
-				Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
-
-				System.out.println("[NetworkDriver: read] Message received : " + message);
-				appendMessage(message, key);
-				
-				i += 4 + length;
-
+		while (true) {
+			if (i + 4 >= newBuf.length) {
+				break;
 			}
-		} else {
-			i -= 4;
+
+			System.out.println("[NetworkDriver: read] Length as array : "
+					+ Arrays.toString(Arrays.copyOfRange(newBuf, i, i + 4)));
+
+			/* Get length */
+			length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
+			if (i + length + 4 > newBuf.length) {
+				break;
+			}
+
+			System.out.println("[NetworkDriver: read] Message length : " + length);
+
+			Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
+
+			System.out.println("[NetworkDriver: read] Message received : " + message);
+			appendMessage(message, key);
+
+			i += 4 + length;
+
 		}
+
+		// // length = ((128 + (int) newBuf[i]) << 24) + ((128 + (int) newBuf[i
+		// +
+		// // 1]) << 16)
+		// // + ((128 + (int) newBuf[i + 2]) << 8) + (128 + (int) newBuf[i +
+		// 3]);
+		// length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
+		// System.out.println("[NetworkDriver: read] Request length = " +
+		// length);
+		// i += 4;
+		//
+		// System.out.println("[NetworkDriver: read] " + (i + length) + " <= " +
+		// newBuf.length);
+		//
+		// /* Read serialized object */
+		// if (i + length <= newBuf.length) {
+		// i -= 4;
+		// while(true){
+		// if (i + 4 >= newBuf.length) {
+		// break;
+		// }
+		//
+		// /* Get length */
+		// length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
+		// if(i + length + 4 > newBuf.length){
+		// break;
+		// }
+		//
+		// Message message = new Message(Arrays.copyOfRange(newBuf, i, length +
+		// i + 4));
+		//
+		// System.out.println("[NetworkDriver: read] Message received : " +
+		// message);
+		// appendMessage(message, key);
+		//
+		// i += 4 + length;
+		//
+		// }
+		// } else {
+		// i -= 4;
+		// }
 
 		byte[] finalBuf = null;
 		if (i > 0) {
@@ -340,7 +374,7 @@ public class NetworkDriver extends Thread {
 	public void sendData(Message message, SelectionKey key) {
 		sendData(key, message.serialize());
 	}
-	
+
 	public void sendData(Message message, SocketChannel chanel) {
 		sendData(message, chanel.keyFor(selector));
 	}
@@ -520,29 +554,30 @@ public class NetworkDriver extends Thread {
 					}
 				}
 
-//				synchronized (changeRequestQueue) {
-//					// while ((creq = this.changeRequestQueue.poll()) != null) {
-//					// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
-//					// + creq.key + " la " + creq.newOps);
-//					// creq.key.interestOps(creq.newOps);
-//					// }
-//
-//					Iterator changes = this.changeRequestQueue.iterator();
-//					while (changes.hasNext()) {
-//						ChangeRequest change = (ChangeRequest) changes.next();
-//						switch (change.type) {
-//						case ChangeRequest.CHANGEOPS:
-//							SelectionKey key = change.socket.keyFor(this.selector);
-//							key.interestOps(change.ops);
-//							break;
-//						case ChangeRequest.REGISTER:
-//							change.socket.register(this.selector, change.ops);
-//							System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
-//							break;
-//						}
-//					}
-//					this.changeRequestQueue.clear();
-//				}
+				// synchronized (changeRequestQueue) {
+				// // while ((creq = this.changeRequestQueue.poll()) != null) {
+				// //
+				// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
+				// // + creq.key + " la " + creq.newOps);
+				// // creq.key.interestOps(creq.newOps);
+				// // }
+				//
+				// Iterator changes = this.changeRequestQueue.iterator();
+				// while (changes.hasNext()) {
+				// ChangeRequest change = (ChangeRequest) changes.next();
+				// switch (change.type) {
+				// case ChangeRequest.CHANGEOPS:
+				// SelectionKey key = change.socket.keyFor(this.selector);
+				// key.interestOps(change.ops);
+				// break;
+				// case ChangeRequest.REGISTER:
+				// change.socket.register(this.selector, change.ops);
+				// System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
+				// break;
+				// }
+				// }
+				// this.changeRequestQueue.clear();
+				// }
 
 			}
 		} catch (Exception e) {
