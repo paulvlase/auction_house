@@ -299,6 +299,7 @@ public class Server extends Thread {
 			}
 
 			socketChannel.register(selector, SelectionKey.OP_CONNECT);
+			selector.wakeup();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -307,11 +308,16 @@ public class Server extends Thread {
 		return true;
 	}
 
-	private void connect(SelectionKey key) throws IOException {
+	private void connect(SelectionKey key) {
 
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-		if (!socketChannel.finishConnect()) {
+		try {
+			socketChannel.finishConnect();
+		} catch (Exception e) {
 			System.err.println("Eroare finishConnect");
+			e.printStackTrace();
+			key.cancel();
+			return;
 		}
 
 		System.out.println("[Server, connect] Connection finished");
@@ -350,12 +356,17 @@ public class Server extends Thread {
 
 		try {
 			while (isRunning()) {
+				System.out.println("[Server: run] Listening on " + getAddress().getPort());
 				selector.select();
+				
+				System.out.println("[Server: run]  After select");
 
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = it.next();
 					it.remove();
 
+					System.out.println("[Server: run]  for's body");
+					
 					if (!key.isValid()) {
 						System.out.println("[Server, run] Key isn't valid");
 						continue;

@@ -138,6 +138,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		receiveEvents = new NetworkReceiveEvents(this);
 		sendEvents = new NetworkSendEvents(this);
 
+		driver.start();
 		receiveEvents.start();
 		sendEvents.start();
 	}
@@ -147,8 +148,12 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	 */
 	public void logOut() {
 		try {
+			driver.stopRunning();
 			receiveEvents.stopRunning();
 			sendEvents.stopRunning();
+			
+			driver = new Server(this);
+			receiveEvents = null;
 			sendEvents = null;
 		} catch (Exception e) {
 			e.printStackTrace();
