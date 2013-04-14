@@ -191,4 +191,10 @@ MediatorWeb{
 		
 	}
 
+	@Override
+	public LoginCred getLoginCred() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

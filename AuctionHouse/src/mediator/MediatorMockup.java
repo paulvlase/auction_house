@@ -36,6 +36,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	private NetworkMediator					net;
 	private WebClient						web;
 
+	private LoginCred						cred;
 	private UserProfile						profile;
 
 	/* Folosite doar pentru mockup. */
@@ -111,9 +112,10 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		UserProfile profile = web.logIn(cred);
 
 		if (profile != null) {
+			this.cred = cred;
 			this.profile = profile;
-			
-			//TODO: net.init();
+
+			// TODO: net.init();
 			net.logIn();
 			System.out.println("MediatorMockup:logIn()] End (profile != null)");
 			return true;
@@ -129,6 +131,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		web.logOut();
 		net.logOut();
 
+		cred = null;
 		profile = null;
 
 		System.out.println("[MockupMediator:logOut()] End");
@@ -310,7 +313,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	public InetSocketAddress getNetworkAddress() {
 		return net.getAddress();
 	}
-	
+
 	@Override
 	public void notifyNetwork(Service service) {
 		System.out.println("[MediatorMockup: notifyNetwork] service.getName(): " + service.getName());
@@ -320,5 +323,11 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		gui.changeServiceNotify(serviceClone);
 		net.publishService(service);
+	}
+
+	@Override
+	public LoginCred getLoginCred() {
+		// TODO Auto-generated method stub
+		return cred;
 	}
 }

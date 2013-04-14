@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import data.LoginCred;
 import data.Service;
 import data.UserProfile;
 
@@ -15,6 +16,7 @@ import data.UserProfile;
 public interface MediatorWeb {
 	public void registerWebClient(WebClient web);
 	
+	public LoginCred getLoginCred();
 	public UserProfile getUserProfile();
 
 	/* Doar pentru mockup. */

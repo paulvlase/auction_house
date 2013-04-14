@@ -72,7 +72,7 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 
 	public UserProfile getUserProfile(String username) {
 		// TODO
-		Object requestObj = new GetProfileRequest(username);
+		Object requestObj = new GetProfileRequest(med.getLoginCred(), username);
 		Object responseObj = Util.askWebServer(requestObj);
 		
 		return (UserProfile) responseObj;
@@ -80,7 +80,7 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 
 	public boolean setUserProfile(UserProfile profile) {
 		// TODO
-		Object requestObj = new SetProfileRequest(profile);
+		Object requestObj = new SetProfileRequest(med.getLoginCred(), profile);
 		Object responseObj = Util.askWebServer(requestObj);
 		med.changeProfileNotify(profile);
 		return true;
