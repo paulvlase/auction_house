@@ -58,8 +58,7 @@ public class WebClientEvents extends Thread {
 			event.execute();
 		}
 
-		System.out.println("[WebServiceClientEvents:process()] Begin");
-
+		System.out.println("[WebServiceClientEvents:process()] End");
 	}
 
 	public synchronized void publishService(Service service) {

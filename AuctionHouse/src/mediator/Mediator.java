@@ -185,4 +185,10 @@ MediatorWeb{
 		
 	}
 
+	@Override
+	public void launchOffers(ArrayList<Service> services) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

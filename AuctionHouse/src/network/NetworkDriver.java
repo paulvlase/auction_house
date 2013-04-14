@@ -80,17 +80,21 @@ public class NetworkDriver extends Thread {
 	}
 
 	protected void accept(SelectionKey key) {
+		System.out.println("[NetworkDriver: accept] Begin");
+
 		SocketChannel socketChannel;
 		ServerSocketChannel serverSocketChannel;
 		Message message;
 
-		System.out.println("[NetworkDriver, accept()] Accept a connection");
+		System.out.println("[NetworkDriver: accept] Accept a connection");
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
 			socketChannel.configureBlocking(false);
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
+			
+			System.out.println("[NetworkDriver: accept] Done");
 
 			/* Check if we know who is at the other end of the connection */
 			if (network.getUserKeyMap().containsKey(key)) {
@@ -113,6 +117,8 @@ public class NetworkDriver extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("[NetworkDriver: accept] End");
+
 	}
 
 	private void appendMessage(Message message, SelectionKey key) {
@@ -479,6 +485,34 @@ public class NetworkDriver extends Thread {
 						finishConnection(key);
 					}
 				}
+<<<<<<< HEAD
+=======
+
+				synchronized (changeRequestQueue) {
+					// while ((creq = this.changeRequestQueue.poll()) != null) {
+					// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
+					// + creq.key + " la " + creq.newOps);
+					// creq.key.interestOps(creq.newOps);
+					// }
+
+					Iterator changes = this.changeRequestQueue.iterator();
+					while (changes.hasNext()) {
+						ChangeRequest change = (ChangeRequest) changes.next();
+						switch (change.type) {
+						case ChangeRequest.CHANGEOPS:
+							SelectionKey key = change.socket.keyFor(this.selector);
+							key.interestOps(change.ops);
+							break;
+						case ChangeRequest.REGISTER:
+							change.socket.register(this.selector, change.ops);
+							System.out.println("NetworkDriver: run] ChangeRequest.REGISTER");
+							break;
+						}
+					}
+					this.changeRequestQueue.clear();
+				}
+
+>>>>>>> branch 'master' of https://github.com/paulvlase/auction_house.git
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

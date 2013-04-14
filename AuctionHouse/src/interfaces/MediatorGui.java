@@ -26,6 +26,7 @@ public interface MediatorGui {
 
 	/* Common */
 	public ArrayList<Service> loadOffers();
+	public void launchOffers(ArrayList<Service> services);
 
 	public void publishService(Service service);
 	public void publishServices(ArrayList<Service> services);

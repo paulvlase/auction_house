@@ -95,8 +95,8 @@ public class MainWindow extends JFrame {
 		initComponents();
 	}
 
-	public MainWindow(Gui gui) {
-		this.services = gui.loadOffers();
+	public MainWindow(Gui gui, ArrayList<Service> services) {
+		this.services = services;
 		this.gui = gui;
 		initComponents();
 		setAvatar(gui.getUserProfile().getAvatar());
