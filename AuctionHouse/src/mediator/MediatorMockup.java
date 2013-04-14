@@ -82,11 +82,11 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		return offers.get(serviceName);
 	}
 
-	public synchronized ConcurrentHashMap<String, Service> getOffers() {
+	public ConcurrentHashMap<String, Service> getOffers() {
 		return offers;
 	}
 
-	public synchronized void removeOffer(String serviceName) {
+	public void removeOffer(String serviceName) {
 		offers.remove(serviceName);
 	}
 
