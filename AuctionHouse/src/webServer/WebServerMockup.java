@@ -18,6 +18,7 @@ import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
+import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 import config.WebServiceServerConfig;
 import data.LoginCred;
@@ -148,6 +149,13 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object setProfile(SetProfileRequest req) {
+		UserProfile profile = req.getUserProfile();
+
+		users.put(profile.getUsername(), profile);
+		return new OkResponse();
+	}
+	
+	public Object registerProfile(RegisterProfileRequest req) {
 		UserProfile profile = req.getUserProfile();
 
 		users.put(profile.getUsername(), profile);

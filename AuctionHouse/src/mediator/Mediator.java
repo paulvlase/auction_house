@@ -24,30 +24,6 @@ MediatorWeb{
 	}
 
 	@Override
-	public void putUser(UserProfile user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public UserProfile getUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Hashtable<String, UserProfile> getUsers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void removeUser(String username) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void changeProfileNotify(UserProfile profile) {
 		// TODO Auto-generated method stub
 		

@@ -10,6 +10,7 @@ import webServer.messages.GetProfileRequest;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LoginRequest;
 import webServer.messages.LogoutRequest;
+import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 
 /**
@@ -62,6 +63,9 @@ public class WebWorkerMockup implements Runnable {
 			} else if (requestObj instanceof SetProfileRequest) {
 				log("Set profile offer request");
 				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
+			} else if (requestObj instanceof RegisterProfileRequest) {
+				log("Register profile offer request");
+				responseObj = webServer.registerProfile((RegisterProfileRequest) requestObj);
 			} else {
 				log("Unknow request " + requestObj);
 				responseObj = null;
