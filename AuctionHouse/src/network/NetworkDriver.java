@@ -485,8 +485,6 @@ public class NetworkDriver extends Thread {
 						finishConnection(key);
 					}
 				}
-<<<<<<< HEAD
-=======
 
 				synchronized (changeRequestQueue) {
 					// while ((creq = this.changeRequestQueue.poll()) != null) {
@@ -512,7 +510,6 @@ public class NetworkDriver extends Thread {
 					this.changeRequestQueue.clear();
 				}
 
->>>>>>> branch 'master' of https://github.com/paulvlase/auction_house.git
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
