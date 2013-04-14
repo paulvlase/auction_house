@@ -3,6 +3,8 @@ package data;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 
+import org.apache.log4j.Logger;
+
 import data.UserProfile.UserRole;
 
 /**
@@ -12,6 +14,8 @@ import data.UserProfile.UserRole;
  */
 public class LoginCred implements Serializable {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(LoginCred.class);
+
 	private String username;
 	private String password;
 	private UserRole role;

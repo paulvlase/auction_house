@@ -9,9 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Message implements Serializable {
+import org.apache.log4j.Logger;
 
+public class Message implements Serializable {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(Message.class);
 
 	private MessageType			type;
 	private String				serviceName;
