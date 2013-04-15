@@ -33,24 +33,6 @@ public class AcceptOfferState extends AbstractState {
 
 	@Override
 	public void executeNet(NetworkService net) {
-		synchronized (service) {
-			ArrayList<UserEntry> users = service.getUsers();
-
-			for (UserEntry user : users) {
-				user.setOffer(Offer.OFFER_REFUSED);
-			}
-
-			UserEntry user = users.get(userIndex);
-			user.setOffer(Offer.OFFER_ACCEPTED);
-
-			/* TODO: communicate with server */
-
-			users.clear();
-			users.add(user);
-
-			// TODO
-			// net.startTransfer(service);
-		}
 	}
 
 	public void executeWeb(WebService web) {
