@@ -62,6 +62,7 @@ public class WebClientEvents extends Thread {
 		for (Command event : events) {
 			event.execute();
 		}
+		events.clear();
 
 		logger.debug("End");
 	}
