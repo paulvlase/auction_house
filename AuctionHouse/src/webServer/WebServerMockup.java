@@ -9,6 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import webServer.messages.DropOfferRequest;
 import webServer.messages.GetProfileRequest;
 import webServer.messages.GetProfileResponse;
@@ -33,6 +36,8 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServerMockup implements Runnable {
+	static Logger logger = Logger.getLogger(WebServerMockup.class);
+
 	private ServerSocket									serverSocket;
 
 	private ConcurrentHashMap<String, UserProfile>			users;
@@ -43,6 +48,8 @@ public class WebServerMockup implements Runnable {
 	private static ExecutorService							pool	= Executors.newCachedThreadPool();
 
 	public WebServerMockup() {
+		// TODO: logger.setLevel(Level.OFF);
+
 		users = new ConcurrentHashMap<String, UserProfile>();
 		onlineUsers = new ConcurrentHashMap<String, InetSocketAddress>();
 
@@ -51,25 +58,26 @@ public class WebServerMockup implements Runnable {
 
 		users.put("pvlase", new UserProfile("pvlase", "Paul", "Vlase", UserRole.BUYER, "parola"));
 		users.put("unix140", new UserProfile("unix140", "Ghennadi", "Procopciuc", UserRole.SELLER, "marmota"));
+		users.put("s1", new UserProfile("s1", "s1", "s1", UserRole.SELLER, "s1"));
 	}
 
 	public Object login(LoginRequest req) {
-		System.out.println("[WebServerMockup: login] Begin");
+		logger.debug("Begin");
 		LoginCred cred = req.getLoginCred();
 
 		UserProfile profile = users.get(cred.getUsername());
 		if (profile == null) {
-			System.out.println("[WebServerMockup: login] Username not found");
+			logger.warn("Username not found");
 			return null;
 		}
 
 		if (!profile.getPassword().equals(cred.getPassword())) {
-			System.out.println("[WebServerMockup: login] Wrong username or password");
+			logger.warn("Wrong username or password");
 			return null;
 		}
 		
 		if (onlineUsers.get(cred.getUsername()) != null) {
-			System.out.println("[WebServerMockup: login] Already logged");
+			logger.warn("Already logged");
 			return null;
 		}
 
@@ -77,7 +85,7 @@ public class WebServerMockup implements Runnable {
 
 		onlineUsers.put(cred.getUsername(), cred.getAddress());
 		
-		System.out.println("[WebServerMockup: login] Success");
+		logger.info("End success");
 		return new LoginResponse(profile);
 	}
 
@@ -87,7 +95,7 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object launchOffer(LaunchOfferRequest req) {
-		System.out.println("[WebServerMockup: launchOffer] Begin");
+		logger.debug("Begin");
 
 		Service service = req.getService();
 		ArrayList<UserEntry> userEntries;
@@ -121,12 +129,12 @@ public class WebServerMockup implements Runnable {
 
 		service.setUsers(userEntries);
 
-		System.out.println("[WebServerMockup: launchOffer] End");
+		logger.debug("End");
 		return new LaunchOfferResponse(service);
 	}
 
 	public Object dropOffer(DropOfferRequest req) {
-		System.out.println("[WebServerMockup: drop] Begin");
+		logger.debug("Begin");
 
 		UserEntry userEntry = new UserEntry();
 		userEntry.setName(req.getUsername());
@@ -144,7 +152,7 @@ public class WebServerMockup implements Runnable {
 			sellers.put(req.getServiceName(), sellersUserEntries);
 		}
 
-		System.out.println("[WebServerMockup: drop] End");
+		logger.debug("End");
 		return new OkResponse();
 	}
 
@@ -172,20 +180,22 @@ public class WebServerMockup implements Runnable {
 		try {
 			this.serverSocket = new ServerSocket(WebServiceServerConfig.PORT);
 		} catch (IOException e) {
-			System.err.println("[WebServerMockup: run] Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
+			// TODO: translate this
+			logger.fatal("Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
 			return;
 		}
 
 		while (true) {
 			try {
 
-				System.out.println("[WebServerMockup: run] Before accept");
+				logger.debug("Before accept");
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("[WebServerMockup: run] Connection accepted");
+				logger.debug("Connection accepted");
 
 				pool.execute(new WebWorkerMockup(this, clientSocket));
 			} catch (IOException e) {
-				System.err.println("[WebServerMockup: run] EROARE: Conectare client");
+				// TODO: translate this
+				logger.error("Conectare client");
 			}
 		}
 	}

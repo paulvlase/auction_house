@@ -14,6 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Pair;
 import data.Service;
 import data.Service.Status;
@@ -21,8 +24,8 @@ import data.UserEntry;
 import data.UserEntry.Offer;
 
 public class MySpanTableModel extends AbstractTableModel {
-
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(MySpanTableModel.class);
 
 	private List<List<Object>>	data;
 	private List<String>		columns;
@@ -33,6 +36,8 @@ public class MySpanTableModel extends AbstractTableModel {
 	private final Lock			mutex				= new ReentrantLock(true);
 
 	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services
 				.clone());
 
@@ -90,12 +95,12 @@ public class MySpanTableModel extends AbstractTableModel {
 	}
 
 	public void removeService(Integer index) {
-		System.out.println(Thread.currentThread().getName() + " is trying to acquaire lock ...");
+		logger.debug(Thread.currentThread().getName() + " is trying to acquaire lock ...");
 		mutex.lock();
-		System.out.println(Thread.currentThread().getName() + " acquaired lock ...");
+		logger.debug(Thread.currentThread().getName() + " acquaired lock ...");
 
 		if(index < 0 || index >= services.size()){
-			System.err.println("Trying to remove an element : " + index);
+			logger.error("Trying to remove an element : " + index);
 			return;			
 		}
 		/* Clear all the previous data */
@@ -110,7 +115,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		}
 
 		mutex.unlock();
-		System.out.println(Thread.currentThread().getName() + " released lock ...");
+		logger.debug(Thread.currentThread().getName() + " released lock ...");
 	}
 
 	public void removeService(Service service) {
@@ -125,7 +130,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		ArrayList<ArrayList<Object>> serviceData;
 
 		users = service.getUsers();
-		System.out.println(service);
+		logger.debug(service);
 		serviceData = service.getAsTable();
 
 		data.addAll(serviceData);
@@ -165,9 +170,9 @@ public class MySpanTableModel extends AbstractTableModel {
 
 	public void addService(Service service) {
 		mutex.lock();
-		System.out.println("Before add : " + services.size());
+		logger.debug("Before add : " + services.size());
 		addService(service, true);
-		System.out.println("After add : " + services.size());
+		logger.debug("After add : " + services.size());
 		mutex.unlock();
 	}
 
@@ -241,7 +246,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		case TRANSFER_FAILED:
 			return 1;
 		default:
-			System.err.println("[MySpanTableModel, geNeededRows] Unexpected Status :|");
+			logger.error("[MySpanTableModel, geNeededRows] Unexpected Status :|");
 			break;
 		}
 

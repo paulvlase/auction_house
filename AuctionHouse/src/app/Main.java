@@ -4,6 +4,7 @@ import gui.GuiImpl;
 
 import javax.swing.UIManager;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -15,10 +16,10 @@ public class Main {
 	static Logger	logger	= Logger.getLogger(Main.class);
 
 	public static void main(String[] args) {
-
 		PropertyConfigurator.configure("log4j.properties");
 
-		logger.error("[Main: main] Begin");
+		logger.setLevel(Level.OFF);
+		logger.error("Begin");
 
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -35,6 +36,6 @@ public class Main {
 		WebClientMockup web = new WebClientMockup(med);
 
 		med.start();
-		System.out.println("Exit");
+		logger.error("End");
 	}
 }

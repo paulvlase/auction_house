@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.swing.*;
 
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 import data.LoginCred;
 import data.UserProfile.UserRole;
@@ -21,6 +23,7 @@ import data.UserProfile.UserRole;
 
 public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(LoginWindow.class);
 
 	private Gui					gui;
 	private JMenuBar			menuBar;

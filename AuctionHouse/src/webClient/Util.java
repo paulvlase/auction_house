@@ -6,9 +6,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import config.WebServiceClientConfig;
 
 public class Util {
+	static Logger logger = Logger.getLogger(Util.class);
+
 	public static Random random = new Random();
 
 	public static String getRandomString(int len) {
@@ -26,7 +30,8 @@ public class Util {
 	}
 	
 	public static Object askWebServer(Object requestObj) {
-		System.out.println("[WebServiceClientMockup:askWebServer()] Begin");
+		logger.debug("Begin");
+
 		Object responseObj = null;
 		
 		Socket socket = null;
@@ -34,7 +39,6 @@ public class Util {
 		ObjectOutputStream oos = null;
 
 		try {
-			System.out.println("[WebServiceClientMockup:askWebServer()] Try block");
 			socket = new Socket(WebServiceClientConfig.IP, WebServiceClientConfig.PORT);
 
 			oos = new ObjectOutputStream(socket.getOutputStream());
@@ -69,6 +73,7 @@ public class Util {
 			}
 		}
 		
+		logger.debug("End");
 		return responseObj;
 	}
 }

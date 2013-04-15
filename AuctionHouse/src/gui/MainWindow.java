@@ -43,6 +43,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 import data.Service;
 import data.UserEntry;
@@ -55,8 +57,8 @@ import data.UserProfile.UserRole;
  */
 
 public class MainWindow extends JFrame implements ClearWindow {
-
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(MainWindow.class);
 
 	/* Swing components */
 	private JMenuBar			menuBar;
@@ -90,13 +92,9 @@ public class MainWindow extends JFrame implements ClearWindow {
 	private ArrayList<Service>	services;
 	private MainWindowListener	listener;
 
-	public MainWindow(ArrayList<Service> services) {
-		this.services = services;
-
-		initComponents();
-	}
-
 	public MainWindow(Gui gui) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.services = new ArrayList<Service>();
 		this.gui = gui;
 		initComponents();
@@ -313,7 +311,8 @@ public class MainWindow extends JFrame implements ClearWindow {
 
 	public void addService(Service service) {
 		if (gui.getUserProfile().getRole() == UserRole.BUYER && service.getUsers() != null) {
-			System.out.println("-------------------");
+			logger.debug("-------------------");
+
 			Offer offer = service.getUsers().get(0).getOffer();
 			if (offer == Offer.TRANSFER_COMPLETE || offer == Offer.TRANSFER_FAILED
 					|| offer == Offer.TRANSFER_IN_PROGRESS || offer == Offer.TRANSFER_STARTED) {
@@ -399,7 +398,7 @@ public class MainWindow extends JFrame implements ClearWindow {
 		ImageIcon newAvatar;
 
 		if (avatar == null) {
-			System.out.println(GuiConfig.DEFAULT_AVATAR);
+			logger.debug(GuiConfig.DEFAULT_AVATAR);
 			avatar = new ImageIcon(GuiConfig.DEFAULT_AVATAR);
 		}
 

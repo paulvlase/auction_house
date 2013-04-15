@@ -12,6 +12,9 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 import data.Period;
 
@@ -19,13 +22,17 @@ import data.Period;
  * @author Ghennadi Procopciuc
  */
 class MyTableCellRenderer extends DefaultTableCellRenderer {
-
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(MyTableCellRenderer.class);
+	
 	private final JProgressBar	bar					= new JProgressBar(0, 100);
 	private final JPanel		panel				= new JPanel(new BorderLayout());
 
 	public MyTableCellRenderer() {
 		super();
+		
+		// TODO: logger.setLevel(Level.OFF);
+		
 		setOpaque(true);
 		panel.add(bar);
 		panel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));

@@ -2,6 +2,9 @@ package webClient;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
@@ -24,44 +27,47 @@ import interfaces.WebService;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebClientMockup extends Thread implements WebClient, WebService {
+	static Logger logger = Logger.getLogger(WebClientMockup.class);
+
 	private MediatorWeb		med;
 	private LoginCred       cred;
 
 	private WebClientEvents	thread;
 
 	public WebClientMockup(MediatorWeb med) {
+		logger.setLevel(Level.OFF);
+
 		this.med = med;
 
 		med.registerWebClient(this);
 	}
 
 	public UserProfile logIn(LoginCred cred) {
-		System.out.println("[WebServiceClientMockup:logIn()] Begin");
+		logger.debug("Begin");
 
 		Object requestObj = new LoginRequest(cred);
 		Object responseObj = Util.askWebServer(requestObj);
 
 		if (responseObj == null) {
-			System.out
-			.println("[WebServiceClientMockup:logIn()] Error");
+			logger.warn("Failed");
 			return null;
 		}
 		if (responseObj instanceof LoginResponse) {
-			System.out.println("[WebServiceClientMockup:logIn()] Success");
+			logger.info("Success");
 			
 			this.cred = cred;
 			thread = new WebClientEvents(this);
 			thread.start();
 			return ((LoginResponse) responseObj).getUserProfile();
 		} else {
-			System.out
-					.println("[WebServiceClientMockup:logIn()] Unexpected response message");
+			logger.error("Unexpected response message");
 			return null;
 		}
 	}
 
 	public void logOut() {
-		System.out.println("[WebServiceClientMockup:logOut()] Begin");
+		logger.debug("Begin");
+
 		LogoutRequest requestMsg = new LogoutRequest(cred);
 
 		Object responseObj = Util.askWebServer(requestMsg);
@@ -74,8 +80,7 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		}
 		thread = null;
 
-		System.out
-					.println("[WebServiceClientMockup:logOut()] Success");
+		logger.debug("End success");
 	}
 
 	public UserProfile getUserProfile(String username) {

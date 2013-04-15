@@ -37,17 +37,17 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
-	static Logger logger = Logger.getLogger(MediatorMockup.class);
+	static Logger								logger	= Logger.getLogger(MediatorMockup.class);
 
-	private Gui								gui;
-	private NetworkMediator					net;
-	private WebClient						web;
+	private Gui									gui;
+	private NetworkMediator						net;
+	private WebClient							web;
 
-	private LoginCred						cred;
-	private UserProfile						profile;
+	private LoginCred							cred;
+	private UserProfile							profile;
 
 	/* Folosite doar pentru mockup. */
-	private ConcurrentHashMap<String, Service>		offers;
+	private ConcurrentHashMap<String, Service>	offers;
 
 	public MediatorMockup() {
 		offers = new ConcurrentHashMap<String, Service>();
@@ -105,7 +105,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			fileAppender.activateOptions();
 
 			logger.error("[MediatorMockup] Logged in");
-			
+
 			// TODO: net.init();
 			net.logIn();
 			System.out.println("MediatorMockup:logIn()] End (profile != null)");
@@ -124,14 +124,14 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		cred = null;
 		profile = null;
-		
+
 		logger.error("Logged out");
-		
+
 		FileAppender fileAppender = (FileAppender) Logger.getRootLogger().getAppender("F");
 		fileAppender.setFile("logs/default.log");
 		fileAppender.activateOptions();
-		
-		//TODO: Remove this.
+
+		// TODO: Remove this.
 		logger.error("Test");
 
 		logger.error("[MediatorMockup] Logged in");

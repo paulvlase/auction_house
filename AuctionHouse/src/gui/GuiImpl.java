@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import config.FilesConfig;
 import config.GuiConfig;
 import data.LoginCred;
@@ -27,12 +30,16 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class GuiImpl implements Gui {
+	private static Logger logger = Logger.getLogger(GuiImpl.class);
+
 	private MediatorGui	med;
 	private LoginWindow		loginWindow;
 	private MainWindow	mainWindow;
 	private RegisterWindow registerWindow;
 
 	public GuiImpl(MediatorGui med) {
+		// TODO: logger.setLevel(Level.OFF);
+		
 		this.med = med;
 		med.registerGui(this);
 
@@ -50,11 +57,12 @@ public class GuiImpl implements Gui {
 	}
 
 	public void logIn(LoginCred cred) {
-		if (med.logIn(cred)) {
+		Boolean bRet = med.logIn(cred);
+		if (bRet) {
 			loginWindow.setVisible(false);
 			loginWindow.clear();
 
-			System.out.println("[GuiImpl: logIn] Signed in");
+			logger.debug("Logged in");
 			
 			mainWindow = new MainWindow(this);
 			mainWindow.setVisible(true);
@@ -72,13 +80,14 @@ public class GuiImpl implements Gui {
 	}
 
 	public void logOut() {
-		System.out.println("[GuiImpl: logOut] Begin");
+		logger.debug("Begin");
+
 		med.logOut();
 
 		mainWindow.setVisible(false);
 		loginWindow.setVisible(true);
 		
-		System.out.println("[GuiImpl: logOut] End");
+		logger.debug("End");
 	}
 	
 	public UserProfile getUserProfile() {
@@ -141,7 +150,8 @@ public class GuiImpl implements Gui {
 			} else if (typeStr.equals("BUYER")) {
 				role = UserRole.BUYER;
 			} else {
-				System.out.println("Invalid user type");
+				logger.error("Invalid user type");
+
 				try {
 					br.close();
 				} catch (IOException e) {
@@ -172,24 +182,24 @@ public class GuiImpl implements Gui {
 	
 	@Override
 	public void changeServiceNotify(Service service) {
-		System.out.println("GuiImpl: changeServiceNotify] Begin");
+		logger.debug("Begin");
 		
 		if (mainWindow != null) {
-			System.out.println("[GuiImpl: changeServiceNotify] SwingUtilities.invokeLater()");
+			logger.debug("SwingUtilities.invokeLater()");
 			SwingUtilities.invokeLater(new GuiServiceRunnable(mainWindow, service));
 		}
 		
-		System.out.println("GuiImpl: changeServiceNotify] End");
+		logger.debug("End");
 	}
 	
 	public void changeServicesNotify(ArrayList<Service> services) {
-		System.out.println("GuiImpl: changeServicesNotify] Begin");
+		logger.debug("Begin");
 		
 		for (Service service: services) {
 			changeServiceNotify(service);
 		}
 		
-		System.out.println("GuiImpl: changeServicesNotify] End");
+		logger.debug("End");
 	}
 
 	@Override

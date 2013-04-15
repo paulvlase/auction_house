@@ -9,6 +9,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Pair;
 import data.Service;
 import data.UserEntry;
@@ -17,9 +20,13 @@ import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
 public class MainWindowListener implements ActionListener, WindowListener, MouseListener {
+	private static Logger logger = Logger.getLogger(MainWindowListener.class);
+
 	private MainWindow	mainWindow;
 
 	public MainWindowListener(MainWindow mainWindow) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.mainWindow = mainWindow;
 	}
 

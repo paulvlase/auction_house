@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.swing.*;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 import data.Service;
 
@@ -15,6 +18,7 @@ import data.Service;
  */
 public class AddNewService extends JFrame {
 	private static final long	serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(AddNewService.class);
 
 	private JPanel				mainPanel;
 	private JLabel				nameLabel;
@@ -29,6 +33,8 @@ public class AddNewService extends JFrame {
 	private MainWindow			mainWindow;
 
 	public AddNewService(MainWindow mainWindow) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.mainWindow = mainWindow;
 		initComponents();
 	}
@@ -149,7 +155,7 @@ public class AddNewService extends JFrame {
 	}
 
 	private void okButtonActionPerformed(ActionEvent e) {
-		System.out.println(timeSpinner.getValue());
+		logger.debug("timeSpinner.getValue() " + timeSpinner.getValue());
 
 		if (nameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null,

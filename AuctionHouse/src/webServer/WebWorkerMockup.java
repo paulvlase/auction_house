@@ -5,6 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import webServer.messages.DropOfferRequest;
 import webServer.messages.GetProfileRequest;
 import webServer.messages.LaunchOfferRequest;
@@ -19,16 +22,20 @@ import webServer.messages.SetProfileRequest;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebWorkerMockup implements Runnable {
+	static Logger logger = Logger.getLogger(WebWorkerMockup.class);
+
 	public WebServerMockup	webServer;
 	public Socket			clientSocket;
 
 	public WebWorkerMockup(WebServerMockup webServer, Socket clientSocket) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.webServer = webServer;
 		this.clientSocket = clientSocket;
 	}
 
-	private void log(String str) {
-		System.out.println("[" + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + "] " + str);
+	private String getWorkerName(String str) {
+		return clientSocket.getInetAddress() + ":" + clientSocket.getPort();
 	}
 
 	@Override
@@ -36,38 +43,37 @@ public class WebWorkerMockup implements Runnable {
 		ObjectInputStream ois = null;
 		ObjectOutputStream oos = null;
 
-		System.out.println("[WebServiceWorkerMockup:run()] Started");
+		logger.info("Begin");
 		try {
 			ois = new ObjectInputStream(clientSocket.getInputStream());
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 
 			Object requestObj = ois.readObject();
 			Object responseObj;
-			System.out.println("New conn");
 
 			if (requestObj instanceof LoginRequest) {
-				log("Login request");
+				logger.debug("Login request");
 				responseObj = webServer.login((LoginRequest) requestObj);
 			} else if (requestObj instanceof LogoutRequest) {
-				log("Logout request");
+				logger.debug("Logout request");
 				responseObj = webServer.logout((LogoutRequest) requestObj);
 			} else if (requestObj instanceof LaunchOfferRequest) {
-				log("Launch offer request");
+				logger.debug("Launch offer request");
 				responseObj = webServer.launchOffer((LaunchOfferRequest) requestObj);
 			} else if (requestObj instanceof DropOfferRequest) {
-				log("Drop offer request");
+				logger.debug("Drop offer request");
 				responseObj = webServer.dropOffer((DropOfferRequest) requestObj);
 			}else if (requestObj instanceof GetProfileRequest) {
-				log("Get profile offer request");
+				logger.debug("Get profile offer request");
 				responseObj = webServer.getProfile((GetProfileRequest) requestObj);
 			} else if (requestObj instanceof SetProfileRequest) {
-				log("Set profile offer request");
+				logger.debug("Set profile offer request");
 				responseObj = webServer.setProfile((SetProfileRequest) requestObj);
 			} else if (requestObj instanceof RegisterProfileRequest) {
-				log("Register profile offer request");
+				logger.debug("Register profile offer request");
 				responseObj = webServer.registerProfile((RegisterProfileRequest) requestObj);
 			} else {
-				log("Unknow request " + requestObj);
+				logger.error("Unknow request " + requestObj);
 				responseObj = null;
 			}
 

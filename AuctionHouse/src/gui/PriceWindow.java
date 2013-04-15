@@ -19,6 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import config.GuiConfig;
 import data.Service;
 
@@ -27,6 +30,8 @@ import data.Service;
  */
 public class PriceWindow extends JFrame implements ActionListener {
 	private static final long		serialVersionUID	= 1L;
+	private static Logger logger = Logger.getLogger(PriceWindow.class);
+
 	private JLabel					priceLabel;
 	private JTextField				priceField;
 	private JButton					okButton;
@@ -36,6 +41,8 @@ public class PriceWindow extends JFrame implements ActionListener {
 	private Integer userIndex;
 
 	public PriceWindow() {
+		// TODO: logger.setLevel(Level.OFF);
+
 		initComponents();
 	}
 
