@@ -378,14 +378,17 @@ public class NetworkDriver extends Thread {
 	}
 
 	public void sendData(Message message, String username) {
+		System.out.println("[NetworkDriver: sendData] Message : " + message);
 		sendData(network.getUserChanelMap().get(username).keyFor(selector), message.serialize());
 	}
 
 	public void sendData(Message message, SelectionKey key) {
+		System.out.println("[NetworkDriver: sendData] Message : " + message);
 		sendData(key, message.serialize());
 	}
 
 	public void sendData(Message message, SocketChannel chanel) {
+		System.out.println("[NetworkDriver: sendData] Message : " + message);
 		sendData(message, chanel.keyFor(selector));
 	}
 

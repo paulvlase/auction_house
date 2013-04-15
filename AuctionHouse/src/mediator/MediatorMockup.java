@@ -273,6 +273,8 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 	@Override
 	public void changeServiceNotify(Service service) {
 		service.setPendingState();
+		System.out.println("[MediatorMockup: changeServiceNotify] service : " + service);
+
 		putOffer(service);
 		gui.changeServiceNotify(service);
 	}
