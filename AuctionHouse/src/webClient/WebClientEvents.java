@@ -16,7 +16,7 @@ import data.Service;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebClientEvents extends Thread {
-	static Logger logger = Logger.getLogger(WebClientEvents.class);
+	static Logger				logger	= Logger.getLogger(WebClientEvents.class);
 
 	private WebService			web;
 	private Object				monitor;
@@ -47,7 +47,7 @@ public class WebClientEvents extends Thread {
 			process();
 		}
 	}
-	
+
 	public synchronized void stopRunning() {
 		running = false;
 
@@ -63,11 +63,16 @@ public class WebClientEvents extends Thread {
 			event.execute();
 		}
 
+		events.clear();
+
 		logger.debug("End");
 	}
 
 	public synchronized void publishService(Service service) {
 		logger.debug("Begin");
+		System.out.println("[WebClientEvents, publishService] StateManager : " + service.getStateMgr());
+		System.out.println("[WebClientEvents, publishService] StateManager state : "
+				+ service.getStateMgr().getStateName());
 
 		events.add(new WebAdapter(service, web));
 
