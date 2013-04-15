@@ -24,7 +24,7 @@ public class LaunchRequestItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		logger.debug("Launch Offer");
 		
-		if (service.isInactiveState()) {
+		if (service.isEnabledState()) {
 			service.setLaunchOfferState();
 
 			gui.publishService(service.clone());

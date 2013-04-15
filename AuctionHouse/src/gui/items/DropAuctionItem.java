@@ -24,7 +24,7 @@ public class DropAuctionItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		logger.debug("Drop auction");
 
-		if (service.isInactiveState()) {
+		if (service.isEnabledState()) {
 			service.setDropAuctionState();
 			gui.publishService(new Service(this.service));
 		}

@@ -38,7 +38,7 @@ public class OfferRefusedEvent implements Command {
 		}
 
 		user.setOffer(Offer.OFFER_REFUSED);
-		service.setPendingState();
+		service.setEnabledState();
 		med.changeServiceNotify(service);
 	}
 }

@@ -24,7 +24,7 @@ public class DropRequestItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		logger.debug("Drop offer");
 
-		if (service.isInactiveState()) {
+		if (service.isEnabledState()) {
 			service.setDropOfferState();
 
 			gui.publishService(service.clone());

@@ -5,43 +5,47 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class RemoveOfferState implements State {
+public class RemoveOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	private Service service;
+	private static Logger		logger				= Logger.getLogger(RemoveOfferState.class);
 
-	public RemoveOfferState() {
-		
+	public RemoveOfferState(Service service) {
+		this.service = service;
 	}
-	
+
+	public RemoveOfferState(RemoveOfferState state) {
+		service = state.service;
+	}
+
 	@Override
 	public void executeNet(NetworkService net) {
 		if (service.getUsers() == null) {
 			return;
 		}
-		
-		for (UserEntry userEntry: service.getUsers()) {
-			if (userEntry.getOffer() == Offer.TRANSFER_IN_PROGRESS ||
-					userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
+
+		for (UserEntry userEntry : service.getUsers()) {
+			if (userEntry.getOffer() == Offer.TRANSFER_IN_PROGRESS || userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
 				/* Cauta in lista de thread-uri ca sa stergi */
 				userEntry.setOffer(Offer.OFFER_DROP);
 			}
 		}
 	}
-	
+
 	public void executeWeb(WebService web) {
 		System.out.println("[RemoveOfferState:executeWeb()] Begin");
-		//TODO
-		//web.removeOffer(service.getName());
+		// TODO
+		// web.removeOffer(service.getName());
 		System.out.println("[RemoveOfferState:executeWeb()] End");
 	}
-	
-	public void setState(Service service) {
-		this.service = service;
+
+	public void updateState() {
 	}
 
 	public String getName() {
@@ -68,5 +72,10 @@ public class RemoveOfferState implements State {
 		}
 
 		return list;
+	}
+
+	@Override
+	public RemoveOfferState clone() {
+		return new RemoveOfferState(this);
 	}
 }

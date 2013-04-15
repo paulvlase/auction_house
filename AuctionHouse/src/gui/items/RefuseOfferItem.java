@@ -25,7 +25,7 @@ public class RefuseOfferItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		logger.debug("Refuse Request");
 		
-		if (service.isInactiveState()) {
+		if (service.isEnabledState()) {
 			service.setRefuseOfferState(row);
 			gui.publishService(new Service(this.service));
 		}

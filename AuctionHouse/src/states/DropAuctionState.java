@@ -13,14 +13,18 @@ import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class DropAuctionState implements State {
+public class DropAuctionState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	static Logger logger = Logger.getLogger(DropAuctionState.class);
+	private static Logger		logger				= Logger.getLogger(DropAuctionState.class);
 
-	private Service service;
-
-	public DropAuctionState() {
+	public DropAuctionState(Service service) {
 		// TODO: logger.setLevel(Level.OFF);
+
+		this.service = service;
+	}
+
+	public DropAuctionState(DropAuctionState state) {
+		service = state.service;
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class DropAuctionState implements State {
 				user.setOffer(Offer.OFFER_REFUSED);
 
 				// TODO
-				//net.putOffer(service);
+				// net.putOffer(service);
 
 				logger.info("users: " + users);
 			}
@@ -40,16 +44,16 @@ public class DropAuctionState implements State {
 			/* Remove all users */
 			service.setUsers(null);
 			// TODO
-			//net.changeServiceNotify(service);
-		} 
-	}  
+			// net.changeServiceNotify(service);
+		}
+	}
 
 	public void executeWeb(WebService web) {
 
 	}
 
-	public void setState(Service service) {
-		this.service = service;
+	public void updateState(Service service) {
+
 	}
 
 	public String getName() {
@@ -58,7 +62,7 @@ public class DropAuctionState implements State {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
-		
+
 		logger.debug("Begin");
 		ArrayList<Message> list = null;
 		Boolean first = true;
@@ -77,5 +81,10 @@ public class DropAuctionState implements State {
 		}
 
 		return list;
+	}
+
+	@Override
+	public DropAuctionState clone() {
+		return new DropAuctionState(this);
 	}
 }

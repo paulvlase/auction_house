@@ -13,22 +13,28 @@ import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class AcceptOfferState implements State {
+public class AcceptOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	static Logger				logger				= Logger.getLogger(AcceptOfferState.class);
+	private static Logger		logger				= Logger.getLogger(AcceptOfferState.class);
 
-	private Service				service;
 	private Integer				userIndex;
 
-	public AcceptOfferState() {
+	public AcceptOfferState(Service service) {
 		// TODO: logger.setLevel(Level.OFF);
+
+		this.service = service;
 	}
-   
+
+	public AcceptOfferState(AcceptOfferState state) {
+		service = state.service;
+		userIndex = state.userIndex;
+	}
+
 	@Override
 	public void executeNet(NetworkService net) {
 		synchronized (service) {
 			ArrayList<UserEntry> users = service.getUsers();
- 
+
 			for (UserEntry user : users) {
 				user.setOffer(Offer.OFFER_REFUSED);
 			}
@@ -50,8 +56,7 @@ public class AcceptOfferState implements State {
 
 	}
 
-	public void setState(Service service, Integer userIndex) {
-		this.service = service;
+	public void updateState(Integer userIndex) {
 		this.userIndex = userIndex;
 	}
 
@@ -69,5 +74,10 @@ public class AcceptOfferState implements State {
 		message.setDestination(service.getUsers().get(userIndex).getUsername());
 
 		return message.asArrayList();
+	}
+
+	@Override
+	public AcceptOfferState clone() {
+		return new AcceptOfferState(this);
 	}
 }

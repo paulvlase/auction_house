@@ -5,6 +5,8 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import webClient.Util;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
@@ -16,12 +18,16 @@ import data.UserEntry;
 import data.UserEntry.Offer;
 import data.UserProfile;
 
-public class LaunchOfferState implements State {
+public class LaunchOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	private Service				service;
+	private static Logger		logger				= Logger.getLogger(LaunchOfferState.class);
 
-	public LaunchOfferState() {
+	public LaunchOfferState(Service service) {
 
+	}
+
+	public LaunchOfferState(LaunchOfferState state) {
+		service = state.service;
 	}
 
 	public void executeNet(NetworkService net) {
@@ -83,5 +89,9 @@ public class LaunchOfferState implements State {
 		}
 
 		return list;
+	}
+
+	public LaunchOfferState clone() {
+		return new LaunchOfferState(this);
 	}
 }

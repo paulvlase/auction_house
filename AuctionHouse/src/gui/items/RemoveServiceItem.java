@@ -25,7 +25,7 @@ public class RemoveServiceItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		window.getModel().removeService(service);
 		
-		if (service.isInactiveState()) {
+		if (service.isEnabledState()) {
 			service.setRemoveOfferState();
 
 			gui.publishService(service.clone());

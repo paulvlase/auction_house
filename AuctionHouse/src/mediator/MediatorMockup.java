@@ -272,7 +272,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public void changeServiceNotify(Service service) {
-		service.setPendingState();
+		service.setEnabledState();
 		System.out.println("[MediatorMockup: changeServiceNotify] service : " + service);
 
 		putOffer(service);
@@ -327,7 +327,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		System.out.println("[MediatorMockup: notifyNetwork] serviceClone.getstatus(): " + serviceClone.getStatus());
 		
 		serviceClone.setUsers(null);
-		serviceClone.setPendingState();
+		serviceClone.setEnabledState();
 		gui.changeServiceNotify(serviceClone);
 
 		net.publishService(service);

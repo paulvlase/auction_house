@@ -66,7 +66,7 @@ public class Service implements Comparable<Service>, Serializable {
 		this.time = 0;
 		this.price = 0;
 		this.status = status;
-		this.stateMgr = new StateManager();
+		this.stateMgr = new StateManager(this);
 	}
 
 	public Service(Service service) {
@@ -76,7 +76,7 @@ public class Service implements Comparable<Service>, Serializable {
 		this.price = service.getPrice();
 		this.progress = service.getProgress();
 		this.status = service.getStatus();
-		this.stateMgr = service.getStateMgr();
+		this.stateMgr = service.getStateMgr().clone();
 	}
 
 	public Service(String serviceName) {
@@ -113,8 +113,8 @@ public class Service implements Comparable<Service>, Serializable {
 	public void executeGui() {
 	}
 
-	public boolean isInactiveState() {
-		return stateMgr.isInactiveState();
+	public boolean isEnabledState() {
+		return stateMgr.isEnabledState();
 	}
 
 	public void addUserEntry(UserEntry user) {
@@ -314,36 +314,36 @@ public class Service implements Comparable<Service>, Serializable {
 		return getName().compareTo(o.getName());
 	}
 
-	public void setPendingState() {
-		stateMgr.setPendingState();
+	public void setEnabledState() {
+		stateMgr.setEnabledState();
 	}
 
 	public void setAccceptOfferState(Integer userIndex) {
-		stateMgr.setAcceptOfferState(this, userIndex);
+		stateMgr.setAcceptOfferState(userIndex);
 	}
 
 	public void setDropAuctionState() {
-		stateMgr.setDropAuctionState(this);
+		stateMgr.setDropAuctionState();
 	}
 
 	public void setDropOfferState() {
-		stateMgr.setDropOfferState(this);
+		stateMgr.setDropOfferState();
 	}
 
 	public void setLaunchOfferState() {
-		stateMgr.setLaunchOfferState(this);
+		stateMgr.setLaunchOfferState();
 	}
 
 	public void setRefuseOfferState(Integer userIndex) {
-		stateMgr.setRefuseOfferState(this, userIndex);
+		stateMgr.setRefuseOfferState(userIndex);
 	}
 
 	public void setRemoveOfferState() {
-		stateMgr.setRemoveOfferState(this);
+		stateMgr.setRemoveOfferState();
 	}
 
 	public void setMakeOfferState(Integer userIndex, Double price) {
-		stateMgr.setMakeOfferState(this, userIndex, price);
+		stateMgr.setMakeOfferState(userIndex, price);
 	}
 	
 	public ArrayList<Message> asMessages(NetworkService net) {

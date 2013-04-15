@@ -5,17 +5,23 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
 
-public class DropOfferState implements State {
+public class DropOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	private Service				service;
+	private static Logger		logger				= Logger.getLogger(DropOfferState.class);
 
-	public DropOfferState() {
+	public DropOfferState(Service service) {
+		this.service = service;
+	}
 
+	public DropOfferState(DropOfferState state) {
+		service = state.service;
 	}
 
 	public void executeNet(NetworkService net) {
@@ -26,7 +32,7 @@ public class DropOfferState implements State {
 		// net.removeOffer(service.getName());
 		System.out.println("[DropOfferState:executeNet()] " + service.getName());
 
-		service.setPendingState();
+		service.setEnabledState();
 		// TODO
 		// net.stopTransfer(service);
 		// net.changeServiceNotify(service);
@@ -63,5 +69,10 @@ public class DropOfferState implements State {
 		}
 
 		return list;
+	}
+
+	@Override
+	public DropOfferState clone() {
+		return new DropOfferState(this);
 	}
 }

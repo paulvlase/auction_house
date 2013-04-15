@@ -5,18 +5,26 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
 
-public class RefuseOfferState implements State {
+public class RefuseOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
-	private Service service;
-	private Integer userIndex;
+	private static Logger		logger				= Logger.getLogger(RefuseOfferState.class);
 
-	public RefuseOfferState() {
+	private Integer				userIndex;
 
+	public RefuseOfferState(Service service) {
+		this.service = service;
+	}
+
+	public RefuseOfferState(RefuseOfferState state) {
+		service = state.service;
+		userIndex = state.userIndex;
 	}
 
 	@Override
@@ -34,8 +42,8 @@ public class RefuseOfferState implements State {
 			if (users.size() == 0) {
 				service.setUsers(null);
 			}
-			//TODO
-			//net.changeServiceNotify(service);
+			// TODO
+			// net.changeServiceNotify(service);
 		}
 	}
 
@@ -43,8 +51,7 @@ public class RefuseOfferState implements State {
 
 	}
 
-	public void setState(Service service, Integer userIndex) {
-		this.service = service;
+	public void updateState(Integer userIndex) {
 		this.userIndex = userIndex;
 	}
 
@@ -61,7 +68,12 @@ public class RefuseOfferState implements State {
 		message.setType(data.Message.MessageType.REFUSE);
 		message.setServiceName(service.getName());
 		message.setUsername(user.getUsername());
-		
+
 		return message.asArrayList();
+	}
+
+	@Override
+	public RefuseOfferState clone() {
+		return new RefuseOfferState(this);
 	}
 }
