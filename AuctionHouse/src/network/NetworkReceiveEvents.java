@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.QueueThread;
 import data.Service;
@@ -20,11 +23,16 @@ import data.UserProfile.UserRole;
  * @author Ghennadi Procopciuc
  */
 public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
+	private Logger			logger	= Logger.getLogger(NetworkReceiveEvents.class);
+
 	private NetworkImpl		network;
 	private NetworkDriver	driver;
 
 	public NetworkReceiveEvents(NetworkImpl network) {
 		super("NetworkReceiveEvents");
+
+		logger.setLevel(Level.OFF);
+
 		this.network = network;
 		driver = network.getDriver();
 	}
@@ -38,7 +46,9 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	 *            Message
 	 */
 	private void messageProcess(SelectionKey key, Message message) {
-		System.out.println("[NetworkReceiveEvents, messageProcess] Message " + message.getType());
+		logger.debug("Begin");
+		logger.debug("Message type: " + message.getType());
+
 		switch (message.getType()) {
 		case GET_USERNAME:
 			processGetUsername(key, message);
@@ -68,13 +78,14 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			processTransferChunk(key, message);
 			break;
 		default:
-			System.err.println("Unknown type of message : " + message.getType());
+			logger.error("Unknown type of message : " + message.getType());
 			break;
 		}
+		logger.debug("End");
 	}
 
 	private void processGetUsername(SelectionKey key, Message message) {
-		System.out.println("[NetworkReceiveEvents: processGetUsername] Begin");
+		logger.debug("Begin");
 		NetworkDriver driver = network.getDriver();
 
 		/* Message build */
@@ -83,11 +94,13 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		newMessage.setUsername(network.getUserProfile().getUsername());
 
 		driver.sendData(newMessage, key);
+		logger.debug("End");
 	}
 
 	private void processSendUsername(SelectionKey key, Message message) {
-		System.out.println("[processSendUsername()] Begin");
+		logger.debug("Begin");
 		network.registerConnection(message.getUsername(), (SocketChannel) key.channel());
+		logger.debug("End");
 	}
 
 	/**
@@ -97,19 +110,16 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	 * @param message
 	 */
 	private void processLaunch(SelectionKey key, Message message) {
-		String serviceName = message.getServiceName();
-
-		System.out.println("[NetworkReceiveEvents: processLaunch] Start : " + message);
+		logger.debug("Start : " + message);
 
 		UserProfile user = network.getUserProfile();
 		if (user.getRole() == UserRole.SELLER) {
-			System.out.println("[NetworkReceiveEvents: processLaunch] SELLER Case");
+			logger.debug("SELLER Case");
 
 			// Send new offer
 			Service service = network.getService(message.getServiceName());
 			if (service == null) {
-				System.err.println("[NetworkReceiveEvents: processLaunch] Unknown service : "
-						+ message.getServiceName());
+				logger.fatal("End Unknown service : " + message.getServiceName());
 				return;
 			}
 
@@ -124,12 +134,12 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			UserEntry userEntry = (UserEntry) message.getPayload();
 			userEntry.setPrice(service.getPrice());
 
-			System.out.println("[NetworkReceiveEvents: processLaunch] Send data ...");
+			logger.debug("Send data ...");
 			driver.sendData(newMessage, key);
 
 			/* Notify mediator about changes */
 
-			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs before " + service.getUsers());
+			logger.debug("Userfs before " + service.getUsers());
 
 			if (service.getUsers() == null) {
 				service.setUsers(new ArrayList<UserEntry>());
@@ -139,24 +149,24 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 			// service.addUserEntry(userEntry);
 
-			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs after " + service.getUsers());
+			logger.debug("Users after " + service.getUsers());
 			network.changeServiceNotify(service);
 		} else {
-			System.out.println("[NetworkReceiveEvents: processLaunch] Buyer Case");
+			logger.debug("[NetworkReceiveEvents: processLaunch] Buyer Case");
 			// An seller make me an new offer
 			// Update price from payload
 
 			Service service = network.getService(message.getServiceName());
 			if (service == null) {
-				System.err.println("Unknown service : " + message.getServiceName());
+				logger.fatal("End Unknown service : " + message.getServiceName());
 				return;
 			}
 
 			Service newService = service.clone();
 			UserEntry userEntry = service.getUser(message.getUsername());
 			if (userEntry == null) {
-				System.err.println("User not found : " + userEntry.getUsername());
-				System.out.println("Check if webService can help us ...");
+				logger.error("User not found: " + message.getUsername());
+				logger.debug("Check if webService can help us ...");
 				// TODO : userEntry =
 				// webService.getUserProfile(userEntry.getUsername)
 				// Check if new userEntry is not null
@@ -177,14 +187,17 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			// TODO : Send response to launch
 			// Message newMessage = new Message();
 		}
+		
+		logger.debug("End");
 	}
 
 	private void processLaunchResponse(SelectionKey key, Message message) {
-		System.out.println("[NetworkReceiveEvent: processLaunchResponse] Message : " + message);
+		logger.debug("Begin");
+		logger.debug("Message : " + message);
 
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
-			System.err.println("Unknown service : " + message.getServiceName());
+			logger.fatal("Unknown service : " + message.getServiceName());
 			return;
 		}
 
@@ -201,8 +214,8 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		userEntry = (UserEntry) message.getPayload();
 
 		// if (userEntry == null) {
-		// System.err.println("User not found : " + userEntry.getUsername());
-		// System.out.println("Check if webService can help us ...");
+		// logger.fatal("User not found : " + userEntry.getUsername());
+		// logger.debug("Check if webService can help us ...");
 		// // TODO : userEntry =
 		// // webService.getUserProfile(userEntry.getUsername)
 		// // Check if new userEntry is not null
@@ -211,10 +224,10 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		// userEntry = (UserEntry) message.getPayload();
 		// }
 
-		System.out.println("[NetworkReceiveEvent: processLaunchResponse] Before users : " + newService.getUsers());
+		logger.debug("Before users : " + newService.getUsers());
 		newService.getUsers().remove(userEntry);
 		newService.getUsers().add(userEntry);
-		System.out.println("[NetworkReceiveEvent: processLaunchResponse] After users : " + newService.getUsers());
+		logger.debug("After users : " + newService.getUsers());
 
 		// UserEntry serviceUser = newService.getUser(userEntry.getUsername());
 		// if (serviceUser == null) {
@@ -226,8 +239,10 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		// serviceUser.setOffer(Offer.OFFER_MADE);
 		// }
 
-		System.out.println("[NetworkReceiveEvent: processLaunchResponse] New Service : " + newService);
+		logger.debug("New Service : " + newService);
 		network.changeServiceNotify(newService);
+
+		logger.debug("End");
 	}
 
 	/**
@@ -238,22 +253,24 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	 * @param message
 	 */
 	private void processMakeOffer(SelectionKey key, Message message) {
+		logger.debug("Begin");
+
 		UserProfile userProfile = network.getUserProfile();
-		System.out.println("[NetworkReceiveEvent: processMakeOffer] Message : " + message);
+		logger.debug("Message: " + message);
 
 		if (userProfile.getRole() == UserRole.SELLER) {
-			System.err.println("[NetworkReceiveEvent: processMakeOffer] Only a buyer can receive this type of message");
+			logger.fatal("Only a buyer can receive this type of message");
 			return;
 		}
 
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
-			System.err.println("[NetworkReceiveEvent: processMakeOffer] Unknown service : " + message.getServiceName());
+			logger.fatal("Unknown service: " + message.getServiceName());
 			return;
 		}
 
-		System.out.println("[NetworkReceiveEvent: processMakeOffer] Service : " + service);
-		System.out.println("[NetworkReceiveEvent: processMakeOffer] Username : " + message.getPayload());
+		logger.debug("Service: " + service);
+		logger.debug("Username: " + message.getPayload());
 
 		if (service.getUsers() == null) {
 			service.setUsers(new ArrayList<UserEntry>());
@@ -262,63 +279,67 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		service.getUsers().remove((UserEntry) message.getPayload());
 		service.addUserEntry((UserEntry) message.getPayload());
 
-		System.out.println("[NetworkReceiveEvent: processMakeOffer] The new service : " + service);
+		logger.debug("The new service : " + service);
 
 		network.changeServiceNotify(service);
+		logger.debug("End");
 	}
 
 	private void processAccept(SelectionKey key, Message message) {
+		logger.debug("Begin");
 		UserProfile userProfile = network.getUserProfile();
 
-		System.out.println("[NetworkReceiveEvent: processAccept] Message : " + message);
+		logger.debug("Message : " + message);
 		if (userProfile.getRole() == UserRole.BUYER) {
-			System.err.println("[NetworkReceiveEvent: processAccept] Only a seller can receive this type of message");
+			logger.fatal("Only a seller can receive this type of message");
 			return;
 		}
 
 		/* Get actual service */
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
-			System.err.println("[NetworkReceiveEvent: processAccept] Unknown service : " + message.getServiceName());
+			logger.fatal("Unknown service : " + message.getServiceName());
 			return;
 		}
 
-		System.out.println("[NetworkReceiveEvent: processAccept] Service : " + service);
-		System.out.println("[NetworkReceiveEvent: processAccept] Username : " + message.getPayload());
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getPayload());
 		UserEntry user = service.getUser((String) message.getPayload());
 		if (user == null) {
-			System.err.println("[NetworkReceiveEvent: processAccept] User " + message.getUsername() + " not found");
+			logger.fatal("User " + message.getUsername() + " not found");
 			return;
 		}
 
 		user.setOffer(Offer.OFFER_ACCEPTED);
-		System.out.println("[NetworkReceiveEvent: processAccept] New service : " + service);
+		logger.debug("New service : " + service);
 
 		network.changeServiceNotify(service);
+		logger.debug("End");
 	}
 
 	private void processRefuse(SelectionKey key, Message message) {
+		logger.debug("Begin");
 		UserProfile userProfile = network.getUserProfile();
 
-		System.out.println("[NetworkReceiveEvent: processRefuse] Message : " + message);
+		logger.debug("Message : " + message);
 
 		if (userProfile.getRole() == UserRole.BUYER) {
-			System.err.println("[NetworkReceiveEvent: processRefuse] Only a seller can receive this type of message");
+			logger.fatal("Only a seller can receive this type of message");
 			return;
 		}
 
 		/* Get actual service */
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
-			System.err.println("[NetworkReceiveEvent: processRefuse] Unknown service : " + message.getServiceName());
+			logger.fatal("Unknown service : " + message.getServiceName());
 			return;
 		}
 
-		System.out.println("[NetworkReceiveEvent: processRefuse] Service : " + service);
-		System.out.println("[NetworkReceiveEvent: processRefuse] Username : " + message.getPayload());
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getPayload());
 		UserEntry user = service.getUser((String) message.getPayload());
 		if (user == null) {
-			System.err.println("[NetworkReceiveEvent: processRefuse] User " + message.getUsername() + " not found");
+			logger.fatal("User " + message.getUsername() + " not found");
 			return;
 		}
 
@@ -327,22 +348,26 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		if (service.getUsers().isEmpty()) {
 			service.setUsers(null);
 		}
-		System.out.println("[NetworkReceiveEvent: processRefuse] New service : " + service);
+		logger.debug("New service : " + service);
 
 		network.changeServiceNotify(service);
+		logger.debug("End");
 	}
 
 	private void processTransferSize(SelectionKey key, Message message) {
 		// TODO Auto-generated method stub
-
+		logger.debug("Begin");
+		logger.debug("End");
 	}
 
 	private void processTransferChunk(SelectionKey key, Message message) {
 		// TODO Auto-generated method stub
-
+		logger.debug("Begin");
+		logger.debug("End");
 	}
 
 	protected synchronized void process() {
+		logger.debug("Begin");
 
 		// if (!haveToProcess()) {
 		// return;
@@ -361,5 +386,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		}
 
 		messageProcess(job.getKey(), job.getValue());
+		logger.debug("End");
 	}
 }
