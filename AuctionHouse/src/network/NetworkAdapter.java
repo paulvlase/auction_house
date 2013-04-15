@@ -10,7 +10,7 @@ import interfaces.Command;
 import interfaces.NetworkService;
 
 public class NetworkAdapter implements Command {
-	private Logger logger = Logger.getLogger(NetworkAdapter.class);
+	private static Logger logger = Logger.getLogger(NetworkAdapter.class);
 
 	private Service service;
 	private NetworkService net;

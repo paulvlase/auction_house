@@ -23,7 +23,7 @@ import data.UserProfile.UserRole;
  * @author Ghennadi Procopciuc
  */
 public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
-	private Logger			logger	= Logger.getLogger(NetworkReceiveEvents.class);
+	private static Logger	logger	= Logger.getLogger(NetworkReceiveEvents.class);
 
 	private NetworkImpl		network;
 	private NetworkDriver	driver;
@@ -187,7 +187,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			// TODO : Send response to launch
 			// Message newMessage = new Message();
 		}
-		
+
 		logger.debug("End");
 	}
 
