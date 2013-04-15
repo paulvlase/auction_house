@@ -77,6 +77,7 @@ public class Service implements Comparable<Service>, Serializable {
 		this.progress = service.getProgress();
 		this.status = service.getStatus();
 		this.stateMgr = service.getStateMgr().clone();
+		this.stateMgr.setService(this);
 	}
 
 	public Service(String serviceName) {

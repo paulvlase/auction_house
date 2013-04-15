@@ -23,7 +23,7 @@ public class LaunchOfferState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(LaunchOfferState.class);
 
 	public LaunchOfferState(Service service) {
-
+		this.service = service;
 	}
 
 	public LaunchOfferState(LaunchOfferState state) {

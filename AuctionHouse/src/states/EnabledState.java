@@ -15,11 +15,11 @@ public class EnabledState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(EnabledState.class);
 
 	public EnabledState(Service service) {
-
+		this.service = service;
 	}
 
 	public EnabledState(EnabledState state) {
-
+		service = state.service;
 	}
 
 	public void executeNet(NetworkService net) {

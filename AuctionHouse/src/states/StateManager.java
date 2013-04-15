@@ -138,6 +138,17 @@ public class StateManager implements Serializable {
 	public String getStateName() {
 		return currentState.getName();
 	}
+	
+	public void setService(Service service) {
+		enabledState.setService(service);
+		makeOfferState.setService(service);
+		removeOfferState.setService(service);
+		dropAuctionState.setService(service);
+		refuseOfferState.setService(service);
+		acceptOfferState.setService(service);
+		launchOfferState.setService(service);
+		dropOfferState.setService(service);
+	}
 
 	public StateManager clone() {
 		return new StateManager(this);
