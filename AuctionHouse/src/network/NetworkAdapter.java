@@ -1,5 +1,8 @@
 package network;
 
+import java.util.ArrayList;
+
+import data.Message;
 import data.Service;
 import interfaces.Command;
 import interfaces.NetworkService;
@@ -15,5 +18,9 @@ public class NetworkAdapter implements Command {
 	
 	public void execute() {
 		service.executeNet(net);
+	}
+	
+	public ArrayList<Message> asMessages() {
+		return service.asMessages(net);
 	}
 }

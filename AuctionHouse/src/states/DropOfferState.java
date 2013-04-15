@@ -46,7 +46,7 @@ public class DropOfferState implements State {
 	}
 
 	@Override
-	public ArrayList<Message> asMessages() {
+	public ArrayList<Message> asMessages(NetworkService net) {
 		System.out.println("[DropOfferState] asMessages");
 		ArrayList<Message> list = new ArrayList<Message>();
 

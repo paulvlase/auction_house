@@ -82,6 +82,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		return true;
 	}
 
+	@Override
 	public UserProfile getUserProfile() {
 		return mediator.getUserProfile();
 	}
@@ -124,6 +125,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	public void setUserChanelMap(ConcurrentHashMap<String, SocketChannel> userChanelMap) {
 		this.userChanelMap = userChanelMap;
+	}
+
+	public MediatorNetwork getMediator() {
+		return mediator;
+	}
+
+	public void setMediator(MediatorNetwork mediator) {
+		this.mediator = mediator;
 	}
 
 	public void changeServiceNotify(Service service) {
@@ -170,7 +179,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	@Override
 	public void publishService(Service service) {
 		System.out.println("[NetworkImpl, publishService] Service : " + service);
-		ArrayList<Message> messages = service.asMessages();
+		ArrayList<Message> messages = service.asMessages(this);
 		System.out.println("[NetworkImpl, publishService] Messages : " + messages);
 
 		for (int i = 0; i < messages.size(); i++) {

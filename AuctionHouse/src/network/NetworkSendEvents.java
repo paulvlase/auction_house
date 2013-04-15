@@ -27,9 +27,9 @@ public class NetworkSendEvents extends QueueThread<SocketChannel, Message> {
 	protected synchronized void process(List<Command> events) {
 	}
 	
-	public void enqueue(SocketChannel chanel, Service service) {
-		super.enqueue(chanel, service.asMessages());
-	}
+//	public void enqueue(SocketChannel chanel, Service service) {
+//		super.enqueue(chanel, service.asMessages(driver.));
+//	}
 
 	@Override
 	protected synchronized void process() {

@@ -1,5 +1,7 @@
 package network;
 
+import interfaces.MediatorNetwork;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -14,6 +16,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
+
+import mediator.Mediator;
 
 import data.Message;
 import data.Message.MessageType;
@@ -172,15 +176,19 @@ public class NetworkDriver extends Thread {
 
 	private void read(SelectionKey key) throws Exception {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
+		System.out.println("[NetworkDriver: read] Begin");
 
 		this.rBuffer.clear();
 
+		System.out.println("[NetworkDriver: read] Rbuffer = " + rBuffer);
 		int numRead;
 
 		try {
 			numRead = socketChannel.read(this.rBuffer);
 		} catch (Exception e) {
-			numRead = -1000000000;
+			key.channel().close();
+			key.cancel();
+			return;
 		}
 
 		if (numRead <= 0) {
@@ -192,6 +200,7 @@ public class NetworkDriver extends Thread {
 
 		byte[] rbuf = null;
 		rbuf = this.readBuffers.get(key);
+		System.out.println("[NetworkDriver: read] readBuffer for this key : " + Arrays.toString(rbuf));
 
 		int rbuflen = 0;
 		if (rbuf != null) {
@@ -299,6 +308,7 @@ public class NetworkDriver extends Thread {
 			finalBuf = newBuf;
 		}
 
+		System.out.println("[NetworkDriver: read] For next time : " + finalBuf.length + " bytes");
 		this.readBuffers.put(key, finalBuf);
 	}
 
@@ -608,5 +618,9 @@ public class NetworkDriver extends Thread {
 
 	protected synchronized boolean isRunning() {
 		return this.running;
+	}
+
+	public MediatorNetwork getMediator() {
+		return network.getMediator();
 	}
 }

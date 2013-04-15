@@ -37,14 +37,14 @@ public class UserEntry implements Comparable<UserEntry>, Serializable {
 		};
 	}
 
-	private String  username;
-	private String	name;
-	private Offer	offer;
-	private Long	time;
-	private Double	price;
-	private Integer	progress;
+	private String				username;
+	private String				name;
+	private Offer				offer;
+	private Long				time;
+	private Double				price;
+	private Integer				progress;
 	// FIXME: Delete it
-	private InetSocketAddress address; 
+	private InetSocketAddress	address;
 
 	public UserEntry(String username, String name, Offer offer, Long time, Double price) {
 		this.username = username;
@@ -115,7 +115,7 @@ public class UserEntry implements Comparable<UserEntry>, Serializable {
 
 	@Override
 	public String toString() {
-		return name;
+		return username;
 	}
 
 	@Override
@@ -125,15 +125,18 @@ public class UserEntry implements Comparable<UserEntry>, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
+		if (!(obj instanceof UserEntry)) {
+			return false;
+		}
+
 		UserEntry userEntry = (UserEntry) obj;
-		return username.equals(userEntry.getName());
+		return username.equals(userEntry.getUsername());
 	}
 
 	public InetSocketAddress getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(InetSocketAddress address) {
 		this.address = address;
 	}

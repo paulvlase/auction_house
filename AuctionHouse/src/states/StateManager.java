@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import data.Message;
 import data.Service;
+import interfaces.MediatorNetwork;
+import interfaces.NetworkMediator;
 import interfaces.NetworkService;
 import interfaces.WebService;
 
@@ -64,13 +66,13 @@ public class StateManager implements Serializable{
 		acceptOfferState.setState(service, userIndex);
 		currentState = acceptOfferState;
 	
-		System.out.println("[StateManager:setAcceptOfferState()]");
+		System.out.println("[StateManager: setAcceptOfferState]");
 	}
 	
 	public void setLaunchOfferState(Service service) {
 		launchOfferState.setState(service);
 		currentState = launchOfferState;
-		System.out.println("[StateManager:setLaunchOfferState()]");
+		System.out.println("[StateManager: setLaunchOfferState]");
 	}
 	
 	public void setDropOfferState(Service service) {
@@ -95,7 +97,7 @@ public class StateManager implements Serializable{
 		currentState.executeWeb(web);
 	}
 	
-	public ArrayList<Message> asMessages() {
-		return currentState.asMessages();
+	public ArrayList<Message> asMessages(NetworkService net) {
+		return currentState.asMessages(net);
 	}
 }
