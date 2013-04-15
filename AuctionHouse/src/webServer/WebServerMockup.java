@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -201,6 +202,7 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public static void main(String args[]) {
+		BasicConfigurator.configure();
 		WebServerMockup server = new WebServerMockup();
 
 		(new Thread(server)).start();
