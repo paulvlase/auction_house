@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 public class Message implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(Message.class);
+	private static Logger		logger				= Logger.getLogger(Message.class);
 
 	private MessageType			type;
 	private String				serviceName;
@@ -160,11 +160,10 @@ public class Message implements Serializable {
 		this.destination = destination;
 	}
 
-	private static byte[] intToByteArray(int value) {		
+	private static byte[] intToByteArray(int value) {
 		return new byte[] { (byte) (((value >> (3 * Byte.SIZE)) % 256) - 128),
-							(byte) (((value >> (2 * Byte.SIZE)) % 256) - 128),
-							(byte) (((value >> Byte.SIZE) % 256) - 128),
-							(byte) ((value % 256) - 128)};
+				(byte) (((value >> (2 * Byte.SIZE)) % 256) - 128), (byte) (((value >> Byte.SIZE) % 256) - 128),
+				(byte) ((value % 256) - 128) };
 	}
 
 	public ArrayList<Message> asArrayList() {
@@ -176,7 +175,7 @@ public class Message implements Serializable {
 	@Override
 	public String toString() {
 		return "type : " + type + ", serviceName : " + serviceName + ", source : " + source + ", destination : "
-				+ destination + ", payload : " + Arrays.asList(payload);
+				+ destination + ", username : " + getUsername() + ", payload : " + Arrays.asList(payload);
 	}
 
 	public static void main(String[] args) {

@@ -12,7 +12,7 @@ import data.UserEntry;
 
 public class DropOfferState implements State {
 	private static final long	serialVersionUID	= 1L;
-	private Service service;
+	private Service				service;
 
 	public DropOfferState() {
 
@@ -23,14 +23,13 @@ public class DropOfferState implements State {
 		service.setUsers(null);
 
 		// TODO
-		//net.removeOffer(service.getName());
-		System.out
-				.println("[DropOfferState:executeNet()] " + service.getName());
+		// net.removeOffer(service.getName());
+		System.out.println("[DropOfferState:executeNet()] " + service.getName());
 
 		service.setPendingState();
 		// TODO
-		//net.stopTransfer(service);
-		//net.changeServiceNotify(service);
+		// net.stopTransfer(service);
+		// net.changeServiceNotify(service);
 	}
 
 	public void executeWeb(WebService web) {
@@ -53,7 +52,7 @@ public class DropOfferState implements State {
 		if (service.getUsers() == null) {
 			return list;
 		}
-		
+
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
 			message.setType(data.Message.MessageType.REFUSE);

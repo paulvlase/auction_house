@@ -94,6 +94,7 @@ public class StateManager implements Serializable{
 	}
 	
 	public void executeWeb(WebService web) {
+		System.out.println("[StateManager: executeWeb] State : " + currentState.getClass());
 		currentState.executeWeb(web);
 	}
 	

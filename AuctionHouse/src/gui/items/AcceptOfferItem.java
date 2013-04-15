@@ -25,10 +25,11 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 	public void execute() {
 		logger.debug("Accept Request");
 
-		if (service.isInactiveState()) {
+//		if (service.isInactiveState()) {
+			logger.debug("Gui notification");
 			service.setAccceptOfferState(row);
 
 			gui.publishService(service.clone());
-		}
+//		}
 	}
 }

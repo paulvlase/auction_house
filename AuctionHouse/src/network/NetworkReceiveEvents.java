@@ -121,23 +121,23 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 			newMessage.setServiceName(message.getServiceName());
 
-			UserEntry userEntry = (UserEntry)message.getPayload();
+			UserEntry userEntry = (UserEntry) message.getPayload();
 			userEntry.setPrice(service.getPrice());
-			
+
 			System.out.println("[NetworkReceiveEvents: processLaunch] Send data ...");
 			driver.sendData(newMessage, key);
-			
+
 			/* Notify mediator about changes */
 
 			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs before " + service.getUsers());
-			
-			if(service.getUsers() == null){
+
+			if (service.getUsers() == null) {
 				service.setUsers(new ArrayList<UserEntry>());
 			}
 			service.getUsers().remove(userEntry);
 			service.getUsers().add(userEntry);
-			
-			//service.addUserEntry(userEntry);
+
+			// service.addUserEntry(userEntry);
 
 			System.out.println("[NetworkReceiveEvents: processLaunch] Userfs after " + service.getUsers());
 			network.changeServiceNotify(service);
@@ -215,7 +215,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		newService.getUsers().remove(userEntry);
 		newService.getUsers().add(userEntry);
 		System.out.println("[NetworkReceiveEvent: processLaunchResponse] After users : " + newService.getUsers());
-		
 
 		// UserEntry serviceUser = newService.getUser(userEntry.getUsername());
 		// if (serviceUser == null) {
@@ -277,12 +276,37 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	}
 
 	private void processAccept(SelectionKey key, Message message) {
-		// TODO Auto-generated method stub
+		UserProfile userProfile = network.getUserProfile();
+
+		System.out.println("[NetworkReceiveEvent: processAccept] Message : " + message);
+		if (userProfile.getRole() == UserRole.BUYER) {
+			System.err.println("[NetworkReceiveEvent: processAccept] Only a seller can receive this type of message");
+			return;
+		}
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			System.err.println("[NetworkReceiveEvent: processAccept] Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		System.out.println("[NetworkReceiveEvent: processAccept] Service : " + service);
+		System.out.println("[NetworkReceiveEvent: processAccept] Username : " + message.getPayload());
+		UserEntry user = service.getUser((String)message.getPayload());
+		if (user == null) {
+			System.err.println("[NetworkReceiveEvent: processAccept] User " + message.getUsername() + " not found");
+			return;
+		}
+
+		user.setOffer(Offer.OFFER_ACCEPTED);
+		System.out.println("[NetworkReceiveEvent: processAccept] New service : " + service);
+
+		network.changeServiceNotify(service);
 	}
 
 	private void processRefuse(SelectionKey key, Message message) {
 		// TODO Auto-generated method stub
-
 	}
 
 	private void processTransferSize(SelectionKey key, Message message) {
@@ -297,21 +321,22 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 	protected synchronized void process() {
 
-//		if (!haveToProcess()) {
-//			return;
-//		}
+		// if (!haveToProcess()) {
+		// return;
+		// }
 
-//		for (Entry<SelectionKey, ArrayList<Message>> entry : new ArrayList<>(queue.entrySet())) {
-//			for (Message message : entry.getValue()) {
-//				messageProcess(entry.getKey(), message);
-//			}
-//		}
+		// for (Entry<SelectionKey, ArrayList<Message>> entry : new
+		// ArrayList<>(queue.entrySet())) {
+		// for (Message message : entry.getValue()) {
+		// messageProcess(entry.getKey(), message);
+		// }
+		// }
 
 		Map.Entry<SelectionKey, Message> job = getJob();
-		if(job == null){
+		if (job == null) {
 			return;
 		}
-		
+
 		messageProcess(job.getKey(), job.getValue());
 	}
 }
