@@ -2,9 +2,8 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class QueueThread<K, T> extends Thread {
@@ -25,29 +24,50 @@ public abstract class QueueThread<K, T> extends Thread {
 	}
 
 	public Map.Entry<K, T> getJob() {
-		Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
+//		Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
+//
+//		if (!it.hasNext()) {
+//			return null;
+//		}
+//
+//		Map.Entry<K, ArrayList<T>> entry = it.next();
+//		K key = entry.getKey();
+//		T value = entry.getValue().get(0);
+//
+//		System.out.println("[QueueThread : getJob] Before " + queue);
+//		queue.get(key).remove(0);
+//		if (queue.get(key).size() == 0) {
+//			queue.remove(key);
+//		}
+//		System.out.println("[QueueThread : getJob] After " + queue);
+//
+//		return new Pair<K, T>(key, value);
+		return getRandomJob();
+	}
 
-		if (!it.hasNext()) {
+	public Map.Entry<K, T> getRandomJob() {
+		@SuppressWarnings("unchecked")
+		K[] keys = (K[]) queue.keySet().toArray();
+		Random random = new Random();
+		Integer keyIndex;
+
+		if (keys.length == 0) {
 			return null;
 		}
 
-		Map.Entry<K, ArrayList<T>> entry = it.next();
-		K key = entry.getKey();
-		T value = entry.getValue().get(0);
+		/* Peek a random key */
+		keyIndex = random.nextInt(keys.length);
+		K key = keys[keyIndex];
+		T value = queue.get(key).get(0);
 
-		System.out.println("[QueueThread : getJob] Before " + queue);
+		System.out.println("[QueueThread : getRandomJob] Before " + queue);
 		queue.get(key).remove(0);
 		if (queue.get(key).size() == 0) {
 			queue.remove(key);
 		}
-		System.out.println("[QueueThread : getJob] After " + queue);
+		System.out.println("[QueueThread : getRandomJob] After " + queue);
 
 		return new Pair<K, T>(key, value);
-	}
-	
-	public Map.Entry<K, T> getRandomJob() {
-		System.err.println("Unimplemented method");
-		return null;
 	}
 
 	@Override
