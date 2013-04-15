@@ -49,7 +49,7 @@ public class RefuseOfferState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "RefuseOfferState";
 	}
 
 	@Override

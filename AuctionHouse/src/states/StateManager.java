@@ -100,4 +100,8 @@ public class StateManager implements Serializable{
 	public ArrayList<Message> asMessages(NetworkService net) {
 		return currentState.asMessages(net);
 	}
+	
+	public String getStateName() {
+		return currentState.getName();
+	}
 }

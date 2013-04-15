@@ -24,7 +24,7 @@ public class InactiveState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "InactiveState";
 	}
 
 	@Override

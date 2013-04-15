@@ -53,7 +53,7 @@ public class LaunchOfferState implements State {
 	}
 
 	public String getName() {
-		return "Launch Offer xxx";
+		return "LaunchOfferState";
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public class AcceptOfferState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "AcceptOfferState";
 	}
 
 	@Override

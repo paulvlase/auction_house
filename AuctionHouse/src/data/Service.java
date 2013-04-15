@@ -349,4 +349,8 @@ public class Service implements Comparable<Service>, Serializable {
 	public ArrayList<Message> asMessages(NetworkService net) {
 		return stateMgr.asMessages(net);
 	}
+	
+	public String getStateName() {
+		return stateMgr.getStateName();
+	}
 }

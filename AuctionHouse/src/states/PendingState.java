@@ -24,7 +24,7 @@ public class PendingState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "PendingState";
 	}
 
 	@Override

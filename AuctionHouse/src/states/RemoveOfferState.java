@@ -45,7 +45,7 @@ public class RemoveOfferState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "RemoveOfferState";
 	}
 
 	@Override

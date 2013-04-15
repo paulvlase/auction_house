@@ -24,6 +24,8 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		logger.debug("Accept Request");
+		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service.getName(): " + service.getStateName());
 
 		if (service.isInactiveState()) {
 			service.setAccceptOfferState(row);

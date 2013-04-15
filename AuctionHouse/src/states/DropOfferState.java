@@ -42,7 +42,7 @@ public class DropOfferState implements State {
 	}
 
 	public String getName() {
-		return "Drop Offer";
+		return "DropOfferState";
 	}
 
 	@Override

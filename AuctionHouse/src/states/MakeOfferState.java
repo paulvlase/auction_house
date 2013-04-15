@@ -49,7 +49,7 @@ public class MakeOfferState implements State {
 	}
 	
 	public String getName() {
-		return "Offer Made";
+		return "MakeOfferState";
 	}
 
 	@Override

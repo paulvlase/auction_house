@@ -53,7 +53,7 @@ public class DropAuctionState implements State {
 	}
 
 	public String getName() {
-		return "Inactive";
+		return "DropAuctionState";
 	}
 
 	@Override
