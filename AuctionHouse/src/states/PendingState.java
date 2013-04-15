@@ -28,7 +28,7 @@ public class PendingState implements State {
 	}
 
 	@Override
-	public ArrayList<Message> asMessages() {
+	public ArrayList<Message> asMessages(NetworkService net) {
 		System.out.println("[InactiveOfferState] asMessages");
 		//Nothing to do, for intern usage
 		return new ArrayList<Message>();
