@@ -115,7 +115,7 @@ public class UserEntry implements Comparable<UserEntry>, Serializable {
 
 	@Override
 	public String toString() {
-		return " [" + username + " " + getOffer() + "]";
+		return " [" + username + ", Offer : " + getOffer() + ", price : " + getPrice() + "]";
 	}
 
 	@Override

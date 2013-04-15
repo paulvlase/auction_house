@@ -11,6 +11,7 @@ import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
+import data.UserProfile;
 
 public class MakeOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
@@ -60,6 +61,7 @@ public class MakeOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
+		UserProfile profile = net.getUserProfile();
 		System.out.println("[MakeOfferState] asMessages");
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);
@@ -68,7 +70,9 @@ public class MakeOfferState extends AbstractState {
 		message.setServiceName(service.getName());
 		message.setUsername(user.getUsername());
 		message.setDestination(user.getUsername());
-		message.setPayload(price);
+		message.setSource(profile.getUsername());
+		message.setPayload(new UserEntry(profile.getUsername(), profile.getFirstName() + " " + profile.getLastName(),
+				Offer.OFFER_MADE, service.getTime(), price));
 
 		return message.asArrayList();
 	}

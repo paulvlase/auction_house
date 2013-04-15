@@ -45,6 +45,7 @@ public class Message implements Serializable {
 		byte[] resultSize;
 		byte[] object;
 
+		System.out.println("[Message: serialize] Message : " + this);
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o;
 		try {

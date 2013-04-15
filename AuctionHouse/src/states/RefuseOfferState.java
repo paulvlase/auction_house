@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import data.Message;
 import data.Service;
 import data.UserEntry;
+import data.UserProfile;
 import data.UserEntry.Offer;
 
 public class RefuseOfferState extends AbstractState {
@@ -62,12 +63,18 @@ public class RefuseOfferState extends AbstractState {
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
 		System.out.println("[RefuseOfferState] asMessages");
+		UserProfile userProfile = net.getUserProfile();
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);
 
 		message.setType(data.Message.MessageType.REFUSE);
 		message.setServiceName(service.getName());
-		message.setUsername(user.getUsername());
+		message.setUsername(new String(user.getUsername()));
+		message.setPayload(userProfile.getUsername());
+		message.setDestination(user.getUsername());
+		message.setSource(userProfile.getUsername());
+		
+		System.out.println("[RefuseOfferState: asMessages] Message : " + message);
 
 		return message.asArrayList();
 	}

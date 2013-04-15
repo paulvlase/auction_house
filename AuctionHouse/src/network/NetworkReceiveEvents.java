@@ -239,40 +239,32 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	 */
 	private void processMakeOffer(SelectionKey key, Message message) {
 		UserProfile userProfile = network.getUserProfile();
+		System.out.println("[NetworkReceiveEvent: processMakeOffer] Message : " + message);
 
 		if (userProfile.getRole() == UserRole.SELLER) {
-			System.err.println("Only a buyer can receive this type of message");
+			System.err.println("[NetworkReceiveEvent: processMakeOffer] Only a buyer can receive this type of message");
 			return;
 		}
 
 		Service service = network.getService(message.getServiceName());
 		if (service == null) {
-			System.err.println("Unknown service : " + message.getServiceName());
+			System.err.println("[NetworkReceiveEvent: processMakeOffer] Unknown service : " + message.getServiceName());
 			return;
 		}
 
-		Service newService = service.clone();
-		UserEntry userEntry = service.getUser(message.getUsername());
-		if (userEntry == null) {
-			System.err.println("User not found : " + userEntry.getUsername());
-			System.out.println("Check if webService can help us ...");
-			// TODO : userEntry =
-			// webService.getUserProfile(userEntry.getUsername)
-			// Check if new userEntry is not null
-			// Add new userEntry to service
+		System.out.println("[NetworkReceiveEvent: processMakeOffer] Service : " + service);
+		System.out.println("[NetworkReceiveEvent: processMakeOffer] Username : " + message.getPayload());
+
+		if (service.getUsers() == null) {
+			service.setUsers(new ArrayList<UserEntry>());
 		}
 
-		UserEntry serviceUser = newService.getUser(userEntry.getUsername());
-		if (serviceUser == null) {
-			newService.addUserEntry(userEntry);
-		} else {
-			UserEntry messageUserEntry = (UserEntry) message.getPayload();
-			serviceUser.setPrice(messageUserEntry.getPrice());
-			serviceUser.setTime(messageUserEntry.getTime());
-			serviceUser.setOffer(Offer.OFFER_MADE);
-		}
+		service.getUsers().remove((UserEntry) message.getPayload());
+		service.addUserEntry((UserEntry) message.getPayload());
 
-		network.changeServiceNotify(newService);
+		System.out.println("[NetworkReceiveEvent: processMakeOffer] The new service : " + service);
+
+		network.changeServiceNotify(service);
 	}
 
 	private void processAccept(SelectionKey key, Message message) {
@@ -293,7 +285,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		System.out.println("[NetworkReceiveEvent: processAccept] Service : " + service);
 		System.out.println("[NetworkReceiveEvent: processAccept] Username : " + message.getPayload());
-		UserEntry user = service.getUser((String)message.getPayload());
+		UserEntry user = service.getUser((String) message.getPayload());
 		if (user == null) {
 			System.err.println("[NetworkReceiveEvent: processAccept] User " + message.getUsername() + " not found");
 			return;
@@ -306,7 +298,38 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	}
 
 	private void processRefuse(SelectionKey key, Message message) {
-		// TODO Auto-generated method stub
+		UserProfile userProfile = network.getUserProfile();
+
+		System.out.println("[NetworkReceiveEvent: processRefuse] Message : " + message);
+
+		if (userProfile.getRole() == UserRole.BUYER) {
+			System.err.println("[NetworkReceiveEvent: processRefuse] Only a seller can receive this type of message");
+			return;
+		}
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			System.err.println("[NetworkReceiveEvent: processRefuse] Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		System.out.println("[NetworkReceiveEvent: processRefuse] Service : " + service);
+		System.out.println("[NetworkReceiveEvent: processRefuse] Username : " + message.getPayload());
+		UserEntry user = service.getUser((String) message.getPayload());
+		if (user == null) {
+			System.err.println("[NetworkReceiveEvent: processRefuse] User " + message.getUsername() + " not found");
+			return;
+		}
+
+		/* Remove user from GUI */
+		service.getUsers().remove(user);
+		if (service.getUsers().isEmpty()) {
+			service.setUsers(null);
+		}
+		System.out.println("[NetworkReceiveEvent: processRefuse] New service : " + service);
+
+		network.changeServiceNotify(service);
 	}
 
 	private void processTransferSize(SelectionKey key, Message message) {
