@@ -100,26 +100,6 @@ public class NetworkDriver extends Thread {
 
 			System.out.println("[NetworkDriver: accept] Done");
 
-			// /* Check if we know who is at the other end of the connection */
-			// if (network.getUserKeyMap().containsKey(key)) {
-			// String username = null;
-			// for (String user : network.getUserKeyMap().keySet()) {
-			// if (network.getUserKeyMap().get(user).equals(key)) {
-			// username = user;
-			// break;
-			// }
-			// }
-			//
-			// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
-			// network.getUserUnsentMessages();
-			// if (unsentMessages.contains(username)) {
-			// network.getSendEvents().enqueue(key,
-			// unsentMessages.get(username));
-			// }
-			// } else {
-			// // TODO : Make & send an username request
-			// System.err.println("[NetworkDriver: connect] Something wrong went ...");
-			// }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

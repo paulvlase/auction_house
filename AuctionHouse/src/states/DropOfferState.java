@@ -11,6 +11,7 @@ import data.Message;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
+import data.UserProfile;
 
 public class DropOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
@@ -53,6 +54,7 @@ public class DropOfferState extends AbstractState {
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
 		System.out.println("[DropOfferState] asMessages");
+		UserProfile userProfile = net.getUserProfile();
 		ArrayList<Message> list = new ArrayList<Message>();
 
 		if (service.getUsers() == null) {
@@ -61,9 +63,13 @@ public class DropOfferState extends AbstractState {
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
+			
 			message.setType(data.Message.MessageType.REFUSE);
 			message.setServiceName(service.getName());
-			message.setUsername(user.getUsername());
+			message.setUsername(new String(user.getUsername()));
+			message.setPayload(userProfile.getUsername());
+			message.setDestination(user.getUsername());
+			message.setSource(userProfile.getUsername());
 
 			list.add(message);
 		}

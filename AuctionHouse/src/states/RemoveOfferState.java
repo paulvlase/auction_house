@@ -11,6 +11,7 @@ import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
+import data.UserProfile;
 
 public class RemoveOfferState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
@@ -54,15 +55,20 @@ public class RemoveOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
+		UserProfile userProfile = net.getUserProfile();
 		System.out.println("[RemoveOfferSettate] asMessages");
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
+			
 			message.setType(data.Message.MessageType.REFUSE);
 			message.setServiceName(service.getName());
-			message.setUsername(user.getUsername());
+			message.setUsername(new String(user.getUsername()));
+			message.setPayload(userProfile.getUsername());
+			message.setDestination(user.getUsername());
+			message.setSource(userProfile.getUsername());
 
 			if (first) {
 				list = message.asArrayList();

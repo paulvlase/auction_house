@@ -12,6 +12,7 @@ import data.Message;
 import data.Service;
 import data.UserEntry;
 import data.UserEntry.Offer;
+import data.UserProfile;
 
 public class DropAuctionState extends AbstractState {
 	private static final long	serialVersionUID	= 1L;
@@ -62,16 +63,21 @@ public class DropAuctionState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
-
 		logger.debug("Begin");
+		UserProfile userProfile = net.getUserProfile();
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
+		/* Send refuse messages to all clients */
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
+
 			message.setType(data.Message.MessageType.REFUSE);
 			message.setServiceName(service.getName());
-			message.setUsername(user.getUsername());
+			message.setUsername(new String(user.getUsername()));
+			message.setPayload(userProfile.getUsername());
+			message.setDestination(user.getUsername());
+			message.setSource(userProfile.getUsername());
 
 			if (first) {
 				list = message.asArrayList();
