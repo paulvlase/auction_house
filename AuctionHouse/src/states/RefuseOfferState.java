@@ -34,21 +34,22 @@ public class RefuseOfferState extends AbstractState {
 	@Override
 	public void executeNet(NetworkService net) {
 		logger.debug("Begin");
-		ArrayList<UserEntry> users = service.getUsers();
+		Service clonedService = service.clone();
+		ArrayList<UserEntry> users = clonedService.getUsers();
 
-//		if (users != null) {
-//			/* TODO Will be implemented */
-//			UserEntry user = users.get(userIndex);
-//
-//			user.setOffer(Offer.OFFER_REFUSED);
-//			users.remove(userIndex);
-//
-//			if (users.size() == 0) {
-//				service.setUsers(null);
-//			}
-//			// TODO
-//			// net.changeServiceNotify(service);
-//		}
+		if (users != null) {
+			/* TODO Will be implemented */
+			UserEntry user = users.get(userIndex);
+
+			user.setOffer(Offer.OFFER_REFUSED);
+			users.remove(userIndex);
+
+			if (users.size() == 0) {
+				service.setUsers(null);
+			}
+			// TODO
+			net.changeServiceNotify(clonedService);
+		}
 
 		logger.debug("End");
 	}
@@ -78,7 +79,7 @@ public class RefuseOfferState extends AbstractState {
 		message.setPayload(userProfile.getUsername());
 		message.setDestination(user.getUsername());
 		message.setSource(userProfile.getUsername());
-		
+
 		logger.debug("Message : " + message);
 
 		logger.debug("End");

@@ -384,10 +384,11 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		}
 
 		/* Remove user from GUI */
-		service.getUsers().remove(user);
-		if (service.getUsers().isEmpty()) {
-			service.setUsers(null);
-		}
+		// service.getUsers().remove(user);
+		// if (service.getUsers().isEmpty()) {
+		// service.setUsers(null);
+		// }
+		user.setOffer(Offer.OFFER_REFUSED);
 		logger.debug("New service : " + service);
 
 		network.changeServiceNotify(service);
@@ -481,10 +482,10 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			logger.fatal("User " + message.getSource() + " not found");
 			return;
 		}
-		
+
 		// TODO : Progress = -1
 
-		if(message.getProgress() > 100){
+		if (message.getProgress() > 100) {
 			service.setStatus(Status.TRANSFER_COMPLETE);
 		} else {
 			service.setStatus(Status.TRANSFER_IN_PROGRESS);
