@@ -33,5 +33,6 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 
 			gui.publishService(service.clone());
 //		}
+			logger.debug("End");
 	}
 }
