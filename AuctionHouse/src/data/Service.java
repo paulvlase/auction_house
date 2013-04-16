@@ -71,7 +71,12 @@ public class Service implements Comparable<Service>, Serializable {
 
 	public Service(Service service) {
 		this.name = service.getName();
-		this.users = service.getUsers();
+
+		if (service.getUsers() == null) {
+			this.users = service.getUsers();
+		} else {
+			this.users = (ArrayList<UserEntry>) service.getUsers().clone();
+		}
 		this.time = service.getTime();
 		this.price = service.getPrice();
 		this.progress = service.getProgress();

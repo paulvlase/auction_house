@@ -169,6 +169,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		logger.debug("Begin");
 		logger.debug("Service : " + service);
 
+		service.executeNet(this);
+		
 		ArrayList<Message> messages = service.asMessages(this);
 		logger.debug("Messages : " + messages);
 
@@ -176,8 +178,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			Message message = messages.get(i);
 			driver.sendData(message, message.getDestination(), service.getUsers().get(i).getAddress());
 		}
-		
-		service.executeNet(this);
+
 		logger.debug("End");
 	}
 
