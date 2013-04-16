@@ -394,11 +394,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			return;
 		}
 
-		/* Remove user from GUI */
-		// service.getUsers().remove(user);
-		// if (service.getUsers().isEmpty()) {
-		// service.setUsers(null);
-		// }
 		user.setOffer(Offer.OFFER_REFUSED);
 		logger.debug("New service : " + service);
 
@@ -460,7 +455,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		}
 
 		user.setProgress(0);
-		// user.setOffer(Offer.TRANSFER_STARTED);
 		service.setStatus(Status.TRANSFER_STARTED);
 
 		network.changeServiceNotify(service);
@@ -555,25 +549,10 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	private void processLogout(SelectionKey key, Message message) {
 		System.out.println("[NetworkReceiveEvent, processLogout] Remove dependencies for " + message.getSource());
 		network.removeAllDependencies(message.getSource());
-		// Message message = new Message();
-		// message.setType(MessageType.LOGOUT);
-		// message.setDestination(entry.getKey());
-		// message.setSource(userProfile.getUsername());
 	}
 
 	protected synchronized void process() {
 		logger.debug("Begin");
-
-		// if (!haveToProcess()) {
-		// return;
-		// }
-
-		// for (Entry<SelectionKey, ArrayList<Message>> entry : new
-		// ArrayList<>(queue.entrySet())) {
-		// for (Message message : entry.getValue()) {
-		// messageProcess(entry.getKey(), message);
-		// }
-		// }
 
 		Map.Entry<SelectionKey, Message> job = getJob();
 		if (job == null) {
