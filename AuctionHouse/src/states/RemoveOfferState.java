@@ -69,7 +69,7 @@ public class RemoveOfferState extends AbstractState {
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
 			
-			message.setType(data.Message.MessageType.REFUSE);
+			message.setType(data.Message.MessageType.REMOVE);
 			message.setServiceName(service.getName());
 			message.setUsername(new String(user.getUsername()));
 			message.setPayload(userProfile.getUsername());

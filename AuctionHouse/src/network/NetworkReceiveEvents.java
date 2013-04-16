@@ -74,6 +74,9 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		case REFUSE:
 			processRefuse(key, message);
 			break;
+		case REMOVE:
+			processRemove(key, message);
+			break;
 		case TRANSFER_STARTED:
 			processTransferStarted(key, message);
 			break;
@@ -389,6 +392,38 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		// service.setUsers(null);
 		// }
 		user.setOffer(Offer.OFFER_REFUSED);
+		logger.debug("New service : " + service);
+
+		network.changeServiceNotify(service);
+		logger.debug("End");
+	}
+
+	private void processRemove(SelectionKey key, Message message) {
+		logger.debug("Begin");
+		UserProfile userProfile = network.getUserProfile();
+
+		logger.debug("Message : " + message);
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getPayload());
+		UserEntry user = service.getUser((String) message.getPayload());
+		if (user == null) {
+			logger.fatal("User " + message.getUsername() + " not found");
+			return;
+		}
+
+		/* Remove user from GUI */
+		service.getUsers().remove(user);
+		if (service.getUsers().isEmpty()) {
+			service.setUsers(null);
+		}
 		logger.debug("New service : " + service);
 
 		network.changeServiceNotify(service);
