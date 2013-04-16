@@ -51,6 +51,7 @@ public abstract class QueueThread<K, T> extends Thread {
 		Random random = new Random();
 		Integer keyIndex;
 
+		System.out.println("[" + threadName + ": getRandomJob] Empty queue");
 		if (keys.length == 0) {
 			return null;
 		}
@@ -60,12 +61,12 @@ public abstract class QueueThread<K, T> extends Thread {
 		K key = keys[keyIndex];
 		T value = queue.get(key).get(0);
 
-		System.out.println("[QueueThread : getRandomJob] Before " + queue);
+		System.out.println("[" + threadName + ": getRandomJob] Before " + queue);
 		queue.get(key).remove(0);
 		if (queue.get(key).size() == 0) {
 			queue.remove(key);
 		}
-		System.out.println("[QueueThread : getRandomJob] After " + queue);
+		System.out.println("[" + threadName + ": getRandomJob] After " + queue);
 
 		return new Pair<K, T>(key, value);
 	}
@@ -105,8 +106,9 @@ public abstract class QueueThread<K, T> extends Thread {
 	protected abstract void process();
 
 	public synchronized void enqueue(K key, T value) {
-		System.out.println("[QueueThread : enqueue] Before " + value);
-		System.out.println("[QueueThread : enqueue] Before " + key);
+		System.out.println("[" + threadName + ": enqueue] Before " + value);
+		System.out.println("[" + threadName + ": enqueue] Before " + key);
+		System.out.println("[" + threadName + ": enqueue] Running " + running);
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 

@@ -31,7 +31,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	public NetworkReceiveEvents(NetworkImpl network) {
 		super("NetworkReceiveEvents");
 
-		logger.setLevel(Level.OFF);
+		//logger.setLevel(Level.OFF);
 
 		this.network = network;
 		driver = network.getDriver();
@@ -382,9 +382,11 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		Map.Entry<SelectionKey, Message> job = getJob();
 		if (job == null) {
+			System.out.println("[NetworkReceiveEvent: process] Job = null");
 			return;
 		}
 
+		System.out.println("[NetworkReceiveEvent: process] Valid job");
 		messageProcess(job.getKey(), job.getValue());
 		logger.debug("End");
 	}
