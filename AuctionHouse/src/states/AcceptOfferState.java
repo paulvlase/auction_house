@@ -78,6 +78,7 @@ public class AcceptOfferState extends AbstractState {
 		message.setUsername(service.getUsers().get(userIndex).getUsername());
 		message.setSource(userProfile.getUsername());
 		message.setDestination(service.getUsers().get(userIndex).getUsername());
+		message.setPayload(userProfile.getUsername());
 		list = message.asArrayList();
 
 		/* Send refuse messages to other clients */
