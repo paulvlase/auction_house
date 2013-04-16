@@ -35,6 +35,12 @@ public class LaunchOfferState extends AbstractState {
 	public void executeNet(NetworkService net) {
 		logger.debug("Begin");
 
+		Service clonedService = service.clone();
+		logger.debug("clonedService.getstatus(): " + clonedService.getStatus());
+		
+		clonedService.setUsers(null);
+		net.changeServiceNotify(clonedService);
+
 		logger.debug("End");
 	}
 
