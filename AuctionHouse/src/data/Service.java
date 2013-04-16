@@ -28,20 +28,20 @@ import data.UserProfile.UserRole;
  * @see Status
  */
 public class Service implements Comparable<Service>, Serializable {
-	private static final long	serialVersionUID	= 1L;
-	private String name;
-	private long time;
-	private double price;
-	private ArrayList<UserEntry> users;
-	private Status status;
+	private static final long		serialVersionUID	= 1L;
+	private String					name;
+	private long					time;
+	private double					price;
+	private ArrayList<UserEntry>	users;
+	private Status					status;
 
-	private StateManager stateMgr;
+	private StateManager			stateMgr;
 
 	/**
 	 * This field will be used only with a TRANSFER_* status, otherwise it means
 	 * nothing.
 	 */
-	private int progress;
+	private int						progress;
 
 	/**
 	 * Service status :
@@ -134,14 +134,14 @@ public class Service implements Comparable<Service>, Serializable {
 	public ArrayList<UserEntry> getUsers() {
 		return users;
 	}
-	
-	public UserEntry getUser(String username){
+
+	public UserEntry getUser(String username) {
 		for (UserEntry user : users) {
-			if(user.getUsername().equals(username)){
+			if (user.getUsername().equals(username)) {
 				return user;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -181,12 +181,9 @@ public class Service implements Comparable<Service>, Serializable {
 		this.price = price;
 	}
 
+	// TODO Manage case when error occurs during transfer
 	public int getProgress() {
 		return progress;
-	}
-
-	public void setProgress(int progress) {
-		this.progress = progress;
 	}
 
 	public ArrayList<ArrayList<Object>> getAsTable() {
@@ -200,16 +197,23 @@ public class Service implements Comparable<Service>, Serializable {
 		System.out.println("[Service: getActiveRow()] user offer : " + user.getOffer());
 		switch (user.getOffer()) {
 		case TRANSFER_STARTED:
-			row = new ArrayList<Object>(Arrays.asList("", "", 0, "", "", ""));
+			if (role == UserRole.BUYER) {
+				row = new ArrayList<Object>(Arrays.asList("", "", 0, "", "", ""));
+			} else {
+				row = new ArrayList<Object>(Arrays.asList("", "", user.getName(), 0, "", ""));
+			}
 			break;
 		case TRANSFER_COMPLETE:
 		case TRANSFER_IN_PROGRESS:
-			row = new ArrayList<Object>(Arrays.asList("", "",
-					user.getProgress(), "", "", ""));
+			if (role == UserRole.BUYER) {
+				row = new ArrayList<Object>(Arrays.asList("", "", user.getProgress(), "", "", ""));
+			} else {
+				row = new ArrayList<Object>(Arrays.asList("", "", user.getName(), user.getProgress(), "", ""));
+			}
 			break;
 		default:
-			row = new ArrayList<Object>(Arrays.asList("", "", user.getName(),
-					user.getOffer(), user.getTime(), user.getPrice()));
+			row = new ArrayList<Object>(Arrays.asList("", "", user.getName(), user.getOffer(), user.getTime(),
+					user.getPrice()));
 			break;
 		}
 
@@ -228,14 +232,14 @@ public class Service implements Comparable<Service>, Serializable {
 
 		switch (status) {
 		case INACTIVE:
-			row = new ArrayList<Object>(Arrays.asList(getName(),
-					GuiConfig.getValue(GuiConfig.INACTIVE), "", "", "", ""));
+			row = new ArrayList<Object>(
+					Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.INACTIVE), "", "", "", ""));
 			data.add(row);
 			break;
 		case ACTIVE:
 			if (users == null) {
-				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.ACTIVE), "", "", "", ""));
+				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.ACTIVE), "", "", "",
+						""));
 				data.add(row);
 				break;
 			}
@@ -255,12 +259,8 @@ public class Service implements Comparable<Service>, Serializable {
 			break;
 		case TRANSFER_IN_PROGRESS:
 			if (role == UserRole.BUYER) {
-				System.out
-						.println("[Bag ceva in ea de viata]]]]]]]]] progress = "
-								+ progress);
 				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS),
-						progress, "", "", ""));
+						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
 				data.add(row);
 				break;
 			} else {
@@ -268,9 +268,8 @@ public class Service implements Comparable<Service>, Serializable {
 			}
 		case TRANSFER_STARTED:
 			if (role == UserRole.BUYER) {
-				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0, "",
-						"", ""));
+				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0,
+						"", "", ""));
 				data.add(row);
 				break;
 			} else {
@@ -278,8 +277,7 @@ public class Service implements Comparable<Service>, Serializable {
 			}
 		case TRANSFER_COMPLETE:
 			if (role == UserRole.BUYER) {
-				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE),
+				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE),
 						progress, "", "", ""));
 				data.add(row);
 				break;
@@ -312,7 +310,7 @@ public class Service implements Comparable<Service>, Serializable {
 
 	@Override
 	public String toString() {
-		return "" + name + " " + users;
+		return "" + name + " " + status + " " + users;
 	}
 
 	@Override
@@ -351,11 +349,11 @@ public class Service implements Comparable<Service>, Serializable {
 	public void setMakeOfferState(Integer userIndex, Double price) {
 		stateMgr.setMakeOfferState(userIndex, price);
 	}
-	
+
 	public ArrayList<Message> asMessages(NetworkService net) {
 		return stateMgr.asMessages(net);
 	}
-	
+
 	public String getStateName() {
 		return stateMgr.getStateName();
 	}

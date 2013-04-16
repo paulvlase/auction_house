@@ -117,7 +117,7 @@ public class MainWindow extends JFrame implements ClearWindow {
 		MyTableCellRenderer cellRenderer = new MyTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)));
+		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)), gui.getUserProfile().getRole());
 		table = new MultiSpanCellTable(model, cellRenderer);
 		menuBar = new JMenuBar();
 		menu = new JMenu();

@@ -23,24 +23,24 @@ import data.Period;
  */
 class MyTableCellRenderer extends DefaultTableCellRenderer {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(MyTableCellRenderer.class);
-	
+	private static Logger		logger				= Logger.getLogger(MyTableCellRenderer.class);
+
 	private final JProgressBar	bar					= new JProgressBar(0, 100);
 	private final JPanel		panel				= new JPanel(new BorderLayout());
 
 	public MyTableCellRenderer() {
 		super();
-		
+
 		// TODO: logger.setLevel(Level.OFF);
-		
+
 		setOpaque(true);
 		panel.add(bar);
 		panel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 
 		if (column == 2 || column == 3) {
 			if (value instanceof Integer) {

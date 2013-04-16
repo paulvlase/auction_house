@@ -19,9 +19,11 @@ import org.apache.log4j.Logger;
 
 import data.Pair;
 import data.Service;
+import data.UserProfile;
 import data.Service.Status;
 import data.UserEntry;
 import data.UserEntry.Offer;
+import data.UserProfile.UserRole;
 
 public class MySpanTableModel extends AbstractTableModel {
 	private static final long	serialVersionUID	= 1L;
@@ -32,12 +34,14 @@ public class MySpanTableModel extends AbstractTableModel {
 	private List<Service>		services;
 	private ArrayList<Span>		spans;
 	protected CellAttribute		cellAtt;
+	private UserRole role;
 
 	private final Lock			mutex				= new ReentrantLock(true);
 
-	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns) {
+	public MySpanTableModel(ArrayList<Service> services, ArrayList<String> columns, UserRole role) {
 		// TODO: logger.setLevel(Level.OFF);
 
+		this.role = role;
 		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services
 				.clone());
 
@@ -131,7 +135,7 @@ public class MySpanTableModel extends AbstractTableModel {
 
 		users = service.getUsers();
 		logger.debug(service);
-		serviceData = service.getAsTable();
+		serviceData = service.getAsTable(role);
 
 		data.addAll(serviceData);
 		cellAtt.addRows(serviceData.size());
@@ -149,8 +153,8 @@ public class MySpanTableModel extends AbstractTableModel {
 						|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS
 						|| user.getOffer() == Offer.TRANSFER_STARTED) {
 
-					/* Service name span */
-					addSpan(new Span(data.size() - users.size() + counter - 1 , 2, 1, 4));
+					/* User transfer span */
+					addSpan(new Span(data.size() - users.size() + counter - 1 , 3, 1, 3));
 				}
 			}
 			
