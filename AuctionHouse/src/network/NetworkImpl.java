@@ -260,6 +260,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		userChanelMap.remove(username);
 	}
 
+	public SocketChannel getSocketChannel(String username) {
+		return userChanelMap.get(username);
+	}
+
+	public SelectionKey getSelectionKey(String username) {
+		return userChanelMap.get(username).keyFor(driver.getSelector());
+	}
+
 	@Override
 	public void publishServices(ArrayList<Service> services) {
 		// TODO : Process send messages
