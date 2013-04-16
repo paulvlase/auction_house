@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import config.GuiConfig;
 import data.Service;
+import data.UserProfile.UserRole;
 
 /**
  * @author Ghennadi Procopciuc
@@ -181,10 +182,17 @@ public class AddNewService extends JFrame {
 		}
 
 		Long time = 10000000L;		
-		Service service = mainWindow.getGui().createService(name, time, price);
-		
+		Service service = new Service(name);
+		service.setTime(time);
+		service.setPrice(price);
+
 		mainWindow.addService(service);
-		mainWindow.getGui().publishService(service.clone());
+		
+		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.SELLER) {
+			Service clonedService = service.clone();
+			clonedService.setLaunchOfferState();
+			mainWindow.getGui().publishService(clonedService);
+		}
 
 		setVisible(false);
 		dispose();

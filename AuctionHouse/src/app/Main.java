@@ -15,7 +15,8 @@ import webClient.WebClientMockup;
 public class Main {
 	static Logger	logger	= Logger.getLogger(Main.class);
 
-	public static void main(String[] args) {
+	public
+	static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		logger.setLevel(Level.OFF);
