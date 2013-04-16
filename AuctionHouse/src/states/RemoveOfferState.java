@@ -5,6 +5,7 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import data.Message;
@@ -18,32 +19,37 @@ public class RemoveOfferState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(RemoveOfferState.class);
 
 	public RemoveOfferState(Service service) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public RemoveOfferState(RemoveOfferState state) {
+		//TODO: logger.setLevel(Level.OFF);
 		service = state.service;
 	}
 
 	@Override
 	public void executeNet(NetworkService net) {
-		if (service.getUsers() == null) {
-			return;
-		}
+		logger.debug("Begin");
+//		if (service.getUsers() == null) {
+//			return;
+//		}
+//
+//		for (UserEntry userEntry : service.getUsers()) {
+//			if (userEntry.getOffer() == Offer.TRANSFER_IN_PROGRESS || userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
+//				/* Cauta in lista de thread-uri ca sa stergi */
+//				userEntry.setOffer(Offer.OFFER_DROP);
+//			}
+//		}
 
-		for (UserEntry userEntry : service.getUsers()) {
-			if (userEntry.getOffer() == Offer.TRANSFER_IN_PROGRESS || userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
-				/* Cauta in lista de thread-uri ca sa stergi */
-				userEntry.setOffer(Offer.OFFER_DROP);
-			}
-		}
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
-		System.out.println("[RemoveOfferState:executeWeb()] Begin");
+		logger.debug("Begin");
 		// TODO
 		// web.removeOffer(service.getName());
-		System.out.println("[RemoveOfferState:executeWeb()] End");
+		logger.debug("End");
 	}
 
 	public void updateState() {
@@ -55,8 +61,8 @@ public class RemoveOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
+		logger.debug("Begin");
 		UserProfile userProfile = net.getUserProfile();
-		System.out.println("[RemoveOfferSettate] asMessages");
 		ArrayList<Message> list = null;
 		Boolean first = true;
 
@@ -77,6 +83,7 @@ public class RemoveOfferState extends AbstractState {
 			}
 		}
 
+		logger.debug("End");
 		return list;
 	}
 

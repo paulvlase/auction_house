@@ -26,17 +26,20 @@ public class DropOfferState extends AbstractState {
 	}
 
 	public void executeNet(NetworkService net) {
-		service.setStatus(Status.INACTIVE);
-		service.setUsers(null);
+		logger.debug("Begin");
 
-		// TODO
-		// net.removeOffer(service.getName());
-		System.out.println("[DropOfferState:executeNet()] " + service.getName());
-
-		service.setEnabledState();
-		// TODO
-		// net.stopTransfer(service);
-		// net.changeServiceNotify(service);
+//		service.setStatus(Status.INACTIVE);
+//		service.setUsers(null);
+//
+//		// TODO
+//		// net.removeOffer(service.getName());
+//		System.out.println("[DropOfferState:executeNet()] " + service.getName());
+//
+//		service.setEnabledState();
+//		// TODO
+//		// net.stopTransfer(service);
+//		// net.changeServiceNotify(service);
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {

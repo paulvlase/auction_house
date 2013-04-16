@@ -21,30 +21,32 @@ public class MakeOfferState extends AbstractState {
 	private Double				price;
 
 	public MakeOfferState(Service service) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public MakeOfferState(MakeOfferState state) {
+		// TODO: logger.setLevel(Level.OFF);
 		service = state.service;
 		userIndex = state.userIndex;
 		price = state.price;
 	}
 
 	public void executeNet(NetworkService net) {
-		System.out.println("[MakeOfferState:executeNet()] Begin");
-		ArrayList<UserEntry> users = service.getUsers();
+		System.out.println("Begin");
+//		ArrayList<UserEntry> users = service.getUsers();
+//
+//		if (users != null) {
+//			UserEntry user = users.get(userIndex);
+//			user.setOffer(Offer.OFFER_MADE);
+//			user.setPrice(price);
+//
+//			service.setEnabledState();
+//			// TODO
+//			// net.changeServiceNotify(service);
+//		}
 
-		if (users != null) {
-			UserEntry user = users.get(userIndex);
-			user.setOffer(Offer.OFFER_MADE);
-			user.setPrice(price);
-
-			service.setEnabledState();
-			// TODO
-			// net.changeServiceNotify(service);
-		}
-
-		System.out.println("[MakeOfferState:executeNet()] End");
+		System.out.println("End");
 	}
 
 	public void executeWeb(WebService web) {
@@ -61,8 +63,9 @@ public class MakeOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
+		logger.debug("Begin");
+
 		UserProfile profile = net.getUserProfile();
-		System.out.println("[MakeOfferState] asMessages");
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);
 
@@ -74,6 +77,7 @@ public class MakeOfferState extends AbstractState {
 		message.setPayload(new UserEntry(profile.getUsername(), profile.getFirstName() + " " + profile.getLastName(),
 				Offer.OFFER_MADE, service.getTime(), price));
 
+		logger.debug("End");
 		return message.asArrayList();
 	}
 

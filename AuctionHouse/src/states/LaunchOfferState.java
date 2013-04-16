@@ -23,22 +23,24 @@ public class LaunchOfferState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(LaunchOfferState.class);
 
 	public LaunchOfferState(Service service) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public LaunchOfferState(LaunchOfferState state) {
+		// TODO: logger.setLevel(Level.OFF);
 		service = state.service;
 	}
 
 	public void executeNet(NetworkService net) {
-		System.out.println("[LaunchOfferState: executeNet] Begin");
+		logger.debug("Begin");
 
-		System.out.println("[LaunchOfferState: executeNet] End");
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
-		System.out.println("[LaunchOfferState: executeWeb] Begin");
-		System.out.println("[LaunchOfferState: executeWeb] service.getName(): " + service.getName());
+		logger.debug("Begin");
+		logger.debug("service.getName(): " + service.getName());
 
 		// TODO
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
@@ -46,12 +48,12 @@ public class LaunchOfferState extends AbstractState {
 
 		responseObj.getService().setStatus(Status.ACTIVE);
 
-		System.out.println("[LaunchOfferState: executeWeb] service.getStatus(): "
+		logger.debug("service.getStatus(): "
 				+ responseObj.getService().getStatus());
 
 		web.notifyNetwork(responseObj.getService());
 
-		System.out.println("[LaunchOfferState: executeWeb] End");
+		logger.debug("End");
 	}
 
 	public void setState(Service service) {
@@ -64,9 +66,9 @@ public class LaunchOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
+		logger.debug("Begin");
 		UserProfile profile = net.getUserProfile();
 
-		System.out.println("[LaunchOfferState: asMessages] ");
 		ArrayList<Message> list = new ArrayList<Message>();
 
 		/**
@@ -84,10 +86,11 @@ public class LaunchOfferState extends AbstractState {
 			message.setDestination(user.getUsername());
 			message.setPayload(new UserEntry(profile.getUsername(), profile.getFirstName() + " "
 					+ profile.getLastName(), Offer.NO_OFFER, service.getTime(), service.getPrice()));
-			System.out.println("[LaunchOfferState: asMessages] user.getUsername(): " + user.getUsername());
+			logger.debug("user.getUsername(): " + user.getUsername());
 			list.add(message);
 		}
 
+		logger.debug("End");
 		return list;
 	}
 

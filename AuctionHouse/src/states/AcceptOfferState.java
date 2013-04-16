@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import data.Message;
 import data.Service;
 import data.UserEntry;
+import data.Service.Status;
 import data.UserEntry.Offer;
 import data.UserProfile;
 
@@ -33,6 +34,20 @@ public class AcceptOfferState extends AbstractState {
 
 	@Override
 	public void executeNet(NetworkService net) {
+		logger.debug("Begin");
+
+		//service.setStatus(Status.TRANSFER_STARTED);
+		
+		ArrayList<UserEntry> userEntries = service.getUsers();
+		UserEntry userEntry = userEntries.get(userIndex);
+		
+		userEntry.setOffer(Offer.OFFER_ACCEPTED);
+		userEntries.clear();
+		userEntries.add(userEntry);
+
+		net.changeServiceNotify(service);
+
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {

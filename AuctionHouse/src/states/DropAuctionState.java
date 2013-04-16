@@ -30,23 +30,28 @@ public class DropAuctionState extends AbstractState {
 
 	@Override
 	public void executeNet(NetworkService net) {
+		logger.debug("Begin");
+
 		ArrayList<UserEntry> users = service.getUsers();
 
-		if (users != null) {
-			for (UserEntry user : users) {
-				user.setOffer(Offer.OFFER_REFUSED);
+//		
+//		if (users != null) {
+//			for (UserEntry user : users) {
+//				user.setOffer(Offer.OFFER_REFUSED);
+//
+//				// TODO
+//				// net.putOffer(service);
+//
+//				logger.info("users: " + users);
+//			}
+//
+//			/* Remove all users */
+//			service.setUsers(null);
+//			// TODO
+//			// net.changeServiceNotify(service);
+//		}
 
-				// TODO
-				// net.putOffer(service);
-
-				logger.info("users: " + users);
-			}
-
-			/* Remove all users */
-			service.setUsers(null);
-			// TODO
-			// net.changeServiceNotify(service);
-		}
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {

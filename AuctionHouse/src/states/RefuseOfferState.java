@@ -5,6 +5,7 @@ import interfaces.WebService;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import data.Message;
@@ -20,32 +21,36 @@ public class RefuseOfferState extends AbstractState {
 	private Integer				userIndex;
 
 	public RefuseOfferState(Service service) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public RefuseOfferState(RefuseOfferState state) {
+		// TODO: logger.setLevel(Level.OFF);
 		service = state.service;
 		userIndex = state.userIndex;
 	}
 
 	@Override
 	public void executeNet(NetworkService net) {
+		logger.debug("Begin");
 		ArrayList<UserEntry> users = service.getUsers();
 
-		System.out.println("[RefuseOfferState:executeNet()]");
-		if (users != null) {
-			/* TODO Will be implemented */
-			UserEntry user = users.get(userIndex);
+//		if (users != null) {
+//			/* TODO Will be implemented */
+//			UserEntry user = users.get(userIndex);
+//
+//			user.setOffer(Offer.OFFER_REFUSED);
+//			users.remove(userIndex);
+//
+//			if (users.size() == 0) {
+//				service.setUsers(null);
+//			}
+//			// TODO
+//			// net.changeServiceNotify(service);
+//		}
 
-			user.setOffer(Offer.OFFER_REFUSED);
-			users.remove(userIndex);
-
-			if (users.size() == 0) {
-				service.setUsers(null);
-			}
-			// TODO
-			// net.changeServiceNotify(service);
-		}
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
@@ -62,7 +67,7 @@ public class RefuseOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
-		System.out.println("[RefuseOfferState] asMessages");
+		logger.debug("Begin");
 		UserProfile userProfile = net.getUserProfile();
 		Message message = new Message();
 		UserEntry user = service.getUsers().get(userIndex);
@@ -74,8 +79,9 @@ public class RefuseOfferState extends AbstractState {
 		message.setDestination(user.getUsername());
 		message.setSource(userProfile.getUsername());
 		
-		System.out.println("[RefuseOfferState: asMessages] Message : " + message);
+		logger.debug("Message : " + message);
 
+		logger.debug("End");
 		return message.asArrayList();
 	}
 
