@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -547,7 +548,7 @@ public class NetworkDriver extends Thread {
 					SelectionKey key = it.next();
 					it.remove();
 
-					//logger.debug("for's body");
+					// logger.debug("for's body");
 
 					if (!key.isValid()) {
 						logger.debug("Key isn't valid");
@@ -627,5 +628,35 @@ public class NetworkDriver extends Thread {
 
 	public MediatorNetwork getMediator() {
 		return network.getMediator();
+	}
+
+	public Selector getSelector() {
+		return selector;
+	}
+
+	public void setSelector(Selector selector) {
+		this.selector = selector;
+	}
+
+	public boolean haveToProcess() {
+		// System.out.println("Write buffers : ");
+		for (Map.Entry<SelectionKey, ArrayList<byte[]>> entry : writeBuffers.entrySet()) {
+			if (!entry.getValue().isEmpty()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	public void removeAllDependencies(SocketChannel chanel){
+		Integer index = socketChannels.indexOf(chanel);
+		SelectionKey key = chanel.keyFor(selector);
+		
+		socketChannels.remove(index);
+		serverChannels.remove(index);
+		
+		writeBuffers.remove(key);
+		readBuffers.remove(key);
 	}
 }
