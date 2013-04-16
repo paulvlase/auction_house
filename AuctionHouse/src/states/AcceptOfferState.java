@@ -37,14 +37,13 @@ public class AcceptOfferState extends AbstractState {
 		logger.debug("Begin");
 
 		//service.setStatus(Status.TRANSFER_STARTED);
-		
 		ArrayList<UserEntry> userEntries = service.getUsers();
 		UserEntry userEntry = userEntries.get(userIndex);
 		
 		userEntry.setOffer(Offer.OFFER_ACCEPTED);
 		userEntries.clear();
 		userEntries.add(userEntry);
-
+		
 		net.changeServiceNotify(service);
 
 		logger.debug("End");
