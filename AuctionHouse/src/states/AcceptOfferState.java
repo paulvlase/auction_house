@@ -36,15 +36,16 @@ public class AcceptOfferState extends AbstractState {
 	public void executeNet(NetworkService net) {
 		logger.debug("Begin");
 
+		Service clonedService = service.clone();
 		//service.setStatus(Status.TRANSFER_STARTED);
-		ArrayList<UserEntry> userEntries = service.getUsers();
+		ArrayList<UserEntry> userEntries = clonedService.getUsers();
 		UserEntry userEntry = userEntries.get(userIndex);
 		
 		userEntry.setOffer(Offer.OFFER_ACCEPTED);
 		userEntries.clear();
 		userEntries.add(userEntry);
 		
-		net.changeServiceNotify(service);
+		net.changeServiceNotify(clonedService);
 
 		logger.debug("End");
 	}
