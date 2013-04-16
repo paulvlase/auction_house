@@ -93,7 +93,7 @@ public abstract class QueueThread<K, T> extends Thread {
 		}
 	}
 
-	public boolean haveToProcess() {
+	public synchronized boolean haveToProcess() {
 		if (queue == null) {
 			return false;
 		}
@@ -137,6 +137,10 @@ public abstract class QueueThread<K, T> extends Thread {
 			monitor.notify();
 		}
 	}
+	
+	public synchronized void clear(){
+		queue.clear();
+	}
 
 	public String getThreadName() {
 		return threadName;
@@ -144,5 +148,13 @@ public abstract class QueueThread<K, T> extends Thread {
 
 	public void setThreadName(String threadName) {
 		this.threadName = threadName;
+	}
+	
+	public void removeKey(K key){
+		if(queue == null){
+			return;
+		}
+		
+		queue.remove(key);
 	}
 }

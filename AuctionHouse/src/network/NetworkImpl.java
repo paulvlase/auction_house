@@ -10,13 +10,17 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
 import data.Message;
+import data.Message.MessageType;
 import data.Service;
 import data.Service.Status;
+import data.UserEntry;
 import data.UserProfile;
 
 /**
@@ -25,7 +29,7 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkService {
-	private static Logger logger = Logger.getLogger(NetworkImpl.class);
+	private static Logger									logger	= Logger.getLogger(NetworkImpl.class);
 
 	private MediatorNetwork									mediator;
 
@@ -38,7 +42,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	private NetworkDriver									driver;
 
 	public NetworkImpl(MediatorNetwork med) {
-		//TODO: logger.setLevel(Level.OFF);
+		// TODO: logger.setLevel(Level.OFF);
 
 		this.mediator = med;
 
@@ -70,7 +74,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	public boolean startTransfer(Service service) {
 		return true;
 	}
-	
+
 	@Override
 	public void stopTransfer(Service service) {
 	}
@@ -149,17 +153,75 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	 */
 	public void logOut() {
 		logger.debug("Begin");
+
+		UserProfile userProfile = getUserProfile();
+
+		System.out.println("[Networkimpl, logout] Clear all messages");
+		/* Clear queue of send messages */
+		userUnsentMessages.clear();
+		sendEvents.clear();
+		receiveEvents.clear();
+
+		System.out.println("[Networkimpl, logout] Create and send REMOVE messages");
+		for (Service service : mediator.getOffers().values()) {
+			if (service.getUsers() == null) {
+				continue;
+			}
+
+			for (UserEntry user : service.getUsers()) {
+				Message message = new Message();
+
+				message.setType(data.Message.MessageType.REMOVE);
+				message.setServiceName(service.getName());
+				message.setUsername(new String(user.getUsername()));
+				message.setPayload(userProfile.getUsername());
+				message.setDestination(user.getUsername());
+				message.setSource(userProfile.getUsername());
+
+				sendEvents.enqueue(userChanelMap.get(user.getUsername()), message);
+			}
+		}
+
+		for (Map.Entry<String, SocketChannel> entry : userChanelMap.entrySet()) {
+			Message message = new Message();
+			message.setType(MessageType.LOGOUT);
+			message.setDestination(entry.getKey());
+			message.setSource(userProfile.getUsername());
+
+			sendEvents.enqueue(entry.getValue(), message);
+		}
+
+		System.out.println("[Networkimpl, logout] Wait until messages will be sent");
+		/* Busy waiting until all message are unsent, ugly solution but it works */
+		while (sendEvents.haveToProcess())
+			;
+		while (driver.haveToProcess())
+			;
+
+		for (Map.Entry<String, SocketChannel> entry : userChanelMap.entrySet()) {
+			System.out.println("[NetworkImpl, logOut] Remove dependencies for : " + entry.getKey());
+			removeAllDependencies(entry.getKey());
+		}
+
+		System.out.println("[Networkimpl, logout] All messages was been sent");
+
 		try {
-			driver.stopRunning();
 			receiveEvents.stopRunning();
 			sendEvents.stopRunning();
+			driver.stopRunning();
 
-			driver = new NetworkDriver(this);
-			receiveEvents = null;
-			sendEvents = null;
+			// receiveEvents = null;
+			// sendEvents = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		/* Clear all informations */
+		receiveEvents.clear();
+		sendEvents.clear();
+		userChanelMap.clear();
+		userUnsentMessages.clear();
+		driver = new NetworkDriver(this);
 
 		logger.debug("End");
 	}
@@ -170,7 +232,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		logger.debug("Service : " + service);
 
 		service.executeNet(this);
-		
+
 		ArrayList<Message> messages = service.asMessages(this);
 		logger.debug("Messages : " + messages);
 
@@ -180,6 +242,22 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		}
 
 		logger.debug("End");
+	}
+
+	public void removeAllDependencies(String username) {
+		SocketChannel chanel = userChanelMap.get(username);
+		SelectionKey key = chanel.keyFor(driver.getSelector());
+
+		// Receive
+		receiveEvents.removeKey(key);
+		// Send
+		sendEvents.removeKey(chanel);
+		// Driver
+		driver.removeAllDependencies(chanel);
+		// Unsent messages
+		userUnsentMessages.remove(username);
+		// User chanel
+		userChanelMap.remove(username);
 	}
 
 	@Override

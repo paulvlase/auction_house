@@ -136,6 +136,10 @@ public class Service implements Comparable<Service>, Serializable {
 	}
 
 	public UserEntry getUser(String username) {
+		if (users == null) {
+			return null;
+		}
+
 		for (UserEntry user : users) {
 			if (user.getUsername().equals(username)) {
 				return user;
