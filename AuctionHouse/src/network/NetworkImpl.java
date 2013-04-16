@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
+
 import data.Message;
 import data.Service;
 import data.Service.Status;
@@ -23,13 +25,12 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkService {
+	private static Logger logger = Logger.getLogger(NetworkImpl.class);
+
 	private MediatorNetwork									mediator;
-	private NetworkJoinThread								joinThread;
 
 	private NetworkReceiveEvents							receiveEvents;
 	private NetworkSendEvents								sendEvents;
-
-	private Hashtable<String, NetworkTransferTask>			tasks;
 
 	private ConcurrentHashMap<String, SocketChannel>		userChanelMap;
 	private ConcurrentHashMap<String, ArrayList<Message>>	userUnsentMessages;
@@ -37,14 +38,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	private NetworkDriver									driver;
 
 	public NetworkImpl(MediatorNetwork med) {
+		//TODO: logger.setLevel(Level.OFF);
+
 		this.mediator = med;
 
 		med.registerNetwork(this);
-
-		joinThread = new NetworkJoinThread(med);
-		joinThread.start();
-
-		tasks = new Hashtable<String, NetworkTransferTask>();
 
 		userChanelMap = new ConcurrentHashMap<String, SocketChannel>();
 		userUnsentMessages = new ConcurrentHashMap<String, ArrayList<Message>>();
@@ -70,16 +68,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 	@Override
 	public boolean startTransfer(Service service) {
-		System.out.println("startTransfer");
-		service.setStatus(Status.TRANSFER_STARTED);
-		mediator.changeServiceNotify(service);
-
-		NetworkTransferTask task = new NetworkTransferTask(mediator, joinThread, service);
-		task.execute();
-
-		tasks.put(service.getName(), task);
-
 		return true;
+	}
+	
+	@Override
+	public void stopTransfer(Service service) {
 	}
 
 	@Override
@@ -139,13 +132,8 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		mediator.changeServiceNotify(service);
 	}
 
-	@Override
-	public void stopTransfer(Service service) {
-		joinThread.stopTask(service);
-	}
-
 	public void logIn() {
-		System.out.println("[NetworkImpl: logIn] Begin");
+		logger.debug("Begin");
 		receiveEvents = new NetworkReceiveEvents(this);
 		sendEvents = new NetworkSendEvents(this.getDriver());
 
@@ -153,14 +141,14 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 		receiveEvents.start();
 		sendEvents.start();
 
-		System.out.println("[NetworkImpl: logIn] End");
+		logger.debug("End");
 	}
 
 	/**
 	 * Stop receiving or sending messages
 	 */
 	public void logOut() {
-		System.out.println("[NetworkImpl: logOut] Begin");
+		logger.debug("Begin");
 		try {
 			driver.stopRunning();
 			receiveEvents.stopRunning();
@@ -173,19 +161,21 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			e.printStackTrace();
 		}
 
-		System.out.println("[NetworkImpl: logOut] End");
+		logger.debug("End");
 	}
 
 	@Override
 	public void publishService(Service service) {
-		System.out.println("[NetworkImpl, publishService] Service : " + service);
+		logger.debug("Begin");
+		logger.debug("Service : " + service);
 		ArrayList<Message> messages = service.asMessages(this);
-		System.out.println("[NetworkImpl, publishService] Messages : " + messages);
+		logger.debug("Messages : " + messages);
 
 		for (int i = 0; i < messages.size(); i++) {
 			Message message = messages.get(i);
 			driver.sendData(message, message.getDestination(), service.getUsers().get(i).getAddress());
 		}
+		logger.debug("End");
 	}
 
 	@Override

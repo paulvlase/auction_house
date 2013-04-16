@@ -76,6 +76,7 @@ public class AcceptOfferState extends AbstractState {
 		message.setType(data.Message.MessageType.ACCEPT);
 		message.setServiceName(service.getName());
 		message.setUsername(service.getUsers().get(userIndex).getUsername());
+		message.setSource(userProfile.getUsername());
 		message.setDestination(service.getUsers().get(userIndex).getUsername());
 		list = message.asArrayList();
 
@@ -91,8 +92,9 @@ public class AcceptOfferState extends AbstractState {
 			message.setServiceName(service.getName());
 			message.setUsername(new String(user.getUsername()));
 			message.setPayload(userProfile.getUsername());
-			message.setDestination(user.getUsername());
 			message.setSource(userProfile.getUsername());
+			message.setDestination(user.getUsername());
+			logger.debug("source: " + message.getSource());
 
 			list.add(message);
 			i++;

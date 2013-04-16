@@ -17,12 +17,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
+
 import mediator.Mediator;
 
 import data.Message;
 import data.Message.MessageType;
 
 public class NetworkDriver extends Thread {
+	private static Logger								logger	= Logger.getLogger(NetworkDriver.class);
 	// private static final Integer MAX_POOL_THREADS = 5;
 
 	private NetworkImpl									network;
@@ -43,6 +46,7 @@ public class NetworkDriver extends Thread {
 	private LinkedList<ChangeRequest>					changeRequestQueue;
 
 	public NetworkDriver(NetworkImpl network) {
+		// TODO: logger.setLevel(Level.OFF);
 		this.network = network;
 
 		try {
@@ -52,7 +56,7 @@ public class NetworkDriver extends Thread {
 			serverSocketChannel.socket().bind(null);
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-			System.out.println("[NetworkDriver] Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
+			logger.debug("Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
 
 			serverChannels = new ArrayList<ServerSocketChannel>();
 			socketChannels = new ArrayList<SocketChannel>();
@@ -70,11 +74,14 @@ public class NetworkDriver extends Thread {
 	}
 
 	public InetSocketAddress getAddress() {
+		logger.debug("Begin");
 		if (serverSocketChannel == null) {
+			logger.fatal("Server isn't listening on any address");
 			return null;
 		}
 
 		ServerSocket socket = serverSocketChannel.socket();
+		logger.debug("End");
 		return new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
 	}
 
@@ -84,13 +91,13 @@ public class NetworkDriver extends Thread {
 	}
 
 	protected void accept(SelectionKey key) {
-		System.out.println("[NetworkDriver: accept] Begin");
+		logger.debug("Begin");
 
 		SocketChannel socketChannel;
 		ServerSocketChannel serverSocketChannel;
 		Message message;
 
-		System.out.println("[NetworkDriver: accept] Accept a connection");
+		logger.debug("Accept a connection");
 		try {
 			serverSocketChannel = (ServerSocketChannel) key.channel();
 			socketChannel = serverSocketChannel.accept();
@@ -98,16 +105,16 @@ public class NetworkDriver extends Thread {
 			socketChannel.register(selector, SelectionKey.OP_READ);
 			socketChannels.add(socketChannel);
 
-			System.out.println("[NetworkDriver: accept] Done");
+			logger.debug("Done");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("[NetworkDriver: accept] End");
-
+		logger.debug("End");
 	}
 
 	private void appendMessage(Message message, SelectionKey key) {
+		logger.debug("Begin");
 		ConcurrentHashMap<String, SocketChannel> userChanelMap;
 		NetworkReceiveEvents networkEvents = network.getEventsTask();
 
@@ -115,16 +122,16 @@ public class NetworkDriver extends Thread {
 
 		if (message.getType() == MessageType.SEND_USERNAME) {
 			String username = message.getSource();
-			System.out.println("[NetworkDriver: appendMessage] SEND_USERNAME received from " + username);
+			logger.debug("SEND_USERNAME received from " + username);
 			userChanelMap.putIfAbsent(username, (SocketChannel) key.channel());
 
 			// TODO : Seems to be an impossible case
 			// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
 			// network.getUserUnsentMessages();
-			// System.out.println("[NetworkDriver, appendMessages] Unsent messages : "
+			// logger.debug("[NetworkDriver, appendMessages] Unsent messages : "
 			// + unsentMessages);
 			// if (unsentMessages.contains(username)) {
-			// System.out.println("[NetworkDriver, appendMessages] Enqueue some messages to send queue");
+			// logger.debug("[NetworkDriver, appendMessages] Enqueue some messages to send queue");
 			// network.getSendEvents().enqueue(key,
 			// unsentMessages.get(username));
 			// }
@@ -133,13 +140,14 @@ public class NetworkDriver extends Thread {
 		}
 
 		networkEvents.enqueue(key, message);
+		logger.debug("End");
 	}
 
 	private static Integer byteArrayToInt(byte[] array) {
 		Integer result = 0;
 
 		if (array.length != Integer.SIZE / Byte.SIZE) {
-			System.err.println("Integer size = 4, no more, no less");
+			logger.error("Integer size = 4, no more, no less");
 			return 0;
 		}
 
@@ -155,12 +163,12 @@ public class NetworkDriver extends Thread {
 	}
 
 	private void read(SelectionKey key) throws Exception {
+		logger.debug("Begin");
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-		System.out.println("[NetworkDriver: read] Begin");
 
 		this.rBuffer.clear();
 
-		System.out.println("[NetworkDriver: read] Rbuffer = " + rBuffer);
+		logger.debug("Rbuffer = " + rBuffer);
 		int numRead;
 
 		try {
@@ -172,7 +180,7 @@ public class NetworkDriver extends Thread {
 		}
 
 		if (numRead <= 0) {
-			System.out.println("[NetworkDriver: read] Socket closed for " + key);
+			logger.error("Socket closed for " + key);
 			key.channel().close();
 			key.cancel();
 			return;
@@ -180,7 +188,7 @@ public class NetworkDriver extends Thread {
 
 		byte[] rbuf = null;
 		rbuf = this.readBuffers.get(key);
-		System.out.println("[NetworkDriver: read] readBuffer for this key : " + Arrays.toString(rbuf));
+		logger.debug("readBuffer for this key : " + Arrays.toString(rbuf));
 
 		int rbuflen = 0;
 		if (rbuf != null) {
@@ -188,8 +196,7 @@ public class NetworkDriver extends Thread {
 		}
 
 		byte[] currentBuf = this.rBuffer.array();
-		System.out.println("[NetworkDriver: read] Were read " + numRead + " bytes from the socket associated yo key "
-				+ key + " : " + currentBuf);
+		logger.debug("Were read " + numRead + " bytes from the socket associated yo key " + key + " : " + currentBuf);
 
 		byte[] newBuf = new byte[rbuflen + numRead];
 
@@ -217,8 +224,7 @@ public class NetworkDriver extends Thread {
 				break;
 			}
 
-			System.out.println("[NetworkDriver: read] Length as array : "
-					+ Arrays.toString(Arrays.copyOfRange(newBuf, i, i + 4)));
+			logger.debug("Length as array : " + Arrays.toString(Arrays.copyOfRange(newBuf, i, i + 4)));
 
 			/* Get length */
 			length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
@@ -226,15 +232,14 @@ public class NetworkDriver extends Thread {
 				break;
 			}
 
-			System.out.println("[NetworkDriver: read] Message length : " + length);
+			logger.debug("Message length : " + length);
 
 			Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
 
-			System.out.println("[NetworkDriver: read] Message received : " + message);
+			logger.debug("Message received : " + message);
 			appendMessage(message, key);
 
 			i += 4 + length;
-
 		}
 
 		// // length = ((128 + (int) newBuf[i]) << 24) + ((128 + (int) newBuf[i
@@ -243,11 +248,11 @@ public class NetworkDriver extends Thread {
 		// // + ((128 + (int) newBuf[i + 2]) << 8) + (128 + (int) newBuf[i +
 		// 3]);
 		// length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
-		// System.out.println("[NetworkDriver: read] Request length = " +
+		// logger.debug("Request length = " +
 		// length);
 		// i += 4;
 		//
-		// System.out.println("[NetworkDriver: read] " + (i + length) + " <= " +
+		// logger.debug((i + length) + " <= " +
 		// newBuf.length);
 		//
 		// /* Read serialized object */
@@ -267,7 +272,7 @@ public class NetworkDriver extends Thread {
 		// Message message = new Message(Arrays.copyOfRange(newBuf, i, length +
 		// i + 4));
 		//
-		// System.out.println("[NetworkDriver: read] Message received : " +
+		// logger.debug("Message received : " +
 		// message);
 		// appendMessage(message, key);
 		//
@@ -288,11 +293,13 @@ public class NetworkDriver extends Thread {
 			finalBuf = newBuf;
 		}
 
-		System.out.println("[NetworkDriver: read] For next time : " + finalBuf.length + " bytes");
+		logger.debug("[NetworkDriver: read] For next time : " + finalBuf.length + " bytes");
 		this.readBuffers.put(key, finalBuf);
+		logger.debug("End");
 	}
 
 	protected void write(SelectionKey key) throws Exception {
+		logger.debug("Begin");
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		ArrayList<byte[]> wbuf = null;
@@ -309,8 +316,7 @@ public class NetworkDriver extends Thread {
 				this.wBuffer.flip();
 
 				int numWritten = socketChannel.write(this.wBuffer);
-				System.out.println("[NetworkDriver: write] Am scris " + numWritten
-						+ " bytes pe socket-ul asociat cheii " + key);
+				logger.debug("Am scris " + numWritten + " bytes pe socket-ul asociat cheii " + key);
 
 				if (numWritten < bbuf.length) {
 					byte[] newBuf = new byte[bbuf.length - numWritten];
@@ -336,10 +342,11 @@ public class NetworkDriver extends Thread {
 				key.interestOps(SelectionKey.OP_READ);
 			}
 		}
+		logger.debug("End");
 	}
 
 	public void sendData(Message message, String username, InetSocketAddress address) {
-		System.out.println("[NetworkDriver, sendData()] Begin");
+		logger.debug("Begin");
 		ConcurrentHashMap<String, SocketChannel> userChanelMap;
 		ConcurrentHashMap<String, ArrayList<Message>> userUnsentMessages;
 
@@ -347,7 +354,7 @@ public class NetworkDriver extends Thread {
 		userUnsentMessages = network.getUserUnsentMessages();
 
 		if (!userChanelMap.containsKey(message.getDestination())) {
-			System.out.println("[NetworkDriver: sendData] Initiate a new connection with " + message.getDestination());
+			logger.debug("Initiate a new connection with " + message.getDestination());
 			/* Initiate a new connection and save all messages */
 			initiateConnect(address, username);
 			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
@@ -355,26 +362,36 @@ public class NetworkDriver extends Thread {
 		} else {
 			sendData(message, message.getDestination());
 		}
+		logger.debug("End");
 	}
 
 	public void sendData(Message message, String username) {
-		System.out.println("[NetworkDriver: sendData] Message : " + message);
+		logger.debug("Begin");
+		logger.debug("Message : " + message);
+
 		sendData(network.getUserChanelMap().get(username).keyFor(selector), message.serialize());
+		logger.debug("End");
 	}
 
 	public void sendData(Message message, SelectionKey key) {
-		System.out.println("[NetworkDriver: sendData] Message : " + message);
+		logger.debug("Begin");
+		logger.debug("Message : " + message);
+
 		sendData(key, message.serialize());
+		logger.debug("End");
 	}
 
 	public void sendData(Message message, SocketChannel chanel) {
-		System.out.println("[NetworkDriver: sendData] Message : " + message);
+		logger.debug("Begin");
+		logger.debug("Message : " + message);
+
 		sendData(message, chanel.keyFor(selector));
+		logger.debug("End");
 	}
 
 	public void sendData(SelectionKey key, byte[] data) {
-		System.out.println("[NetworkDriver: sendData] Se doreste scrierea a " + data.length
-				+ " bytes pe socket-ul asociat cheii " + key);
+		logger.debug("Begin");
+		logger.debug("Se doreste scrierea a " + data.length + " bytes pe socket-ul asociat cheii " + key);
 
 		ArrayList<byte[]> wbuf = null;
 
@@ -395,30 +412,31 @@ public class NetworkDriver extends Thread {
 		}
 
 		this.selector.wakeup();
+		logger.debug("End");
 	}
 
 	public boolean initiateConnect(InetSocketAddress destination, String username) {
+		logger.debug("Begin");
 		SocketChannel socketChannel = null;
 		Boolean bRet;
 
-		System.out.println("[NetworkDriver: initiateConnect] Begin");
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			System.out.println("[NetworkDriver: initiateConnect] Connect to : " + destination + " " + username);
+			logger.debug("Connect to : " + destination + " " + username);
 			bRet = socketChannel.connect(destination);
 
 			if (bRet) {
-				System.out.println("[NetworkDriver: initiateConnect] Connection established");
+				logger.debug("Connection established");
 			} else {
-				System.out.println("[NetworkDriver: initiateConnect] Connection will be finish later");
+				logger.debug("Connection will be finish later");
 			}
 
-			System.out.println("Map : " + network.getUserChanelMap());
-			System.out.println("Username : " + username);
-			System.out.println("Key : " + socketChannel.keyFor(selector));
+			logger.debug("Map : " + network.getUserChanelMap());
+			logger.debug("Username : " + username);
+			logger.debug("Key : " + socketChannel.keyFor(selector));
 			network.getUserChanelMap().putIfAbsent(username, socketChannel);
-			System.out.println("[NetworkDriver: initiateConnect] Before registering new interest");
+			logger.debug("Before registering new interest");
 			// socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
 			// Queue a channel registration since the caller is not the
@@ -430,31 +448,33 @@ public class NetworkDriver extends Thread {
 						.add(new ChangeRequest(socketChannel, ChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
 			}
 
-			System.out.println("[NetworkDriver: initiateConnect] Before wakeup");
+			logger.debug("Before wakeup");
 			selector.wakeup();
-			System.out.println("[NetworkDriver: initiateConnect] Wakeup was sent");
+			logger.debug("Wakeup was sent");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 
+		logger.debug("End");
 		return true;
 	}
 
 	private void finishConnection(SelectionKey key) {
-
+		logger.debug("Begin");
 		SocketChannel socketChannel = (SocketChannel) key.channel();
+
 		try {
 			socketChannel.finishConnect();
 		} catch (Exception e) {
-			System.err.println("[NetworkDriver: connect] ERROR: finishConnect");
+			logger.fatal("ERROR: finishConnect");
 			e.printStackTrace();
 			key.cancel();
 			return;
 		}
 
-		System.out.println("[NetworkDriver: connect] Connection finished");
+		logger.debug("Connection finished");
 		key.interestOps(SelectionKey.OP_WRITE);
 
 		Message message = new Message();
@@ -463,8 +483,8 @@ public class NetworkDriver extends Thread {
 
 		sendData(key, message.serialize());
 
-		System.out.println("[NetworkDriver: finishConnect] Chanel = " + key.channel());
-		System.out.println("[NetworkDriver: finishConnect] KeyMap = " + network.getUserChanelMap());
+		logger.debug("Chanel = " + key.channel());
+		logger.debug("KeyMap = " + network.getUserChanelMap());
 		/* Check if we know who is at the other end of the connection */
 		if (network.getUserChanelMap().containsValue(key.channel())) {
 			String username = null;
@@ -477,16 +497,17 @@ public class NetworkDriver extends Thread {
 
 			/* Send all pending messages */
 			ConcurrentHashMap<String, ArrayList<Message>> unsentMessages = network.getUserUnsentMessages();
-			System.out.println("[NetworkDriver: finishConnect] Unsent messages list = " + unsentMessages);
-			System.out.println("[NetworkDriver: finishConnect] Username : " + username);
+			logger.debug("Unsent messages list = " + unsentMessages);
+			logger.debug("Username : " + username);
 			if (unsentMessages.containsKey(username)) {
-				System.out.println("[NetworkDriver: finishConnect] Send pending messages");
+				logger.debug("Send pending messages");
 				network.getSendEvents().enqueue(socketChannel, unsentMessages.get(username));
 			}
 		} else {
 			// TODO : Make & send an username request
-			System.err.println("[NetworkDriver: finishConnect] Something wrong went ...");
+			logger.fatal("Something wrong went ...");
 		}
+		logger.debug("End");
 	}
 
 	public void run() {
@@ -502,12 +523,12 @@ public class NetworkDriver extends Thread {
 						ChangeRequest change = (ChangeRequest) changes.next();
 						switch (change.type) {
 						case ChangeRequest.CHANGEOPS:
-							System.out.println("[NetworkDriver, run] CHANGEOPS = " + change.ops);
+							logger.debug("CHANGEOPS = " + change.ops);
 							SelectionKey key = change.socket.keyFor(selector);
 							key.interestOps(change.ops);
 							break;
 						case ChangeRequest.REGISTER:
-							System.out.println("[NetworkDriver, run] REGISTER = " + change.ops);
+							logger.debug("REGISTER = " + change.ops);
 							change.socket.register(selector, change.ops);
 							break;
 						}
@@ -515,34 +536,34 @@ public class NetworkDriver extends Thread {
 					this.changeRequestQueue.clear();
 				}
 
-				// System.out.println("[NetworkDriver: run] Listening on " +
+				// logger.debug("Listening on " +
 				// getAddress().getPort());
 				selector.select();
 
-				// System.out.println("[NetworkDriver: run]  After select");
+				// logger.debug("After select");
 
 				for (Iterator<SelectionKey> it = selector.selectedKeys().iterator(); it.hasNext();) {
 					SelectionKey key = it.next();
 					it.remove();
 
-					// System.out.println("[NetworkDriver: run]  for's body");
+					//logger.debug("for's body");
 
 					if (!key.isValid()) {
-						System.out.println("[NetworkDriver, run] Key isn't valid");
+						logger.debug("Key isn't valid");
 						continue;
 					}
 
 					if (key.isAcceptable()) {
-						System.out.println("[NetworkDriver, run] accept");
+						logger.debug("accept");
 						accept(key);
 					} else if (key.isReadable()) {
-						System.out.println("[NetworkDriver, run] read");
+						logger.debug("read");
 						read(key);
 					} else if (key.isWritable()) {
-						System.out.println("[NetworkDriver, run] write");
+						logger.debug("write");
 						write(key);
 					} else if (key.isConnectable()) {
-						System.out.println("[NetworkDriver, run] connect");
+						logger.debug("connect");
 						finishConnection(key);
 					}
 				}
@@ -550,7 +571,7 @@ public class NetworkDriver extends Thread {
 				// synchronized (changeRequestQueue) {
 				// // while ((creq = this.changeRequestQueue.poll()) != null) {
 				// //
-				// System.out.println("[NIOTCPServer] Schimb operatiile cheii "
+				// logger.debug("Schimb operatiile cheii "
 				// // + creq.key + " la " + creq.newOps);
 				// // creq.key.interestOps(creq.newOps);
 				// // }
@@ -565,7 +586,7 @@ public class NetworkDriver extends Thread {
 				// break;
 				// case ChangeRequest.REGISTER:
 				// change.socket.register(this.selector, change.ops);
-				// System.out.println("[NetworkDriver: run] ChangeRequest.REGISTER");
+				// logger.debug("ChangeRequest.REGISTER");
 				// break;
 				// }
 				// }
