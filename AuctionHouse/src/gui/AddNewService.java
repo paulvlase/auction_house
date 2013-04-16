@@ -12,13 +12,15 @@ import org.apache.log4j.Logger;
 
 import config.GuiConfig;
 import data.Service;
+import data.Service.Status;
+import data.UserProfile.UserRole;
 
 /**
  * @author Ghennadi Procopciuc
  */
 public class AddNewService extends JFrame {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(AddNewService.class);
+	private static Logger		logger				= Logger.getLogger(AddNewService.class);
 
 	private JPanel				mainPanel;
 	private JLabel				nameLabel;
@@ -37,6 +39,11 @@ public class AddNewService extends JFrame {
 
 		this.mainWindow = mainWindow;
 		initComponents();
+
+		if (mainWindow.getGui().getUserProfile().getRole() != UserRole.SELLER) {
+			priceField.setVisible(false);
+			priceLabel.setVisible(false);
+		}
 	}
 
 	private void initComponents() {
@@ -56,10 +63,8 @@ public class AddNewService extends JFrame {
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
 		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 0.0, 0.0,
-				1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
-				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0E-4 };
 
 		// mainPanel
 		{
@@ -67,52 +72,43 @@ public class AddNewService extends JFrame {
 			((GridBagLayout) mainPanel.getLayout()).columnWidths = new int[] { 0, 110, 0 };
 			((GridBagLayout) mainPanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
 			((GridBagLayout) mainPanel.getLayout()).columnWeights = new double[] { 0.0, 0.0, 1.0E-4 };
-			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) mainPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0E-4 };
 
 			// nameLabel
 			nameLabel.setText(GuiConfig.getValue(GuiConfig.NAME));
-			mainPanel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
-			mainPanel.add(nameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			mainPanel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+			mainPanel.add(nameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// timeLabel
 			timeLabel.setText(GuiConfig.getValue(GuiConfig.TIME));
-			mainPanel.add(timeLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
+			mainPanel.add(timeLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 			// timeSpinner
-			timeSpinner.setModel(new SpinnerDateModel(new java.util.Date((System
-					.currentTimeMillis() / 60000) * 60000), new java.util.Date((System
-					.currentTimeMillis() / 60000) * 60000), null, java.util.Calendar.MINUTE));
+			timeSpinner.setModel(new SpinnerDateModel(new java.util.Date((System.currentTimeMillis() / 60000) * 60000),
+					new java.util.Date((System.currentTimeMillis() / 60000) * 60000), null, java.util.Calendar.MINUTE));
 			timeSpinner.setPreferredSize(new Dimension(120, 20));
-			mainPanel.add(timeSpinner, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			mainPanel.add(timeSpinner, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// priceLabel
 			priceLabel.setText(GuiConfig.getValue(GuiConfig.PRICE));
-			mainPanel.add(priceLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
-			mainPanel.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			mainPanel.add(priceLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+			mainPanel.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// bottomPanel
 		{
 			bottomPanel.setLayout(new GridBagLayout());
 			((GridBagLayout) bottomPanel.getLayout()).columnWidths = new int[] { 0, 0, 0, 0 };
 			((GridBagLayout) bottomPanel.getLayout()).rowHeights = new int[] { 15, 0, 0 };
-			((GridBagLayout) bottomPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) bottomPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0, 0.0, 1.0E-4 };
 			((GridBagLayout) bottomPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
 			// cancelButton
@@ -123,9 +119,8 @@ public class AddNewService extends JFrame {
 					cancelButtonActionPerformed(e);
 				}
 			});
-			bottomPanel.add(cancelButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
+			bottomPanel.add(cancelButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 			// okButton
 			okButton.setText(GuiConfig.getValue(GuiConfig.OK));
@@ -135,15 +130,12 @@ public class AddNewService extends JFrame {
 					okButtonActionPerformed(e);
 				}
 			});
-			bottomPanel.add(okButton, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			bottomPanel.add(okButton, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(bottomPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(bottomPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
-
 
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(new ImageIcon(GuiConfig.ADD_ICON16).getImage());
@@ -158,31 +150,39 @@ public class AddNewService extends JFrame {
 		logger.debug("timeSpinner.getValue() " + timeSpinner.getValue());
 
 		if (nameField.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null,
-					GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME_ERROR),
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME_ERROR),
 					GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME), JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		if (mainWindow.getServices().contains(new Service(nameField.getText()))) {
-			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.SERVICE_TWICE_ERROR),
-					"", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.SERVICE_TWICE_ERROR), "",
+					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		String name = nameField.getText();
 		Double price = 0.0;
-		try {
-			price = Double.parseDouble(priceField.getText());
-		} catch (NumberFormatException e2) {
-			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
-					JOptionPane.WARNING_MESSAGE);
-			return;
+
+		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.SELLER) {
+			try {
+				price = Double.parseDouble(priceField.getText());
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PRICE_ERROR), "",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 		}
 
-		Long time = 10000000L;		
+		Long time = 10000000L;
 		Service service = mainWindow.getGui().createService(name, time, price);
-		
+
+		UserRole role = mainWindow.getGui().getUserProfile().getRole();
+		if (role == UserRole.SELLER) {
+			// TODO Ask Paul how to deal with this
+			service.setStatus(Status.ACTIVE);
+		}
+
 		mainWindow.addService(service);
 		mainWindow.getGui().publishService(service.clone());
 

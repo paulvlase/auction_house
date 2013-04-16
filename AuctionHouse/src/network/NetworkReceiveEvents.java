@@ -86,6 +86,9 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		case TRANSFER_PROGRESS:
 			processTransferProgress(key, message);
 			break;
+		case LOGOUT:
+			processLogout(key, message);
+			break;
 		default:
 			logger.error("Unknown type of message : " + message.getType());
 			break;
@@ -122,8 +125,8 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		logger.debug("Start : " + message);
 
 		UserProfile user = network.getUserProfile();
-		if (user.getRole() == UserRole.SELLER) {
-			logger.debug("SELLER Case");
+//		if (user.getRole() == UserRole.SELLER) {
+//			logger.debug("SELLER Case");
 
 			// Send new offer
 			Service service = network.getService(message.getServiceName());
@@ -160,42 +163,45 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 			logger.debug("Users after " + service.getUsers());
 			network.changeServiceNotify(service);
-		} else {
-			logger.debug("[NetworkReceiveEvents: processLaunch] Buyer Case");
-			// An seller make me an new offer
-			// Update price from payload
-
-			Service service = network.getService(message.getServiceName());
-			if (service == null) {
-				logger.fatal("End Unknown service : " + message.getServiceName());
-				return;
-			}
-
-			Service newService = service.clone();
-			UserEntry userEntry = service.getUser(message.getUsername());
-			if (userEntry == null) {
-				logger.error("User not found: " + message.getUsername());
-				logger.debug("Check if webService can help us ...");
-				// TODO : userEntry =
-				// webService.getUserProfile(userEntry.getUsername)
-				// Check if new userEntry is not null
-				// Add new userEntry to service
-			}
-
-			UserEntry serviceUser = newService.getUser(userEntry.getUsername());
-			if (serviceUser == null) {
-				newService.addUserEntry(userEntry);
-			} else {
-				UserEntry messageUserEntry = (UserEntry) message.getPayload();
-				serviceUser.setPrice(messageUserEntry.getPrice());
-				serviceUser.setTime(messageUserEntry.getTime());
-				serviceUser.setOffer(Offer.OFFER_MADE);
-			}
-
-			// network.changeServiceNotify(newService);
-			// TODO : Send response to launch
-			// Message newMessage = new Message();
-		}
+//		} else {
+//			logger.debug("[NetworkReceiveEvents: processLaunch] Buyer Case");
+//			// An seller make me an new offer
+//			// Update price from payload
+//
+//			Service service = network.getService(message.getServiceName());
+//			if (service == null) {
+//				logger.fatal("End Unknown service : " + message.getServiceName());
+//				return;
+//			}
+//
+//			Service newService = service.clone();
+//			UserEntry userEntry = service.getUser(message.getUsername());
+//			UserEntry userEntry = (UserEntry) message.getPayload();
+//			if (userEntry == null) {
+//				logger.error("User not found: " + message.getUsername());
+//				logger.debug("Check if webService can help us ...");
+//				// TODO : userEntry =
+//				// webService.getUserProfile(userEntry.getUsername)
+//				// Check if new userEntry is not null
+//				// Add new userEntry to service
+//				newService.addUserEntry(userEntry);
+//			}
+//
+//			logger.debug("[NetworkReceiveEvents: processLaunch] NewService : " + newService);
+//			UserEntry serviceUser = newService.getUser(userEntry.getUsername());
+//			if (serviceUser == null) {
+//				newService.addUserEntry(userEntry);
+//			} else {
+//				UserEntry messageUserEntry = (UserEntry) message.getPayload();
+//				serviceUser.setPrice(messageUserEntry.getPrice());
+//				serviceUser.setTime(messageUserEntry.getTime());
+//				serviceUser.setOffer(Offer.NO_OFFER);
+//			}
+//
+//			// TODO : Send response to launch
+//			// Message newMessage = new Message();
+//			network.changeServiceNotify(newService);
+//		}
 
 		logger.debug("End");
 	}
@@ -542,6 +548,15 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		network.changeServiceNotify(service);
 
 		logger.debug("End");
+	}
+
+	private void processLogout(SelectionKey key, Message message) {
+		System.out.println("[NetworkReceiveEvent, processLogout] Remove dependencies for " + message.getSource());
+		network.removeAllDependencies(message.getSource());
+		// Message message = new Message();
+		// message.setType(MessageType.LOGOUT);
+		// message.setDestination(entry.getKey());
+		// message.setSource(userProfile.getUsername());
 	}
 
 	protected synchronized void process() {
