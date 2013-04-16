@@ -186,6 +186,10 @@ public class Service implements Comparable<Service>, Serializable {
 		return progress;
 	}
 
+	public void setProgress(Integer progress) {
+		this.progress = progress;
+	}
+
 	public ArrayList<ArrayList<Object>> getAsTable() {
 		return getAsTable(UserRole.BUYER);
 	}

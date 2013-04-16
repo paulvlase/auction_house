@@ -79,7 +79,9 @@ public abstract class QueueThread<K, T> extends Thread {
 		while (running) {
 			try {
 				synchronized (monitor) {
-					monitor.wait();
+					if(queue.isEmpty()){
+						monitor.wait();
+					}
 				}
 				if (!running) {
 					return;

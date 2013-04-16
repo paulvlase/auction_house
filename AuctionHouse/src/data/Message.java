@@ -24,8 +24,11 @@ public class Message implements Serializable {
 	private String				destination;
 	private Object				payload;
 
+	/* Used for TRANSFER_* */
+	private Integer				progress;
+
 	public enum MessageType {
-		LAUNCH, LAUNCH_RESPONSE, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_SIZE, TRANSFER_CHUNCK;
+		LAUNCH, LAUNCH_RESPONSE, ACCEPT, REFUSE, GET_USERNAME, SEND_USERNAME, MAKE_OFFER, TRANSFER_STARTED, TRANSFER_CHUNCK, TRANSFER_PROGRESS;
 	}
 
 	public Message() {
@@ -47,17 +50,26 @@ public class Message implements Serializable {
 
 		System.out.println("[Message: serialize] Message : " + this);
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		ObjectOutputStream o;
+		ObjectOutputStream o = null;
 		try {
 			o = new ObjectOutputStream(b);
 			o.writeObject(this);
+
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			o.close();
+			b.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		/* Object representation */
 		object = b.toByteArray();
-
+		
 		result = new byte[b.size() + Integer.SIZE / Byte.SIZE];
 		resultSize = intToByteArray(b.size());
 		System.out.println("[Message: serialize] Message length as array = " + Arrays.toString(resultSize));
@@ -71,7 +83,7 @@ public class Message implements Serializable {
 		for (int i = 0; i < object.length; i++) {
 			result[i + Integer.SIZE / Byte.SIZE] = object[i];
 		}
-
+		
 		return result;
 	}
 
@@ -111,6 +123,8 @@ public class Message implements Serializable {
 		this.source = ((Message) obj).getSource();
 		this.destination = ((Message) obj).getDestination();
 		this.payload = ((Message) obj).getPayload();
+		this.progress = ((Message) obj).getProgress();
+		this.username = ((Message) obj).getUsername();
 	}
 
 	public MessageType getType() {
@@ -161,6 +175,14 @@ public class Message implements Serializable {
 		this.destination = destination;
 	}
 
+	public Integer getProgress() {
+		return progress;
+	}
+
+	public void setProgress(Integer progress) {
+		this.progress = progress;
+	}
+
 	private static byte[] intToByteArray(int value) {
 		return new byte[] { (byte) (((value >> (3 * Byte.SIZE)) % 256) - 128),
 				(byte) (((value >> (2 * Byte.SIZE)) % 256) - 128), (byte) (((value >> Byte.SIZE) % 256) - 128),
@@ -176,7 +198,8 @@ public class Message implements Serializable {
 	@Override
 	public String toString() {
 		return "type : " + type + ", serviceName : " + serviceName + ", source : " + source + ", destination : "
-				+ destination + ", username : " + getUsername() + ", payload : " + Arrays.asList(payload);
+				+ destination + ", username : " + getUsername() + ", progress : " + getProgress() + ", payload : "
+				+ Arrays.asList(payload);
 	}
 
 	public static void main(String[] args) {

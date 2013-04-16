@@ -39,7 +39,9 @@ public class WebClientEvents extends Thread {
 		while (running) {
 			try {
 				synchronized (monitor) {
-					monitor.wait();
+					if (events.isEmpty()) {
+						monitor.wait();
+					}
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

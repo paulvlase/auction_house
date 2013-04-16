@@ -34,17 +34,16 @@ public class MakeOfferState extends AbstractState {
 
 	public void executeNet(NetworkService net) {
 		System.out.println("Begin");
-//		ArrayList<UserEntry> users = service.getUsers();
-//
-//		if (users != null) {
-//			UserEntry user = users.get(userIndex);
-//			user.setOffer(Offer.OFFER_MADE);
-//			user.setPrice(price);
-//
-//			service.setEnabledState();
-//			// TODO
-//			// net.changeServiceNotify(service);
-//		}
+		Service clonedService = service.clone();
+		ArrayList<UserEntry> users = clonedService.getUsers();
+
+		if (users != null) {
+			UserEntry user = users.get(userIndex);
+			user.setOffer(Offer.OFFER_MADE);
+			user.setPrice(price);
+
+			net.changeServiceNotify(clonedService);
+		}
 
 		System.out.println("End");
 	}

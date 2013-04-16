@@ -377,6 +377,7 @@ public class NetworkDriver extends Thread {
 		logger.debug("Begin");
 		logger.debug("Message : " + message);
 
+		logger.debug("Before serialization ...");
 		sendData(key, message.serialize());
 		logger.debug("End");
 	}

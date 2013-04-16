@@ -1,10 +1,12 @@
 package network;
 
 import java.nio.channels.SelectionKey;
+import java.nio.channels.ShutdownChannelGroupException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.TreeSet;
 
 import org.apache.log4j.Level;
@@ -13,6 +15,7 @@ import org.apache.log4j.Logger;
 import data.Message;
 import data.QueueThread;
 import data.Service;
+import data.Service.Status;
 import data.UserEntry;
 import data.Message.MessageType;
 import data.UserEntry.Offer;
@@ -31,7 +34,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 	public NetworkReceiveEvents(NetworkImpl network) {
 		super("NetworkReceiveEvents");
 
-		//logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 
 		this.network = network;
 		driver = network.getDriver();
@@ -71,11 +74,14 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		case REFUSE:
 			processRefuse(key, message);
 			break;
-		case TRANSFER_SIZE:
-			processTransferSize(key, message);
+		case TRANSFER_STARTED:
+			processTransferStarted(key, message);
 			break;
 		case TRANSFER_CHUNCK:
 			processTransferChunk(key, message);
+			break;
+		case TRANSFER_PROGRESS:
+			processTransferProgress(key, message);
 			break;
 		default:
 			logger.error("Unknown type of message : " + message.getType());
@@ -310,10 +316,44 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			return;
 		}
 
-		user.setOffer(Offer.OFFER_ACCEPTED);
+		user.setOffer(Offer.TRANSFER_STARTED);
 		logger.debug("New service : " + service);
 
 		network.changeServiceNotify(service);
+
+		/* Make sure that client know about our intentions ... */
+		{
+			Message startTransfer = new Message();
+			startTransfer.setDestination((String) message.getPayload());
+			startTransfer.setSource(userProfile.getUsername());
+			startTransfer.setServiceName(message.getServiceName());
+
+			/* Set file size as price in KB */
+			startTransfer.setPayload(service.getPrice() * 1024);
+			startTransfer.setType(MessageType.TRANSFER_STARTED);
+			network.getSendEvents().enqueue((SocketChannel) key.channel(), startTransfer);
+		}
+
+		/* Send file over network */
+		{
+			int chunkSize = (int) (service.getPrice() * 1024 / 100);
+			Random random = new Random();
+
+			for (int i = 1; i <= 101; i++) {
+				Message transferChunk = new Message();
+				transferChunk.setServiceName(message.getServiceName());
+				transferChunk.setDestination((String) message.getPayload());
+				transferChunk.setSource(userProfile.getUsername());
+				transferChunk.setType(MessageType.TRANSFER_CHUNCK);
+				transferChunk.setProgress(i);
+
+				byte[] chunk = new byte[chunkSize];
+				random.nextBytes(chunk);
+				transferChunk.setPayload(chunk);
+				network.getSendEvents().enqueue((SocketChannel) key.channel(), transferChunk);
+			}
+		}
+
 		logger.debug("End");
 	}
 
@@ -354,15 +394,117 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		logger.debug("End");
 	}
 
-	private void processTransferSize(SelectionKey key, Message message) {
-		// TODO Auto-generated method stub
+	private void processTransferStarted(SelectionKey key, Message message) {
 		logger.debug("Begin");
+		UserProfile userProfile = network.getUserProfile();
+
+		logger.debug("Message : " + message);
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getPayload());
+		UserEntry user = service.getUser(message.getSource());
+		if (user == null) {
+			logger.fatal("User " + message.getUsername() + " not found");
+			return;
+		}
+
+		user.setProgress(0);
+		// user.setOffer(Offer.TRANSFER_STARTED);
+		service.setStatus(Status.TRANSFER_STARTED);
+
+		network.changeServiceNotify(service);
+
+		logger.debug("End");
+	}
+
+	private void processTransferProgress(SelectionKey key, Message message) {
+		logger.debug("Begin");
+		UserProfile userProfile = network.getUserProfile();
+
+		logger.debug("Message : " + message);
+		if (userProfile.getRole() == UserRole.BUYER) {
+			logger.fatal("Only a seller can receive this type of message");
+			return;
+		}
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getSource());
+		UserEntry user = service.getUser((String) message.getSource());
+		if (user == null) {
+			logger.fatal("User " + message.getSource() + " not found");
+			return;
+		}
+
+		user.setOffer(Offer.TRANSFER_IN_PROGRESS);
+		user.setProgress(message.getProgress());
+		logger.debug("New service : " + service);
+
+		network.changeServiceNotify(service);
 		logger.debug("End");
 	}
 
 	private void processTransferChunk(SelectionKey key, Message message) {
-		// TODO Auto-generated method stub
 		logger.debug("Begin");
+		UserProfile userProfile = network.getUserProfile();
+
+		logger.debug("Message : " + message);
+		if (userProfile.getRole() == UserRole.SELLER) {
+			logger.fatal("Only a buyer can receive this type of message");
+			return;
+		}
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getSource());
+		UserEntry user = service.getUser((String) message.getSource());
+		if (user == null) {
+			logger.fatal("User " + message.getSource() + " not found");
+			return;
+		}
+		
+		// TODO : Progress = -1
+
+		if(message.getProgress() > 100){
+			service.setStatus(Status.TRANSFER_COMPLETE);
+		} else {
+			service.setStatus(Status.TRANSFER_IN_PROGRESS);
+		}
+		service.setProgress(message.getProgress());
+
+		/* Send progress notification to source */
+		{
+			Message progressMessage = new Message();
+			progressMessage.setServiceName(message.getServiceName());
+			progressMessage.setDestination(message.getSource());
+			progressMessage.setSource(userProfile.getUsername());
+			progressMessage.setType(MessageType.TRANSFER_PROGRESS);
+			progressMessage.setProgress(message.getProgress());
+			network.getSendEvents().enqueue((SocketChannel) key.channel(), progressMessage);
+		}
+
+		System.out.println("New service : " + service);
+		network.changeServiceNotify(service);
+
 		logger.debug("End");
 	}
 
