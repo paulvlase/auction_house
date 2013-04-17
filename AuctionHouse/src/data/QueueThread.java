@@ -6,7 +6,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 public abstract class QueueThread<K, T> extends Thread {
+	private static Logger logger = Logger.getLogger(QueueThread.class);
 
 	private Object									monitor;
 	protected ConcurrentHashMap<K, ArrayList<T>>	queue;
@@ -14,6 +18,8 @@ public abstract class QueueThread<K, T> extends Thread {
 	private String									threadName;
 
 	public QueueThread(String threadName) {
+//		 logger.setLevel(Level.OFF);
+
 		this.monitor = new Object();
 		this.threadName = threadName;
 		queue = new ConcurrentHashMap<K, ArrayList<T>>();
@@ -34,24 +40,25 @@ public abstract class QueueThread<K, T> extends Thread {
 //		K key = entry.getKey();
 //		T value = entry.getValue().get(0);
 //
-//		System.out.println("[QueueThread : getJob] Before " + queue);
+//		logger.debug("[QueueThread] Before " + queue);
 //		queue.get(key).remove(0);
 //		if (queue.get(key).size() == 0) {
 //			queue.remove(key);
 //		}
-//		System.out.println("[QueueThread : getJob] After " + queue);
+//		logger.debug("[QueueThread] After " + queue);
 //
 //		return new Pair<K, T>(key, value);
 		return getRandomJob();
 	}
 
 	public Map.Entry<K, T> getRandomJob() {
+		logger.debug("Begin");
 		@SuppressWarnings("unchecked")
 		K[] keys = (K[]) queue.keySet().toArray();
 		Random random = new Random();
 		Integer keyIndex;
 
-		System.out.println("[" + threadName + ": getRandomJob] Empty queue");
+		logger.debug("[" + threadName + "] Empty queue");
 		if (keys.length == 0) {
 			return null;
 		}
@@ -61,19 +68,19 @@ public abstract class QueueThread<K, T> extends Thread {
 		K key = keys[keyIndex];
 		T value = queue.get(key).get(0);
 
-		System.out.println("[" + threadName + ": getRandomJob] Before " + queue);
+		logger.debug("[" + threadName + "] Before " + queue);
 		queue.get(key).remove(0);
 		if (queue.get(key).size() == 0) {
 			queue.remove(key);
 		}
-		System.out.println("[" + threadName + ": getRandomJob] After " + queue);
+		logger.debug("[" + threadName + "] After " + queue);
 
 		return new Pair<K, T>(key, value);
 	}
 
 	@Override
 	public void run() {
-		System.out.println("[" + threadName + "] Start running");
+		logger.debug("[" + threadName + "] Begin");
 		running = true;
 
 		while (running) {
@@ -91,6 +98,7 @@ public abstract class QueueThread<K, T> extends Thread {
 			}
 			process();
 		}
+		logger.debug("[" + threadName + "] End");
 	}
 
 	public synchronized boolean haveToProcess() {
@@ -108,9 +116,9 @@ public abstract class QueueThread<K, T> extends Thread {
 	protected abstract void process();
 
 	public synchronized void enqueue(K key, T value) {
-		System.out.println("[" + threadName + ": enqueue] Before " + value);
-		System.out.println("[" + threadName + ": enqueue] Before " + key);
-		System.out.println("[" + threadName + ": enqueue] Running " + running);
+		logger.debug("[" + threadName + "] Before " + value);
+		logger.debug("[" + threadName + "] Before " + key);
+		logger.debug("[" + threadName + "] Running " + running);
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 
@@ -131,7 +139,7 @@ public abstract class QueueThread<K, T> extends Thread {
 	public synchronized void stopRunning() {
 		running = false;
 
-		System.out.println("[" + threadName + "] Stop running");
+		logger.debug("[" + threadName + "] Stop running");
 
 		synchronized (monitor) {
 			monitor.notify();

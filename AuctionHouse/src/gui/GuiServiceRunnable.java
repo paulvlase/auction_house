@@ -19,8 +19,7 @@ public class GuiServiceRunnable implements Runnable {
 	}
 	
 	public void run() {
-		logger.debug("service.getName(): " + service.getName());
-		logger.debug("service.getStatus(): " + service.getStatus());
+		logger.debug("service: " + service);
 
 		mainWindow.changeServiceNotify(service);
 	}

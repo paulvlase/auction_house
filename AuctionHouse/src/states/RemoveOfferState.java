@@ -49,6 +49,7 @@ public class RemoveOfferState extends AbstractState {
 		logger.debug("Begin");
 		// TODO
 		// web.removeOffer(service.getName());
+		web.notifyNetwork(service);
 		logger.debug("End");
 	}
 

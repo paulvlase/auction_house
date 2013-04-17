@@ -37,7 +37,7 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebServerMockup implements Runnable {
-	static Logger logger = Logger.getLogger(WebServerMockup.class);
+	static Logger											logger	= Logger.getLogger(WebServerMockup.class);
 
 	private ServerSocket									serverSocket;
 
@@ -76,7 +76,7 @@ public class WebServerMockup implements Runnable {
 			logger.warn("Wrong username or password");
 			return null;
 		}
-		
+
 		if (onlineUsers.get(cred.getUsername()) != null) {
 			logger.warn("Already logged");
 			return null;
@@ -85,7 +85,7 @@ public class WebServerMockup implements Runnable {
 		profile.setRole(cred.getRole());
 
 		onlineUsers.put(cred.getUsername(), cred.getAddress());
-		
+
 		logger.info("End success");
 		return new LoginResponse(profile);
 	}
@@ -108,12 +108,12 @@ public class WebServerMockup implements Runnable {
 		UserProfile profile = users.get(req.getUsername());
 		userEntry.setName(profile.getFirstName() + " " + profile.getLastName());
 		userEntry.setAddress(onlineUsers.get(req.getUsername()));
-	
+
 		if (req.getUserRole() == UserRole.BUYER) {
 			sellers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			userEntries = sellers.get(service.getName());
 
-			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());		
+			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			ArrayList<UserEntry> buyersUserEntries = buyers.get(service.getName());
 			buyersUserEntries.add(userEntry);
 
@@ -174,7 +174,7 @@ public class WebServerMockup implements Runnable {
 		logger.debug("End (OK response");
 		return new OkResponse();
 	}
-	
+
 	public Object registerProfile(RegisterProfileRequest req) {
 		logger.debug("Begin");
 		UserProfile profile = req.getUserProfile();

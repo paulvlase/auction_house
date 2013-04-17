@@ -236,7 +236,7 @@ public class NetworkDriver extends Thread {
 			Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
 
 			logger.debug("Message received : " + message);
-			//appendMessage(message, key);
+			appendMessage(message, key);
 
 			i += 4 + length;
 		}
@@ -637,7 +637,7 @@ public class NetworkDriver extends Thread {
 	}
 
 	public boolean haveToProcess() {
-		// System.out.println("Write buffers : ");
+		// logger.debug("Write buffers : ");
 		for (Map.Entry<SelectionKey, ArrayList<byte[]>> entry : writeBuffers.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
 				return true;

@@ -147,13 +147,13 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 
 		UserProfile userProfile = getUserProfile();
 
-		System.out.println("[Networkimpl, logout] Clear all messages");
+		logger.debug("Clear all messages");
 		/* Clear queue of send messages */
 		userUnsentMessages.clear();
 		sendEvents.clear();
 		receiveEvents.clear();
 
-		System.out.println("[Networkimpl, logout] Create and send REMOVE messages");
+		logger.debug("Create and send REMOVE messages");
 		for (Service service : mediator.getOffers().values()) {
 			if (service.getUsers() == null) {
 				continue;
@@ -182,7 +182,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			sendEvents.enqueue(entry.getValue(), message);
 		}
 
-		System.out.println("[Networkimpl, logout] Wait until messages will be sent");
+		logger.debug("Wait until messages will be sent");
 		/* Busy waiting until all message are unsent, ugly solution but it works */
 		while (sendEvents.haveToProcess())
 			;
@@ -190,11 +190,11 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 			;
 
 		for (Map.Entry<String, SocketChannel> entry : userChanelMap.entrySet()) {
-			System.out.println("[NetworkImpl, logOut] Remove dependencies for : " + entry.getKey());
+			logger.debug("Remove dependencies for : " + entry.getKey());
 			removeAllDependencies(entry.getKey());
 		}
 
-		System.out.println("[Networkimpl, logout] All messages was been sent");
+		logger.debug("All messages was been sent");
 
 		try {
 			receiveEvents.stopRunning();

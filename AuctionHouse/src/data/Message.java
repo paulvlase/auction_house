@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Message implements Serializable {
@@ -32,9 +33,11 @@ public class Message implements Serializable {
 	}
 
 	public Message() {
+//		logger.setLevel(Level.OFF);
 	}
 
 	public Message(MessageType type, String serviceName) {
+//		logger.setLevel(Level.OFF);
 		this.type = type;
 		this.serviceName = serviceName;
 	}
@@ -48,7 +51,7 @@ public class Message implements Serializable {
 		byte[] resultSize;
 		byte[] object;
 
-		System.out.println("[Message: serialize] Message : " + this);
+		logger.debug("Message : " + this);
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = null;
 		try {
@@ -69,11 +72,11 @@ public class Message implements Serializable {
 
 		/* Object representation */
 		object = b.toByteArray();
-		
+
 		result = new byte[b.size() + Integer.SIZE / Byte.SIZE];
 		resultSize = intToByteArray(b.size());
-		System.out.println("[Message: serialize] Message length as array = " + Arrays.toString(resultSize));
-		System.out.println("[Message: serialize] Message length = " + b.size());
+		logger.debug("Message length as array = " + Arrays.toString(resultSize));
+		logger.debug("Message length = " + b.size());
 
 		/* Package length */
 		for (int i = 0; i < resultSize.length; i++) {
@@ -83,7 +86,7 @@ public class Message implements Serializable {
 		for (int i = 0; i < object.length; i++) {
 			result[i + Integer.SIZE / Byte.SIZE] = object[i];
 		}
-		
+
 		return result;
 	}
 
@@ -94,7 +97,7 @@ public class Message implements Serializable {
 		byte object[];
 
 		if (array.length <= 4) {
-			System.err.println("Corrupted package ...");
+			logger.error("Corrupted package ...");
 			return;
 		}
 
@@ -114,7 +117,7 @@ public class Message implements Serializable {
 		}
 
 		if (!(obj instanceof Message)) {
-			System.out.println("Unknown class :| " + obj.getClass());
+			logger.error("Unknown class :| " + obj.getClass());
 		}
 
 		/* Object clone */
@@ -197,12 +200,12 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "type : " + type + ", serviceName : " + serviceName + ", source : " + source + ", destination : "
-				+ destination + ", username : " + getUsername() + ", progress : " + getProgress() + ", payload : "
-				+ Arrays.asList(payload);
+		return "[type: " + type + ", serviceName: " + serviceName + ", source: " + source + ", destination: "
+				+ destination + ", username: " + getUsername() + ", progress: " + getProgress() + ", payload: "
+				+ Arrays.asList(payload) + "]";
 	}
 
 	public static void main(String[] args) {
-		System.out.println(new Message(new Message(MessageType.LAUNCH, "service1").serialize()));
+		logger.debug(new Message(new Message(MessageType.LAUNCH, "service1").serialize()));
 	}
 }

@@ -135,7 +135,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 		fileAppender.setFile("logs/default.log");
 		fileAppender.activateOptions();
 
-		System.out.println("End");
+		logger.debug("End");
 	}
 
 	@Override
@@ -256,6 +256,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	}
 
 	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
+		logger.debug("Begin");
 		ArrayList<Service> services = new ArrayList<Service>();
 
 		File demandsFile = new File(filename);
@@ -266,7 +267,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 				String line;
 				while ((line = br.readLine()) != null) {
-					System.out.println(line);
+					logger.debug(line);
 					Service d = parseLine(line, type);
 
 					/* TODO: wrong file format. */
@@ -283,6 +284,8 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 				e.printStackTrace();
 			}
 		}
+		
+		logger.debug("End");
 		return services;
 	}
 
@@ -310,8 +313,6 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	public void publishService(Service service) {
 		logger.debug("Begin");
 
-		// TODO: BUG: Launching a service two times.
-		net.publishService(service);
 		web.publishService(service);
 
 		logger.debug("End");
@@ -321,7 +322,6 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	public void publishServices(ArrayList<Service> services) {
 		logger.debug("Begin");
 
-		net.publishServices(services);
 		web.publishServices(services);
 
 		logger.debug("End");
@@ -340,7 +340,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	@Override
 	public void notifyNetwork(Service service) {
 		logger.debug("Begin");
-		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service: " + service);
 
 		net.publishService(service);
 		logger.debug("End");

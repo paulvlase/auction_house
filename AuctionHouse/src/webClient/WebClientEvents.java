@@ -25,7 +25,7 @@ public class WebClientEvents extends Thread {
 	private ArrayList<Command>	events;
 
 	public WebClientEvents(WebService web) {
-		// TODO: logger.setLevel(Level.OFF);
+//		 logger.setLevel(Level.OFF);
 		this.web = web;
 
 		events = new ArrayList<Command>();
@@ -73,9 +73,8 @@ public class WebClientEvents extends Thread {
 
 	public synchronized void publishService(Service service) {
 		logger.debug("Begin");
-		System.out.println("[WebClientEvents, publishService] StateManager : " + service.getStateMgr());
-		System.out.println("[WebClientEvents, publishService] StateManager state : "
-				+ service.getStateMgr().getStateName());
+		logger.debug("service: " + service);
+		logger.debug("StateManager : " + service.getStateMgr());
 
 		events.add(new WebAdapter(service, web));
 

@@ -21,19 +21,19 @@ public class MakeOfferState extends AbstractState {
 	private Double				price;
 
 	public MakeOfferState(Service service) {
-		// TODO: logger.setLevel(Level.OFF);
+//		 logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public MakeOfferState(MakeOfferState state) {
-		// TODO: logger.setLevel(Level.OFF);
+//		 logger.setLevel(Level.OFF);
 		service = state.service;
 		userIndex = state.userIndex;
 		price = state.price;
 	}
 
 	public void executeNet(NetworkService net) {
-		System.out.println("Begin");
+		logger.debug("Begin");
 		Service clonedService = service.clone();
 		ArrayList<UserEntry> users = clonedService.getUsers();
 
@@ -45,10 +45,13 @@ public class MakeOfferState extends AbstractState {
 			net.changeServiceNotify(clonedService);
 		}
 
-		System.out.println("End");
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
+		logger.debug("Begin");
+		web.notifyNetwork(service);
+		logger.debug("End");
 	}
 
 	public void updateState(Integer userIndex, Double price) {

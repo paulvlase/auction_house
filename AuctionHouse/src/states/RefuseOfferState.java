@@ -55,7 +55,11 @@ public class RefuseOfferState extends AbstractState {
 	}
 
 	public void executeWeb(WebService web) {
-
+		logger.debug("Begin");
+		
+		web.notifyNetwork(service);
+		
+		logger.debug("End");
 	}
 
 	public void updateState(Integer userIndex) {

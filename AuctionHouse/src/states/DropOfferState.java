@@ -4,13 +4,12 @@ import interfaces.NetworkService;
 import interfaces.WebService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import data.Message;
 import data.Service;
-import data.Service.Status;
 import data.UserEntry.Offer;
 import data.UserEntry;
 import data.UserProfile;
@@ -20,10 +19,12 @@ public class DropOfferState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(DropOfferState.class);
 
 	public DropOfferState(Service service) {
+//		logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public DropOfferState(DropOfferState state) {
+//		logger.setLevel(Level.OFF);
 		service = state.service;
 	}
 
@@ -44,20 +45,21 @@ public class DropOfferState extends AbstractState {
 		// service.setStatus(Status.INACTIVE);
 		// service.setUsers(null);
 		//
-		// // TODO
-		// // net.removeOffer(service.getName());
-		// System.out.println("[DropOfferState:executeNet()] " +
-		// service.getName());
+		// TODO
+		// net.removeOffer(service.getName());
+		// logger.debug("service: " +service);
 		//
 		// service.setEnabledState();
-		// // TODO
-		// // net.stopTransfer(service);
-		// // net.changeServiceNotify(service);
+		// TODO
+		// net.stopTransfer(service);
+		// net.changeServiceNotify(service);
 		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
-
+		logger.debug("Begin");
+		web.notifyNetwork(service);
+		logger.debug("End");
 	}
 
 	public void setState(Service service) {
@@ -70,7 +72,7 @@ public class DropOfferState extends AbstractState {
 
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
-		System.out.println("[DropOfferState] asMessages");
+		logger.debug("Begin");
 		UserProfile userProfile = net.getUserProfile();
 		ArrayList<Message> list = new ArrayList<Message>();
 
@@ -91,6 +93,7 @@ public class DropOfferState extends AbstractState {
 			list.add(message);
 		}
 
+		logger.debug("End");
 		return list;
 	}
 

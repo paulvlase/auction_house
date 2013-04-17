@@ -544,19 +544,22 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			network.getSendEvents().enqueue((SocketChannel) key.channel(), progressMessage);
 		}
 
-		System.out.println("New service : " + service);
+		logger.debug("New service : " + service);
 		network.changeServiceNotify(service);
 
 		logger.debug("End");
 	}
 
 	private void processLogout(SelectionKey key, Message message) {
-		System.out.println("[NetworkReceiveEvent, processLogout] Remove dependencies for " + message.getSource());
+		logger.debug("begin");
+		logger.debug("Remove dependencies for " + message.getSource());
+
 		network.removeAllDependencies(message.getSource());
 		// Message message = new Message();
 		// message.setType(MessageType.LOGOUT);
 		// message.setDestination(entry.getKey());
 		// message.setSource(userProfile.getUsername());
+		logger.debug("End"); 
 	}
 
 	protected synchronized void process() {
@@ -575,11 +578,11 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		Map.Entry<SelectionKey, Message> job = getJob();
 		if (job == null) {
-			System.out.println("[NetworkReceiveEvent: process] Job = null");
+			logger.debug("End (job = null)");
 			return;
 		}
 
-		System.out.println("[NetworkReceiveEvent: process] Valid job");
+		logger.debug("Valid job");
 		messageProcess(job.getKey(), job.getValue());
 		logger.debug("End");
 	}

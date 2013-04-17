@@ -211,6 +211,8 @@ public class GuiImpl implements Gui {
 	
 	@Override
 	public void publishService(Service service) {
+		logger.debug("Begin");
 		med.publishService(service);
+		logger.debug("End");
 	}
 }

@@ -29,6 +29,7 @@ public class EnabledState extends AbstractState {
 
 	public void executeWeb(WebService web) {
 		logger.debug("Begin");
+		web.notifyNetwork(service);
 		logger.debug("End");
 	}
 

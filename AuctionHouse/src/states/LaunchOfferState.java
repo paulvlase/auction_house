@@ -36,7 +36,7 @@ public class LaunchOfferState extends AbstractState {
 		logger.debug("Begin");
 
 		Service clonedService = service.clone();
-		logger.debug("clonedService.getstatus(): " + clonedService.getStatus());
+		logger.debug("clonedService: " + clonedService);
 		
 		clonedService.setUsers(null);
 		net.changeServiceNotify(clonedService);
@@ -46,7 +46,7 @@ public class LaunchOfferState extends AbstractState {
 
 	public void executeWeb(WebService web) {
 		logger.debug("Begin");
-		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service: " + service);
 
 		// TODO
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
@@ -54,8 +54,8 @@ public class LaunchOfferState extends AbstractState {
 
 		responseObj.getService().setStatus(Status.ACTIVE);
 
-		logger.debug("service.getStatus(): "
-				+ responseObj.getService().getStatus());
+		logger.debug("service.getService(): "
+				+ responseObj.getService());
 
 		web.notifyNetwork(responseObj.getService());
 
@@ -92,7 +92,7 @@ public class LaunchOfferState extends AbstractState {
 			message.setDestination(user.getUsername());
 			message.setPayload(new UserEntry(profile.getUsername(), profile.getFirstName() + " "
 					+ profile.getLastName(), Offer.NO_OFFER, service.getTime(), service.getPrice()));
-			logger.debug("user.getUsername(): " + user.getUsername());
+			logger.debug("user: " + user);
 			list.add(message);
 		}
 

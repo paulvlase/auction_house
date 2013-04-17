@@ -154,7 +154,7 @@ public class AddNewService extends JFrame {
 	}
 
 	private void okButtonActionPerformed(ActionEvent e) {
-		logger.debug("timeSpinner.getValue() " + timeSpinner.getValue());
+		logger.debug("timeSpinner.getValue(): " + timeSpinner.getValue());
 
 		if (nameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME_ERROR),
@@ -182,11 +182,12 @@ public class AddNewService extends JFrame {
 		}
 
 		Long time = ((Date) timeSpinner.getValue()).getTime();
-		logger.debug("name: " + name + "time: " + time + "price: " + price);
 
 		Service service = new Service(name);
 		service.setTime(time);
 		service.setPrice(price);
+		
+		logger.debug("service: " + service);
 
 		UserRole role = mainWindow.getGui().getUserProfile().getRole();
 		if (role == UserRole.SELLER) {
