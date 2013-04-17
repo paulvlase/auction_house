@@ -35,7 +35,7 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 	private WebClientEvents	thread;
 
 	public WebClientMockup(MediatorWeb med) {
-		logger.setLevel(Level.OFF);
+		//TODO: logger.setLevel(Level.OFF);
 
 		this.med = med;
 
@@ -51,8 +51,7 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 		if (responseObj == null) {
 			logger.warn("Failed");
 			return null;
-		}
-		if (responseObj instanceof LoginResponse) {
+		} else if (responseObj instanceof LoginResponse) {
 			logger.info("Success");
 			
 			this.cred = cred;

@@ -20,8 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import mediator.Mediator;
-
 import data.Message;
 import data.Message.MessageType;
 
@@ -238,7 +236,7 @@ public class NetworkDriver extends Thread {
 			Message message = new Message(Arrays.copyOfRange(newBuf, i, length + i + 4));
 
 			logger.debug("Message received : " + message);
-			appendMessage(message, key);
+			//appendMessage(message, key);
 
 			i += 4 + length;
 		}

@@ -213,9 +213,4 @@ public class GuiImpl implements Gui {
 	public void publishService(Service service) {
 		med.publishService(service);
 	}
-	
-	@Override
-	public Service createService(String name, Long time, Double price) {
-		return med.createService(name, time, price);
-	}
 }

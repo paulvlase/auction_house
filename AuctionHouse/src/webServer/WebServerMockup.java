@@ -91,7 +91,9 @@ public class WebServerMockup implements Runnable {
 	}
 
 	public Object logout(LogoutRequest requestMsg) {
+		logger.debug("Begin");
 		onlineUsers.remove(requestMsg.getCred().getUsername());
+		logger.debug("End");
 		return new OkResponse();
 	}
 
@@ -153,26 +155,32 @@ public class WebServerMockup implements Runnable {
 			sellers.put(req.getServiceName(), sellersUserEntries);
 		}
 
-		logger.debug("End");
+		logger.debug("End (OK response)");
 		return new OkResponse();
 	}
 
 	public Object getProfile(GetProfileRequest req) {
+		logger.debug("Begin");
 		UserProfile profile = users.get(req.getUsername());
+		logger.debug("End (OK response)");
 		return new GetProfileResponse(profile);
 	}
 
 	public Object setProfile(SetProfileRequest req) {
+		logger.debug("Begin");
 		UserProfile profile = req.getUserProfile();
 
 		users.put(profile.getUsername(), profile);
+		logger.debug("End (OK response");
 		return new OkResponse();
 	}
 	
 	public Object registerProfile(RegisterProfileRequest req) {
+		logger.debug("Begin");
 		UserProfile profile = req.getUserProfile();
 
 		users.put(profile.getUsername(), profile);
+		logger.debug("End (OK response)");
 		return new OkResponse();
 	}
 
@@ -182,21 +190,21 @@ public class WebServerMockup implements Runnable {
 			this.serverSocket = new ServerSocket(WebServiceServerConfig.PORT);
 		} catch (IOException e) {
 			// TODO: translate this
-			logger.fatal("Nu pot asculta pe portul: " + WebServiceServerConfig.PORT + ".");
+			logger.fatal("Server can't listen on port: " + WebServiceServerConfig.PORT + "");
 			return;
 		}
 
 		while (true) {
 			try {
 
-				logger.debug("Before accept");
+				logger.debug("Waiting on accept");
 				Socket clientSocket = serverSocket.accept();
 				logger.debug("Connection accepted");
 
 				pool.execute(new WebWorkerMockup(this, clientSocket));
 			} catch (IOException e) {
 				// TODO: translate this
-				logger.error("Conectare client");
+				logger.error("Connection error from client");
 			}
 		}
 	}

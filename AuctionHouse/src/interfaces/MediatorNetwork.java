@@ -1,6 +1,5 @@
 package interfaces;
 
-import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import data.Service;
@@ -17,12 +16,12 @@ public interface MediatorNetwork {
 	public void registerNetwork(NetworkMediator net);
 
 	public void changeServiceNotify(Service service);
-	
-	public void startTransfer(Service service);
-	public void stopTransfer(Service service);
-	
+
 	public void putOffer(Service service);
+
 	public Service getOffer(String serviceName);
+
 	public ConcurrentHashMap<String, Service> getOffers();
+
 	public void removeOffer(String serviceName);
 }

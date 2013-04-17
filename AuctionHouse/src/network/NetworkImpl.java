@@ -71,15 +71,6 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	@Override
-	public boolean startTransfer(Service service) {
-		return true;
-	}
-
-	@Override
-	public void stopTransfer(Service service) {
-	}
-
-	@Override
 	public UserProfile getUserProfile() {
 		return mediator.getUserProfile();
 	}

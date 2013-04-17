@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class AddNewService extends JFrame {
 	private static final long	serialVersionUID	= 1L;
 	private static Logger		logger				= Logger.getLogger(AddNewService.class);
 
+	private static Long			ONE_HOUR			= 1 * 60 * 60 * 1000L;
+
 	private JPanel				mainPanel;
 	private JLabel				nameLabel;
 	private JTextField			nameField;
@@ -39,7 +42,10 @@ public class AddNewService extends JFrame {
 		// TODO: logger.setLevel(Level.OFF);
 
 		this.mainWindow = mainWindow;
+
 		initComponents();
+		
+		timeSpinner.setValue(new Date(System.currentTimeMillis() + ONE_HOUR));
 
 		if (mainWindow.getGui().getUserProfile().getRole() != UserRole.SELLER) {
 			priceField.setVisible(false);
@@ -175,7 +181,9 @@ public class AddNewService extends JFrame {
 			}
 		}
 
-		Long time = 10000000L;		
+		Long time = ((Date) timeSpinner.getValue()).getTime();
+		logger.debug("name: " + name + "time: " + time + "price: " + price);
+
 		Service service = new Service(name);
 		service.setTime(time);
 		service.setPrice(price);
@@ -184,7 +192,7 @@ public class AddNewService extends JFrame {
 		if (role == UserRole.SELLER) {
 			service.setStatus(Status.ACTIVE);
 			mainWindow.addService(service);
-			
+
 			Service clonedService = service.clone();
 			clonedService.setLaunchOfferState();
 			mainWindow.getGui().publishService(clonedService);

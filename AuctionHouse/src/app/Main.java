@@ -8,7 +8,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import mediator.MediatorMockup;
+import mediator.MediatorImpl;
 import network.NetworkImpl;
 import webClient.WebClientMockup;
 
@@ -31,7 +31,7 @@ public class Main {
 			}
 		}
 
-		MediatorMockup med = new MediatorMockup();
+		MediatorImpl med = new MediatorImpl();
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
 		WebClientMockup web = new WebClientMockup(med);
