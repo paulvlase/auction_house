@@ -37,7 +37,6 @@ public class NetworkDriver extends Thread {
 	private ArrayList<ServerSocketChannel>				serverChannels;
 	private ArrayList<SocketChannel>					socketChannels;
 
-	// private static ExecutorService pool = Executors.newCachedThreadPool();
 	private ByteBuffer									rBuffer	= ByteBuffer.allocate(8192);
 	private ByteBuffer									wBuffer	= ByteBuffer.allocate(8192);
 
@@ -126,17 +125,6 @@ public class NetworkDriver extends Thread {
 			logger.debug("SEND_USERNAME received from " + username);
 			userChanelMap.putIfAbsent(username, (SocketChannel) key.channel());
 
-			// TODO : Seems to be an impossible case
-			// ConcurrentHashMap<String, ArrayList<Message>> unsentMessages =
-			// network.getUserUnsentMessages();
-			// logger.debug("[NetworkDriver, appendMessages] Unsent messages : "
-			// + unsentMessages);
-			// if (unsentMessages.contains(username)) {
-			// logger.debug("[NetworkDriver, appendMessages] Enqueue some messages to send queue");
-			// network.getSendEvents().enqueue(key,
-			// unsentMessages.get(username));
-			// }
-
 			return;
 		}
 
@@ -154,11 +142,6 @@ public class NetworkDriver extends Thread {
 
 		result = ((128 + (int) array[0]) << (3 * Byte.SIZE)) + ((128 + (int) array[1]) << (2 * Byte.SIZE))
 				+ ((128 + (int) array[2]) << Byte.SIZE) + (128 + (int) array[3]);
-
-		// for (int i = 0; i < array.length; i++) {
-		// result <<= Byte.SIZE;
-		// result |= array[i];
-		// }
 
 		return result;
 	}
@@ -243,47 +226,6 @@ public class NetworkDriver extends Thread {
 			i += 4 + length;
 		}
 
-		// // length = ((128 + (int) newBuf[i]) << 24) + ((128 + (int) newBuf[i
-		// +
-		// // 1]) << 16)
-		// // + ((128 + (int) newBuf[i + 2]) << 8) + (128 + (int) newBuf[i +
-		// 3]);
-		// length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
-		// logger.debug("Request length = " +
-		// length);
-		// i += 4;
-		//
-		// logger.debug((i + length) + " <= " +
-		// newBuf.length);
-		//
-		// /* Read serialized object */
-		// if (i + length <= newBuf.length) {
-		// i -= 4;
-		// while(true){
-		// if (i + 4 >= newBuf.length) {
-		// break;
-		// }
-		//
-		// /* Get length */
-		// length = byteArrayToInt(Arrays.copyOfRange(newBuf, i, i + 4));
-		// if(i + length + 4 > newBuf.length){
-		// break;
-		// }
-		//
-		// Message message = new Message(Arrays.copyOfRange(newBuf, i, length +
-		// i + 4));
-		//
-		// logger.debug("Message received : " +
-		// message);
-		// appendMessage(message, key);
-		//
-		// i += 4 + length;
-		//
-		// }
-		// } else {
-		// i -= 4;
-		// }
-
 		byte[] finalBuf = null;
 		if (i > 0) {
 			finalBuf = new byte[newBuf.length - i];
@@ -333,13 +275,6 @@ public class NetworkDriver extends Thread {
 			}
 
 			if (wbuf.size() == 0) {
-				// synchronized (changeRequestQueue) {
-				// // this.changeRequestQueue.add(new ChangeRequest(key,
-				// // key.interestOps() | SelectionKey.OP_WRITE));
-				// this.changeRequestQueue.add(new ChangeRequest(socketChannel,
-				// ChangeRequest.CHANGEOPS,
-				// SelectionKey.OP_WRITE));
-				// }
 				key.interestOps(SelectionKey.OP_READ);
 			}
 		}
@@ -648,14 +583,14 @@ public class NetworkDriver extends Thread {
 
 		return false;
 	}
-	
-	public void removeAllDependencies(SocketChannel chanel){
+
+	public void removeAllDependencies(SocketChannel chanel) {
 		Integer index = socketChannels.indexOf(chanel);
 		SelectionKey key = chanel.keyFor(selector);
-		
+
 		socketChannels.remove(index);
 		serverChannels.remove(index);
-		
+
 		writeBuffers.remove(key);
 		readBuffers.remove(key);
 	}

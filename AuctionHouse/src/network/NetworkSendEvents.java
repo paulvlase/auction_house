@@ -35,10 +35,6 @@ public class NetworkSendEvents extends QueueThread<SocketChannel, Message> {
 		logger.debug("End");
 	}
 
-	// public void enqueue(SocketChannel chanel, Service service) {
-	// super.enqueue(chanel, service.asMessages(driver.));
-	// }
-
 	@Override
 	protected synchronized void process() {
 		logger.debug("Begin");

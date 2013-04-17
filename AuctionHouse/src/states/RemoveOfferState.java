@@ -42,6 +42,7 @@ public class RemoveOfferState extends AbstractState {
 //			}
 //		}
 
+		net.cancelTransfer(getService());
 		logger.debug("End");
 	}
 

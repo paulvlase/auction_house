@@ -21,6 +21,7 @@ import data.Message.MessageType;
 import data.Service;
 import data.Service.Status;
 import data.UserEntry;
+import data.UserEntry.Offer;
 import data.UserProfile;
 
 /**
@@ -271,5 +272,50 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	@Override
 	public void publishServices(ArrayList<Service> services) {
 		// TODO : Process send messages
+	}
+
+	@Override
+	public void cancelTransfer(Service service) {
+		System.out.println("[NetworkImpl, cancelTransfer] CancelService : " + service);
+		synchronized (sendEvents) {
+			if (service.getStatus() == Status.TRANSFER_COMPLETE || service.getStatus() == Status.TRANSFER_FAILED
+					|| service.getStatus() == Status.TRANSFER_IN_PROGRESS
+					|| service.getStatus() == Status.TRANSFER_STARTED) {
+
+				for (UserEntry user : service.getUsers()) {
+					/* Get all messages */
+					ArrayList<Message> messages = sendEvents.getJobs(userChanelMap.get(user.getUsername()));
+					for (Message message : (ArrayList<Message>) messages.clone()) {
+						if (message.getType() == MessageType.TRANSFER_CHUNCK
+								|| message.getType() == MessageType.TRANSFER_PROGRESS
+								|| message.getType() == MessageType.TRANSFER_STARTED) {
+							messages.remove(message);
+						}
+					}
+				}
+
+				return;
+			}
+
+			if (service.getUsers() == null) {
+				for (UserEntry user : service.getUsers()) {
+					if (user.getOffer() == Offer.TRANSFER_COMPLETE || user.getOffer() == Offer.TRANSFER_FAILED
+							|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS
+							|| user.getOffer() == Offer.TRANSFER_STARTED) {
+
+						/* Get all messages */
+						ArrayList<Message> messages = sendEvents.getJobs(userChanelMap.get(user.getUsername()));
+						for (Message message : (ArrayList<Message>) messages.clone()) {
+							if (message.getType() == MessageType.TRANSFER_CHUNCK
+									|| message.getType() == MessageType.TRANSFER_PROGRESS
+									|| message.getType() == MessageType.TRANSFER_STARTED) {
+								messages.remove(message);
+							}
+						}
+					}
+				}
+			}
+
+		}
 	}
 }

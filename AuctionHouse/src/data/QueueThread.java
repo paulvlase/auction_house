@@ -24,24 +24,24 @@ public abstract class QueueThread<K, T> extends Thread {
 	}
 
 	public Map.Entry<K, T> getJob() {
-//		Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
-//
-//		if (!it.hasNext()) {
-//			return null;
-//		}
-//
-//		Map.Entry<K, ArrayList<T>> entry = it.next();
-//		K key = entry.getKey();
-//		T value = entry.getValue().get(0);
-//
-//		System.out.println("[QueueThread : getJob] Before " + queue);
-//		queue.get(key).remove(0);
-//		if (queue.get(key).size() == 0) {
-//			queue.remove(key);
-//		}
-//		System.out.println("[QueueThread : getJob] After " + queue);
-//
-//		return new Pair<K, T>(key, value);
+		// Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
+		//
+		// if (!it.hasNext()) {
+		// return null;
+		// }
+		//
+		// Map.Entry<K, ArrayList<T>> entry = it.next();
+		// K key = entry.getKey();
+		// T value = entry.getValue().get(0);
+		//
+		// System.out.println("[QueueThread : getJob] Before " + queue);
+		// queue.get(key).remove(0);
+		// if (queue.get(key).size() == 0) {
+		// queue.remove(key);
+		// }
+		// System.out.println("[QueueThread : getJob] After " + queue);
+		//
+		// return new Pair<K, T>(key, value);
 		return getRandomJob();
 	}
 
@@ -79,7 +79,7 @@ public abstract class QueueThread<K, T> extends Thread {
 		while (running) {
 			try {
 				synchronized (monitor) {
-					if(queue.isEmpty()){
+					if (queue.isEmpty()) {
 						monitor.wait();
 					}
 				}
@@ -137,8 +137,8 @@ public abstract class QueueThread<K, T> extends Thread {
 			monitor.notify();
 		}
 	}
-	
-	public synchronized void clear(){
+
+	public synchronized void clear() {
 		queue.clear();
 	}
 
@@ -149,12 +149,28 @@ public abstract class QueueThread<K, T> extends Thread {
 	public void setThreadName(String threadName) {
 		this.threadName = threadName;
 	}
-	
-	public void removeKey(K key){
-		if(queue == null){
+
+	public void removeKey(K key) {
+		if (queue == null) {
 			return;
 		}
-		
+
 		queue.remove(key);
+	}
+	
+	public void removeKey(K key, T value) {
+		if (queue == null) {
+			return;
+		}
+
+		queue.get(key).remove(value);
+	}
+
+	public ArrayList<T> getJobs(K key) {
+		if (queue == null) {
+			return null;
+		}
+
+		return queue.get(key);
 	}
 }
