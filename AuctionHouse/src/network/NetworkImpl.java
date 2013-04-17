@@ -288,7 +288,7 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 				return;
 			}
 
-			if (service.getUsers() == null) {
+			if (service.getUsers() != null) {
 				for (UserEntry user : service.getUsers()) {
 					if (user.getOffer() == Offer.TRANSFER_COMPLETE || user.getOffer() == Offer.TRANSFER_FAILED
 							|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS

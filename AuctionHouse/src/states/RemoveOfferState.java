@@ -65,8 +65,12 @@ public class RemoveOfferState extends AbstractState {
 	public ArrayList<Message> asMessages(NetworkService net) {
 		logger.debug("Begin");
 		UserProfile userProfile = net.getUserProfile();
-		ArrayList<Message> list = null;
+		ArrayList<Message> list = new ArrayList<Message>();
 		Boolean first = true;
+
+		if (service.getUsers() == null) {
+			return list;
+		}
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
@@ -78,11 +82,7 @@ public class RemoveOfferState extends AbstractState {
 			message.setDestination(user.getUsername());
 			message.setSource(userProfile.getUsername());
 
-			if (first) {
-				list = message.asArrayList();
-			} else {
-				list.add(message);
-			}
+			list.add(message);
 		}
 
 		logger.debug("End");

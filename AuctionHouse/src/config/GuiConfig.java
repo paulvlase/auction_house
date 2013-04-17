@@ -1,5 +1,7 @@
 package config;
 
+import org.apache.log4j.Logger;
+
 /**
  * Configurations for GuiConfig.
  * 
@@ -7,6 +9,7 @@ package config;
  * @author Ghennadi Procopciuc
  */
 public class GuiConfig {
+	private static Logger logger = Logger.getLogger(GuiConfig.class);
 
 	/* GUI languages */
 	enum Language {
@@ -295,7 +298,7 @@ public class GuiConfig {
 
 	public static String getValue(int key) {
 		if (values[key].length <= CURRENT_LANGUAGE) {
-			System.err.println("No value availaible for : '" + values[key] + "' in "
+			logger.error("No value availaible for : '" + values[key] + "' in "
 					+ CURRENT_LANGUAGE + " language");
 			System.exit(1);
 		}

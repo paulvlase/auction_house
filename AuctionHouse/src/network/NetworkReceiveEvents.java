@@ -138,14 +138,24 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		Message newMessage = new Message();
 		newMessage.setType(MessageType.LAUNCH_RESPONSE);
-		newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
-				Offer.NO_OFFER, service.getTime(), service.getPrice()));
+
+		if (user.getRole() == UserRole.SELLER) {
+			newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
+					Offer.NO_OFFER, service.getTime(), service.getPrice()));
+		} else {
+			newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
+					Offer.NO_OFFER, service.getTime(), ((UserEntry) message.getPayload()).getPrice()));
+		}
 		newMessage.setUsername(user.getUsername());
 
 		newMessage.setServiceName(message.getServiceName());
 
 		UserEntry userEntry = (UserEntry) message.getPayload();
-		userEntry.setPrice(service.getPrice());
+		
+		logger.debug("userEntry: " + userEntry);
+		if (user.getRole() == UserRole.SELLER) {
+			userEntry.setPrice(service.getPrice());
+		}
 
 		logger.debug("Send data ...");
 		driver.sendData(newMessage, key);
@@ -157,12 +167,16 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		if (service.getUsers() == null) {
 			service.setUsers(new ArrayList<UserEntry>());
 		}
+		
+		logger.debug("userEntry: " + userEntry);
+		logger.debug("Before service: " + service);
 		service.getUsers().remove(userEntry);
 		service.getUsers().add(userEntry);
+		logger.debug("After service: " + service);
 
 		/* Check for OFFER_EXCEED */
-		service.getUsers().remove((UserEntry) message.getPayload());
-		service.addUserEntry((UserEntry) message.getPayload());
+//		service.getUsers().remove((UserEntry) message.getPayload());
+//		service.addUserEntry((UserEntry) message.getPayload());
 		for (UserEntry userEntry1 : service.getUsers()) {
 			if (userEntry1.getPrice() > ((UserEntry) message.getPayload()).getPrice()) {
 				logger.debug("User : " + userEntry1.getUsername() + " : " + userEntry1.getPrice() + " > "

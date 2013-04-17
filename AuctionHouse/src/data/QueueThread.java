@@ -116,6 +116,11 @@ public abstract class QueueThread<K, T> extends Thread {
 		System.out.println("[" + threadName + ": enqueue] Before " + value);
 		System.out.println("[" + threadName + ": enqueue] Before " + key);
 		System.out.println("[" + threadName + ": enqueue] Running " + running);
+		
+		if (key == null) {
+			return;
+		}
+		
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 
