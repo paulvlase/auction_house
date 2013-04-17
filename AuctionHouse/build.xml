@@ -5,12 +5,13 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="auctionHouse">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="D:/Programs/eclipse"/>
+    <property name="ECLIPSE_HOME" value="../../../../../safe/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
     <path id="auctionHouse.classpath">
         <pathelement location="bin"/>
+        <pathelement location="lib/log4j-1.2.17.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -28,7 +29,7 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
             <classpath refid="auctionHouse.classpath"/>
         </javac>
@@ -47,33 +48,18 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="AddNewService">
-        <java classname="gui.AddNewService" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
-    <target name="Login">
-        <java classname="gui.Login" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
     <target name="Main">
         <java classname="app.Main" failonerror="true" fork="yes">
             <classpath refid="auctionHouse.classpath"/>
         </java>
     </target>
+    <target name="WebServerMockup">
+        <java classname="webServer.WebServerMockup" failonerror="true" fork="yes">
+            <classpath refid="auctionHouse.classpath"/>
+        </java>
+    </target>
     <target name="MainWindow">
         <java classname="gui.MainWindow" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
-    <target name="Period">
-        <java classname="data.Period" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
-    <target name="ProfileWindow">
-        <java classname="gui.ProfileWindow" failonerror="true" fork="yes">
             <classpath refid="auctionHouse.classpath"/>
         </java>
     </target>
