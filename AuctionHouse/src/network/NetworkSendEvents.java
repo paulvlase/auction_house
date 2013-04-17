@@ -2,7 +2,6 @@ package network;
 
 import interfaces.Command;
 
-import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import data.Message;
 import data.QueueThread;
-import data.Service;
 
 /**
  * 
@@ -45,7 +43,7 @@ public class NetworkSendEvents extends QueueThread<SocketChannel, Message> {
 			return;
 		}
 
-		logger.debug("Send message : " + job.getValue());
+		logger.debug("Send message: " + job.getValue());
 		driver.sendData(job.getValue(), job.getKey());
 		logger.debug("End");
 	}

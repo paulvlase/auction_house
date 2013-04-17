@@ -71,47 +71,75 @@ public class StateManager implements Serializable {
 	}
 
 	public void setEnabledState() {
+		logger.debug("Begin");
+
 		enabledState.updateState();
 		currentState = enabledState;
+		
+		logger.debug("End");
 	}
 
 	public void setMakeOfferState(Integer userIndex, Double price) {
+		logger.debug("Begin");
+
 		makeOfferState.updateState(userIndex, price);
 		currentState = makeOfferState;
+		
+		logger.debug("End");
 	}
 
 	public void setRemoveOfferState() {
+		logger.debug("Begin");
+
 		removeOfferState.updateState();
 		currentState = removeOfferState;
+		
+		logger.debug("End");
 	}
 
 	public void setDropAuctionState() {
+		logger.debug("Begin");
+
 		dropAuctionState.updateState();
 		currentState = dropAuctionState;
+		
+		logger.debug("End");
 	}
 
 	public void setRefuseOfferState(Integer userIndex) {
+		logger.debug("Begin");
+
 		refuseOfferState.updateState(userIndex);
 		currentState = refuseOfferState;
+		
+		logger.debug("End");
 	}
 
 	public void setAcceptOfferState(Integer userIndex) {
+		logger.debug("Begin");
+
 		acceptOfferState.updateState(userIndex);
 		currentState = acceptOfferState;
 
-		System.out.println("[StateManager: setAcceptOfferState]");
+		logger.debug("End");
 	}
 
 	public void setLaunchOfferState() {
+		logger.debug("Begin");
+
 		launchOfferState.updateState();
 		currentState = launchOfferState;
-		System.out.println("[StateManager: setLaunchOfferState]");
+
+		logger.debug("End");
 	}
 
 	public void setDropOfferState() {
+		logger.debug("Begin");
+
 		dropOfferState.updateState();
 		currentState = dropOfferState;
-		System.out.println("[StateManager:setDropOfferState()]");
+
+		logger.debug("End");
 	}
 
 	public String getName() {
@@ -123,19 +151,32 @@ public class StateManager implements Serializable {
 	}
 
 	public void executeNet(NetworkService net) {
+		logger.debug("Begin");
 		currentState.executeNet(net);
+		logger.debug("End");
 	}
 
 	public void executeWeb(WebService web) {
-		System.out.println("[StateManager: executeWeb] State : " + currentState.getClass());
+		logger.debug("Begin");
+		logger.debug("State: " + currentState.getClass());
 		currentState.executeWeb(web);
+		logger.debug("End");
 	}
 
 	public ArrayList<Message> asMessages(NetworkService net) {
-		return currentState.asMessages(net);
+		logger.debug("Begin");
+		ArrayList<Message> messages = currentState.asMessages(net);
+		
+		logger.debug("End");
+		return messages;
 	}
 
 	public String getStateName() {
+		return currentState.getName();
+	}
+	
+	public String toString() {
+		// TODO: return currentState.toString();
 		return currentState.getName();
 	}
 	

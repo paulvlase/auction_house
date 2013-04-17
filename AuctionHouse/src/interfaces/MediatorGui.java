@@ -30,6 +30,4 @@ public interface MediatorGui {
 
 	public void publishService(Service service);
 	public void publishServices(ArrayList<Service> services);
-
-	public Service createService(String name, Long time, Double price);
 }

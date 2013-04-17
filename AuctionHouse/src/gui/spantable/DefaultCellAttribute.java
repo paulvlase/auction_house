@@ -6,16 +6,20 @@ package gui.spantable;
 
 import java.awt.*;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 /**
  * @version 1.0 11/22/98
  */
 
 public class DefaultCellAttribute implements CellAttribute, CellSpan {
+	private static Logger		logger	= Logger.getLogger(DefaultCellAttribute.class);
 
 	protected int		rowSize;
 	protected int		columnSize;
-	protected int[][][]	span;		// CellSpan
-	protected Color[][]	background; //
+	protected int[][][]	span;													// CellSpan
+	protected Color[][]	background;											//
 
 	public DefaultCellAttribute() {
 		this(0, 0);
@@ -28,6 +32,8 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	}
 
 	public DefaultCellAttribute(int numRows, int numColumns) {
+//		  logger.setLevel(Level.OFF);
+
 		setSize(new Dimension(numColumns, numRows));
 	}
 
@@ -85,7 +91,7 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 
 	public void combine(int row, int column, int height, int width) {
 		if (isOutOfBounds(row, column, height, width)) {
-			System.out.println("Span out of bounds : " + new Span(row, column, height, width));
+			logger.debug("Span out of bounds : " + new Span(row, column, height, width));
 			return;
 		}
 
@@ -93,7 +99,7 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 		int columnSpan = width;
 		int startRow = row;
 		int startColumn = column;
-		
+
 		for (int i = 0; i < rowSpan; i++) {
 			for (int j = 0; j < columnSpan; j++) {
 				if ((span[startRow + i][startColumn + j][CellSpan.COLUMN] != 1)
@@ -148,25 +154,25 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 			span[i][numColumns][CellSpan.COLUMN] = 1;
 			span[i][numColumns][CellSpan.ROW] = 1;
 		}
-		
-		//TODO: Update columnSize
+
+		// TODO: Update columnSize
 	}
 
 	public void addRow() {
-//		System.out.println("Rowsize : " + rowSize);
-//		System.out.println("Columnsie : " + columnSize);
-		
-		if(rowSize == 0){
+//		logger.debug("Rowsize : " + rowSize);
+//		logger.debug("Columnsie : " + columnSize);
+
+		if (rowSize == 0) {
 			span = new int[1][columnSize][2];
 			for (int i = 0; i < columnSize; i++) {
 				span[0][i][CellSpan.COLUMN] = 1;
 				span[0][i][CellSpan.ROW] = 1;
 			}
-			
+
 			rowSize++;
 			return;
 		}
-		
+
 		int[][][] oldSpan = span;
 		int numRows = oldSpan.length;
 		int numColumns = oldSpan[0].length;
@@ -178,7 +184,6 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 		}
 		rowSize++;
 	}
-	
 
 	public void addRows(Integer rows) {
 		for (int i = 0; i < rows; i++) {
@@ -199,8 +204,8 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 			span[row][i][CellSpan.COLUMN] = 1;
 			span[row][i][CellSpan.ROW] = 1;
 		}
-		
-		//TODO : Update rowSize and columnSize
+
+		// TODO : Update rowSize and columnSize
 	}
 
 	public Dimension getSize() {
@@ -235,17 +240,18 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	}
 
 	protected boolean isOutOfBounds(int row, int column, int height, int width) {
-//		System.out.println(">>>>Rowsize : " + rowSize);
-//		System.out.println("Columnsize : " + columnSize);
-//		System.out.println("Row : " + row + " column : " + column);
-//		System.out.println("Width : " + width + " height "+ height);
+//		logger.debug(">>>>Rowsize: " + rowSize);
+//		logger.debug("Columnsize: " + columnSize);
+//		logger.debug("Row: " + row + " column: " + column);
+//		logger.debug("Width: " + width + " height: "+ height);
+		
 		if (row < 0 || row + height > rowSize) {
-			System.out.println("Row condition");
+			logger.debug("Row condition");
 			return true;
 		}
 
 		if (column < 0 || column + width > columnSize) {
-			System.out.println("Row Column");
+			logger.debug("Row Column");
 			return true;
 		}
 

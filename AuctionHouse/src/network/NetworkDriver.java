@@ -20,8 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import mediator.Mediator;
-
 import data.Message;
 import data.Message.MessageType;
 
@@ -574,7 +572,7 @@ public class NetworkDriver extends Thread {
 	}
 
 	public boolean haveToProcess() {
-		// System.out.println("Write buffers : ");
+		// logger.debug("Write buffers : ");
 		for (Map.Entry<SelectionKey, ArrayList<byte[]>> entry : writeBuffers.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
 				return true;

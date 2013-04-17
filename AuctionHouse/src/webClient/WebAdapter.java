@@ -15,23 +15,20 @@ public class WebAdapter implements Command {
 		this.service = service;
 		this.web = web;
 		
-		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service: " + service);
 		logger.debug("service.getStateMgr(): " + service.getStateMgr());
-		logger.debug("service.getStateMgr().getName(): " + service.getStateMgr().getName());
 	}
 	
 	public void execute() {
 		logger.debug("Begin");
-		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service: " + service);
 		logger.debug("service.getStateMgr(): " + service.getStateMgr());
-		logger.debug("service.getStateMgr().getName(): " + service.getStateMgr().getName());
-
 		
 		service.executeWeb(web);
 		
-		logger.debug("service.getName(): " + service.getName());
+		logger.debug("service: " + service);
 		logger.debug("service.getStateMgr(): " + service.getStateMgr());
-		logger.debug("service.getStateMgr().getName(): " + service.getStateMgr().getName());
+
 		logger.debug("End");
 	}
 }

@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class AddNewService extends JFrame {
 	private static final long	serialVersionUID	= 1L;
 	private static Logger		logger				= Logger.getLogger(AddNewService.class);
 
+	private static Long			ONE_HOUR			= 1 * 60 * 60 * 1000L;
+
 	private JPanel				mainPanel;
 	private JLabel				nameLabel;
 	private JTextField			nameField;
@@ -39,7 +42,10 @@ public class AddNewService extends JFrame {
 		// TODO: logger.setLevel(Level.OFF);
 
 		this.mainWindow = mainWindow;
+
 		initComponents();
+		
+		timeSpinner.setValue(new Date(System.currentTimeMillis() + ONE_HOUR));
 
 		if (mainWindow.getGui().getUserProfile().getRole() != UserRole.SELLER) {
 			priceField.setVisible(false);
@@ -148,7 +154,7 @@ public class AddNewService extends JFrame {
 	}
 
 	private void okButtonActionPerformed(ActionEvent e) {
-		logger.debug("timeSpinner.getValue() " + timeSpinner.getValue());
+		logger.debug("timeSpinner.getValue(): " + timeSpinner.getValue());
 
 		if (nameField.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.EMPTY_SERVICE_NAME_ERROR),
@@ -175,16 +181,19 @@ public class AddNewService extends JFrame {
 			}
 		}
 
-		Long time = 10000000L;		
+		Long time = ((Date) timeSpinner.getValue()).getTime();
+
 		Service service = new Service(name);
 		service.setTime(time);
 		service.setPrice(price);
+		
+		logger.debug("service: " + service);
 
 		UserRole role = mainWindow.getGui().getUserProfile().getRole();
 		if (role == UserRole.SELLER) {
 			service.setStatus(Status.ACTIVE);
 			mainWindow.addService(service);
-			
+
 			Service clonedService = service.clone();
 			clonedService.setLaunchOfferState();
 			mainWindow.getGui().publishService(clonedService);

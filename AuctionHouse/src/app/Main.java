@@ -8,15 +8,14 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import mediator.MediatorMockup;
+import mediator.MediatorImpl;
 import network.NetworkImpl;
 import webClient.WebClientMockup;
 
 public class Main {
 	static Logger	logger	= Logger.getLogger(Main.class);
 
-	public
-	static void main(String[] args) {
+	public static void main(String[] args) {
 		PropertyConfigurator.configure("log4j.properties");
 
 		logger.setLevel(Level.OFF);
@@ -31,7 +30,7 @@ public class Main {
 			}
 		}
 
-		MediatorMockup med = new MediatorMockup();
+		MediatorImpl med = new MediatorImpl();
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
 		WebClientMockup web = new WebClientMockup(med);

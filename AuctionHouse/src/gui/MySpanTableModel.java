@@ -134,7 +134,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		ArrayList<ArrayList<Object>> serviceData;
 
 		users = service.getUsers();
-		logger.debug(service);
+		logger.debug("service: " + service);
 		serviceData = service.getAsTable(role);
 
 		data.addAll(serviceData);

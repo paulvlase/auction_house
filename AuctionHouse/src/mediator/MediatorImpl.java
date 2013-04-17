@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import app.Main;
@@ -36,35 +37,38 @@ import data.UserProfile.UserRole;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb {
-	static Logger logger = Logger.getLogger(MediatorMockup.class);
+public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
+	private static Logger						logger	= Logger.getLogger(MediatorImpl.class);
 
-	private Gui								gui;
-	private NetworkMediator					net;
-	private WebClient						web;
+	private Gui									gui;
+	private NetworkMediator						net;
+	private WebClient							web;
 
-	private LoginCred						cred;
-	private UserProfile						profile;
+	private LoginCred							cred;
+	private UserProfile							profile;
 
-	/* Folosite doar pentru mockup. */
-	private ConcurrentHashMap<String, Service>		offers;
+	private ConcurrentHashMap<String, Service>	offers;
 
-	public MediatorMockup() {
+	public MediatorImpl() {
+		// TODO: logger.setLevel(Level.OFF);
 		offers = new ConcurrentHashMap<String, Service>();
 	}
 
 	@Override
 	public void registerGui(Gui gui) {
+		logger.debug("Entered");
 		this.gui = gui;
 	}
 
 	@Override
 	public void registerNetwork(NetworkMediator net) {
+		logger.debug("Entered");
 		this.net = net;
 	}
 
 	@Override
 	public void registerWebClient(WebClient web) {
+		logger.debug("Entered");
 		this.web = web;
 	}
 
@@ -75,24 +79,28 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	/* Metode pentru accesul la cache-ul de servicii. */
 	public void putOffer(Service service) {
+		logger.debug("Entered");
 		offers.put(service.getName(), service);
 	}
 
 	public Service getOffer(String serviceName) {
+		logger.debug("Entered");
 		return offers.get(serviceName);
 	}
 
 	public ConcurrentHashMap<String, Service> getOffers() {
+		logger.debug("Entered");
 		return offers;
 	}
 
 	public void removeOffer(String serviceName) {
+		logger.debug("Entered");
 		offers.remove(serviceName);
 	}
 
 	@Override
 	public boolean logIn(LoginCred cred) {
-		System.out.println("MediatorMockup:logIn()] Begin");
+		logger.debug("Begin");
 		cred.setAddress(net.getAddress());
 		UserProfile profile = web.logIn(cred);
 
@@ -104,73 +112,73 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			fileAppender.setFile("logs/pvlase.log");
 			fileAppender.activateOptions();
 
-			logger.error("[MediatorMockup] Logged in");
-			
 			// TODO: net.init();
 			net.logIn();
-			System.out.println("MediatorMockup:logIn()] End (profile != null)");
+			logger.debug("End (true)");
 			return true;
 		}
-		System.out.println("MediatorMockup:logIn()] End (profile == null)");
+		logger.debug("End (false)");
 		return false;
 	}
 
 	@Override
 	public void logOut() {
-		System.out.println("[MockupMediator:logOut()] Begin");
+		logger.debug("Begin");
 
 		web.logOut();
 		net.logOut();
 
 		cred = null;
 		profile = null;
-		
-		logger.error("Logged out");
-		
+
 		FileAppender fileAppender = (FileAppender) Logger.getRootLogger().getAppender("F");
 		fileAppender.setFile("logs/default.log");
 		fileAppender.activateOptions();
-		
-		//TODO: Remove this.
-		logger.error("Test");
 
-		logger.error("[MediatorMockup] Logged in");
-
-		System.out.println("[MockupMediator:logOut()] End");
+		logger.debug("End");
 	}
 
 	@Override
 	public UserProfile getUserProfile() {
+		logger.debug("Entered");
 		return profile;
 	}
 
 	@Override
 	public boolean setUserProfile(UserProfile profile) {
-		return web.setUserProfile(profile);
+		logger.debug("Begin");
+
+		Boolean bRet = web.setUserProfile(profile);
+
+		logger.debug("End");
+		return bRet;
 	}
 
 	@Override
 	public boolean registerUser(UserProfile profile) {
-		return web.registerUser(profile);
+		logger.debug("Begin");
+
+		Boolean bRet = web.registerUser(profile);
+
+		logger.debug("End");
+		return bRet;
 	}
 
 	@Override
 	public boolean verifyUsername(String username) {
-		return web.verifyUsername(username);
-	}
+		logger.debug("Begin");
 
-	public static Date create(int day, int month, int year, int hourofday, int minute, int second) {
-		if (day == 0 && month == 0 && year == 0)
-			return null;
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month - 1, day, hourofday, minute, second);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTime();
+		Boolean bRet = web.verifyUsername(username);
+
+		logger.debug("End");
+		return bRet;
 	}
 
 	/* MediatorWeb */
 	@Override
 	public ArrayList<Service> loadOffers() {
+		logger.debug("Begin");
+
 		if (profile == null)
 			return null;
 
@@ -188,10 +196,12 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 			}
 		}
 
+		logger.debug("End");
 		return services;
 	}
 
 	public void launchOffers(ArrayList<Service> services) {
+		logger.debug("Begin");
 
 		for (Integer i = 0; i < services.size(); i++) {
 			Service service = services.get(i);
@@ -202,6 +212,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		}
 
 		publishServices(services);
+		logger.debug("End");
 	}
 
 	private Service parseLine(String line, ServiceType type) {
@@ -219,6 +230,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 		try {
 			time = Long.parseLong(st.nextToken());
+			time = System.currentTimeMillis() + time * 1000;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -236,10 +248,15 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 		if (st.hasMoreTokens())
 			return null;
 
-		return createService(name, time, price);
+		Service service = new Service(name);
+		service.setTime(time);
+		service.setPrice(price);
+
+		return service;
 	}
 
 	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
+		logger.debug("Begin");
 		ArrayList<Service> services = new ArrayList<Service>();
 
 		File demandsFile = new File(filename);
@@ -250,7 +267,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 				String line;
 				while ((line = br.readLine()) != null) {
-					System.out.println(line);
+					logger.debug(line);
 					Service d = parseLine(line, type);
 
 					/* TODO: wrong file format. */
@@ -267,63 +284,63 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 				e.printStackTrace();
 			}
 		}
+		
+		logger.debug("End");
 		return services;
 	}
 
 	@Override
 	public void changeServiceNotify(Service service) {
+		logger.debug("Begin");
+
 		service.setEnabledState();
-		System.out.println("[MediatorMockup: changeServiceNotify] service : " + service);
+		logger.debug("service: " + service);
 
 		putOffer(service);
 		gui.changeServiceNotify(service);
+
+		logger.debug("End");
 	}
 
 	@Override
 	public void changeProfileNotify(UserProfile profile) {
+		logger.debug("Begin");
 		gui.changeProfileNotify(profile);
-	}
-
-	@Override
-	public void stopTransfer(Service service) {
-		net.stopTransfer(service);
+		logger.debug("End");
 	}
 
 	@Override
 	public void publishService(Service service) {
-		// TODO Auto-generated method stub
-		net.publishService(service);
+		logger.debug("Begin");
+
 		web.publishService(service);
+
+		logger.debug("End");
 	}
 
 	@Override
 	public void publishServices(ArrayList<Service> services) {
-		net.publishServices(services);
+		logger.debug("Begin");
+
 		web.publishServices(services);
-	}
 
-	public Service createService(String name, Long time, Double price) {
-		Service service = new Service(name);
-		service.setTime(time);
-		service.setPrice(price);
-
-		return service;
-	}
-
-	public void startTransfer(Service service) {
-		net.startTransfer(service);
+		logger.debug("End");
 	}
 
 	@Override
 	public InetSocketAddress getNetworkAddress() {
-		return net.getAddress();
+		logger.debug("Begin");
+
+		InetSocketAddress address = net.getAddress();
+
+		logger.debug("End");
+		return address;
 	}
 
 	@Override
 	public void notifyNetwork(Service service) {
 		logger.debug("Begin");
-		logger.debug("service.getName(): " + service.getName());
-
+		logger.debug("service: " + service);
 
 		net.publishService(service);
 		logger.debug("End");
@@ -331,6 +348,7 @@ public class MediatorMockup implements MediatorGui, MediatorNetwork, MediatorWeb
 
 	@Override
 	public LoginCred getLoginCred() {
+		logger.debug("Entered");
 		return cred;
 	}
 }

@@ -12,10 +12,13 @@ import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Ghennadi Procopciuc
  */
 public class MultiSpanCellTableUI extends BasicTableUI {
+	private static Logger logger = Logger.getLogger(MultiSpanCellTableUI.class);
 
 	public void paint(Graphics g, JComponent c) {
 		Rectangle oldClipBounds = g.getClipBounds();
@@ -89,7 +92,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 			component.setBounds(cellRect);
 			component.validate();
 		} else {
-			//System.out.println("Get cell render for : " + row + " " + column);
+			// logger.debug("Get cell render for : " + row + " " + column);
 			TableCellRenderer renderer = table.getCellRenderer(row, column);
 
 			Component component = table.prepareRenderer(renderer, row, column);
@@ -98,7 +101,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 				rendererPane.add(component);
 			}
 
-			// System.out.println("Row " + row + " column : " + column + " " +
+			// logger.debug("Row " + row + " column : " + column + " " +
 			// component);
 			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
 					cellRect.width, cellRect.height, true);

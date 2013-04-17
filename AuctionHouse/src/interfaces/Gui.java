@@ -31,6 +31,4 @@ public interface Gui {
 
 	public void changeServiceNotify(Service service);	
 	public void changeProfileNotify(UserProfile profile);
-	
-	public Service createService(String name, Long time, Double price);
 }

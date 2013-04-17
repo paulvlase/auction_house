@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import states.StateManager;
 
 import config.GuiConfig;
@@ -29,6 +32,8 @@ import data.UserProfile.UserRole;
  */
 public class Service implements Comparable<Service>, Serializable {
 	private static final long		serialVersionUID	= 1L;
+	private static Logger			logger				= Logger.getLogger(Service.class);
+
 	private String					name;
 	private long					time;
 	private double					price;
@@ -58,9 +63,12 @@ public class Service implements Comparable<Service>, Serializable {
 	};
 
 	public Service() {
+		// TODO: logger.setLevel(Level.OFF);
 	}
 
 	public Service(String name, ArrayList<UserEntry> users, Status status) {
+		// TODO: logger.setLevel(Level.OFF);
+
 		this.name = name;
 		this.users = users;
 		this.time = 0;
@@ -69,7 +77,10 @@ public class Service implements Comparable<Service>, Serializable {
 		this.stateMgr = new StateManager(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Service(Service service) {
+//		 logger.setLevel(Level.OFF);
+
 		this.name = service.getName();
 
 		if (service.getUsers() == null) {
@@ -201,8 +212,8 @@ public class Service implements Comparable<Service>, Serializable {
 	private ArrayList<Object> getActiveRow(UserRole role, UserEntry user) {
 		ArrayList<Object> row = new ArrayList<Object>();
 
-		System.out.println("[Service: getActiveRow()] user: " + user);
-		System.out.println("[Service: getActiveRow()] user offer : " + user.getOffer());
+		logger.debug("user: " + user);
+		logger.debug("user.getOffer(): " + user.getOffer());
 		switch (user.getOffer()) {
 		case TRANSFER_STARTED:
 			if (role == UserRole.BUYER) {
@@ -296,7 +307,7 @@ public class Service implements Comparable<Service>, Serializable {
 			// TODO
 			break;
 		default:
-			System.err.println("[Service, getAsTable] Unexpected Status :|");
+			logger.error("Unexpected Status :|");
 			break;
 		}
 
@@ -318,7 +329,8 @@ public class Service implements Comparable<Service>, Serializable {
 
 	@Override
 	public String toString() {
-		return "" + name + " " + status + " " + users;
+		return "[name: " + name + ", status: " + status + ", state: " + stateMgr + ", time: " + time + ", price: "
+				+ price + ", users: " + users + "]";
 	}
 
 	@Override
