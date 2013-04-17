@@ -43,18 +43,18 @@ Procopciuc                                                                 Vlase
 
 
 
-
-
 Cuprins:
-    1.Continut arhivă ........................................................ 3
+    1.Conținut arhivă ........................................................ 3
     2.Rulare ................................................................. 3
-    3.Organizarea surselor ................................................... 3
+    3.Organizarea surselor ................................................... 4
     4.Testare ................................................................ 4
-    5.Implementare ........................................................... 4
-    5.Acces surse ............................................................ 5
-    5.Bonus .................................................................. 5
-
-
+    5.Acces surse ............................................................ 4
+    6.Credențiale utilizate în interfața grafică.............................. 5
+    7.GUI & Arhitectura .......................................................5
+        7.1.Implementare ..................................................... 5
+        7.2.Bonus ............................................................ 6
+    8.NET .....................................................................6
+        8.1.Implementare ..................................................... 6
 
 
 
@@ -84,9 +84,25 @@ Cuprins:
     Compilarea surselor :
     ant
 
-    Rularea proiectului :
+    Pornirea serverului Web :
+    ant WebServerMockup
+
+    Rularea interfeței grafice :
     ant Main
 
+    O posibilă rulare :
+    ant
+    ant WebServerMockup
+    ant Main # Logare utilizator1
+    ant Main # Logare utilizator2
+    ant Main # Logare utilizator3
+
+    Notă : Pentru partea de logare în interfată grafică vezi capitolul :
+    6. Credențiale utilizate în interfața grafică
+
+
+
+                                                                    [ pagina 3 ]
 3. Organizarea surselor
 
     Proiectul este organizat în 11 pachete, după cum urmează :
@@ -102,7 +118,6 @@ Cuprins:
     mediator            Modulul mediator
     network             Modulul rețea
     webServiceClient    Modulul clientului web
-                                                                    [ pagina 3 ]
 
 4. Testare
 
@@ -116,7 +131,28 @@ Cuprins:
     module). În cadrul acestor module am apelat la SwingWorkers, care ne ajută
     în generarea datelor într-un mod aleator.
 
-5. Implementare
+5. Acces surse
+    În dezvolatare surselor am folosit git (GitHub). Pentru a observa modul în
+    care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
+
+    Username : IDPdummyAccount
+    Password : IDPdummyAccount1
+                                                                    [ pagina 4 ]
+    Adresă proiect : https://github.com/paulvlase/auction_house
+
+
+6. Credențiale utilizate în interfața grafică
+        Usernmae : unix140
+        Password : marmota
+
+        Usernmae : pvlase
+        Password : parola
+
+        Usernmae : s1
+        Password : s1
+
+7. GUI & Arhitectura
+    7.1. Implementare
 
         În cursul implementării am încercat să urmăm enunțul, iar acolo unde ni
     s-a părut că am putea aduce îmbunătățiri, am mai adăugat funcționalități. La
@@ -128,35 +164,22 @@ Cuprins:
     progresbar-ul se va extinde peste toate celulele care țin de datele
     consumatorului, dar nu va șterge restul cererilor de oferte venite din
     partea altor cumpărători.
-        Pentru a rezolva tema am apelat de pattern-urile prezentate în laborator:
-    - MVC (Crearea și controlarea interfeței grafice)
-    - Mediator (A se vedea modulul mediator)
-    - Commander (generarea evenimentelor pentru testate in Network si 
-    WebServiceClient clasele din pachetul guiItems)
-    - State (Prelucrarea pachetelor Service)
-    - Adapter (Pentru a putea publica si prelucra pachetele Service in
-    metoda process din SwingWorker) 
+        Pentru a rezolva tema am apelat de pattern-urile prezentate în
+    laborator:
+        - MVC (Crearea și controlarea interfeței grafice)
+        - Mediator (A se vedea modulul mediator)
+        - Commander (generarea evenimentelor pentru testate in Network si
+        WebServiceClient clasele din pachetul guiItems)
+        - State (Prelucrarea pachetelor Service)
+
+                                                                    [ pagina 5 ]
+        - Adapter (Pentru a putea publica si prelucra pachetele Service in
+        metoda process din SwingWorker)
 
     Comunicarea între module se face cu ajutorul unor notificări. Pachetele
     prin intermediul cărora se transmit date sunt prezente în pachetul data.
 
-
-                                                                    [ pagina 4 ]
-
-    Credențiale utilizate în interfața grafică :
-        Usernmae : unix140
-        Password : marmota
-
-6. Acces surse
-    În dezvolatare surselor am folosit git (GitHub). Pentru a observa modul în
-    care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
-
-    Username : IDPdummyAccount
-    Password : IDPdummyAccount1
-
-    Adresă proiect : https://github.com/paulvlase/auction_house
-
-7. Bonus
+    7.2. Bonus
 
     - Interfață bilingvă cu posibilitate de extindere (Opțiunea se accesează
       din fereastra Login, Language)
@@ -169,6 +192,26 @@ Cuprins:
     - Un utilizator poate accesa ambele conturi atât vânzător cât și producător
     - Fereastră de înregistrare pentru utilizatori
 
+8.NET
+    8.1. Implementare
+
+    Sursele corespunzătoare modulului de networking se găsesc în pachetul
+    network. Conform enunțului procesarea mesajelor și transmiterea / primirea
+    lor de pe rețea sunt două componente distincte. Partea de gestiune a
+    pachetor pe rețea se face în NetworkDriver iar tratarea evenimentelor
+    apărute în urma unor pachete în NetworkReceiveEvents / NetworkSendEvents.
+    Structura mesajelor folosite în cadrul protocolului este definită în clasa
+    Message din pachetul data, câmpurile acesteia sunt completate în funcție de
+    necesitate. Un Message este serializat sub forma unui vector intrinsec de
+    bytes a cărui primii 4 bytes reprezintă dimensiunea efectivă a pachetului.
+    La recepționare octeții sunt interpretați ca fiind un obiect de tipul
+    Message. Fiecare Serviciu din interfața grafică are asociată o stare la un
+
+                                                                    [ pagina 6 ]
+    moment dat, această stare ne ajută să generăm un pachet Message de fiecare
+    dată când sunt necesare notificările celor care sunt implicați în licitație.
+    Interpretarea unui mesaj se poate urmări în clasa NetworkReceiveEvents.
+    Pentru mai multe detalii despre protocol se pot urmări sursele.
 
 
 
@@ -176,4 +219,27 @@ Cuprins:
 
 
 
-                                                                    [ pagina 5 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    [ pagina 7 ]
