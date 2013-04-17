@@ -68,6 +68,9 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		case MAKE_OFFER:
 			processMakeOffer(key, message);
 			break;
+		case OFFER_EXCEED:
+			processOfferExceed(key, message);
+			break;
 		case ACCEPT:
 			processAccept(key, message);
 			break;
@@ -125,83 +128,58 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		logger.debug("Start : " + message);
 
 		UserProfile user = network.getUserProfile();
-//		if (user.getRole() == UserRole.SELLER) {
-//			logger.debug("SELLER Case");
 
-			// Send new offer
-			Service service = network.getService(message.getServiceName());
-			if (service == null) {
-				logger.fatal("End Unknown service : " + message.getServiceName());
-				return;
+		/* Send new offer */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("End Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		Message newMessage = new Message();
+		newMessage.setType(MessageType.LAUNCH_RESPONSE);
+		newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
+				Offer.NO_OFFER, service.getTime(), service.getPrice()));
+		newMessage.setUsername(user.getUsername());
+
+		newMessage.setServiceName(message.getServiceName());
+
+		UserEntry userEntry = (UserEntry) message.getPayload();
+		userEntry.setPrice(service.getPrice());
+
+		logger.debug("Send data ...");
+		driver.sendData(newMessage, key);
+
+		/* Notify mediator about changes */
+
+		logger.debug("Userfs before " + service.getUsers());
+
+		if (service.getUsers() == null) {
+			service.setUsers(new ArrayList<UserEntry>());
+		}
+		service.getUsers().remove(userEntry);
+		service.getUsers().add(userEntry);
+
+		/* Check for OFFER_EXCEED */
+		service.getUsers().remove((UserEntry) message.getPayload());
+		service.addUserEntry((UserEntry) message.getPayload());
+		for (UserEntry userEntry1 : service.getUsers()) {
+			if (userEntry1.getPrice() > ((UserEntry) message.getPayload()).getPrice()) {
+				logger.debug("User : " + userEntry1.getUsername() + " : " + userEntry1.getPrice() + " > "
+						+ ((UserEntry) message.getPayload()).getPrice());
+				Message exceededMessage = new Message();
+				exceededMessage.setServiceName(message.getServiceName());
+				exceededMessage.setDestination(userEntry1.getUsername());
+				exceededMessage.setSource(user.getUsername());
+				exceededMessage.setType(MessageType.OFFER_EXCEED);
+
+				System.out.println("EXCEED : " + exceededMessage);
+				network.getSendEvents().enqueue(network.getSocketChannel(userEntry1.getUsername()), exceededMessage);
 			}
+		}
 
-			Message newMessage = new Message();
-			newMessage.setType(MessageType.LAUNCH_RESPONSE);
-			newMessage.setPayload(new UserEntry(user.getUsername(), user.getFirstName() + " " + user.getLastName(),
-					Offer.NO_OFFER, service.getTime(), service.getPrice()));
-			newMessage.setUsername(user.getUsername());
-
-			newMessage.setServiceName(message.getServiceName());
-
-			UserEntry userEntry = (UserEntry) message.getPayload();
-			userEntry.setPrice(service.getPrice());
-
-			logger.debug("Send data ...");
-			driver.sendData(newMessage, key);
-
-			/* Notify mediator about changes */
-
-			logger.debug("Userfs before " + service.getUsers());
-
-			if (service.getUsers() == null) {
-				service.setUsers(new ArrayList<UserEntry>());
-			}
-			service.getUsers().remove(userEntry);
-			service.getUsers().add(userEntry);
-
-			// service.addUserEntry(userEntry);
-
-			logger.debug("Users after " + service.getUsers());
-			network.changeServiceNotify(service);
-//		} else {
-//			logger.debug("[NetworkReceiveEvents: processLaunch] Buyer Case");
-//			// An seller make me an new offer
-//			// Update price from payload
-//
-//			Service service = network.getService(message.getServiceName());
-//			if (service == null) {
-//				logger.fatal("End Unknown service : " + message.getServiceName());
-//				return;
-//			}
-//
-//			Service newService = service.clone();
-//			UserEntry userEntry = service.getUser(message.getUsername());
-//			UserEntry userEntry = (UserEntry) message.getPayload();
-//			if (userEntry == null) {
-//				logger.error("User not found: " + message.getUsername());
-//				logger.debug("Check if webService can help us ...");
-//				// TODO : userEntry =
-//				// webService.getUserProfile(userEntry.getUsername)
-//				// Check if new userEntry is not null
-//				// Add new userEntry to service
-//				newService.addUserEntry(userEntry);
-//			}
-//
-//			logger.debug("[NetworkReceiveEvents: processLaunch] NewService : " + newService);
-//			UserEntry serviceUser = newService.getUser(userEntry.getUsername());
-//			if (serviceUser == null) {
-//				newService.addUserEntry(userEntry);
-//			} else {
-//				UserEntry messageUserEntry = (UserEntry) message.getPayload();
-//				serviceUser.setPrice(messageUserEntry.getPrice());
-//				serviceUser.setTime(messageUserEntry.getTime());
-//				serviceUser.setOffer(Offer.NO_OFFER);
-//			}
-//
-//			// TODO : Send response to launch
-//			// Message newMessage = new Message();
-//			network.changeServiceNotify(newService);
-//		}
+		logger.debug("Users after " + service.getUsers());
+		network.changeServiceNotify(service);
 
 		logger.debug("End");
 	}
@@ -228,31 +206,10 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		userEntry = (UserEntry) message.getPayload();
 
-		// if (userEntry == null) {
-		// logger.fatal("User not found : " + userEntry.getUsername());
-		// logger.debug("Check if webService can help us ...");
-		// // TODO : userEntry =
-		// // webService.getUserProfile(userEntry.getUsername)
-		// // Check if new userEntry is not null
-		// // Add new userEntry to service
-		//
-		// userEntry = (UserEntry) message.getPayload();
-		// }
-
 		logger.debug("Before users : " + newService.getUsers());
 		newService.getUsers().remove(userEntry);
 		newService.getUsers().add(userEntry);
 		logger.debug("After users : " + newService.getUsers());
-
-		// UserEntry serviceUser = newService.getUser(userEntry.getUsername());
-		// if (serviceUser == null) {
-		// newService.addUserEntry(userEntry);
-		// } else {
-		// UserEntry messageUserEntry = (UserEntry) message.getPayload();
-		// serviceUser.setPrice(messageUserEntry.getPrice());
-		// serviceUser.setTime(messageUserEntry.getTime());
-		// serviceUser.setOffer(Offer.OFFER_MADE);
-		// }
 
 		logger.debug("New Service : " + newService);
 		network.changeServiceNotify(newService);
@@ -293,8 +250,53 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 		service.getUsers().remove((UserEntry) message.getPayload());
 		service.addUserEntry((UserEntry) message.getPayload());
+		for (UserEntry userEntry : service.getUsers()) {
+			if (userEntry.getPrice() > ((UserEntry) message.getPayload()).getPrice()) {
+				logger.debug("User : " + userEntry.getUsername() + " : " + userEntry.getPrice() + " > "
+						+ ((UserEntry) message.getPayload()).getPrice());
+				Message exceededMessage = new Message();
+				exceededMessage.setServiceName(message.getServiceName());
+				exceededMessage.setDestination(userEntry.getUsername());
+				exceededMessage.setSource(userProfile.getUsername());
+				exceededMessage.setType(MessageType.OFFER_EXCEED);
+
+				System.out.println("EXCEED : " + exceededMessage);
+				network.getSendEvents().enqueue(network.getSocketChannel(userEntry.getUsername()), exceededMessage);
+			}
+		}
 
 		logger.debug("The new service : " + service);
+
+		network.changeServiceNotify(service);
+		logger.debug("End");
+	}
+
+	private void processOfferExceed(SelectionKey key, Message message) {
+		logger.debug("Begin");
+		UserProfile userProfile = network.getUserProfile();
+
+		logger.debug("Message : " + message);
+		if (userProfile.getRole() == UserRole.BUYER) {
+			logger.fatal("Only a seller can receive this type of message");
+			return;
+		}
+
+		/* Get actual service */
+		Service service = network.getService(message.getServiceName());
+		if (service == null) {
+			logger.fatal("Unknown service : " + message.getServiceName());
+			return;
+		}
+
+		logger.debug("Service : " + service);
+		logger.debug("Username : " + message.getSource());
+		UserEntry user = service.getUser(message.getSource());
+		if (user == null) {
+			logger.fatal("User " + message.getSource() + " not found");
+			return;
+		}
+
+		user.setOffer(Offer.OFFER_EXCEDED);
 
 		network.changeServiceNotify(service);
 		logger.debug("End");
@@ -392,11 +394,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 			return;
 		}
 
-		/* Remove user from GUI */
-		// service.getUsers().remove(user);
-		// if (service.getUsers().isEmpty()) {
-		// service.setUsers(null);
-		// }
 		user.setOffer(Offer.OFFER_REFUSED);
 		logger.debug("New service : " + service);
 
@@ -458,7 +455,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		}
 
 		user.setProgress(0);
-		// user.setOffer(Offer.TRANSFER_STARTED);
 		service.setStatus(Status.TRANSFER_STARTED);
 
 		network.changeServiceNotify(service);
@@ -555,6 +551,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		logger.debug("Remove dependencies for " + message.getSource());
 
 		network.removeAllDependencies(message.getSource());
+
 		// Message message = new Message();
 		// message.setType(MessageType.LOGOUT);
 		// message.setDestination(entry.getKey());
@@ -564,17 +561,6 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 
 	protected synchronized void process() {
 		logger.debug("Begin");
-
-		// if (!haveToProcess()) {
-		// return;
-		// }
-
-		// for (Entry<SelectionKey, ArrayList<Message>> entry : new
-		// ArrayList<>(queue.entrySet())) {
-		// for (Message message : entry.getValue()) {
-		// messageProcess(entry.getKey(), message);
-		// }
-		// }
 
 		Map.Entry<SelectionKey, Message> job = getJob();
 		if (job == null) {
