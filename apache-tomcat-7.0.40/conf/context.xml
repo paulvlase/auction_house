@@ -17,6 +17,14 @@
 -->
 <!-- The contents of this file will be loaded for each web application -->
 <Context>
+    <Resource name="jdbc/AirplaineComp"
+              auth="Container"
+	      type="javax.sql.DataSource"
+	      maxActive="50" maxIdle="30"
+	      maxWait="10000" username="user"
+	      password="password"
+	      driverClassName="com.mysql.jdbc.Driver"
+	      url="jdbc:mysql://localhost:3306/AirplaineDb" />
 
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
