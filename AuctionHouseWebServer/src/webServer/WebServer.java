@@ -62,6 +62,7 @@ public class WebServer {
 
 		if (!(obj instanceof LoginRequest)) {
 			System.out.println("[WebServer:login] Wrong message... waiting LoginRequest");
+			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LoginRequest"));
 		}
 		
 		LoginRequest loginRequest = (LoginRequest) obj;
@@ -134,6 +135,7 @@ public class WebServer {
 
 		if (!(obj instanceof LogoutRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
+			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LogoutRequest"));
 		}
 		
 		LogoutRequest logoutRequest = (LogoutRequest) obj;
@@ -181,10 +183,23 @@ public class WebServer {
 	public byte[] launchOffer(byte[] req) {
 		System.out.println("[WebServer:logout] Begin");
 		
-		byte[] res = new byte[1];
-		LaunchOfferRequest launchOfferReq;
+		byte[] res;
+		Object obj = WebMessage.deserialize(req);
+		
+		if (!(obj instanceof LaunchOfferRequest)) {
+			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
+			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+		}
+		
+		LaunchOfferRequest launchOfferReq = (LaunchOfferRequest) obj;
+		Service service = launchOfferReq.getService();
 
-//		Service service = req.getService();
+		String query =
+				"SELECT *" +
+				" FROM services" +
+				" WHERE name = " + service.getName()
+		
+		Service service = req.getService();
 //		ArrayList<UserEntry> userEntries;
 //
 //		UserEntry userEntry = new UserEntry();
