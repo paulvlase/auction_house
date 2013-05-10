@@ -20,6 +20,7 @@ public class LoginCred implements Serializable {
 	private String password;
 	private UserRole role;
 	private InetSocketAddress address;
+	private Integer id;
 	
 	public LoginCred(String username, String password, UserRole role) {
 		this.username = username;
