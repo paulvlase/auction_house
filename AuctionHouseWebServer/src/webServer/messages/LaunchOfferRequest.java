@@ -2,18 +2,19 @@ package webServer.messages;
 
 import java.io.Serializable;
 
+import data.LoginCred;
 import data.Service;
 import data.UserProfile.UserRole;
 
 public class LaunchOfferRequest implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 	public String username;
-	public UserRole role;
 	public Service service;
+	public LoginCred cred;
 	
-	public LaunchOfferRequest(String username, UserRole role, Service service) {
+	public LaunchOfferRequest(String username, LoginCred cred, Service service) {
 		this.username = username;
-		this.role = role;
+		this.cred = cred;
 		this.service = service;
 	}
 	
@@ -21,8 +22,8 @@ public class LaunchOfferRequest implements Serializable {
 		return username;
 	}
 	
-	public UserRole getUserRole() {
-		return role;
+	public LoginCred getCred() {
+		return cred;
 	}
 	
 	public Service getService() {

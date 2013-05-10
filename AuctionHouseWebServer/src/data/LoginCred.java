@@ -14,7 +14,7 @@ import data.UserProfile.UserRole;
  */
 public class LoginCred implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(LoginCred.class);
+	private static Logger		logger				= Logger.getLogger(LoginCred.class);
 
 	private String username;
 	private String password;
@@ -38,12 +38,20 @@ public class LoginCred implements Serializable {
 	public UserRole getRole() {
 		return role;
 	}
-	
+
 	public InetSocketAddress getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(InetSocketAddress address) {
 		this.address = address;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
