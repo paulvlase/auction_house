@@ -7,7 +7,11 @@ import java.rmi.RemoteException;
 import org.apache.axis.AxisFault;
 import org.apache.axis.client.Service;
 
-import webServer.WebServerSoap11BindingStub;
+import data.LoginCred;
+import data.UserProfile.UserRole;
+
+import webServer.messages.LoginRequest;
+
 
 public class WebClient {
 	public static void main(String[] args) throws MalformedURLException, RemoteException {
@@ -16,6 +20,10 @@ public class WebClient {
 		System.out.println("LALALA");
 		float x = client.celsiusToFarenheit(12.3f);
 		System.out.println(x);
+		
+		LoginRequest request = new LoginRequest(new LoginCred("shmeker", "parolaDeJmecker", UserRole.SELLER));
+		
+		System.out.println(client.login(WebMessage.serialize(request)));
 		System.out.println("End of story ...");
 	}
 }
