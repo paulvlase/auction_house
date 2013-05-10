@@ -1,2 +1,11 @@
 eclipse.preferences.version=1
 encoding//src/config/GuiConfig.java=UTF-8
+encoding//src/webServer/CelsiusToFarenheit.java=UTF-8
+encoding//src/webServer/CelsiusToFarenheitResponse.java=UTF-8
+encoding//src/webServer/FarenheitToCelsius.java=UTF-8
+encoding//src/webServer/FarenheitToCelsius1Response.java=UTF-8
+encoding//src/webServer/FarenheitToCelsiusResponse.java=UTF-8
+encoding//src/webServer/WebServer.java=UTF-8
+encoding//src/webServer/WebServerLocator.java=UTF-8
+encoding//src/webServer/WebServerPortType.java=UTF-8
+encoding//src/webServer/WebServerSoap11BindingStub.java=UTF-8
