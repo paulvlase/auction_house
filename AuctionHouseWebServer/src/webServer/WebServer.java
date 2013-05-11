@@ -1,19 +1,12 @@
 package webServer;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import mediator.MediatorImpl;
-
-import org.apache.log4j.Logger;
 
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
@@ -27,7 +20,6 @@ import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
-import config.WebServiceServerConfig;
 import data.LoginCred;
 import data.Service;
 import data.UserEntry;

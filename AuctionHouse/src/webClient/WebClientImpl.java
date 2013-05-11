@@ -73,6 +73,11 @@ public class WebClientImpl implements WebClient, WebService {
 
 		Object responseObj = Util.askWebServer(requestMsg);
 
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+			logger.warn("Failed: " + res.getMsg());
+		} 
+		
 		thread.stopRunning();
 		try {
 			thread.join();
@@ -88,7 +93,19 @@ public class WebClientImpl implements WebClient, WebService {
 		Object requestObj = new GetProfileRequest(med.getLoginCred(), username);
 		Object responseObj = Util.askWebServer(requestObj);
 		
-		return ((GetProfileResponse) responseObj).getProfile();
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+
+			logger.warn("Failed: " + res.getMsg());
+			return null;
+		} else if (responseObj instanceof GetProfileResponse) {
+			GetProfileResponse res = (GetProfileResponse) responseObj;
+			
+			return res.getProfile();
+		} else {
+			logger.error("Unexpected response message");
+			return null;
+		}
 	}
 
 	public boolean setUserProfile(UserProfile profile) {
