@@ -27,6 +27,7 @@ import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
+import webServer.messages.RemoveOfferRequest;
 import webServer.messages.SetProfileRequest;
 import data.LoginCred;
 import data.Service;
@@ -88,7 +89,7 @@ public class WebServer {
 
 				Statement st2 = conn.createStatement();
 				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
-						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
+						+ cred.getAddress().getAddress().getCanonicalHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 						+ id;
 				st2.executeUpdate(query);
 
@@ -245,7 +246,11 @@ public class WebServer {
 				
 				PreparedStatement ps2 = conn.prepareStatement(query);
 				ps2.setString(1, service.getName());
-				ps2.setInt(2, UserRole.SELLER.ordinal());
+				if (cred.getRole() == UserRole.BUYER) {
+					ps2.setInt(2, UserRole.SELLER.ordinal());
+				} else {
+					ps2.setInt(2, UserRole.BUYER.ordinal());
+				}
 				ps2.setInt(3, 1);
 				ResultSet rs2 = ps2.executeQuery();
 
@@ -257,11 +262,13 @@ public class WebServer {
 					InetSocketAddress address = new InetSocketAddress(rs2.getString("u.address"), rs2.getInt("u.port"));
 					userEntry.setAddress(address);
 
+					System.out.println("userEntry: " + userEntry);
 					sellers.add(userEntry);
 				}
 				rs2.close();
 				ps2.close();
 				service.setUsers(sellers);
+				System.out.println("service: " + service);
 			} else {
 				if (cred.getRole() == UserRole.SELLER) {
 					System.out.println("[WebServer:launchOffer] Inserting new service as seller ");
@@ -341,6 +348,38 @@ public class WebServer {
 			st.close();
 
 			System.out.println("[WebServer: dropOffer] End");
+			return WebMessage.serialize(new OkResponse());
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
+		}
+	}
+	
+	public byte[] removeOffer(byte[] byteReq) {
+		System.out.println("[WebServer:removeOffer] Begin");
+		
+		Object obj = WebMessage.deserialize(byteReq);
+		if (!(obj instanceof RemoveOfferRequest)) {
+			System.out.println("[WebServer:dropOffer] Wrong message... waiting removeOfferRequest");
+
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting removeOfferRequest"));	
+		}
+		
+		RemoveOfferRequest req = (RemoveOfferRequest) obj;
+		LoginCred cred = req.getLoginCred();
+		
+		try {
+			String query = "DELETE FROM services WHERE name = ? AND user_id = ? AND user_role = ?";
+			
+			PreparedStatement  ps = conn.prepareStatement(query);
+			ps.setString(1, req.getServiceName());
+			ps.setInt(2, cred.getId());
+			ps.setInt(3, cred.getRole().ordinal());
+			ps.executeUpdate();
+			ps.close();
+			
+			System.out.println("[WebServer:removeOffer] End");
 			return WebMessage.serialize(new OkResponse());
 		} catch (SQLException e) {
 			e.printStackTrace();

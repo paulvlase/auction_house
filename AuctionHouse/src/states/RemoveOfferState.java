@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import webClient.Util;
+import webServer.messages.ErrorResponse;
+import webServer.messages.RemoveOfferRequest;
+
 import data.Message;
 import data.Service;
 import data.UserEntry;
-import data.UserEntry.Offer;
 import data.UserProfile;
 
 public class RemoveOfferState extends AbstractState {
@@ -48,8 +51,17 @@ public class RemoveOfferState extends AbstractState {
 
 	public void executeWeb(WebService web) {
 		logger.debug("Begin");
-		// TODO
-		// web.removeOffer(service.getName());
+		logger.debug("service: " + service);
+
+		RemoveOfferRequest reqObject = new RemoveOfferRequest(web.getLoginCred(), service.getName());
+		Object resObject = Util.askWebServer(reqObject);
+
+		if (resObject instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) resObject;
+			
+			System.out.println("Failed: " + res.getMsg());
+		}
+		
 		web.notifyNetwork(service);
 		logger.debug("End");
 	}
