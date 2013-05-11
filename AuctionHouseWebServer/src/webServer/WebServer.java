@@ -89,7 +89,7 @@ public class WebServer {
 
 				Statement st2 = conn.createStatement();
 				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
-						+ cred.getAddress().getAddress().getCanonicalHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
+						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 						+ id;
 				st2.executeUpdate(query);
 
