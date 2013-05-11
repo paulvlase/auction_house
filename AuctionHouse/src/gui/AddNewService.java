@@ -192,6 +192,10 @@ public class AddNewService extends JFrame {
 		mainWindow.addService(service);
 
 		Service clonedService = service.clone();
+		
+		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.BUYER) {
+			clonedService.setStatus(Status.NEW);
+		}
 		clonedService.setLaunchOfferState();
 		mainWindow.getGui().publishService(clonedService);
 

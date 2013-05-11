@@ -16,6 +16,7 @@ import data.Service;
 import data.Service.Status;
 import data.UserEntry;
 import data.UserEntry.Offer;
+import data.UserProfile.UserRole;
 import data.UserProfile;
 
 public class LaunchOfferState extends AbstractState {
@@ -48,11 +49,14 @@ public class LaunchOfferState extends AbstractState {
 		logger.debug("Begin");
 		logger.debug("service: " + service);
 
-		// TODO
-		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getLoginCred(), service);
+		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getLoginCred(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
 
-		responseObj.getService().setStatus(Status.ACTIVE);
+		if (service.getStatus() == Status.NEW) { 
+			responseObj.getService().setStatus(Status.INACTIVE);
+		} else if (service.getStatus() == Status.INACTIVE) {
+			responseObj.getService().setStatus(Status.ACTIVE);
+		}
 
 		logger.debug("service.getService(): "
 				+ responseObj.getService());

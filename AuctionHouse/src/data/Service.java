@@ -59,7 +59,7 @@ public class Service implements Comparable<Service>, Serializable {
 	 * 
 	 */
 	public enum Status {
-		ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
+		NEW, ACTIVE, INACTIVE, TRANSFER_STARTED, TRANSFER_IN_PROGRESS, TRANSFER_COMPLETE, TRANSFER_FAILED, DROP
 	};
 
 	public Service() {

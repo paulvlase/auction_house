@@ -7,7 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import config.WebServerConfig;
 
@@ -136,8 +139,9 @@ public class WebServer {
 			String query = "UPDATE users" + " SET " + online_as_field + " = 0 WHERE id = " + cred.getId();
 			st.executeUpdate(query);
 
-			query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
+			query = "UPDATE services" + " SET active = 0 WHERE id = " + cred.getId() + " AND user_role = "
 					+ cred.getRole().ordinal();
+			System.out.println("[WebServer:logout] " + query);
 			st.executeUpdate(query);
 
 			st.close();
@@ -176,7 +180,7 @@ public class WebServer {
 			while (rs.next()) {
 				Service service = new Service(rs.getString("name"));
 
-				service.setTime(rs.getLong("time"));
+				service.setTime(rs.getTimestamp("time").getTime());
 				service.setPrice(rs.getDouble("price"));
 
 				services.add(service);
@@ -193,7 +197,7 @@ public class WebServer {
 	}
 
 	public byte[] launchOffer(byte[] byteReq) {
-		System.out.println("[WebServer:loadOffers] Begin");
+		System.out.println("[WebServer:launchOffers] Begin");
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LaunchOfferRequest)) {
@@ -202,7 +206,7 @@ public class WebServer {
 		}
 
 		LaunchOfferRequest req = (LaunchOfferRequest) obj;
-		LoginCred cred = req.getCred();
+		LoginCred cred = req.getLoginCred();
 		Service service = req.getService();
 
 		try {
@@ -220,7 +224,7 @@ public class WebServer {
 			ps1.close();
 
 			if (found) {
-				// Activez un serviciu
+				System.out.println("[WebService:launchOffer] Service found, activating...");
 				query = "UPDATE services SET active = 1 WHERE user_id = ? AND name = ? AND user_role = ?";
 
 				PreparedStatement ps2 = conn.prepareStatement(query);
@@ -230,12 +234,13 @@ public class WebServer {
 				ps2.executeUpdate();
 				ps2.close();
 				
-				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1";
+				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ?";
 				
 				ps2 = conn.prepareStatement(query);
 				ps2.setString(1, service.getName());
 				ps2.setInt(2, UserRole.SELLER.ordinal());
-				ResultSet rs2 = ps2.executeQuery(query);
+				ps2.setInt(3, 1);
+				ResultSet rs2 = ps2.executeQuery();
 
 				ArrayList<UserEntry> sellers = new ArrayList<UserEntry>();
 				while (rs2.next()) {
@@ -251,24 +256,24 @@ public class WebServer {
 				ps2.close();
 				service.setUsers(sellers);
 			} else {
-				// Adaug un serviciu, si daca role-ul e SELLER il activez
 				if (cred.getRole() == UserRole.SELLER) {
+					System.out.println("[WebServer:launchOffer] Inserting new service as seller ");
 					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 1, ?)";
 					
 					PreparedStatement ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
-					ps2.setLong(2, service.getTime());
+					ps2.setTimestamp(2, new Timestamp(service.getTime()));
 					ps2.setDouble(3, service.getPrice());
 					ps2.setInt(4, cred.getId());
 					ps2.setInt(5, UserRole.SELLER.ordinal());
-					ps2.executeUpdate(query);
+					ps2.executeUpdate();
 					ps2.close();
 					
 					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1";
 					ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
 					ps2.setInt(2, UserRole.BUYER.ordinal());
-					ResultSet rs2 = ps2.executeQuery(query);
+					ResultSet rs2 = ps2.executeQuery();
 
 					ArrayList<UserEntry> buyers = new ArrayList<UserEntry>();
 					while (rs2.next()) {
@@ -285,16 +290,17 @@ public class WebServer {
 					ps2.close();
 					service.setUsers(buyers);
 				} else {
+					System.out.println("[WebServer:launchOffer] Inserting new service as buyer");
 					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 0, ?)";
 					
 					PreparedStatement ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
-					ps2.setLong(2, service.getTime());
+					ps2.setTimestamp(2, new Timestamp(service.getTime()));
 					ps2.setDouble(3,  service.getPrice());
 					ps2.setInt(4, cred.getId());
 					ps2.setInt(5, cred.getRole().ordinal());
 					ps2.setInt(2, UserRole.BUYER.ordinal());
-					ps2.executeUpdate(query);
+					ps2.executeUpdate();
 					
 					ps2.close();
 				}
@@ -323,12 +329,12 @@ public class WebServer {
 			Statement st = conn.createStatement();
 
 			// TODO: Fix this.
-			String query = "SELECT id FROM users WHERE username = " + req.getUsername();
+			String query = "SELECT id FROM users WHERE username = '" + req.getUsername() + "'";
 			ResultSet rs = st.executeQuery(query);
 
 			Integer id = rs.getInt("id");
 
-			query = "UPDATE services SET active = 0 WHERE name = " + req.getServiceName() + " AND user_id = " + id
+			query = "UPDATE services SET active = 0 WHERE name = '" + req.getServiceName() + "' AND user_id = " + id
 					+ " AND user_role = " + req.getUserRole().ordinal();
 			st.executeUpdate(query);
 			st.close();
@@ -356,7 +362,7 @@ public class WebServer {
 
 		try {
 			Statement st = conn.createStatement();
-			String query = "SELECT * FROM users WHERE username = " + req.getUsername();
+			String query = "SELECT * FROM users WHERE username = '" + req.getUsername() +"'";
 			ResultSet rs = st.executeQuery(query);
 
 			UserProfile profile = null;
@@ -396,9 +402,9 @@ public class WebServer {
 
 		try {
 			Statement st = conn.createStatement();
-			String query = "UPDATE users SET first_name = " + profile.getFirstName() + ", last_name = "
-					+ profile.getLastName() + ", password = " + profile.getPassword() + ", location = "
-					+ profile.getLocation() + " WHERE username = " + profile.getUsername();
+			String query = "UPDATE users SET first_name = '" + profile.getFirstName() + "', last_name = '"
+					+ profile.getLastName() + "', password = '" + profile.getPassword() + "', location = '"
+					+ profile.getLocation() + "' WHERE username = '" + profile.getUsername() + "'";
 			st.executeUpdate(query);
 			st.close();
 		} catch (SQLException e) {
