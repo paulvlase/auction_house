@@ -387,6 +387,9 @@ public class NetworkDriver extends Thread {
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
+			
+			/* A little ugly hack */
+			destination = new InetSocketAddress(destination.getHostName(), destination.getPort());
 			logger.debug("Connect to : " + destination + " " + username);
 			bRet = socketChannel.connect(destination);
 
