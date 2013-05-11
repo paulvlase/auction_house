@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import config.WebServerConfig;
+
 import webClient.WebMessage;
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
@@ -29,8 +31,6 @@ import data.UserProfile;
 import data.UserProfile.UserRole;
 
 public class WebServer {
-	static String		name	= "root";
-	static String		pass	= "student";
 	static Connection	conn;
 
 	static {
@@ -40,10 +40,11 @@ public class WebServer {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		String url = "jdbc:mysql://127.0.0.1:3306/auction_house";
+		String url = "jdbc:mysql://" + WebServerConfig.DB_SERVER_ADDRESS + ":" + WebServerConfig.DB_SERVER_PORT + "/"
+				+ WebServerConfig.DB_NAME;
 
 		try {
-			conn = DriverManager.getConnection(url, name, pass);
+			conn = DriverManager.getConnection(url, WebServerConfig.DB_USER, WebServerConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -81,8 +82,9 @@ public class WebServer {
 					online_as_field = "as_seller";
 				}
 
-				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = " + cred.getAddress().getHostName()
-						+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
+				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = "
+						+ cred.getAddress().getHostName() + ", port = " + cred.getAddress().getPort() + " WHERE id = "
+						+ id;
 				st.executeUpdate(query);
 
 				UserProfile userProfile = new UserProfile();
@@ -92,7 +94,7 @@ public class WebServer {
 				userProfile.setPassword(rs.getString("password"));
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs.getString("location"));
-				
+
 				st.close();
 				System.out.println("[WebServer:login] End (lLoginResponse)");
 				return WebMessage.serialize(new LoginResponse(userProfile));
@@ -274,18 +276,18 @@ public class WebServer {
 
 		try {
 			Statement st = conn.createStatement();
-			
+
 			// TODO: Fix this.
 			String query = "SELECT id FROM users WHERE username = " + req.getUsername();
 			ResultSet rs = st.executeQuery(query);
 
 			Integer id = rs.getInt("id");
 
-			query = "UPDATE services SET active = 0 WHERE name = " + req.getServiceName() + " AND user_id = "
-					+ id + " AND user_role = " + req.getUserRole().ordinal();
+			query = "UPDATE services SET active = 0 WHERE name = " + req.getServiceName() + " AND user_id = " + id
+					+ " AND user_role = " + req.getUserRole().ordinal();
 			st.executeUpdate(query);
 			st.close();
-			
+
 			System.out.println("[WebServer: dropOffer] End");
 			return WebMessage.serialize(new OkResponse());
 		} catch (SQLException e) {
@@ -301,7 +303,7 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof GetProfileRequest)) {
 			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
-			
+
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting GetProfileRequest"));
 		}
 
@@ -324,12 +326,12 @@ public class WebServer {
 				// profile.setAvatar(avatar);
 			}
 			st.close();
-			
+
 			System.out.println("[WebServer:getProfile] End");
 			return WebMessage.serialize(new GetProfileResponse(profile));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 	}
@@ -385,7 +387,7 @@ public class WebServer {
 			st.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 
