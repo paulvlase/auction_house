@@ -18,6 +18,7 @@ import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserProfile;
 import data.UserProfile.UserRole;
@@ -45,7 +46,7 @@ public class WebClientImpl implements WebClient, WebService {
 		med.registerWebClient(this);
 	}
 
-	public UserProfile logIn(LoginCred cred) {
+	public Pair<LoginCred, UserProfile> logIn(LoginCred cred) {
 		logger.debug("Begin");
 
 		Object requestObj = new LoginRequest(cred);
@@ -63,8 +64,7 @@ public class WebClientImpl implements WebClient, WebService {
 			thread = new WebClientEvents(this);
 			thread.start();
 			
-			med.getLoginCred().setId(res.getCred().getId());
-			return ((LoginResponse) responseObj).getUserProfile();
+			return new Pair<LoginCred, UserProfile>(res.getCred(), res.getUserProfile());
 		} else {
 			logger.error("Unexpected response message " + responseObj.getClass());
 			return null;

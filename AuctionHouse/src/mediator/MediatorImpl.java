@@ -28,6 +28,7 @@ import app.Main;
 import config.FilesConfig;
 import config.GlobalConfig.ServiceType;
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserProfile;
 import data.UserProfile.UserRole;
@@ -102,11 +103,11 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	public boolean logIn(LoginCred cred) {
 		logger.debug("Begin");
 		cred.setAddress(net.getAddress());
-		UserProfile profile = web.logIn(cred);
-
-		if (profile != null) {
-			this.cred = cred;
-			this.profile = profile;
+		Pair<LoginCred, UserProfile> pair = web.logIn(cred);
+		
+		if (pair != null) {
+			this.cred = pair.getFirst();
+			this.profile = pair.getSecond();
 
 			FileAppender fileAppender = (FileAppender) Logger.getRootLogger().getAppender("F");
 			fileAppender.setFile("logs/pvlase.log");

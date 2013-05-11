@@ -31,4 +31,12 @@ public class Pair<K, V> implements Map.Entry<K, V>{
 		this.key = key;
 		return key;
 	}
+	
+	public K getFirst() {
+		return key;
+	}
+	
+	public V getSecond() {
+		return value;
+	}
 }

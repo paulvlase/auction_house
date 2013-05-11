@@ -3,6 +3,7 @@ package interfaces;
 import java.util.ArrayList;
 
 import data.LoginCred;
+import data.Pair;
 import data.Service;
 import data.UserProfile;
 
@@ -12,7 +13,7 @@ import data.UserProfile;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public interface WebClient {
-	public UserProfile logIn(LoginCred cred);
+	public Pair<LoginCred, UserProfile> logIn(LoginCred cred);
 	public void logOut();
 	
 	public UserProfile getUserProfile(String username);
