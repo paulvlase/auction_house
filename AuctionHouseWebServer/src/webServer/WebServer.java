@@ -3,6 +3,7 @@ package webServer;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -158,62 +159,97 @@ public class WebServer {
 		Service service = req.getService();
 
 		try {
-			Statement st = conn.createStatement();
-			String query = "SELECT *" + " FROM services" + " WHERE user_id = " + cred.getId() + " AND name = "
-					+ service.getName() + " AND user_role = " + cred.getRole().ordinal();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT * FROM services WHERE user_id = ? AND name = ? AND user_role = ?";
 
-			if (rs.first()) {
+			PreparedStatement ps1 = conn.prepareStatement(query);
+			ps1.setInt(1, cred.getId());
+			ps1.setString(2, service.getName());
+			ps1.setInt(3, cred.getRole().ordinal());
+			ResultSet rs1 = ps1.executeQuery();
+			
+			Boolean found = rs1.first();
+			
+			rs1.close();
+			ps1.close();
+
+			if (found) {
 				// Activez un serviciu
-				query = "UPDATE services SET active = 1 WHERE user_id = " + cred.getId() + " AND name = "
-						+ service.getName() + " AND user_role = " + cred.getRole().ordinal();
+				query = "UPDATE services SET active = 1 WHERE user_id = ? AND name = ? AND user_role = ?";
 
-				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = " + service.getName()
-						+ " AND s.user_role = " + UserRole.SELLER.ordinal() + " AND s.active = 1";
-				rs = st.executeQuery(query);
+				PreparedStatement ps2 = conn.prepareStatement(query);
+				ps2.setInt(1, cred.getId());
+				ps2.setString(2, service.getName());
+				ps2.setInt(3, cred.getRole().ordinal());
+				ps2.executeUpdate();
+				ps2.close();
+				
+				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1";
+				
+				ps2 = conn.prepareStatement(query);
+				ps2.setString(1, service.getName());
+				ps2.setInt(2, UserRole.SELLER.ordinal());
+				ResultSet rs2 = ps2.executeQuery(query);
 
 				ArrayList<UserEntry> sellers = new ArrayList<UserEntry>();
-				while (rs.next()) {
+				while (rs2.next()) {
 					UserEntry userEntry = new UserEntry();
-					userEntry.setUsername(rs.getString("u.username"));
-					userEntry.setName(rs.getString("u.first_name") + rs.getString("u.last_name"));
-					InetSocketAddress address = new InetSocketAddress(rs.getString("u.address"), rs.getInt("u.port"));
+					userEntry.setUsername(rs2.getString("u.username"));
+					userEntry.setName(rs2.getString("u.first_name") + rs2.getString("u.last_name"));
+					InetSocketAddress address = new InetSocketAddress(rs2.getString("u.address"), rs2.getInt("u.port"));
 					userEntry.setAddress(address);
 
 					sellers.add(userEntry);
 				}
-				rs.close();
+				rs2.close();
+				ps2.close();
 				service.setUsers(sellers);
 			} else {
 				// Adaug un serviciu, si daca role-ul e SELLER il activez
 				if (cred.getRole() == UserRole.SELLER) {
-					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES ("
-							+ service.getName() + ", " + service.getTime() + ", " + service.getPrice() + ", "
-							+ cred.getId() + ", " + 1 + ", " + cred.getRole() + ")";
-					st.executeUpdate(query);
-
-					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = "
-							+ service.getName() + " AND s.user_role = " + UserRole.BUYER + " AND s.active = " + 1;
-					rs = st.executeQuery(query);
+					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 1, ?)";
+					
+					PreparedStatement ps2 = conn.prepareStatement(query);
+					ps2.setString(1, service.getName());
+					ps2.setLong(2, service.getTime());
+					ps2.setDouble(3, service.getPrice());
+					ps2.setInt(4, cred.getId());
+					ps2.setInt(5, UserRole.SELLER.ordinal());
+					ps2.executeUpdate(query);
+					ps2.close();
+					
+					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1";
+					ps2 = conn.prepareStatement(query);
+					ps2.setString(1, service.getName());
+					ps2.setInt(2, UserRole.BUYER.ordinal());
+					ResultSet rs2 = ps2.executeQuery(query);
 
 					ArrayList<UserEntry> buyers = new ArrayList<UserEntry>();
-					while (rs.next()) {
+					while (rs2.next()) {
 						UserEntry userEntry = new UserEntry();
-						userEntry.setUsername(rs.getString("u.username"));
-						userEntry.setName(rs.getString("u.first_name") + rs.getString("u.last_name"));
-						InetSocketAddress address = new InetSocketAddress(rs.getString("u.address"),
-								rs.getInt("u.port"));
+						userEntry.setUsername(rs2.getString("u.username"));
+						userEntry.setName(rs2.getString("u.first_name") + rs2.getString("u.last_name"));
+						InetSocketAddress address = new InetSocketAddress(rs2.getString("u.address"),
+								rs2.getInt("u.port"));
 						userEntry.setAddress(address);
 
 						buyers.add(userEntry);
 					}
-					rs.close();
+					rs2.close();
+					ps2.close();
 					service.setUsers(buyers);
 				} else {
-					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES ("
-							+ service.getName() + ", " + service.getTime() + ", " + service.getPrice() + ", "
-							+ cred.getId() + ", " + 0 + ", " + cred.getRole() + ")";
-					st.executeUpdate(query);
+					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 0, ?)";
+					
+					PreparedStatement ps2 = conn.prepareStatement(query);
+					ps2.setString(1, service.getName());
+					ps2.setLong(2, service.getTime());
+					ps2.setDouble(3,  service.getPrice());
+					ps2.setInt(4, cred.getId());
+					ps2.setInt(5, cred.getRole().ordinal());
+					ps2.setInt(2, UserRole.BUYER.ordinal());
+					ps2.executeUpdate(query);
+					
+					ps2.close();
 				}
 			}
 		} catch (SQLException e) {
