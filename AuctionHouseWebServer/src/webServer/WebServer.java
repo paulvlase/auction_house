@@ -30,6 +30,7 @@ import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 import data.LoginCred;
 import data.Service;
+import data.Service.Status;
 import data.UserEntry;
 import data.UserProfile;
 import data.UserProfile.UserRole;
@@ -224,19 +225,23 @@ public class WebServer {
 			ps1.close();
 
 			if (found) {
-				System.out.println("[WebService:launchOffer] Service found, activating...");
-				query = "UPDATE services SET active = 1 WHERE user_id = ? AND name = ? AND user_role = ?";
+				System.out.println("[WebService:launchOffer] Service found");
+				
+				if (service.getStatus() != Status.NEW) {
+					System.out.println("[WebService:launchOffer] activating...");
+					query = "UPDATE services SET active = 1 WHERE user_id = ? AND name = ? AND user_role = ?";
 
-				PreparedStatement ps2 = conn.prepareStatement(query);
-				ps2.setInt(1, cred.getId());
-				ps2.setString(2, service.getName());
-				ps2.setInt(3, cred.getRole().ordinal());
-				ps2.executeUpdate();
-				ps2.close();
+					PreparedStatement ps2 = conn.prepareStatement(query);
+					ps2.setInt(1, cred.getId());
+					ps2.setString(2, service.getName());
+					ps2.setInt(3, cred.getRole().ordinal());
+					ps2.executeUpdate();
+					ps2.close();
+				}
 				
 				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ?";
 				
-				ps2 = conn.prepareStatement(query);
+				PreparedStatement ps2 = conn.prepareStatement(query);
 				ps2.setString(1, service.getName());
 				ps2.setInt(2, UserRole.SELLER.ordinal());
 				ps2.setInt(3, 1);
