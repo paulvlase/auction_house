@@ -84,7 +84,12 @@ public class NetworkDriver extends Thread {
 
 
 		logger.error("Address : " + serverSocketChannel.socket().getInetAddress().getCanonicalHostName());
-		logger.error("IP Addr: " + localhost.getHostAddress());
+		try {
+			logger.error("IP Addr: " + InetAddress.getByAddress(localhost.getAddress()).getHostAddress());
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		logger.debug("Begin");
 		if (serverSocketChannel == null) {
@@ -94,7 +99,15 @@ public class NetworkDriver extends Thread {
 
 		ServerSocket socket = serverSocketChannel.socket();
 		logger.debug("End");
-		return new InetSocketAddress(localhost.getHostAddress(), socket.getLocalPort());
+		String name = null;
+		try {
+			 name = InetAddress.getByAddress(localhost.getAddress()).getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		//InetAddress.getByAddress(localhost.getAddress()).getHostAddress()
+		return new InetSocketAddress(name, socket.getLocalPort());
 	}
 
 	public synchronized void startRunning() {
