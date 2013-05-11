@@ -74,6 +74,12 @@ public class WebServerPortTypeProxy implements webServer.WebServerPortType {
     return webServerPortType.login(byteReq);
   }
   
+  public byte[] loadOffers(byte[] byteReq) throws java.rmi.RemoteException{
+    if (webServerPortType == null)
+      _initWebServerPortTypeProxy();
+    return webServerPortType.loadOffers(byteReq);
+  }
+  
   public byte[] getProfile(byte[] byteReq) throws java.rmi.RemoteException{
     if (webServerPortType == null)
       _initWebServerPortTypeProxy();
@@ -84,12 +90,6 @@ public class WebServerPortTypeProxy implements webServer.WebServerPortType {
     if (webServerPortType == null)
       _initWebServerPortTypeProxy();
     return webServerPortType.setProfile(byteReq);
-  }
-  
-  public byte[] loadOffers(byte[] byteReq) throws java.rmi.RemoteException{
-    if (webServerPortType == null)
-      _initWebServerPortTypeProxy();
-    return webServerPortType.loadOffers(byteReq);
   }
   
   
