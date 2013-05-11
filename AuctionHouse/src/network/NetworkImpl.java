@@ -125,7 +125,9 @@ public class NetworkImpl implements NetworkMediator, NetworkTransfer, NetworkSer
 	}
 
 	public void changeServiceNotify(Service service) {
+		logger.debug("Begin");
 		mediator.changeServiceNotify(service);
+		logger.debug("End");
 	}
 
 	public void logIn() {

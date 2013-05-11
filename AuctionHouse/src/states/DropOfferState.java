@@ -43,9 +43,9 @@ public class DropOfferState extends AbstractState {
 			for (UserEntry user : users) {
 				user.setOffer(Offer.OFFER_REFUSED);
 			}
-
-			net.changeServiceNotify(clonedService);
 		}
+		
+		net.changeServiceNotify(clonedService);
 
 		// service.setStatus(Status.INACTIVE);
 		// service.setUsers(null);
