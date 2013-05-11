@@ -16,7 +16,7 @@ import mediator.MediatorImpl;
 import org.apache.log4j.Logger;
 
 import webServer.messages.DropOfferRequest;
-import webServer.messages.ErrorMessage;
+import webServer.messages.ErrorResponse;
 import webServer.messages.GetProfileRequest;
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
@@ -63,7 +63,7 @@ public class WebServer {
 
 		if (!(obj instanceof LoginRequest)) {
 			System.out.println("[WebServer:login] Wrong message... waiting LoginRequest");
-			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LoginRequest"));
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LoginRequest"));
 		}
 
 		LoginRequest req = (LoginRequest) obj;
@@ -108,13 +108,13 @@ public class WebServer {
 				return WebMessage.serialize(new LoginResponse(userProfile));
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");
-				return WebMessage.serialize(new ErrorMessage("Wrong username or password"));
+				return WebMessage.serialize(new ErrorResponse("Wrong username or password"));
 			}
 		} catch (SQLException e) {
 			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 
-			return WebMessage.serialize(new ErrorMessage("Something bad happend at server"));
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 	}
 
@@ -125,7 +125,7 @@ public class WebServer {
 
 		if (!(obj instanceof LogoutRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
-			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LogoutRequest"));
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LogoutRequest"));
 		}
 
 		LogoutRequest logoutRequest = (LogoutRequest) obj;
@@ -166,7 +166,7 @@ public class WebServer {
 
 		if (!(obj instanceof LaunchOfferRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
-			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LaunchOfferRequest"));
 		}
 
 		LaunchOfferRequest launchOfferReq = (LaunchOfferRequest) obj;
