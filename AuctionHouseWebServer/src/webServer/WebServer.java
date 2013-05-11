@@ -1,6 +1,7 @@
 package webServer;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
@@ -34,9 +35,9 @@ import data.UserProfile;
 import data.UserProfile.UserRole;
 
 public class WebServer {
-	static String			name	= "root";
-	static String			pass	= "student";
-	static Connection		conn;
+	static String		name	= "root";
+	static String		pass	= "student";
+	static Connection	conn;
 
 	static {
 		System.out.println("[WebServer:static] Begin");
@@ -52,7 +53,7 @@ public class WebServer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("[WebServer:static] End");
 	}
 
@@ -64,7 +65,7 @@ public class WebServer {
 			System.out.println("[WebServer:login] Wrong message... waiting LoginRequest");
 			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LoginRequest"));
 		}
-		
+
 		LoginRequest loginRequest = (LoginRequest) obj;
 		LoginCred loginCred = loginRequest.getLoginCred();
 
@@ -73,36 +74,27 @@ public class WebServer {
 		Statement simpleStatement;
 		try {
 			simpleStatement = conn.createStatement();
-			
-			String query = 
-					"SELECT *" +
-					" FROM users" +
-					" WHERE username = " + loginCred.getUsername() +
-					" AND password = " + loginCred.getPassword();
+
+			String query = "SELECT *" + " FROM users" + " WHERE username = " + loginCred.getUsername()
+					+ " AND password = " + loginCred.getPassword();
 			ResultSet rs = simpleStatement.executeQuery(query);
 
 			if (rs.first()) {
 				Integer id = rs.getInt("id");
-				
+
 				Integer role = 0;
 				if (loginCred.getRole() == UserRole.SELLER) {
 					role = 1;
 				}
 
 				if (role == 0) {
-					query = 
-							"UPDATE users" +
-									" SET as_buyer = " + 1 +
-									" WHERE id = " + id;
+					query = "UPDATE users" + " SET as_buyer = " + 1 + " WHERE id = " + id;
 				} else {
-					query = 
-							"UPDATE users" + 
-									" SET as_seller = " + 1 +
-									" WHERE id = " + id;
+					query = "UPDATE users" + " SET as_seller = " + 1 + " WHERE id = " + id;
 				}
 
 				simpleStatement.executeUpdate(query);
-				
+
 				UserProfile userProfile = new UserProfile();
 				userProfile.setUsername(rs.getString("username"));
 				userProfile.setFirstName(rs.getString("first_name"));
@@ -110,9 +102,9 @@ public class WebServer {
 				userProfile.setPassword(rs.getString("password"));
 				userProfile.setRole(loginCred.getRole());
 				userProfile.setLocation(rs.getString("location"));
-				
+
 				res = WebMessage.serialize(new LoginResponse(userProfile));
-				
+
 				System.out.println("[WebServer:login] Logged in");
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");
@@ -124,7 +116,7 @@ public class WebServer {
 
 			e.printStackTrace();
 		}
-		
+
 		return res;
 	}
 
@@ -137,38 +129,26 @@ public class WebServer {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
 			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LogoutRequest"));
 		}
-		
+
 		LogoutRequest logoutRequest = (LogoutRequest) obj;
 		LoginCred cred = logoutRequest.getCred();
 
 		try {
 			Statement simpleStatement = conn.createStatement();
-		
+
 			if (cred.getRole() == UserRole.BUYER) {
-				String query = 
-						"UPDATE users" +
-								" SET as_buyer = " + 0 +
-								" WHERE username = " + cred.getId();
+				String query = "UPDATE users" + " SET as_buyer = " + 0 + " WHERE username = " + cred.getId();
 				simpleStatement.executeUpdate(query);
-				
-				query = 
-						"UPDATE services" +
-								" SET active = " + 0 +
-								" WHERE id = " + cred.getId() +
-								" AND user_role = " + cred.getRole();
+
+				query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
+						+ cred.getRole();
 				simpleStatement.executeUpdate(query);
 			} else {
-				String query = 
-						"UPDATE users" +
-								" SET as_seller = " + 0 +
-								" WHERE username = " + cred.getId();
+				String query = "UPDATE users" + " SET as_seller = " + 0 + " WHERE username = " + cred.getId();
 				simpleStatement.executeUpdate(query);
-				
-				query = 
-						"UPDATE services" +
-								" SET active = " + 0 +
-								" WHERE id = " + cred.getId() +
-								" AND user_role = " + cred.getRole();
+
+				query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
+						+ cred.getRole();
 				simpleStatement.executeUpdate(query);
 			}
 		} catch (SQLException e) {
@@ -182,59 +162,90 @@ public class WebServer {
 
 	public byte[] launchOffer(byte[] req) {
 		System.out.println("[WebServer:logout] Begin");
-		
+
 		byte[] res;
 		Object obj = WebMessage.deserialize(req);
-		
+
 		if (!(obj instanceof LaunchOfferRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
 			return WebMessage.serialize(new ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
 		}
-		
+
 		LaunchOfferRequest launchOfferReq = (LaunchOfferRequest) obj;
+		LoginCred cred = launchOfferReq.getCred();
 		Service service = launchOfferReq.getService();
 
-		String query =
-				"SELECT *" +
-				" FROM services" +
-				" WHERE name = " + service.getName()
-		
-		Service service = req.getService();
-//		ArrayList<UserEntry> userEntries;
-//
-//		UserEntry userEntry = new UserEntry();
-//		userEntry.setUsername(req.getUsername());
-//		UserProfile profile = users.get(req.getUsername());
-//		userEntry.setName(profile.getFirstName() + " " + profile.getLastName());
-//		userEntry.setAddress(onlineUsers.get(req.getUsername()));
-//
-//		if (req.getUserRole() == UserRole.BUYER) {
-//			sellers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
-//			userEntries = sellers.get(service.getName());
-//
-//			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
-//			ArrayList<UserEntry> buyersUserEntries = buyers.get(service.getName());
-//			buyersUserEntries.add(userEntry);
-//
-//			buyers.put(service.getName(), buyersUserEntries);
-//		} else {
-//			userEntry.setTime(service.getTime());
-//			buyers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
-//			userEntries = buyers.get(service.getName());
-//
-//			sellers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
-//			ArrayList<UserEntry> sellersUserEntries = sellers.get(service.getName());
-//			sellersUserEntries.add(userEntry);
-//
-//			sellers.put(service.getName(), sellersUserEntries);
-//		}
-//
-//		service.setUsers(userEntries);
-//
-//		return new LaunchOfferResponse(service);
+		Integer role = 0;
+		if (cred.getRole() == UserRole.SELLER) {
+			role = 1;
+		}
+
+		try {
+			Statement st = conn.createStatement();
+			String query = "SELECT *" + " FROM services" + " WHERE user_id = " + cred.getId() + " AND name = "
+					+ service.getName() + " AND user_role = " + role;
+			ResultSet rs = st.executeQuery(query);
+
+			if (rs.first()) {
+				// Activez un serviciu
+				query = "UPDATE services SET active = " + 1 + " WHERE user_id = " + cred.getId() + " AND name = "
+						+ service.getName() + " AND user_role = " + role;
+
+				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = " + service.getName()
+						+ " AND s.user_role = " + UserRole.SELLER + " AND s.active = " + 1;
+				rs = st.executeQuery(query);
+
+				ArrayList<UserEntry> sellers = new ArrayList<UserEntry>();
+				while (rs.next()) {
+					UserEntry userEntry = new UserEntry();
+					userEntry.setUsername(rs.getString("u.username"));
+					userEntry.setName(rs.getString("u.first_name") + rs.getString("u.last_name"));
+					InetSocketAddress address = new InetSocketAddress(rs.getString("u.address"), rs.getInt("u.port"));
+					userEntry.setAddress(address);
+
+					sellers.add(userEntry);
+				}
+				rs.close();
+				service.setUsers(sellers);
+			} else {
+				// Adaug un serviciu, si daca role-ul e SELLER il activez
+				if (cred.getRole() == UserRole.SELLER) {
+					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES ("
+							+ service.getName() + ", " + service.getTime() + ", " + service.getPrice() + ", "
+							+ cred.getId() + ", " + 1 + ", " + cred.getRole() + ")";
+					st.executeUpdate(query);
+
+					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = "
+							+ service.getName() + " AND s.user_role = " + UserRole.BUYER + " AND s.active = " + 1;
+					rs = st.executeQuery(query);
+
+					ArrayList<UserEntry> buyers = new ArrayList<UserEntry>();
+					while (rs.next()) {
+						UserEntry userEntry = new UserEntry();
+						userEntry.setUsername(rs.getString("u.username"));
+						userEntry.setName(rs.getString("u.first_name") + rs.getString("u.last_name"));
+						InetSocketAddress address = new InetSocketAddress(rs.getString("u.address"),
+								rs.getInt("u.port"));
+						userEntry.setAddress(address);
+
+						buyers.add(userEntry);
+					}
+					rs.close();
+					service.setUsers(buyers);
+				} else {
+					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES ("
+							+ service.getName() + ", " + service.getTime() + ", " + service.getPrice() + ", "
+							+ cred.getId() + ", " + 0 + ", " + cred.getRole() + ")";
+					st.executeUpdate(query);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Something bad happend at server");
+			e.printStackTrace();
+		}
 
 		System.out.println("[WebServer:logout] End");
-		return res;
+		return WebMessage.serialize(new LaunchOfferResponse(service));
 	}
 
 	public byte[] dropOffer(DropOfferRequest req) {
@@ -260,28 +271,97 @@ public class WebServer {
 		return new OkResponse();
 	}
 
-	public byte[] getProfile(GetProfileRequest req) {
-		logger.debug("Begin");
-		UserProfile profile = users.get(req.getUsername());
-		logger.debug("End (OK response)");
-		return new GetProfileResponse(profile);
+	public byte[] getProfile(byte[] byteReq) {
+		System.out.println("[WebServer:getProfile] Begin");
+		Object obj = WebMessage.deserialize(byteReq);
+
+		if (!(obj instanceof GetProfileRequest)) {
+			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
+			// return WebMessage.serialize(new
+			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+		}
+		GetProfileRequest req = (GetProfileRequest) obj;
+
+		UserProfile profile = null;
+		try {
+			Statement st = conn.createStatement();
+			String query = "SELECT * FROM users WHERE username = " + req.getUsername();
+			ResultSet rs = st.executeQuery(query);
+
+			if (rs.next()) {
+				profile = new UserProfile();
+				profile.setUsername(rs.getString("username"));
+				profile.setFirstName(rs.getString("first_name"));
+				profile.setLastName(rs.getString("last_name"));
+				// TODO: Anybody can see anyone's password;
+				profile.setPassword(rs.getString("password"));
+				profile.setLocation(rs.getString("location"));
+				// profile.setAvatar(avatar);
+			}
+		} catch (SQLException e) {
+			profile = null;
+			System.out.println("Something bad happend at server");
+			e.printStackTrace();
+		}
+
+		System.out.println("[WebServer:getProfile] End");
+		return WebMessage.serialize(new GetProfileResponse(profile));
 	}
 
-	public Object setProfile(SetProfileRequest req) {
-		logger.debug("Begin");
+	public byte[] setProfile(byte[] byteReq) {
+		System.out.println("[WebServer:setProfile] Begin");
+
+		Object obj = WebMessage.deserialize(byteReq);
+		if (!(obj instanceof SetProfileRequest)) {
+			System.out.println("[WebServer:setProfile] Wrong message... waiting SetProfileRequest");
+			// TODO: Fix this
+			// return WebMessage.serialize(new
+			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+			return WebMessage.serialize(new OkResponse());
+		}
+
+		SetProfileRequest req = (SetProfileRequest) obj;
 		UserProfile profile = req.getUserProfile();
 
-		users.put(profile.getUsername(), profile);
-		logger.debug("End (OK response");
-		return new OkResponse();
+		try {
+			Statement st = conn.createStatement();
+			String query = "UPDATE users SET first_name = " + profile.getFirstName() + ", last_name = "
+					+ profile.getLastName() + ", password = " + profile.getPassword() + ", location = "
+					+ profile.getLocation() + " WHERE username = " + profile.getUsername();
+			st.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Something bad happend");
+			e.printStackTrace();
+		}
+		System.out.println("[WebServer:setProfile] End");
+		return WebMessage.serialize(new OkResponse());
 	}
 
-	public byte[] registerProfile(RegisterProfileRequest req) {
-		logger.debug("Begin");
+	public byte[] registerProfile(byte[] byteReq) {
+		System.out.println("Begin");
+		
+		Object obj = WebMessage.deserialize(byteReq);
+		if (!(obj instanceof RegisterProfileRequest)) {
+			System.out.println("[WebServer:registerProfile] Wrong message... waiting RegisterProfileRequest");
+			// TODO: Fix this
+			// return WebMessage.serialize(new
+			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+			return WebMessage.serialize(new OkResponse());
+		}
+		RegisterProfileRequest req = (RegisterProfileRequest) obj;
 		UserProfile profile = req.getUserProfile();
 
-		users.put(profile.getUsername(), profile);
-		logger.debug("End (OK response)");
-		return new OkResponse();
+		try {
+			Statement st = conn.createStatement();
+			String query = "INSERT INTO users(username, first_name, last_name, password, location) VALUES (" + profile.getUsername() + ", " + profile.getFirstName() + ", " + profile.getLastName() + ", " + profile.getPassword() + ", "
+					+ profile.getLocation() + ")";
+			st.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Something bad happend");
+			e.printStackTrace();
+		}
+
+		System.out.println("[WebServer:registerProfile] End");
+		return WebMessage.serialize(new OkResponse());
 	}
 }
