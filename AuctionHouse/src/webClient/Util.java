@@ -3,76 +3,93 @@ package webClient;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.Random;
 
+import org.apache.axis.AxisFault;
+import org.apache.axis.client.Service;
 import org.apache.log4j.Logger;
+
+import webServer.WebServerSoap11BindingStub;
+import webServer.messages.DropOfferRequest;
+import webServer.messages.ErrorResponse;
+import webServer.messages.GetProfileRequest;
+import webServer.messages.GetProfileResponse;
+import webServer.messages.LaunchOfferRequest;
+import webServer.messages.LaunchOfferResponse;
+import webServer.messages.LoginRequest;
+import webServer.messages.LoginResponse;
+import webServer.messages.LogoutRequest;
+import webServer.messages.OkResponse;
+import webServer.messages.RegisterProfileRequest;
+import webServer.messages.SetProfileRequest;
 
 import config.WebServiceClientConfig;
 
 public class Util {
-	static Logger logger = Logger.getLogger(Util.class);
+	private static Logger						logger	= Logger.getLogger(Util.class);
+	private static WebServerSoap11BindingStub	client;
 
-	public static Random random = new Random();
-
-	public static String getRandomString(int len) {
-		char[] str = new char[len];
-
-		for (int i = 0; i < len; i++) {
-			int c;
-			do {
-				c = 48 + random.nextInt(123 - 48);
-			} while ((c >= 91 && c <= 96) || (c >= 58 && c <= 64));
-			str[i] = (char) c;
+	static {
+		try {
+			client = new WebServerSoap11BindingStub(new URL(WebServiceClientConfig.ENDPOINT_URL), new Service());
+		} catch (AxisFault e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		}
-
-		return new String(str);
 	}
-	
+
+	private static void printErrorMessage(Object requestObj) {
+		System.err.println("Unknow type of message : " + requestObj.getClass());
+	}
+
 	public static Object askWebServer(Object requestObj) {
 		logger.debug("Begin");
 
 		Object responseObj = null;
-		
-		Socket socket = null;
-		ObjectInputStream ois = null;
-		ObjectOutputStream oos = null;
+		byte[] responseByteArray = null;
+		byte[] requestByteArray = WebMessage.serialize(requestObj);
 
 		try {
-			socket = new Socket(WebServiceClientConfig.IP, WebServiceClientConfig.PORT);
-
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			ois = new ObjectInputStream(socket.getInputStream());
-
-			oos.writeObject(requestObj);
-			oos.flush();
-
-			responseObj = ois.readObject();
-		} catch (Exception e) {
+			if (requestObj instanceof DropOfferRequest) {
+				responseByteArray = client.dropOffer(requestByteArray);
+			} else if (requestObj instanceof ErrorResponse) {
+				printErrorMessage(requestObj);
+			} else if (requestObj instanceof GetProfileRequest) {
+				responseByteArray = client.getProfile(requestByteArray);
+			} else if (requestObj instanceof GetProfileResponse) {
+				printErrorMessage(requestObj);
+			} else if (requestObj instanceof LaunchOfferRequest) {
+				responseByteArray = client.launchOffer(requestByteArray);
+			} else if (requestObj instanceof LaunchOfferResponse) {
+				printErrorMessage(requestObj);
+			} else if (requestObj instanceof LoginRequest) {
+				responseByteArray = client.login(requestByteArray);
+			} else if (requestObj instanceof LoginResponse) {
+				printErrorMessage(requestObj);
+			} else if (requestObj instanceof LogoutRequest) {
+				responseByteArray = client.logout(requestByteArray);
+			} else if (requestObj instanceof OkResponse) {
+				printErrorMessage(requestObj);
+			} else if (requestObj instanceof RegisterProfileRequest) {
+				responseByteArray = client.registerProfile(requestByteArray);
+			} else if (requestObj instanceof SetProfileRequest) {
+				responseByteArray = client.setProfile(requestByteArray);
+			} else {
+				printErrorMessage(requestObj);
+			}
+		} catch (RemoteException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (oos != null)
-					oos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (ois != null)
-					ois.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (socket != null)
-					socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
-		
+
+		if (responseByteArray != null) {
+			responseObj = WebMessage.serialize(responseByteArray);
+		}
+
 		logger.debug("End");
 		return responseObj;
 	}
