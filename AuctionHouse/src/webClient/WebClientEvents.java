@@ -66,8 +66,6 @@ public class WebClientEvents extends Thread {
 		}
 		events.clear();
 
-		events.clear();
-
 		logger.debug("End");
 	}
 
