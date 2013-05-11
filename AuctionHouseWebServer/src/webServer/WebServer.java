@@ -113,17 +113,17 @@ public class WebServer {
 		}
 	}
 
-	public byte[] logout(byte[] req) {
+	public byte[] logout(byte[] byteReq) {
 		System.out.println("[WebServer:logout] Begin");
 
-		Object obj = WebMessage.deserialize(req);
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LogoutRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LogoutRequest"));
 		}
 
-		LogoutRequest logoutRequest = (LogoutRequest) obj;
-		LoginCred cred = logoutRequest.getCred();
+		LogoutRequest req = (LogoutRequest) obj;
+		LoginCred cred = req.getCred();
 
 		try {
 			Statement st = conn.createStatement();
@@ -150,19 +150,18 @@ public class WebServer {
 		return WebMessage.serialize(new OkResponse());
 	}
 
-	public byte[] launchOffer(byte[] req) {
+	public byte[] launchOffer(byte[] byteReq) {
 		System.out.println("[WebServer:logout] Begin");
 
-		Object obj = WebMessage.deserialize(req);
-
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LaunchOfferRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LaunchOfferRequest"));
 		}
 
-		LaunchOfferRequest launchOfferReq = (LaunchOfferRequest) obj;
-		LoginCred cred = launchOfferReq.getCred();
-		Service service = launchOfferReq.getService();
+		LaunchOfferRequest req = (LaunchOfferRequest) obj;
+		LoginCred cred = req.getCred();
+		Service service = req.getService();
 
 		Integer role = 0;
 		if (cred.getRole() == UserRole.SELLER) {
