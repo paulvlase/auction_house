@@ -56,11 +56,14 @@ public class WebClientImpl implements WebClient, WebService {
 			logger.warn("Failed: " + res.getMsg());
 			return null;
 		} else if (responseObj instanceof LoginResponse) {
+			LoginResponse res = (LoginResponse) responseObj;
 			logger.info("Success");
 			
 			this.cred = cred;
 			thread = new WebClientEvents(this);
 			thread.start();
+			
+			med.getLoginCred().setId(res.getCred().getId());
 			return ((LoginResponse) responseObj).getUserProfile();
 		} else {
 			logger.error("Unexpected response message " + responseObj.getClass());

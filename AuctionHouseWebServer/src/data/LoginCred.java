@@ -47,12 +47,17 @@ public class LoginCred implements Serializable {
 	public void setAddress(InetSocketAddress address) {
 		this.address = address;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String toString() {
+		return "[username: " + username + ", password: " + password + ", role: " + role + ", id: " + id + ", address: "
+				+ address + "]";
 	}
 }

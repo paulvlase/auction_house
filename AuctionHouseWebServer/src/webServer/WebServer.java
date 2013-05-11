@@ -96,10 +96,12 @@ public class WebServer {
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs1.getString("location"));
 
+				cred.setId(id);
+				
 				st1.close();
 				st2.close();
 				System.out.println("[WebServer:login] End (LoginResponse)");
-				return WebMessage.serialize(new LoginResponse(userProfile));
+				return WebMessage.serialize(new LoginResponse(userProfile, cred));
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");
 				return WebMessage.serialize(new ErrorResponse("Wrong username or password"));
@@ -161,6 +163,7 @@ public class WebServer {
 		
 		LoadOffersRequest req = (LoadOffersRequest) obj;
 		LoginCred cred = req.getCred();
+		System.out.println("cred: " + cred);
 
 		try {
 			String query = "SELECT * FROM services WHERE user_id = ? AND user_role = ?";
