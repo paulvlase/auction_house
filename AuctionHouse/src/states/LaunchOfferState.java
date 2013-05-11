@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import webClient.Util;
+import webServer.Util;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
 
@@ -49,17 +49,19 @@ public class LaunchOfferState extends AbstractState {
 		logger.debug("Begin");
 		logger.debug("service: " + service);
 
-		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getLoginCred(), service);
+		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getLoginCred(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
-
-		if (service.getStatus() == Status.NEW) { 
-			responseObj.getService().setStatus(Status.INACTIVE);
-		} else if (service.getStatus() == Status.INACTIVE) {
-			responseObj.getService().setStatus(Status.ACTIVE);
-		}
 
 		logger.debug("service.getService(): "
 				+ responseObj.getService());
+		
+		if (service.getStatus() == Status.NEW) { 
+			responseObj.getService().setStatus(Status.INACTIVE);
+			logger.debug("End");
+			return;
+		} else if (service.getStatus() == Status.INACTIVE) {
+			responseObj.getService().setStatus(Status.ACTIVE);
+		}
 
 		web.notifyNetwork(responseObj.getService());
 

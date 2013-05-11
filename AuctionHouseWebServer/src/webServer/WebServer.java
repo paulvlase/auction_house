@@ -209,6 +209,8 @@ public class WebServer {
 		LaunchOfferRequest req = (LaunchOfferRequest) obj;
 		LoginCred cred = req.getLoginCred();
 		Service service = req.getService();
+		
+		System.out.println("service: " + service);
 
 		try {
 			String query = "SELECT * FROM services WHERE user_id = ? AND name = ? AND user_role = ?";
