@@ -89,7 +89,7 @@ public class WebServer {
 
 				Statement st2 = conn.createStatement();
 				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
-						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
+						+ cred.getAddress().getAddress().getCanonicalHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 						+ id;
 				st2.executeUpdate(query);
 
@@ -262,11 +262,13 @@ public class WebServer {
 					InetSocketAddress address = new InetSocketAddress(rs2.getString("u.address"), rs2.getInt("u.port"));
 					userEntry.setAddress(address);
 
+					System.out.println("userEntry: " + userEntry);
 					sellers.add(userEntry);
 				}
 				rs2.close();
 				ps2.close();
 				service.setUsers(sellers);
+				System.out.println("service: " + service);
 			} else {
 				if (cred.getRole() == UserRole.SELLER) {
 					System.out.println("[WebServer:launchOffer] Inserting new service as seller ");

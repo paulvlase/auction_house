@@ -87,7 +87,7 @@ public class Util {
 			} else if (requestObj instanceof LoadOffersResponse) {
 				printErrorMessage(requestObj);
 			} else if (requestObj instanceof RemoveOfferRequest) {
-				responseByteArray = client.removeService(requestByteArray);
+				responseByteArray = client.removeOffer(requestByteArray);
 			} else {
 				printErrorMessage(requestObj);
 			}

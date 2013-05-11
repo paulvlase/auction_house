@@ -1,8 +1,11 @@
 package webServer.messages;
 
+import java.io.Serializable;
+
 import data.LoginCred;
 
-public class RemoveOfferRequest {
+public class RemoveOfferRequest implements Serializable {
+	private static final long	serialVersionUID	= 1L;
 	private LoginCred cred;
 	private String serviceName;
 	
