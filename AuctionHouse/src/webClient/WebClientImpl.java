@@ -59,6 +59,8 @@ public class WebClientImpl implements WebClient, WebService {
 			LoginResponse res = (LoginResponse) responseObj;
 			logger.info("Success");
 			
+			logger.error("profile.getAvatar(): " + res.getUserProfile().getAvatar());
+			
 			thread = new WebClientEvents(this);
 			thread.start();
 			

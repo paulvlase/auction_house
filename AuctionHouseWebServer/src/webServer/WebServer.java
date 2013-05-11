@@ -100,6 +100,7 @@ public class WebServer {
 				userProfile.setPassword(rs1.getString("password"));
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs1.getString("location"));
+				userProfile.setAvatar(rs1.getBytes("avatar"));
 
 				cred.setId(id);
 				
@@ -401,9 +402,11 @@ public class WebServer {
 		GetProfileRequest req = (GetProfileRequest) obj;
 
 		try {
-			Statement st = conn.createStatement();
-			String query = "SELECT * FROM users WHERE username = '" + req.getUsername() +"'";
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT * FROM users WHERE username = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, req.getUsername());
+			ResultSet rs = ps.executeQuery();
 
 			UserProfile profile = null;
 			if (rs.next()) {
@@ -414,9 +417,9 @@ public class WebServer {
 				// TODO: Anybody can see anyone's password;
 				profile.setPassword(rs.getString("password"));
 				profile.setLocation(rs.getString("location"));
-				// profile.setAvatar(avatar);
+				profile.setAvatar(rs.getBytes("avatar"));
 			}
-			st.close();
+			ps.close();
 
 			System.out.println("[WebServer:getProfile] End");
 			return WebMessage.serialize(new GetProfileResponse(profile));
@@ -441,12 +444,17 @@ public class WebServer {
 		UserProfile profile = req.getUserProfile();
 
 		try {
-			Statement st = conn.createStatement();
-			String query = "UPDATE users SET first_name = '" + profile.getFirstName() + "', last_name = '"
-					+ profile.getLastName() + "', password = '" + profile.getPassword() + "', location = '"
-					+ profile.getLocation() + "' WHERE username = '" + profile.getUsername() + "'";
-			st.executeUpdate(query);
-			st.close();
+			String query = "UPDATE users SET first_name = ?, last_name = ?, password = ?, avatar = ?, location = ? WHERE username = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, profile.getFirstName());
+			ps.setString(2, profile.getLastName());
+			ps.setString(3, profile.getPassword());
+			ps.setBytes(4, profile.getAvatar());
+			ps.setString(5, profile.getLocation());
+			ps.setString(6, profile.getUsername());
+			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 
@@ -470,12 +478,17 @@ public class WebServer {
 		UserProfile profile = req.getUserProfile();
 
 		try {
-			Statement st = conn.createStatement();
-			String query = "INSERT INTO users(username, first_name, last_name, password, location) VALUES ("
-					+ profile.getUsername() + ", " + profile.getFirstName() + ", " + profile.getLastName() + ", "
-					+ profile.getPassword() + ", " + profile.getLocation() + ")";
-			st.executeUpdate(query);
-			st.close();
+			String query = "INSERT INTO users(username, first_name, last_name, password, avatar, location) VALUES (?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, profile.getUsername());
+			ps.setString(2, profile.getFirstName());
+			ps.setString(3, profile.getLastName());
+			ps.setString(4, profile.getPassword());
+			ps.setBytes(5, profile.getAvatar());
+			ps.setString(6, profile.getLocation());
+			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 
