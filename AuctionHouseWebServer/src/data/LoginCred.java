@@ -16,12 +16,12 @@ public class LoginCred implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 	private static Logger		logger				= Logger.getLogger(LoginCred.class);
 
-	private String				username;
-	private String				password;
-	private UserRole			role;
-	private Integer				id;
-	private InetSocketAddress	address;
-
+	private String username;
+	private String password;
+	private UserRole role;
+	private InetSocketAddress address;
+	private Integer id;
+	
 	public LoginCred(String username, String password, UserRole role) {
 		this.username = username;
 		this.password = password;
