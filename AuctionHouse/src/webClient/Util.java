@@ -20,6 +20,8 @@ import webServer.messages.GetProfileRequest;
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
+import webServer.messages.LoadOffersRequest;
+import webServer.messages.LoadOffersResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
@@ -79,6 +81,10 @@ public class Util {
 				responseByteArray = client.registerProfile(requestByteArray);
 			} else if (requestObj instanceof SetProfileRequest) {
 				responseByteArray = client.setProfile(requestByteArray);
+			} else if (requestObj instanceof LoadOffersRequest) {
+				responseByteArray = client.loadOffers(requestByteArray);
+			} else if (requestObj instanceof LoadOffersResponse) {
+				printErrorMessage(requestObj);
 			} else {
 				printErrorMessage(requestObj);
 			}
@@ -87,7 +93,7 @@ public class Util {
 		}
 
 		if (responseByteArray != null) {
-			responseObj = WebMessage.serialize(responseByteArray);
+			responseObj = WebMessage.deserialize(responseByteArray);
 		}
 
 		logger.debug("End");
