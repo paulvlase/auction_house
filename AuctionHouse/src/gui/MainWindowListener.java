@@ -20,9 +20,9 @@ import data.UserEntry.Offer;
 import data.UserProfile.UserRole;
 
 public class MainWindowListener implements ActionListener, WindowListener, MouseListener {
-	private static Logger logger = Logger.getLogger(MainWindowListener.class);
+	private static Logger	logger	= Logger.getLogger(MainWindowListener.class);
 
-	private MainWindow	mainWindow;
+	private MainWindow		mainWindow;
 
 	public MainWindowListener(MainWindow mainWindow) {
 		// TODO: logger.setLevel(Level.OFF);
@@ -112,11 +112,10 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 				Offer userOffer = service.getUsers().get(userIndex).getOffer();
 				if (userOffer != Offer.TRANSFER_COMPLETE && userOffer != Offer.TRANSFER_FAILED
-						&& userOffer != Offer.TRANSFER_IN_PROGRESS
-						&& userOffer != Offer.TRANSFER_STARTED) {
+						&& userOffer != Offer.TRANSFER_IN_PROGRESS && userOffer != Offer.TRANSFER_STARTED) {
 					mainWindow.getMakeOfferItem().showItem(pair);
 				} else {
-					mainWindow.getMakeOfferItem().hideItem();					
+					mainWindow.getMakeOfferItem().hideItem();
 				}
 
 				if (service.getUsers().get(userIndex).getOffer() == Offer.OFFER_EXCEDED) {
@@ -139,11 +138,14 @@ public class MainWindowListener implements ActionListener, WindowListener, Mouse
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		mainWindow.getGui().logOut();
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		logger.debug("I'm closing ....");
+		mainWindow.getGui().logOut();
+		mainWindow.setVisible(false);
+		mainWindow.dispose();
 	}
 
 	@Override

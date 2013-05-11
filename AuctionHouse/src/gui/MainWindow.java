@@ -58,7 +58,7 @@ import data.UserProfile.UserRole;
 
 public class MainWindow extends JFrame implements ClearWindow {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(MainWindow.class);
+	private static Logger		logger				= Logger.getLogger(MainWindow.class);
 
 	/* Swing components */
 	private JMenuBar			menuBar;
@@ -110,14 +110,14 @@ public class MainWindow extends JFrame implements ClearWindow {
 		tableColumns = new String[] {
 				GuiConfig.getValue(GuiConfig.SERVICE),
 				GuiConfig.getValue(GuiConfig.STATUS),
-				gui.getUserProfile().getRole() == UserRole.SELLER ? GuiConfig
-						.getValue(GuiConfig.BUYER) : GuiConfig.getValue(GuiConfig.SELLER),
-				GuiConfig.getValue(GuiConfig.OFFER_STATUS), GuiConfig.getValue(GuiConfig.TIME),
-				GuiConfig.getValue(GuiConfig.PRICE) };
+				gui.getUserProfile().getRole() == UserRole.SELLER ? GuiConfig.getValue(GuiConfig.BUYER) : GuiConfig
+						.getValue(GuiConfig.SELLER), GuiConfig.getValue(GuiConfig.OFFER_STATUS),
+				GuiConfig.getValue(GuiConfig.TIME), GuiConfig.getValue(GuiConfig.PRICE) };
 		MyTableCellRenderer cellRenderer = new MyTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)), gui.getUserProfile().getRole());
+		model = new MySpanTableModel(services, new ArrayList<String>(Arrays.asList(tableColumns)), gui.getUserProfile()
+				.getRole());
 		table = new MultiSpanCellTable(model, cellRenderer);
 		menuBar = new JMenuBar();
 		menu = new JMenu();
@@ -201,8 +201,7 @@ public class MainWindow extends JFrame implements ClearWindow {
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 10, 0 };
 		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 14, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0,
-				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0E-4 };
 		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 1.0, 0.0, 1.0E-4 };
 
 		// menuBar1
@@ -249,44 +248,37 @@ public class MainWindow extends JFrame implements ClearWindow {
 				topPanel.setLayout(new GridBagLayout());
 				((GridBagLayout) topPanel.getLayout()).columnWidths = new int[] { 0, 0, 0, 0, 0 };
 				((GridBagLayout) topPanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
-				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0,
-						0.0, 0.0, 1.0E-4 };
-				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] { 1.0, 0.0, 1.0,
-						1.0E-4 };
+				((GridBagLayout) topPanel.getLayout()).columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0E-4 };
+				((GridBagLayout) topPanel.getLayout()).rowWeights = new double[] { 1.0, 0.0, 1.0, 1.0E-4 };
 
 				avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
-				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 3, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5),
-						0, 0));
+				topPanel.add(avatarLabel, new GridBagConstraints(1, 0, 1, 3, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 				// usernameLabel
 				usernameLabel.setText("");
-				topPanel.add(usernameLabel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5),
-						0, 0));
+				topPanel.add(usernameLabel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 				// logoutButton
 				signOutButton.setText(GuiConfig.getValue(GuiConfig.LOG_OUT));
 				signOutButton.setIcon(new ImageIcon(GuiConfig.LOGOUT_ICON));
 				signOutButton.setHorizontalTextPosition(SwingConstants.LEFT);
-				topPanel.add(signOutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0),
-						0, 0));
+				topPanel.add(signOutButton, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 			}
-			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			mainPanel.add(topPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// scrollPane1
 			{
 				scrollPanel.setViewportView(table);
 			}
-			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			mainPanel.add(scrollPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		if (gui.getUserProfile().getRole() == UserRole.SELLER) {
 			setTitle(GuiConfig.getValue(GuiConfig.SELLER_TITLE));
@@ -302,7 +294,8 @@ public class MainWindow extends JFrame implements ClearWindow {
 
 		setSize(new Dimension(700, 400));
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(listener);
 	}
 
 	public ActionListener getActionListener() {
@@ -509,9 +502,9 @@ public class MainWindow extends JFrame implements ClearWindow {
 		setAvatar(profile.getAvatar());
 		setName(profile.getFirstName(), profile.getLastName());
 	}
-	
+
 	@Override
 	public void clear() {
-		
+
 	}
 }
