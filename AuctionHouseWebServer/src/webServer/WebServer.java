@@ -58,9 +58,9 @@ public class WebServer {
 	}
 
 	public byte[] login(byte[] byteReq) {
-		byte[] res;
-		Object obj = WebMessage.deserialize(byteReq);
+		System.out.println("[WebServer:login] Begin");
 
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LoginRequest)) {
 			System.out.println("[WebServer:login] Wrong message... waiting LoginRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LoginRequest"));
@@ -69,32 +69,27 @@ public class WebServer {
 		LoginRequest req = (LoginRequest) obj;
 		LoginCred cred = req.getLoginCred();
 
-		System.out.println("[WebServer:login] Begin (req.getLoginCred(): " + req.getLoginCred().getUsername());
+		System.out.println("[WebServer:login] cred: " + cred);
 
-		Statement simpleStatement;
+		Statement st;
 		try {
-			simpleStatement = conn.createStatement();
+			st = conn.createStatement();
 
 			String query = "SELECT *" + " FROM users" + " WHERE username = " + cred.getUsername() + " AND password = "
 					+ cred.getPassword();
-			ResultSet rs = simpleStatement.executeQuery(query);
+			ResultSet rs = st.executeQuery(query);
 
 			if (rs.first()) {
 				Integer id = rs.getInt("id");
 
-				Integer role = 0;
+				String online_as_field = "as_buyer";
 				if (cred.getRole() == UserRole.SELLER) {
-					role = 1;
+					online_as_field = "as_seller";
 				}
 
-				if (role == 0) {
-					query = "UPDATE users" + " SET as_buyer = " + 1 + ", address = " + cred.getAddress().getHostName()
-							+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
-				} else {
-					query = "UPDATE users" + " SET as_seller = " + 1 + ", address = " + cred.getAddress().getHostName()
-							+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
-				}
-				simpleStatement.executeUpdate(query);
+				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = " + cred.getAddress().getHostName()
+						+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
+				st.executeUpdate(query);
 
 				UserProfile userProfile = new UserProfile();
 				userProfile.setUsername(rs.getString("username"));
@@ -104,14 +99,14 @@ public class WebServer {
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs.getString("location"));
 
-				System.out.println("[WebServer:login] End (logged in)");
+				System.out.println("[WebServer:login] End (lLoginResponse)");
 				return WebMessage.serialize(new LoginResponse(userProfile));
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");
 				return WebMessage.serialize(new ErrorResponse("Wrong username or password"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
+			System.out.println("Something bad happend");
 			e.printStackTrace();
 
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
