@@ -180,7 +180,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 		logger.debug("Begin");
 
 		if (cred == null) {
-			System.out.println("cred: " + null);
+			logger.debug("cred: " + null);
 			return null;
 		}
 
