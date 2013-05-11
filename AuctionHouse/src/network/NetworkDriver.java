@@ -3,8 +3,10 @@ package network;
 import interfaces.MediatorNetwork;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -52,6 +54,7 @@ public class NetworkDriver extends Thread {
 			serverSocketChannel = ServerSocketChannel.open();
 			serverSocketChannel.configureBlocking(false);
 			serverSocketChannel.socket().bind(null);
+
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
 			logger.debug("Linstening on " + serverSocketChannel.socket().getLocalSocketAddress());
@@ -72,6 +75,17 @@ public class NetworkDriver extends Thread {
 	}
 
 	public InetSocketAddress getAddress() {
+		InetAddress localhost = null;
+		try {
+			localhost = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+
+		logger.error("Address : " + serverSocketChannel.socket().getInetAddress().getCanonicalHostName());
+		logger.error("IP Addr: " + localhost.getHostAddress());
+		
 		logger.debug("Begin");
 		if (serverSocketChannel == null) {
 			logger.fatal("Server isn't listening on any address");
@@ -80,7 +94,7 @@ public class NetworkDriver extends Thread {
 
 		ServerSocket socket = serverSocketChannel.socket();
 		logger.debug("End");
-		return new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
+		return new InetSocketAddress(localhost.getHostAddress(), socket.getLocalPort());
 	}
 
 	public synchronized void startRunning() {
