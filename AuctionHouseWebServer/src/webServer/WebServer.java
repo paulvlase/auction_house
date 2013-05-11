@@ -243,7 +243,14 @@ public class WebServer {
 					ps2.close();
 				}
 				
-				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ?";
+				String online_as_field;
+				if (cred.getRole() == UserRole.BUYER) {
+					online_as_field = "as_seller";
+				} else {
+					online_as_field = "as_buyer";
+				}
+				
+				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ? AND u." + online_as_field + " = 1";
 				
 				PreparedStatement ps2 = conn.prepareStatement(query);
 				ps2.setString(1, service.getName());
@@ -284,7 +291,8 @@ public class WebServer {
 					ps2.executeUpdate();
 					ps2.close();
 					
-					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1";
+					
+					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1 AND u.as_buyer = 1";
 					ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
 					ps2.setInt(2, UserRole.BUYER.ordinal());
