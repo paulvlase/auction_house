@@ -17,6 +17,7 @@ import webServer.messages.GetProfileRequest;
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
+import webServer.messages.LoadOffersResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
@@ -146,9 +147,19 @@ public class WebServer {
 		System.out.println("[WebServer:logout] End");
 		return WebMessage.serialize(new OkResponse());
 	}
+	
+	public byte[] loadOffers(byte[] byteReq) {
+		System.out.println("[WebServer:loadOffers] Begin");
+		ArrayList<Service> services = new ArrayList<Service>();
+		
+		//String query = "SELECT * FROM services WHERE "
+		
+		System.out.println("[WebServer:loadOffers] End");
+		return WebMessage.serialize(new LoadOffersResponse(services));
+	}
 
 	public byte[] launchOffer(byte[] byteReq) {
-		System.out.println("[WebServer:logout] Begin");
+		System.out.println("[WebServer:loadOffers] Begin");
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LaunchOfferRequest)) {
