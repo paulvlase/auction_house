@@ -13,7 +13,7 @@ Procopciuc                                                                 Vlase
 
 
 
-                                     Tema 2
+                                     Tema 3
                                       IDP
 
 
@@ -42,20 +42,20 @@ Procopciuc                                                                 Vlase
 
 
 
-
 Cuprins:
     1.Conținut arhivă ........................................................ 3
     2.Rulare ................................................................. 3
     3.Organizarea surselor ................................................... 4
-    4.Testare ................................................................ 4
-    5.Acces surse ............................................................ 4
+    4.Testare ................................................................ 5
+    5.Acces surse ............................................................ 5
     6.Credențiale utilizate în interfața grafică.............................. 5
-    7.GUI & Arhitectura .......................................................5
-        7.1.Implementare ..................................................... 5
-        7.2.Bonus ............................................................ 6
-    8.NET .....................................................................6
-        8.1.Implementare ..................................................... 6
-
+    7.GUI & Arhitectura .......................................................6
+        7.1.Implementare ..................................................... 6
+        7.2.Bonus ............................................................ 7
+    8.NET .....................................................................7
+        8.1.Implementare ..................................................... 7
+    8.Web .....................................................................8
+        9.1.Implementare ..................................................... 8
 
 
 
@@ -71,42 +71,48 @@ Cuprins:
 1. Conținut arhivă
 
     AuctionHouse
-        src              Dosar cu sursele proiectului
-        resources        Resurse aditionale necesare pentru rularea proiectului
-        build.xml        Fișie de build
-        demands.list     Lista de oferte a cumpărătorului
-        login.conf       Conturi utilizate în cadrul aplicației
-        supplies.list    Lista de oferte a vânzătorului
-    action_house.sql Date pentru test
-    README           Fișierul curent
+        src                   Dosar cu sursele proiectului
+        lib                   Biblioteci adiționale
+        resources             Resurse aditionale necesare pentru rularea
+                              proiectului
+        build.xml             Fișie de build
+
+    AuctionHouseWebServer
+        src                   Dosar cu sursele proiectului
+        lib                   Biblioteci adiționale
+        build.xml             Fișier de build
+
+    action_house.sql          Date pentru test
+    auction_house_schema.png  Schema bazei de date
+    README                    Fișierul curent
 
 2. Rulare
-
     Compilarea surselor :
     ant
 
-    Pornirea serverului Web :
-    ant WebServerMockup
+    Compilarea serverului Web :
+    ant
 
     Rularea interfeței grafice :
     ant Main
 
     O posibilă rulare :
     ant
-    ant WebServerMockup
+    # Copierea claselor generate în folderul de la apache.
+    ant
     ant Main # Logare utilizator1
+
+                                                                    [ pagina 3 ]
     ant Main # Logare utilizator2
     ant Main # Logare utilizator3
 
-    Notă : Pentru partea de logare în interfată grafică vezi capitolul :
-    6. Credențiale utilizate în interfața grafică
-
-
-
-                                                                    [ pagina 3 ]
 3. Organizarea surselor
 
-    Proiectul este organizat în 11 pachete, după cum urmează :
+    Proiectul este organizat în 2 proiecte Java :
+        - AuctionHouse
+        - AuctionHouseWebServer
+
+    AuctionHouse este organizat în 14 pachete, după cum urmează :
 
     app                     Punctul de lansare a proiectului
     config                  Fișiere de configurare
@@ -127,6 +133,19 @@ Cuprins:
         webServer.messages  O serie de mesaje cu ajutorul cărora se realizează
                             comunicația cu serverul Web.
 
+    AuctionHouseWebServer este organizat în 6 pachete :
+
+    config                  Configurări ale modulului WebServer.
+                                                                    [ pagina 4 ]
+
+    data                    Clase necesare pentru abstractizarea datelor interne.
+    interfaces              Serie de interfețe
+    states                  O serie de clase care descriu stările în care se
+                            poate afla un serviciu [Service]
+    webServer               Implementarea serverului Web.
+        webServer.messages  O serie de mesaje cu ajutorul cărora se realizează
+                            comunicația cu clientul Web.
+
 4. Testare
 
     Sistem de operare : Ubuntu 11.10 / Windows 7 / Bodhi Linux 2.3.8
@@ -144,7 +163,6 @@ Cuprins:
 
     Username : IDPdummyAccount
     Password : IDPdummyAccount1
-                                                                    [ pagina 4 ]
     Adresă proiect : https://github.com/paulvlase/auction_house
 
 
@@ -153,6 +171,8 @@ Cuprins:
         Usernmae : unix140
         Password : marmota
 
+
+                                                                    [ pagina 5 ]
         Usernmae : pvlase
         Password : parola
 
@@ -179,13 +199,15 @@ Cuprins:
         - Commander (generarea evenimentelor pentru testate in Network si
         WebServiceClient clasele din pachetul guiItems)
         - State (Prelucrarea pachetelor Service)
-
-                                                                    [ pagina 5 ]
         - Adapter (Pentru a putea publica si prelucra pachetele Service in
         metoda process din SwingWorker)
 
     Comunicarea între module se face cu ajutorul unor notificări. Pachetele
     prin intermediul cărora se transmit date sunt prezente în pachetul data.
+
+
+
+                                                                    [ pagina 6 ]
 
     7.2. Bonus
 
@@ -214,20 +236,26 @@ Cuprins:
     bytes a cărui primii 4 bytes reprezintă dimensiunea efectivă a pachetului.
     La recepționare octeții sunt interpretați ca fiind un obiect de tipul
     Message. Fiecare Serviciu din interfața grafică are asociată o stare la un
-
-                                                                    [ pagina 6 ]
     moment dat, această stare ne ajută să generăm un pachet Message de fiecare
     dată când sunt necesare notificările celor care sunt implicați în licitație.
     Interpretarea unui mesaj se poate urmări în clasa NetworkReceiveEvents.
     Pentru mai multe detalii despre protocol se pot urmări sursele.
 
-9.Web Client & Server
 
+                                                                    [ pagina 7 ]
+9.Web Client & Server
     9.1 Implementare
 
     Sursele corespunzătoare părții 3 a proiectului se împart în :
-    o Client : 
-    o Server :
+        o Client : AuctionHouse/webServer, AuctionHouse/webClient
+        o Server : AuctionHouseWebServer
+    Pentru a realiza ocomunicație între cele 2 module a trebuit să creăm câte un
+    mesaj pentru fiecare mesaj, motivul fiind încapsularea datelor. Ținând cont
+    că Axis2 nu se descurcă prea bine cu încapsularea pachetelor și transmisia
+    lor pe rețea sau necesită configurări destul de complexe am decis să
+    realizăm noi serializarea și deserializarea obiectelor, idem ca la pachetele
+    de rețea. Ținând cont de asta, am transmis Axis-ului vectori intrinseci de
+    byte-ți.
 
 
 
@@ -249,10 +277,4 @@ Cuprins:
 
 
 
-
-
-
-
-
-
-                                                                    [ pagina 7 ]
+                                                                    [ pagina 8 ]
