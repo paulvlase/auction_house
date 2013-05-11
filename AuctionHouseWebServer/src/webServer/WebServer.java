@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import webClient.WebMessage;
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
 import webServer.messages.GetProfileRequest;
@@ -156,24 +157,19 @@ public class WebServer {
 		LoginCred cred = req.getCred();
 		Service service = req.getService();
 
-		Integer role = 0;
-		if (cred.getRole() == UserRole.SELLER) {
-			role = 1;
-		}
-
 		try {
 			Statement st = conn.createStatement();
 			String query = "SELECT *" + " FROM services" + " WHERE user_id = " + cred.getId() + " AND name = "
-					+ service.getName() + " AND user_role = " + role;
+					+ service.getName() + " AND user_role = " + cred.getRole().ordinal();
 			ResultSet rs = st.executeQuery(query);
 
 			if (rs.first()) {
 				// Activez un serviciu
-				query = "UPDATE services SET active = " + 1 + " WHERE user_id = " + cred.getId() + " AND name = "
-						+ service.getName() + " AND user_role = " + role;
+				query = "UPDATE services SET active = 1 WHERE user_id = " + cred.getId() + " AND name = "
+						+ service.getName() + " AND user_role = " + cred.getRole().ordinal();
 
 				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = " + service.getName()
-						+ " AND s.user_role = " + UserRole.SELLER + " AND s.active = " + 1;
+						+ " AND s.user_role = " + UserRole.SELLER.ordinal() + " AND s.active = 1";
 				rs = st.executeQuery(query);
 
 				ArrayList<UserEntry> sellers = new ArrayList<UserEntry>();
@@ -229,40 +225,38 @@ public class WebServer {
 	}
 
 	public byte[] dropOffer(byte[] byteReq) {
-		System.out.println("Begin");
+		System.out.println("[WebServer:dropOffer] Begin");
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof DropOfferRequest)) {
 			System.out.println("[WebServer:dropOffer] Wrong message... waiting DropOfferRequest");
-			// TODO: Fix this
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new OkResponse());
+
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting DropOfferRequest"));
 		}
 
 		DropOfferRequest req = (DropOfferRequest) obj;
 
 		try {
 			Statement st = conn.createStatement();
+			
+			// TODO: Fix this.
 			String query = "SELECT id FROM users WHERE username = " + req.getUsername();
 			ResultSet rs = st.executeQuery(query);
 
 			Integer id = rs.getInt("id");
 
-			Integer role = 0;
-			if (req.getUserRole() == UserRole.SELLER) {
-				role = 1;
-			}
-
-			query = "UPDATE services SET active = " + 0 + " WHERE name = " + req.getServiceName() + " AND user_id = "
-					+ id + " AND user_role = " + role;
+			query = "UPDATE services SET active = 0 WHERE name = " + req.getServiceName() + " AND user_id = "
+					+ id + " AND user_role = " + req.getUserRole().ordinal();
 			st.executeUpdate(query);
+			st.close();
+			
+			System.out.println("[WebServer: dropOffer] End");
+			return WebMessage.serialize(new OkResponse());
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
 
-		System.out.println("[WebServer: dropOffer] End");
-		return WebMessage.serialize(new OkResponse());
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
+		}
 	}
 
 	public byte[] getProfile(byte[] byteReq) {
