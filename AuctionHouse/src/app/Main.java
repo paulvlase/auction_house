@@ -10,7 +10,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import mediator.MediatorImpl;
 import network.NetworkImpl;
-import webClient.WebClientMockup;
+import webClient.WebClientImpl;
 
 public class Main {
 	static Logger	logger	= Logger.getLogger(Main.class);
@@ -33,7 +33,7 @@ public class Main {
 		MediatorImpl med = new MediatorImpl();
 		GuiImpl gui = new GuiImpl(med);
 		NetworkImpl net = new NetworkImpl(med);
-		WebClientMockup web = new WebClientMockup(med);
+		WebClientImpl web = new WebClientImpl(med);
 
 		med.start();
 		logger.error("End");
