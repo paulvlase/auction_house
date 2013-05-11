@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import webServer.Util;
+import webServer.messages.DropOfferRequest;
+import webServer.messages.ErrorResponse;
+
 import data.Message;
 import data.Service;
 import data.UserEntry.Offer;
@@ -58,6 +62,17 @@ public class DropOfferState extends AbstractState {
 
 	public void executeWeb(WebService web) {
 		logger.debug("Begin");
+		logger.debug("service: " + service);
+
+		DropOfferRequest requestObj = new DropOfferRequest(web.getLoginCred(), service.getName());
+		Object responseObj = Util.askWebServer(requestObj);
+		
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+			
+			System.out.println("Failed: " + res.getMsg());
+		}
+		
 		web.notifyNetwork(service);
 		logger.debug("End");
 	}

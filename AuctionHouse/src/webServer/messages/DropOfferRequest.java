@@ -2,26 +2,20 @@ package webServer.messages;
 
 import java.io.Serializable;
 
-import data.UserProfile.UserRole;
+import data.LoginCred;
 
 public class DropOfferRequest implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private String username;
-	private UserRole role;
+	private LoginCred cred;
 	private String serviceName;
 	
-	public DropOfferRequest(String username, UserRole role, String serviceName) {
-		this.username = username;
-		this.role = role;
+	public DropOfferRequest(LoginCred cred, String serviceName) {
+		this.cred = cred;
 		this.serviceName = serviceName;
 	}
 	
-	public String getUsername() {
-		return username;
-	}
-	
-	public UserRole getUserRole() {
-		return role;
+	public LoginCred getLoginCred() {
+		return cred;
 	}
 	
 	public String getServiceName() {

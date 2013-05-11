@@ -140,7 +140,7 @@ public class WebServer {
 			String query = "UPDATE users" + " SET " + online_as_field + " = 0 WHERE id = " + cred.getId();
 			st.executeUpdate(query);
 
-			query = "UPDATE services" + " SET active = 0 WHERE id = " + cred.getId() + " AND user_role = "
+			query = "UPDATE services" + " SET active = 0 WHERE user_id = " + cred.getId() + " AND user_role = "
 					+ cred.getRole().ordinal();
 			System.out.println("[WebServer:logout] " + query);
 			st.executeUpdate(query);
@@ -306,7 +306,6 @@ public class WebServer {
 					ps2.setDouble(3,  service.getPrice());
 					ps2.setInt(4, cred.getId());
 					ps2.setInt(5, cred.getRole().ordinal());
-					ps2.setInt(2, UserRole.BUYER.ordinal());
 					ps2.executeUpdate();
 					
 					ps2.close();
@@ -331,18 +330,13 @@ public class WebServer {
 		}
 
 		DropOfferRequest req = (DropOfferRequest) obj;
+		LoginCred cred = req.getLoginCred();
 
 		try {
 			Statement st = conn.createStatement();
 
-			// TODO: Fix this.
-			String query = "SELECT id FROM users WHERE username = '" + req.getUsername() + "'";
-			ResultSet rs = st.executeQuery(query);
-
-			Integer id = rs.getInt("id");
-
-			query = "UPDATE services SET active = 0 WHERE name = '" + req.getServiceName() + "' AND user_id = " + id
-					+ " AND user_role = " + req.getUserRole().ordinal();
+			String query = "UPDATE services SET active = 0 WHERE name = '" + req.getServiceName() + "' AND user_id = " + cred.getId()
+					+ " AND user_role = " + cred.getRole().ordinal();
 			st.executeUpdate(query);
 			st.close();
 

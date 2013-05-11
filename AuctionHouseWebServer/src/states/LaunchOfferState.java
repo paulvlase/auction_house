@@ -16,7 +16,6 @@ import data.Service;
 import data.Service.Status;
 import data.UserEntry;
 import data.UserEntry.Offer;
-import data.UserProfile.UserRole;
 import data.UserProfile;
 
 public class LaunchOfferState extends AbstractState {
@@ -64,7 +63,6 @@ public class LaunchOfferState extends AbstractState {
 		}
 
 		web.notifyNetwork(responseObj.getService());
-
 		logger.debug("End");
 	}
 

@@ -64,7 +64,6 @@ public class LaunchOfferState extends AbstractState {
 		}
 
 		web.notifyNetwork(responseObj.getService());
-
 		logger.debug("End");
 	}
 
