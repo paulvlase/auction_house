@@ -27,6 +27,7 @@ import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
+import webServer.messages.RemoveOfferRequest;
 import webServer.messages.SetProfileRequest;
 
 import config.WebServiceClientConfig;
@@ -85,6 +86,8 @@ public class Util {
 				responseByteArray = client.loadOffers(requestByteArray);
 			} else if (requestObj instanceof LoadOffersResponse) {
 				printErrorMessage(requestObj);
+			} else if (requestObj instanceof RemoveOfferRequest) {
+				responseByteArray = client.removeService(requestByteArray);
 			} else {
 				printErrorMessage(requestObj);
 			}
