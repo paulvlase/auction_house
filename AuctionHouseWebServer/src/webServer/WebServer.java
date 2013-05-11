@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import config.WebServerConfig;
 
-import webClient.WebMessage;
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
 import webServer.messages.GetProfileRequest;
@@ -66,37 +65,38 @@ public class WebServer {
 
 		System.out.println("[WebServer:login] cred: " + cred);
 
-		Statement st;
 		try {
-			st = conn.createStatement();
+			Statement st1 = conn.createStatement();
 
-			String query = "SELECT *" + " FROM users" + " WHERE username = " + cred.getUsername() + " AND password = "
-					+ cred.getPassword();
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT * FROM users WHERE username = '" + cred.getUsername() + "' AND password = '"
+					+ cred.getPassword() + "'";
+			ResultSet rs1 = st1.executeQuery(query);
 
-			if (rs.first()) {
-				Integer id = rs.getInt("id");
+			if (rs1.first()) {
+				Integer id = rs1.getInt("id");
 
 				String online_as_field = "as_buyer";
 				if (cred.getRole() == UserRole.SELLER) {
 					online_as_field = "as_seller";
 				}
 
-				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = "
-						+ cred.getAddress().getHostName() + ", port = " + cred.getAddress().getPort() + " WHERE id = "
+				Statement st2 = conn.createStatement();
+				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
+						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 						+ id;
-				st.executeUpdate(query);
+				st2.executeUpdate(query);
 
 				UserProfile userProfile = new UserProfile();
-				userProfile.setUsername(rs.getString("username"));
-				userProfile.setFirstName(rs.getString("first_name"));
-				userProfile.setLastName(rs.getString("last_name"));
-				userProfile.setPassword(rs.getString("password"));
+				userProfile.setUsername(rs1.getString("username"));
+				userProfile.setFirstName(rs1.getString("first_name"));
+				userProfile.setLastName(rs1.getString("last_name"));
+				userProfile.setPassword(rs1.getString("password"));
 				userProfile.setRole(cred.getRole());
-				userProfile.setLocation(rs.getString("location"));
+				userProfile.setLocation(rs1.getString("location"));
 
-				st.close();
-				System.out.println("[WebServer:login] End (lLoginResponse)");
+				st1.close();
+				st2.close();
+				System.out.println("[WebServer:login] End (LoginResponse)");
 				return WebMessage.serialize(new LoginResponse(userProfile));
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");

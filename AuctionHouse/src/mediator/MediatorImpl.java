@@ -176,28 +176,27 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 	/* MediatorWeb */
 	@Override
-	public ArrayList<Service> loadOffers() {
+	public ArrayList<Service> loadOffers(LoginCred cred) {
 		logger.debug("Begin");
 
 		if (profile == null)
 			return null;
 
-		ArrayList<Service> services = null;
-		if (profile.getRole() == UserRole.BUYER)
-			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
-
-		if (profile.getRole() == UserRole.SELLER) {
-			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
-		}
-
-		for (Service service : services) {
-			if (service.getUsers() != null) {
-				Collections.sort(service.getUsers());
-			}
-		}
-
-		logger.debug("End");
-		return services;
+		return web.loadOffers(cred);
+//		if (profile.getRole() == UserRole.BUYER)
+//			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
+//
+//		if (profile.getRole() == UserRole.SELLER) {
+//			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
+//		}
+//
+//		for (Service service : services) {
+//			if (service.getUsers() != null) {
+//				Collections.sort(service.getUsers());
+//			}
+//		}
+//
+//		logger.debug("End");
 	}
 
 	public void launchOffers(ArrayList<Service> services) {
@@ -213,80 +212,6 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 		publishServices(services);
 		logger.debug("End");
-	}
-
-	private Service parseLine(String line, ServiceType type) {
-		StringTokenizer st = new StringTokenizer(line, " ");
-		String name;
-		Long time;
-		Double price = 0.0;
-
-		if (!st.hasMoreTokens())
-			return null;
-		name = st.nextToken();
-
-		if (!st.hasMoreTokens())
-			return null;
-
-		try {
-			time = Long.parseLong(st.nextToken());
-			time = System.currentTimeMillis() + time * 1000;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		if (type == ServiceType.SUPPLY) {
-			try {
-				price = Double.parseDouble(st.nextToken());
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		if (st.hasMoreTokens())
-			return null;
-
-		Service service = new Service(name);
-		service.setTime(time);
-		service.setPrice(price);
-
-		return service;
-	}
-
-	private ArrayList<Service> loadServicesFile(String filename, ServiceType type) {
-		logger.debug("Begin");
-		ArrayList<Service> services = new ArrayList<Service>();
-
-		File demandsFile = new File(filename);
-		if (demandsFile.exists()) {
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(new FileReader(demandsFile));
-
-				String line;
-				while ((line = br.readLine()) != null) {
-					logger.debug(line);
-					Service d = parseLine(line, type);
-
-					/* TODO: wrong file format. */
-					services.add(d);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			try {
-				if (br != null)
-					br.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		logger.debug("End");
-		return services;
 	}
 
 	@Override

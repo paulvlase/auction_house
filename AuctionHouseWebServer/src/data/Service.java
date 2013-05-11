@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import states.StateManager;
 
-import config.GuiConfig;
 import data.UserProfile.UserRole;
 
 /**
@@ -240,78 +239,7 @@ public class Service implements Comparable<Service>, Serializable {
 	}
 
 	public ArrayList<ArrayList<Object>> getAsTable(UserRole role) {
-		ArrayList<ArrayList<Object>> data = new ArrayList<ArrayList<Object>>();
-		Boolean first = true;
-
-		/**
-		 * Columns from row are : Service Name, Status, User, Offer made, Time,
-		 * Price
-		 */
-		ArrayList<Object> row;
-
-		switch (status) {
-		case INACTIVE:
-			row = new ArrayList<Object>(
-					Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.INACTIVE), "", "", "", ""));
-			data.add(row);
-			break;
-		case ACTIVE:
-			if (users == null) {
-				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.ACTIVE), "", "", "",
-						""));
-				data.add(row);
-				break;
-			}
-
-			for (UserEntry user : users) {
-
-				row = getActiveRow(role, user);
-				if (first) {
-					first = false;
-
-					row.set(0, getName());
-					row.set(1, GuiConfig.getValue(GuiConfig.ACTIVE));
-				}
-
-				data.add(row);
-			}
-			break;
-		case TRANSFER_IN_PROGRESS:
-			if (role == UserRole.BUYER) {
-				row = new ArrayList<Object>(Arrays.asList(getName(),
-						GuiConfig.getValue(GuiConfig.TRANSFER_IN_PROGRESS), progress, "", "", ""));
-				data.add(row);
-				break;
-			} else {
-				// TODO
-			}
-		case TRANSFER_STARTED:
-			if (role == UserRole.BUYER) {
-				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.TRANSFER_STARTED), 0,
-						"", "", ""));
-				data.add(row);
-				break;
-			} else {
-				// TODO
-			}
-		case TRANSFER_COMPLETE:
-			if (role == UserRole.BUYER) {
-				row = new ArrayList<Object>(Arrays.asList(getName(), GuiConfig.getValue(GuiConfig.TRANSFER_COMPLETE),
-						progress, "", "", ""));
-				data.add(row);
-				break;
-			} else {
-				// TODO
-			}
-		case TRANSFER_FAILED:
-			// TODO
-			break;
-		default:
-			logger.error("Unexpected Status :|");
-			break;
-		}
-
-		return data;
+		return null;
 	}
 
 	public Service clone() {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import webClient.Util;
+import webServer.Util;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
 
