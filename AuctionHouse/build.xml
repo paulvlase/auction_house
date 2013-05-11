@@ -3,15 +3,22 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="auctionHouse">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="AuctionHouse">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../../safe/eclipse"/>
+    <property name="AuctionHouseWebServer.location" value="../AuctionHouseWebServer"/>
+    <property name="ECLIPSE_HOME" value="D:/Programs/Eclipse-jee-indigo-SR2-win32/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
-    <path id="auctionHouse.classpath">
+    <path id="AuctionHouse.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/log4j-1.2.17.jar"/>
+        <pathelement location="lib/axis.jar"/>
+        <pathelement location="lib/commons-discovery-0.2.jar"/>
+        <pathelement location="lib/javax.wsdl_1.6.2.v201012040545.jar"/>
+        <pathelement location="lib/jaxrpc.jar"/>
+        <pathelement location="lib/org.apache.commons.codec_1.3.0.v201101211617.jar"/>
+        <pathelement location="lib/saaj.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -29,12 +36,19 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="auctionHouse.classpath"/>
+            <classpath refid="AuctionHouse.classpath"/>
         </javac>
     </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build.xml" dir="${AuctionHouseWebServer.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${AuctionHouseWebServer.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
         <copy todir="${ant.library.dir}">
             <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
@@ -47,20 +61,5 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
-    </target>
-    <target name="Main">
-        <java classname="app.Main" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
-    <target name="WebServerMockup">
-        <java classname="webServer.WebServerMockup" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
-    </target>
-    <target name="MainWindow">
-        <java classname="gui.MainWindow" failonerror="true" fork="yes">
-            <classpath refid="auctionHouse.classpath"/>
-        </java>
     </target>
 </project>
