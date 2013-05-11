@@ -279,18 +279,18 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof GetProfileRequest)) {
 			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new GetProfileResponse(null));
+			
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting GetProfileRequest"));
 		}
+
 		GetProfileRequest req = (GetProfileRequest) obj;
 
-		UserProfile profile = null;
 		try {
 			Statement st = conn.createStatement();
 			String query = "SELECT * FROM users WHERE username = " + req.getUsername();
 			ResultSet rs = st.executeQuery(query);
 
+			UserProfile profile = null;
 			if (rs.next()) {
 				profile = new UserProfile();
 				profile.setUsername(rs.getString("username"));
@@ -301,16 +301,15 @@ public class WebServer {
 				profile.setLocation(rs.getString("location"));
 				// profile.setAvatar(avatar);
 			}
-			
 			st.close();
+			
+			System.out.println("[WebServer:getProfile] End");
+			return WebMessage.serialize(new GetProfileResponse(profile));
 		} catch (SQLException e) {
-			profile = null;
-
 			e.printStackTrace();
+			
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
-
-		System.out.println("[WebServer:getProfile] End");
-		return WebMessage.serialize(new GetProfileResponse(profile));
 	}
 
 	public byte[] setProfile(byte[] byteReq) {
@@ -319,6 +318,7 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof SetProfileRequest)) {
 			System.out.println("[WebServer:setProfile] Wrong message... waiting SetProfileRequest");
+
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting SetProfileRequest"));
 		}
 
@@ -347,11 +347,10 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof RegisterProfileRequest)) {
 			System.out.println("[WebServer:registerProfile] Wrong message... waiting RegisterProfileRequest");
-			// TODO: Fix this
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new OkResponse());
+
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting RegisterProfileRequest"));
 		}
+
 		RegisterProfileRequest req = (RegisterProfileRequest) obj;
 		UserProfile profile = req.getUserProfile();
 
@@ -361,9 +360,11 @@ public class WebServer {
 					+ profile.getUsername() + ", " + profile.getFirstName() + ", " + profile.getLastName() + ", "
 					+ profile.getPassword() + ", " + profile.getLocation() + ")";
 			st.executeUpdate(query);
+			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend");
 			e.printStackTrace();
+			
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 
 		System.out.println("[WebServer:registerProfile] End");
