@@ -191,6 +191,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 		}
 
 		logger.debug("End");
+		return services;
 	}
 
 	public void launchOffers(ArrayList<Service> services) {
