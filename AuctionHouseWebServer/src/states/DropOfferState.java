@@ -14,6 +14,7 @@ import webServer.messages.ErrorResponse;
 
 import data.Message;
 import data.Service;
+import data.Service.Status;
 import data.UserEntry.Offer;
 import data.UserEntry;
 import data.UserProfile;
@@ -73,6 +74,7 @@ public class DropOfferState extends AbstractState {
 			System.out.println("Failed: " + res.getMsg());
 		}
 		
+		service.setStatus(Status.INACTIVE);
 		web.notifyNetwork(service);
 		logger.debug("End");
 	}

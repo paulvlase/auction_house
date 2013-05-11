@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import webClient.Util;
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
-import webServer.messages.LaunchOfferRequest;
-import webServer.messages.LaunchOfferResponse;
 
 import data.Message;
 import data.Service;
@@ -76,6 +74,7 @@ public class DropOfferState extends AbstractState {
 			System.out.println("Failed: " + res.getMsg());
 		}
 		
+		service.setStatus(Status.INACTIVE);
 		web.notifyNetwork(service);
 		logger.debug("End");
 	}
