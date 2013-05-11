@@ -9,5 +9,8 @@
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.codec_1.3.0.v201101211617.jar"/>
 	<classpathentry kind="lib" path="lib/saaj.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Ghennadi/Downloads/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/Eclipse-jee-indigo-SR2-win32/eclipse/plugins/javax.wsdl_1.6.2.v201012040545.jar"/>
+	<classpathentry kind="lib" path="D:/Programs/Eclipse-jee-indigo-SR2-win32/eclipse/plugins/org.apache.commons.logging_1.0.4.v201101211617.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -8,5 +8,5 @@ package config;
 public class WebServiceClientConfig {
 	public static final String	IP				= "127.0.0.1";
 	public static final int		PORT			= 3333;
-	public static final String	ENDPOINT_URL	= "http://localhost:8080/AuctionHouseWebServer/services/WebServer?wsdl";
+	public static final String	ENDPOINT_URL	= "http://172.16.5.198:8080/AuctionHouseWebServer/services/WebServer?wsdl";
 }

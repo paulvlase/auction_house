@@ -22,4 +22,5 @@ public interface WebClient {
 	
 	public void publishService(Service service);
 	public void publishServices(ArrayList<Service> services);
+	public ArrayList<Service> loadOffers(LoginCred cred);
 }

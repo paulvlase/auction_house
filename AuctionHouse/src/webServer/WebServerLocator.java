@@ -22,7 +22,7 @@ public class WebServerLocator extends org.apache.axis.client.Service implements 
     }
 
     // Use to get a proxy class for WebServerHttpSoap11Endpoint
-    private java.lang.String WebServerHttpSoap11Endpoint_address = "http://192.168.1.2:8080/AuctionHouseWebServer/services/WebServer.WebServerHttpSoap11Endpoint/";
+    private java.lang.String WebServerHttpSoap11Endpoint_address = "http://172.16.164.1:8080/AuctionHouseWebServer/services/WebServer.WebServerHttpSoap11Endpoint/";
 
     public java.lang.String getWebServerHttpSoap11EndpointAddress() {
         return WebServerHttpSoap11Endpoint_address;

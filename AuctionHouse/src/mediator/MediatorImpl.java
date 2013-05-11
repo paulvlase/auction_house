@@ -176,7 +176,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 	/* MediatorWeb */
 	@Override
-	public ArrayList<Service> loadOffers(LoginCred cred) {
+	public ArrayList<Service> loadOffers() {
 		logger.debug("Begin");
 
 		if (profile == null)

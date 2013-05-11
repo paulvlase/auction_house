@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 
 import webServer.messages.ErrorResponse;
 import webServer.messages.GetProfileResponse;
+import webServer.messages.LoadOffersRequest;
+import webServer.messages.LoadOffersResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
@@ -61,7 +63,7 @@ public class WebClientImpl implements WebClient, WebService {
 			thread.start();
 			return ((LoginResponse) responseObj).getUserProfile();
 		} else {
-			logger.error("Unexpected response message");
+			logger.error("Unexpected response message " + responseObj.getClass());
 			return null;
 		}
 	}
@@ -87,6 +89,24 @@ public class WebClientImpl implements WebClient, WebService {
 		thread = null;
 
 		logger.debug("End success");
+	}
+	
+	public ArrayList<Service> loadOffers(LoginCred cred){
+		Object responseObj = Util.askWebServer(new LoadOffersRequest(cred));
+
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+
+			logger.warn("Failed: " + res.getMsg());
+			return null;
+		} else if (responseObj instanceof LoadOffersResponse) {
+			LoadOffersResponse res = (LoadOffersResponse) responseObj;
+			
+			return res.getServices();
+		} else {
+			logger.error("Unexpected response message");
+			return null;
+		}		
 	}
 
 	public UserProfile getUserProfile(String username) {
