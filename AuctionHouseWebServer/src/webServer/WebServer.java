@@ -17,6 +17,7 @@ import webServer.messages.GetProfileRequest;
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LaunchOfferRequest;
 import webServer.messages.LaunchOfferResponse;
+import webServer.messages.LoadOffersRequest;
 import webServer.messages.LoadOffersResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
@@ -151,8 +152,38 @@ public class WebServer {
 	public byte[] loadOffers(byte[] byteReq) {
 		System.out.println("[WebServer:loadOffers] Begin");
 		ArrayList<Service> services = new ArrayList<Service>();
+
+		Object obj = WebMessage.deserialize(byteReq);
+		if (!(obj instanceof LoadOffersRequest)) {
+			System.out.println("[WebServer:launchOffer] Wrong message... waiting LaunchOfferRequest");
+			return WebMessage.serialize(new LoadOffersResponse(services));
+		}
 		
-		//String query = "SELECT * FROM services WHERE "
+		LoadOffersRequest req = (LoadOffersRequest) obj;
+		LoginCred cred = req.getCred();
+
+		try {
+			String query = "SELECT * FROM services WHERE user_id = ? AND user_role = ?";
+		
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setInt(1, cred.getId());
+			ps.setInt(2, cred.getRole().ordinal());
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Service service = new Service(rs.getString("name"));
+
+				service.setTime(rs.getLong("time"));
+				service.setPrice(rs.getDouble("price"));
+
+				services.add(service);
+			}
+			
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("[WebServer:loadOffers] End");
 		return WebMessage.serialize(new LoadOffersResponse(services));

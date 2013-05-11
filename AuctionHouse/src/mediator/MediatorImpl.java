@@ -176,27 +176,21 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 
 	/* MediatorWeb */
 	@Override
-	public ArrayList<Service> loadOffers(LoginCred cred) {
+	public ArrayList<Service> loadOffers() {
 		logger.debug("Begin");
 
 		if (profile == null)
 			return null;
 
-		return web.loadOffers(cred);
-//		if (profile.getRole() == UserRole.BUYER)
-//			services = loadServicesFile(FilesConfig.DEMANDS_FILENAME, ServiceType.DEMAND);
-//
-//		if (profile.getRole() == UserRole.SELLER) {
-//			services = loadServicesFile(FilesConfig.SUPPLIES_FILENAME, ServiceType.SUPPLY);
-//		}
-//
-//		for (Service service : services) {
-//			if (service.getUsers() != null) {
-//				Collections.sort(service.getUsers());
-//			}
-//		}
-//
-//		logger.debug("End");
+		ArrayList<Service> services = web.loadOffers(cred);
+
+		for (Service service : services) {
+			if (service.getUsers() != null) {
+				Collections.sort(service.getUsers());
+			}
+		}
+
+		logger.debug("End");
 	}
 
 	public void launchOffers(ArrayList<Service> services) {
