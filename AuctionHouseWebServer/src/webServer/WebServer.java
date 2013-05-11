@@ -122,7 +122,6 @@ public class WebServer {
 		System.out.println("[WebServer:logout] Begin");
 
 		Object obj = WebMessage.deserialize(req);
-
 		if (!(obj instanceof LogoutRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LogoutRequest"));
@@ -132,23 +131,21 @@ public class WebServer {
 		LoginCred cred = logoutRequest.getCred();
 
 		try {
-			Statement simpleStatement = conn.createStatement();
+			Statement st = conn.createStatement();
 
-			if (cred.getRole() == UserRole.BUYER) {
-				String query = "UPDATE users" + " SET as_buyer = " + 0 + " WHERE username = " + cred.getId();
-				simpleStatement.executeUpdate(query);
-
-				query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
-						+ cred.getRole();
-				simpleStatement.executeUpdate(query);
-			} else {
-				String query = "UPDATE users" + " SET as_seller = " + 0 + " WHERE username = " + cred.getId();
-				simpleStatement.executeUpdate(query);
-
-				query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
-						+ cred.getRole();
-				simpleStatement.executeUpdate(query);
+			String online_as_field = "as_buyer";
+			if (cred.getRole() == UserRole.SELLER) {
+				online_as_field = "as_seller";
 			}
+
+			String query = "UPDATE users" + " SET " + online_as_field + " = 0 WHERE id = " + cred.getId();
+			st.executeUpdate(query);
+
+			query = "UPDATE services" + " SET active = " + 0 + " WHERE id = " + cred.getId() + " AND user_role = "
+					+ cred.getRole().ordinal();
+			st.executeUpdate(query);
+
+			st.close();
 		} catch (SQLException e) {
 			System.out.println("Something bad happend at server");
 			e.printStackTrace();
@@ -161,7 +158,6 @@ public class WebServer {
 	public byte[] launchOffer(byte[] req) {
 		System.out.println("[WebServer:logout] Begin");
 
-		byte[] res;
 		Object obj = WebMessage.deserialize(req);
 
 		if (!(obj instanceof LaunchOfferRequest)) {
