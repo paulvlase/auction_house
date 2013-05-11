@@ -70,13 +70,14 @@ Cuprins:
                                                                     [ pagina 2 ]
 1. Conținut arhivă
 
-    src              Dosar cu sursele proiectului
-    resources        Resurse aditionale necesare pentru rularea proiectului
-    build.xml        Fișie de build
-    demands.list     Lista de oferte a cumpărătorului
-    login.conf       Conturi utilizate în cadrul aplicației
-    supplies.list    Lista de oferte a vânzătorului
-
+    AuctionHouse
+        src              Dosar cu sursele proiectului
+        resources        Resurse aditionale necesare pentru rularea proiectului
+        build.xml        Fișie de build
+        demands.list     Lista de oferte a cumpărătorului
+        login.conf       Conturi utilizate în cadrul aplicației
+        supplies.list    Lista de oferte a vânzătorului
+    action_house.sql Date pentru test
     README           Fișierul curent
 
 2. Rulare
@@ -107,31 +108,37 @@ Cuprins:
 
     Proiectul este organizat în 11 pachete, după cum urmează :
 
-    app                 Punctul de lansare a proiectului
-    config              Fișiere de configurare
-    data                Clase utilizate pentru transferul mesajului între module
-    gui                 Intefața grafică
-        gui.items       Suită de clase utilizate în meniurile din aplicație
-        gui.spantable   Ajută la crearea unui tabel cu celule unite
-    guiBuilder          Clase și forme generate cu JFormDesigner
-    interfaces          Interfețele utilizate în proiect
-    mediator            Modulul mediator
-    network             Modulul rețea
-    webServiceClient    Modulul clientului web
+    app                     Punctul de lansare a proiectului
+    config                  Fișiere de configurare
+    data                    Clase utilizate pentru transferul mesajului între
+                            module
+    gui                     Intefața grafică
+        gui.items           Suită de clase utilizate în meniurile din aplicație
+        gui.spantable       Ajută la crearea unui tabel cu celule unite
+    guiBuilder              Clase și forme generate cu JFormDesigner
+    interfaces              Interfețele utilizate în proiect
+    mediator                Modulul mediator
+    network                 Modulul rețea
+    states                  O serie de clase care descriu stările în care se
+                            poate afla un serviciu [Service]
+    webClient               Modulul clientului Web
+    webServer               Clasele care încapsulează și abstractizează mesajele
+                            din comunicarea cu serverul Web.
+        webServer.messages  O serie de mesaje cu ajutorul cărora se realizează
+                            comunicația cu serverul Web.
 
 4. Testare
 
-    Sistem de operare : Ubuntu 11.10 / Windows 7
+    Sistem de operare : Ubuntu 11.10 / Windows 7 / Bodhi Linux 2.3.8
+    Limbaj            : Java
     IDE               : Eclipse [Juno / Indigo]
     Plugin-uri        : EGit, JFormDesigner
     Testare           : mockup-uri scrise de noi
-
-    Pentru simula modulele : Network, Mediator și WebServiceClient am create 3
-    module de mockup (a se vedea pachetele ce sunt răspunzătoare de aceste
-    module). În cadrul acestor module am apelat la SwingWorkers, care ne ajută
-    în generarea datelor într-un mod aleator.
+    Baza de date      : MySql 5.5.31
+    Date pentru test  : action_house.sql
 
 5. Acces surse
+
     În dezvolatare surselor am folosit git (GitHub). Pentru a observa modul în
     care a evoluat dezvoltarea surselor se va accesa contul de pe GitHub :
 
@@ -142,6 +149,7 @@ Cuprins:
 
 
 6. Credențiale utilizate în interfața grafică
+
         Usernmae : unix140
         Password : marmota
 
@@ -213,8 +221,13 @@ Cuprins:
     Interpretarea unui mesaj se poate urmări în clasa NetworkReceiveEvents.
     Pentru mai multe detalii despre protocol se pot urmări sursele.
 
+9.Web Client & Server
 
+    9.1 Implementare
 
+    Sursele corespunzătoare părții 3 a proiectului se împart în :
+    o Client : 
+    o Server :
 
 
 
