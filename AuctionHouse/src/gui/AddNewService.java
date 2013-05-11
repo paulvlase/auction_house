@@ -189,11 +189,6 @@ public class AddNewService extends JFrame {
 		
 		logger.debug("service: " + service);
 
-		UserRole role = mainWindow.getGui().getUserProfile().getRole();
-		if (role == UserRole.SELLER) {
-			service.setStatus(Status.ACTIVE);
-		}
-
 		mainWindow.addService(service);
 
 		Service clonedService = service.clone();
