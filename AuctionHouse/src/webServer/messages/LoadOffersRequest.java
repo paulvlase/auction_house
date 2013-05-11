@@ -6,10 +6,10 @@ import data.LoginCred;
 
 public class LoadOffersRequest implements Serializable{
 	private static final long	serialVersionUID	= 1L;
-	public LoginCred cred;
+	private LoginCred cred;
 
 	public LoadOffersRequest(LoginCred cred) {
-		super();		this.cred = cred;
+		this.cred = cred;
 	}
 
 	public LoginCred getCred() {

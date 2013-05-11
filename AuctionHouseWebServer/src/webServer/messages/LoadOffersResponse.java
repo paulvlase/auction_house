@@ -10,7 +10,6 @@ public class LoadOffersResponse implements Serializable {
 	private ArrayList<Service> services;
 
 	public LoadOffersResponse(ArrayList<Service> services) {
-		super();
 		this.services = services;
 	}
 
