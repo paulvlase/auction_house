@@ -98,7 +98,8 @@ public class WebServer {
 				userProfile.setPassword(rs.getString("password"));
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs.getString("location"));
-
+				
+				st.close();
 				System.out.println("[WebServer:login] End (lLoginResponse)");
 				return WebMessage.serialize(new LoginResponse(userProfile));
 			} else {
@@ -106,7 +107,6 @@ public class WebServer {
 				return WebMessage.serialize(new ErrorResponse("Wrong username or password"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Something bad happend");
 			e.printStackTrace();
 
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
@@ -142,8 +142,9 @@ public class WebServer {
 
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
+
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 
 		System.out.println("[WebServer:logout] End");
@@ -155,7 +156,7 @@ public class WebServer {
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LaunchOfferRequest)) {
-			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
+			System.out.println("[WebServer:launchOffer] Wrong message... waiting LaunchOfferRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LaunchOfferRequest"));
 		}
 
@@ -228,11 +229,10 @@ public class WebServer {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 		}
 
-		System.out.println("[WebServer:logout] End");
+		System.out.println("[WebServer:launchOffer] End");
 		return WebMessage.serialize(new LaunchOfferResponse(service));
 	}
 
@@ -266,7 +266,6 @@ public class WebServer {
 					+ id + " AND user_role = " + role;
 			st.executeUpdate(query);
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 		}
 
@@ -276,8 +275,8 @@ public class WebServer {
 
 	public byte[] getProfile(byte[] byteReq) {
 		System.out.println("[WebServer:getProfile] Begin");
-		Object obj = WebMessage.deserialize(byteReq);
 
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof GetProfileRequest)) {
 			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
 			// return WebMessage.serialize(new
@@ -302,9 +301,11 @@ public class WebServer {
 				profile.setLocation(rs.getString("location"));
 				// profile.setAvatar(avatar);
 			}
+			
+			st.close();
 		} catch (SQLException e) {
 			profile = null;
-			System.out.println("Something bad happend at server");
+
 			e.printStackTrace();
 		}
 
@@ -318,10 +319,7 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof SetProfileRequest)) {
 			System.out.println("[WebServer:setProfile] Wrong message... waiting SetProfileRequest");
-			// TODO: Fix this
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new OkResponse());
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting SetProfileRequest"));
 		}
 
 		SetProfileRequest req = (SetProfileRequest) obj;
@@ -333,9 +331,11 @@ public class WebServer {
 					+ profile.getLastName() + ", password = " + profile.getPassword() + ", location = "
 					+ profile.getLocation() + " WHERE username = " + profile.getUsername();
 			st.executeUpdate(query);
+			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend");
 			e.printStackTrace();
+
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 		System.out.println("[WebServer:setProfile] End");
 		return WebMessage.serialize(new OkResponse());
