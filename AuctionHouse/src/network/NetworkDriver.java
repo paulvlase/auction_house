@@ -320,8 +320,6 @@ public class NetworkDriver extends Thread {
 			initiateConnect(address, username);
 			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
 			userUnsentMessages.get(message.getDestination()).add(message);
-			logger.debug("userUnsentMessages: " + userUnsentMessages);
-			logger.debug("message: " + message);
 		} else {
 			sendData(message, message.getDestination());
 		}
