@@ -192,14 +192,13 @@ public class AddNewService extends JFrame {
 		UserRole role = mainWindow.getGui().getUserProfile().getRole();
 		if (role == UserRole.SELLER) {
 			service.setStatus(Status.ACTIVE);
-			mainWindow.addService(service);
-
-			Service clonedService = service.clone();
-			clonedService.setLaunchOfferState();
-			mainWindow.getGui().publishService(clonedService);
-		} else {
-			mainWindow.addService(service);
 		}
+
+		mainWindow.addService(service);
+
+		Service clonedService = service.clone();
+		clonedService.setLaunchOfferState();
+		mainWindow.getGui().publishService(clonedService);
 
 		setVisible(false);
 		dispose();
