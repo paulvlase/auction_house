@@ -1,19 +1,12 @@
 package webServer;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import mediator.MediatorImpl;
-
-import org.apache.log4j.Logger;
 
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
@@ -27,7 +20,6 @@ import webServer.messages.LogoutRequest;
 import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
-import config.WebServiceServerConfig;
 import data.LoginCred;
 import data.Service;
 import data.UserEntry;
@@ -58,9 +50,9 @@ public class WebServer {
 	}
 
 	public byte[] login(byte[] byteReq) {
-		byte[] res;
-		Object obj = WebMessage.deserialize(byteReq);
+		System.out.println("[WebServer:login] Begin");
 
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LoginRequest)) {
 			System.out.println("[WebServer:login] Wrong message... waiting LoginRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LoginRequest"));
@@ -69,32 +61,27 @@ public class WebServer {
 		LoginRequest req = (LoginRequest) obj;
 		LoginCred cred = req.getLoginCred();
 
-		System.out.println("[WebServer:login] Begin (req.getLoginCred(): " + req.getLoginCred().getUsername());
+		System.out.println("[WebServer:login] cred: " + cred);
 
-		Statement simpleStatement;
+		Statement st;
 		try {
-			simpleStatement = conn.createStatement();
+			st = conn.createStatement();
 
 			String query = "SELECT *" + " FROM users" + " WHERE username = " + cred.getUsername() + " AND password = "
 					+ cred.getPassword();
-			ResultSet rs = simpleStatement.executeQuery(query);
+			ResultSet rs = st.executeQuery(query);
 
 			if (rs.first()) {
 				Integer id = rs.getInt("id");
 
-				Integer role = 0;
+				String online_as_field = "as_buyer";
 				if (cred.getRole() == UserRole.SELLER) {
-					role = 1;
+					online_as_field = "as_seller";
 				}
 
-				if (role == 0) {
-					query = "UPDATE users" + " SET as_buyer = " + 1 + ", address = " + cred.getAddress().getHostName()
-							+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
-				} else {
-					query = "UPDATE users" + " SET as_seller = " + 1 + ", address = " + cred.getAddress().getHostName()
-							+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
-				}
-				simpleStatement.executeUpdate(query);
+				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = " + cred.getAddress().getHostName()
+						+ ", port = " + cred.getAddress().getPort() + " WHERE id = " + id;
+				st.executeUpdate(query);
 
 				UserProfile userProfile = new UserProfile();
 				userProfile.setUsername(rs.getString("username"));
@@ -103,32 +90,32 @@ public class WebServer {
 				userProfile.setPassword(rs.getString("password"));
 				userProfile.setRole(cred.getRole());
 				userProfile.setLocation(rs.getString("location"));
-
-				System.out.println("[WebServer:login] End (logged in)");
+				
+				st.close();
+				System.out.println("[WebServer:login] End (lLoginResponse)");
 				return WebMessage.serialize(new LoginResponse(userProfile));
 			} else {
 				System.out.println("[WebServer:login] Wrong username or password");
 				return WebMessage.serialize(new ErrorResponse("Wrong username or password"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 	}
 
-	public byte[] logout(byte[] req) {
+	public byte[] logout(byte[] byteReq) {
 		System.out.println("[WebServer:logout] Begin");
 
-		Object obj = WebMessage.deserialize(req);
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LogoutRequest)) {
 			System.out.println("[WebServer:logout] Wrong message... waiting LogoutRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LogoutRequest"));
 		}
 
-		LogoutRequest logoutRequest = (LogoutRequest) obj;
-		LoginCred cred = logoutRequest.getCred();
+		LogoutRequest req = (LogoutRequest) obj;
+		LoginCred cred = req.getCred();
 
 		try {
 			Statement st = conn.createStatement();
@@ -147,27 +134,27 @@ public class WebServer {
 
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
+
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 
 		System.out.println("[WebServer:logout] End");
 		return WebMessage.serialize(new OkResponse());
 	}
 
-	public byte[] launchOffer(byte[] req) {
+	public byte[] launchOffer(byte[] byteReq) {
 		System.out.println("[WebServer:logout] Begin");
 
-		Object obj = WebMessage.deserialize(req);
-
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LaunchOfferRequest)) {
-			System.out.println("[WebServer:logout] Wrong message... waiting LaunchOfferRequest");
+			System.out.println("[WebServer:launchOffer] Wrong message... waiting LaunchOfferRequest");
 			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting LaunchOfferRequest"));
 		}
 
-		LaunchOfferRequest launchOfferReq = (LaunchOfferRequest) obj;
-		LoginCred cred = launchOfferReq.getCred();
-		Service service = launchOfferReq.getService();
+		LaunchOfferRequest req = (LaunchOfferRequest) obj;
+		LoginCred cred = req.getCred();
+		Service service = req.getService();
 
 		Integer role = 0;
 		if (cred.getRole() == UserRole.SELLER) {
@@ -234,11 +221,10 @@ public class WebServer {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 		}
 
-		System.out.println("[WebServer:logout] End");
+		System.out.println("[WebServer:launchOffer] End");
 		return WebMessage.serialize(new LaunchOfferResponse(service));
 	}
 
@@ -272,7 +258,6 @@ public class WebServer {
 					+ id + " AND user_role = " + role;
 			st.executeUpdate(query);
 		} catch (SQLException e) {
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
 		}
 
@@ -282,22 +267,22 @@ public class WebServer {
 
 	public byte[] getProfile(byte[] byteReq) {
 		System.out.println("[WebServer:getProfile] Begin");
-		Object obj = WebMessage.deserialize(byteReq);
 
+		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof GetProfileRequest)) {
 			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new GetProfileResponse(null));
+			
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting GetProfileRequest"));
 		}
+
 		GetProfileRequest req = (GetProfileRequest) obj;
 
-		UserProfile profile = null;
 		try {
 			Statement st = conn.createStatement();
 			String query = "SELECT * FROM users WHERE username = " + req.getUsername();
 			ResultSet rs = st.executeQuery(query);
 
+			UserProfile profile = null;
 			if (rs.next()) {
 				profile = new UserProfile();
 				profile.setUsername(rs.getString("username"));
@@ -308,14 +293,15 @@ public class WebServer {
 				profile.setLocation(rs.getString("location"));
 				// profile.setAvatar(avatar);
 			}
+			st.close();
+			
+			System.out.println("[WebServer:getProfile] End");
+			return WebMessage.serialize(new GetProfileResponse(profile));
 		} catch (SQLException e) {
-			profile = null;
-			System.out.println("Something bad happend at server");
 			e.printStackTrace();
+			
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
-
-		System.out.println("[WebServer:getProfile] End");
-		return WebMessage.serialize(new GetProfileResponse(profile));
 	}
 
 	public byte[] setProfile(byte[] byteReq) {
@@ -324,10 +310,8 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof SetProfileRequest)) {
 			System.out.println("[WebServer:setProfile] Wrong message... waiting SetProfileRequest");
-			// TODO: Fix this
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new OkResponse());
+
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting SetProfileRequest"));
 		}
 
 		SetProfileRequest req = (SetProfileRequest) obj;
@@ -339,9 +323,11 @@ public class WebServer {
 					+ profile.getLastName() + ", password = " + profile.getPassword() + ", location = "
 					+ profile.getLocation() + " WHERE username = " + profile.getUsername();
 			st.executeUpdate(query);
+			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend");
 			e.printStackTrace();
+
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 		System.out.println("[WebServer:setProfile] End");
 		return WebMessage.serialize(new OkResponse());
@@ -353,11 +339,10 @@ public class WebServer {
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof RegisterProfileRequest)) {
 			System.out.println("[WebServer:registerProfile] Wrong message... waiting RegisterProfileRequest");
-			// TODO: Fix this
-			// return WebMessage.serialize(new
-			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
-			return WebMessage.serialize(new OkResponse());
+
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting RegisterProfileRequest"));
 		}
+
 		RegisterProfileRequest req = (RegisterProfileRequest) obj;
 		UserProfile profile = req.getUserProfile();
 
@@ -367,9 +352,11 @@ public class WebServer {
 					+ profile.getUsername() + ", " + profile.getFirstName() + ", " + profile.getLastName() + ", "
 					+ profile.getPassword() + ", " + profile.getLocation() + ")";
 			st.executeUpdate(query);
+			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something bad happend");
 			e.printStackTrace();
+			
+			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 
 		System.out.println("[WebServer:registerProfile] End");
