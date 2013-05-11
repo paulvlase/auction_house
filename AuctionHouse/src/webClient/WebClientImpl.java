@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import webServer.messages.ErrorResponse;
 import webServer.messages.GetProfileResponse;
 import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
@@ -48,8 +49,9 @@ public class WebClientImpl implements WebClient, WebService {
 		Object requestObj = new LoginRequest(cred);
 		Object responseObj = Util.askWebServer(requestObj);
 
-		if (responseObj == null) {
-			logger.warn("Failed");
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+			logger.warn("Failed: " + res.getMsg());
 			return null;
 		} else if (responseObj instanceof LoginResponse) {
 			logger.info("Success");
@@ -138,7 +140,6 @@ public class WebClientImpl implements WebClient, WebService {
 
 	@Override
 	public LoginCred getLoginCred() {
-		// TODO Auto-generated method stub
 		return med.getLoginCred();
 	}
 }
