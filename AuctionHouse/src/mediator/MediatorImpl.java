@@ -179,8 +179,10 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 	public ArrayList<Service> loadOffers() {
 		logger.debug("Begin");
 
-		if (profile == null)
+		if (cred == null) {
+			System.out.println("cred: " + null);
 			return null;
+		}
 
 		ArrayList<Service> services = web.loadOffers(cred);
 
