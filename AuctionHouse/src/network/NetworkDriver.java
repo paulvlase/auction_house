@@ -107,7 +107,8 @@ public class NetworkDriver extends Thread {
 		}
 		
 		//InetAddress.getByAddress(localhost.getAddress()).getHostAddress()
-		return new InetSocketAddress(name, socket.getLocalPort());
+		
+		return new InetSocketAddress(localhost, socket.getLocalPort());
 	}
 
 	public synchronized void startRunning() {
