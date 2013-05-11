@@ -316,10 +316,12 @@ public class NetworkDriver extends Thread {
 
 		if (!userChanelMap.containsKey(message.getDestination())) {
 			logger.debug("Initiate a new connection with " + message.getDestination());
-			/* Initiate a new connection and save all messages */
-			initiateConnect(address, username);
+
 			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
 			userUnsentMessages.get(message.getDestination()).add(message);
+			
+			/* Initiate a new connection and save all messages */
+			initiateConnect(address, username);
 		} else {
 			sendData(message, message.getDestination());
 		}
