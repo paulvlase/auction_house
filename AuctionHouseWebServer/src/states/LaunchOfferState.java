@@ -49,7 +49,7 @@ public class LaunchOfferState extends AbstractState {
 		logger.debug("service: " + service);
 
 		// TODO
-		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getUserRole(), service);
+		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getUsername(), web.getLoginCred(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
 
 		responseObj.getService().setStatus(Status.ACTIVE);

@@ -109,7 +109,7 @@ public class WebServerMockup implements Runnable {
 		userEntry.setName(profile.getFirstName() + " " + profile.getLastName());
 		userEntry.setAddress(onlineUsers.get(req.getUsername()));
 
-		if (req.getUserRole() == UserRole.BUYER) {
+		if (req.getCred().getRole() == UserRole.BUYER) {
 			sellers.putIfAbsent(service.getName(), new ArrayList<UserEntry>());
 			userEntries = sellers.get(service.getName());
 

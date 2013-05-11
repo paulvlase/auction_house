@@ -248,27 +248,41 @@ public class WebServer {
 		return WebMessage.serialize(new LaunchOfferResponse(service));
 	}
 
-	public byte[] dropOffer(DropOfferRequest req) {
-		logger.debug("Begin");
+	public byte[] dropOffer(byte[] byteReq) {
+		System.out.println("Begin");
 
-		UserEntry userEntry = new UserEntry();
-		userEntry.setName(req.getUsername());
-		userEntry.setAddress(onlineUsers.get(req.getUsername()));
+		Object obj = WebMessage.deserialize(byteReq);
+		if (!(obj instanceof DropOfferRequest)) {
+			System.out.println("[WebServer:dropOffer] Wrong message... waiting DropOfferRequest");
+			// TODO: Fix this
+			// return WebMessage.serialize(new
+			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+			return WebMessage.serialize(new OkResponse());
+		}
+		
+		DropOfferRequest req = (DropOfferRequest) obj;
+		
+		try {
+		Statement st = conn.createStatement();
+		String query = "SELECT id FROM users WHERE username = " + req.getUsername();
+		ResultSet rs = st.executeQuery(query);
+		
+		Integer id = rs.getInt("id");
 
-		if (req.getUserRole() == UserRole.BUYER) {
-			ArrayList<UserEntry> buyersUserEntries = buyers.get(req.getServiceName());
-			buyersUserEntries.remove(userEntry);
-
-			buyers.put(req.getServiceName(), buyersUserEntries);
-		} else {
-			ArrayList<UserEntry> sellersUserEntries = sellers.get(req.getServiceName());
-			sellersUserEntries.remove(userEntry);
-
-			sellers.put(req.getServiceName(), sellersUserEntries);
+		Integer role = 0;
+		if (req.getUserRole() == UserRole.SELLER) {
+			role = 1;
+		}
+		
+		query = "UPDATE services SET active = " + 0 + " WHERE name = " + req.getServiceName() + " AND user_id = " + id + " AND user_role = " + role;
+		st.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Something bad happend at server");
+			e.printStackTrace();
 		}
 
-		logger.debug("End (OK response)");
-		return new OkResponse();
+		System.out.println("[WebServer: dropOffer] End");
+		return WebMessage.serialize(new OkResponse());
 	}
 
 	public byte[] getProfile(byte[] byteReq) {
@@ -279,6 +293,7 @@ public class WebServer {
 			System.out.println("[WebServer:getProfile] Wrong message... waiting GetProfileRequest");
 			// return WebMessage.serialize(new
 			// ErrorMessage("Wrong message... waiting LaunchOfferRequest"));
+			return WebMessage.serialize(new GetProfileResponse(null));
 		}
 		GetProfileRequest req = (GetProfileRequest) obj;
 

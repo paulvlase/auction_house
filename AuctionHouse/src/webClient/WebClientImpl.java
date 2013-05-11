@@ -26,15 +26,15 @@ import interfaces.WebService;
  * 
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
-public class WebClientMockup extends Thread implements WebClient, WebService {
-	static Logger logger = Logger.getLogger(WebClientMockup.class);
+public class WebClientImpl implements WebClient, WebService {
+	static Logger logger = Logger.getLogger(WebClientImpl.class);
 
 	private MediatorWeb		med;
 	private LoginCred       cred;
 
 	private WebClientEvents	thread;
 
-	public WebClientMockup(MediatorWeb med) {
+	public WebClientImpl(MediatorWeb med) {
 		//TODO: logger.setLevel(Level.OFF);
 
 		this.med = med;
@@ -134,5 +134,11 @@ public class WebClientMockup extends Thread implements WebClient, WebService {
 	@Override
 	public UserRole getUserRole() {
 		return med.getUserProfile().getRole();
+	}
+
+	@Override
+	public LoginCred getLoginCred() {
+		// TODO Auto-generated method stub
+		return med.getLoginCred();
 	}
 }
