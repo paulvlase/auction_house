@@ -35,7 +35,6 @@ public class WebClientImpl implements WebClient, WebService {
 	static Logger logger = Logger.getLogger(WebClientImpl.class);
 
 	private MediatorWeb		med;
-	private LoginCred       cred;
 
 	private WebClientEvents	thread;
 
@@ -60,7 +59,6 @@ public class WebClientImpl implements WebClient, WebService {
 			LoginResponse res = (LoginResponse) responseObj;
 			logger.info("Success");
 			
-			this.cred = cred;
 			thread = new WebClientEvents(this);
 			thread.start();
 			
@@ -74,7 +72,7 @@ public class WebClientImpl implements WebClient, WebService {
 	public void logOut() {
 		logger.debug("Begin");
 
-		LogoutRequest requestMsg = new LogoutRequest(cred);
+		LogoutRequest requestMsg = new LogoutRequest(med.getLoginCred());
 
 		Object responseObj = Util.askWebServer(requestMsg);
 
