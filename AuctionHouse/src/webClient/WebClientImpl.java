@@ -11,6 +11,7 @@ import webServer.messages.LoginRequest;
 import webServer.messages.LoginResponse;
 import webServer.messages.LogoutRequest;
 import webServer.messages.GetProfileRequest;
+import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
 import webServer.messages.SetProfileRequest;
 
@@ -39,7 +40,6 @@ public class WebClientImpl implements WebClient, WebService {
 		//TODO: logger.setLevel(Level.OFF);
 
 		this.med = med;
-
 		med.registerWebClient(this);
 	}
 
@@ -111,8 +111,20 @@ public class WebClientImpl implements WebClient, WebService {
 	public boolean setUserProfile(UserProfile profile) {
 		Object requestObj = new SetProfileRequest(med.getLoginCred(), profile);
 		Object responseObj = Util.askWebServer(requestObj);
-		med.changeProfileNotify(profile);
 		
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+
+			logger.warn("Failed: " + res.getMsg());
+			//return false;
+		} else if (responseObj instanceof OkResponse) {			
+			//return true;
+		} else {
+			logger.error("Unexpected response message");
+			//return false;
+		}
+		
+		med.changeProfileNotify(profile);
 		return true;
 	}
 
@@ -123,6 +135,18 @@ public class WebClientImpl implements WebClient, WebService {
 		Object requestObj = new RegisterProfileRequest(profile);
 		Object responseObj = Util.askWebServer(requestObj);
 
+		if (responseObj instanceof ErrorResponse) {
+			ErrorResponse res = (ErrorResponse) responseObj;
+
+			logger.warn("Failed: " + res.getMsg());
+			//return false;
+		} else if (responseObj instanceof OkResponse) {			
+			//return true;
+		} else {
+			logger.error("Unexpected response message");
+			//return false;
+		}
+		
 		return true;
 	}
 
