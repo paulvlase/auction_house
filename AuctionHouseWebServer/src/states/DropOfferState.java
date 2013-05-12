@@ -24,12 +24,12 @@ public class DropOfferState extends AbstractState {
 	private static Logger		logger				= Logger.getLogger(DropOfferState.class);
 
 	public DropOfferState(Service service) {
-//		logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public DropOfferState(DropOfferState state) {
-//		logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		service = state.service;
 	}
 
@@ -47,17 +47,6 @@ public class DropOfferState extends AbstractState {
 			net.changeServiceNotify(clonedService);
 		}
 
-		// service.setStatus(Status.INACTIVE);
-		// service.setUsers(null);
-		//
-		// TODO
-		// net.removeOffer(service.getName());
-		// logger.debug("service: " +service);
-		//
-		// service.setEnabledState();
-		// TODO
-		// net.stopTransfer(service);
-		// net.changeServiceNotify(service);
 		logger.debug("End");
 	}
 
@@ -67,13 +56,13 @@ public class DropOfferState extends AbstractState {
 
 		DropOfferRequest requestObj = new DropOfferRequest(web.getLoginCred(), service.getName());
 		Object responseObj = Util.askWebServer(requestObj);
-		
+
 		if (responseObj instanceof ErrorResponse) {
 			ErrorResponse res = (ErrorResponse) responseObj;
-			
+
 			System.out.println("Failed: " + res.getMsg());
 		}
-		
+
 		service.setStatus(Status.INACTIVE);
 		web.notifyNetwork(service);
 		logger.debug("End");

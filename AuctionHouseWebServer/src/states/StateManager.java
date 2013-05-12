@@ -54,7 +54,7 @@ public class StateManager implements Serializable {
 		if (mgr.currentState == mgr.enabledState) {
 			currentState = enabledState;
 		} else if (mgr.currentState == mgr.makeOfferState) {
-			currentState = makeOfferState;	
+			currentState = makeOfferState;
 		} else if (mgr.currentState == mgr.removeOfferState) {
 			currentState = removeOfferState;
 		} else if (mgr.currentState == mgr.dropAuctionState) {
@@ -75,7 +75,7 @@ public class StateManager implements Serializable {
 
 		enabledState.updateState();
 		currentState = enabledState;
-		
+
 		logger.debug("End");
 	}
 
@@ -84,7 +84,7 @@ public class StateManager implements Serializable {
 
 		makeOfferState.updateState(userIndex, price);
 		currentState = makeOfferState;
-		
+
 		logger.debug("End");
 	}
 
@@ -93,7 +93,7 @@ public class StateManager implements Serializable {
 
 		removeOfferState.updateState();
 		currentState = removeOfferState;
-		
+
 		logger.debug("End");
 	}
 
@@ -102,7 +102,7 @@ public class StateManager implements Serializable {
 
 		dropAuctionState.updateState();
 		currentState = dropAuctionState;
-		
+
 		logger.debug("End");
 	}
 
@@ -111,7 +111,7 @@ public class StateManager implements Serializable {
 
 		refuseOfferState.updateState(userIndex);
 		currentState = refuseOfferState;
-		
+
 		logger.debug("End");
 	}
 
@@ -166,7 +166,7 @@ public class StateManager implements Serializable {
 	public ArrayList<Message> asMessages(NetworkService net) {
 		logger.debug("Begin");
 		ArrayList<Message> messages = currentState.asMessages(net);
-		
+
 		logger.debug("End");
 		return messages;
 	}
@@ -174,12 +174,12 @@ public class StateManager implements Serializable {
 	public String getStateName() {
 		return currentState.getName();
 	}
-	
+
 	public String toString() {
 		// TODO: return currentState.toString();
 		return currentState.getName();
 	}
-	
+
 	public void setService(Service service) {
 		enabledState.setService(service);
 		makeOfferState.setService(service);

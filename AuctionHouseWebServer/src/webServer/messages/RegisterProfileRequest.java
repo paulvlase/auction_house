@@ -5,10 +5,10 @@ import java.io.Serializable;
 import data.LoginCred;
 import data.UserProfile;
 
-public class RegisterProfileRequest  implements Serializable {
+public class RegisterProfileRequest implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private UserProfile profile;
-	
+	private UserProfile			profile;
+
 	public RegisterProfileRequest(UserProfile profile) {
 		this.profile = profile;
 	}

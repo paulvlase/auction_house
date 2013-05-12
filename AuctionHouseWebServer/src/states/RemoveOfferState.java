@@ -27,24 +27,13 @@ public class RemoveOfferState extends AbstractState {
 	}
 
 	public RemoveOfferState(RemoveOfferState state) {
-		//TODO: logger.setLevel(Level.OFF);
+		// TODO: logger.setLevel(Level.OFF);
 		service = state.service;
 	}
 
 	@Override
 	public void executeNet(NetworkService net) {
 		logger.debug("Begin");
-//		if (service.getUsers() == null) {
-//			return;
-//		}
-//
-//		for (UserEntry userEntry : service.getUsers()) {
-//			if (userEntry.getOffer() == Offer.TRANSFER_IN_PROGRESS || userEntry.getOffer() == Offer.OFFER_ACCEPTED) {
-//				/* Cauta in lista de thread-uri ca sa stergi */
-//				userEntry.setOffer(Offer.OFFER_DROP);
-//			}
-//		}
-
 		net.cancelTransfer(getService());
 		logger.debug("End");
 	}
@@ -58,10 +47,10 @@ public class RemoveOfferState extends AbstractState {
 
 		if (resObject instanceof ErrorResponse) {
 			ErrorResponse res = (ErrorResponse) resObject;
-			
+
 			System.out.println("Failed: " + res.getMsg());
 		}
-		
+
 		web.notifyNetwork(service);
 		logger.debug("End");
 	}
@@ -86,7 +75,7 @@ public class RemoveOfferState extends AbstractState {
 
 		for (UserEntry user : service.getUsers()) {
 			Message message = new Message();
-			
+
 			message.setType(data.Message.MessageType.REMOVE);
 			message.setServiceName(service.getName());
 			message.setUsername(new String(user.getUsername()));

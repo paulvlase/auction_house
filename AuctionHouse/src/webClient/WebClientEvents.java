@@ -25,7 +25,7 @@ public class WebClientEvents extends Thread {
 	private ArrayList<Command>	events;
 
 	public WebClientEvents(WebService web) {
-//		 logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		this.web = web;
 
 		events = new ArrayList<Command>();

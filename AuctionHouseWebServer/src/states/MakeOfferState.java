@@ -21,12 +21,12 @@ public class MakeOfferState extends AbstractState {
 	private Double				price;
 
 	public MakeOfferState(Service service) {
-//		 logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		this.service = service;
 	}
 
 	public MakeOfferState(MakeOfferState state) {
-//		 logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		service = state.service;
 		userIndex = state.userIndex;
 		price = state.price;
@@ -85,7 +85,6 @@ public class MakeOfferState extends AbstractState {
 
 	@Override
 	public MakeOfferState clone() {
-		// TODO Auto-generated method stub
 		return new MakeOfferState(this);
 	}
 }

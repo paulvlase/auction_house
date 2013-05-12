@@ -103,7 +103,7 @@ public class WebServer {
 				userProfile.setAvatar(rs1.getBytes("avatar"));
 
 				cred.setId(id);
-				
+
 				st1.close();
 				st2.close();
 				System.out.println("[WebServer:login] End (LoginResponse)");
@@ -157,7 +157,7 @@ public class WebServer {
 		System.out.println("[WebServer:logout] End");
 		return WebMessage.serialize(new OkResponse());
 	}
-	
+
 	public byte[] loadOffers(byte[] byteReq) {
 		System.out.println("[WebServer:loadOffers] Begin");
 		ArrayList<Service> services = new ArrayList<Service>();
@@ -167,19 +167,19 @@ public class WebServer {
 			System.out.println("[WebServer:launchOffer] Wrong message... waiting LaunchOfferRequest");
 			return WebMessage.serialize(new LoadOffersResponse(services));
 		}
-		
+
 		LoadOffersRequest req = (LoadOffersRequest) obj;
 		LoginCred cred = req.getCred();
 		System.out.println("cred: " + cred);
 
 		try {
 			String query = "SELECT * FROM services WHERE user_id = ? AND user_role = ?";
-		
+
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setInt(1, cred.getId());
 			ps.setInt(2, cred.getRole().ordinal());
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				Service service = new Service(rs.getString("name"));
 
@@ -188,13 +188,13 @@ public class WebServer {
 
 				services.add(service);
 			}
-			
+
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("[WebServer:loadOffers] End");
 		return WebMessage.serialize(new LoadOffersResponse(services));
 	}
@@ -211,7 +211,7 @@ public class WebServer {
 		LaunchOfferRequest req = (LaunchOfferRequest) obj;
 		LoginCred cred = req.getLoginCred();
 		Service service = req.getService();
-		
+
 		System.out.println("service: " + service);
 
 		try {
@@ -222,15 +222,15 @@ public class WebServer {
 			ps1.setString(2, service.getName());
 			ps1.setInt(3, cred.getRole().ordinal());
 			ResultSet rs1 = ps1.executeQuery();
-			
+
 			Boolean found = rs1.first();
-			
+
 			rs1.close();
 			ps1.close();
 
 			if (found) {
 				System.out.println("[WebService:launchOffer] Service found");
-				
+
 				if (service.getStatus() != Status.NEW) {
 					System.out.println("[WebService:launchOffer] activating...");
 					query = "UPDATE services SET active = 1 WHERE user_id = ? AND name = ? AND user_role = ?";
@@ -242,16 +242,17 @@ public class WebServer {
 					ps2.executeUpdate();
 					ps2.close();
 				}
-				
+
 				String online_as_field;
 				if (cred.getRole() == UserRole.BUYER) {
 					online_as_field = "as_seller";
 				} else {
 					online_as_field = "as_buyer";
 				}
-				
-				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ? AND u." + online_as_field + " = 1";
-				
+
+				query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = ? AND u."
+						+ online_as_field + " = 1";
+
 				PreparedStatement ps2 = conn.prepareStatement(query);
 				ps2.setString(1, service.getName());
 				if (cred.getRole() == UserRole.BUYER) {
@@ -281,7 +282,7 @@ public class WebServer {
 				if (cred.getRole() == UserRole.SELLER) {
 					System.out.println("[WebServer:launchOffer] Inserting new service as seller ");
 					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 1, ?)";
-					
+
 					PreparedStatement ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
 					ps2.setTimestamp(2, new Timestamp(service.getTime()));
@@ -290,8 +291,7 @@ public class WebServer {
 					ps2.setInt(5, UserRole.SELLER.ordinal());
 					ps2.executeUpdate();
 					ps2.close();
-					
-					
+
 					query = "SELECT * FROM services s JOIN users u ON s.user_id = u.id WHERE s.name = ? AND s.user_role = ? AND s.active = 1 AND u.as_buyer = 1";
 					ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
@@ -315,15 +315,15 @@ public class WebServer {
 				} else {
 					System.out.println("[WebServer:launchOffer] Inserting new service as buyer");
 					query = "INSERT INTO services(name, time, price, user_id, active, user_role) VALUES (?, ?, ?, ?, 0, ?)";
-					
+
 					PreparedStatement ps2 = conn.prepareStatement(query);
 					ps2.setString(1, service.getName());
 					ps2.setTimestamp(2, new Timestamp(service.getTime()));
-					ps2.setDouble(3,  service.getPrice());
+					ps2.setDouble(3, service.getPrice());
 					ps2.setInt(4, cred.getId());
 					ps2.setInt(5, cred.getRole().ordinal());
 					ps2.executeUpdate();
-					
+
 					ps2.close();
 				}
 			}
@@ -351,8 +351,8 @@ public class WebServer {
 		try {
 			Statement st = conn.createStatement();
 
-			String query = "UPDATE services SET active = 0 WHERE name = '" + req.getServiceName() + "' AND user_id = " + cred.getId()
-					+ " AND user_role = " + cred.getRole().ordinal();
+			String query = "UPDATE services SET active = 0 WHERE name = '" + req.getServiceName() + "' AND user_id = "
+					+ cred.getId() + " AND user_role = " + cred.getRole().ordinal();
 			st.executeUpdate(query);
 			st.close();
 
@@ -364,30 +364,30 @@ public class WebServer {
 			return WebMessage.serialize(new ErrorResponse("Something bad happend at server"));
 		}
 	}
-	
+
 	public byte[] removeOffer(byte[] byteReq) {
 		System.out.println("[WebServer:removeOffer] Begin");
-		
+
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof RemoveOfferRequest)) {
 			System.out.println("[WebServer:dropOffer] Wrong message... waiting removeOfferRequest");
 
-			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting removeOfferRequest"));	
+			return WebMessage.serialize(new ErrorResponse("Wrong message... waiting removeOfferRequest"));
 		}
-		
+
 		RemoveOfferRequest req = (RemoveOfferRequest) obj;
 		LoginCred cred = req.getLoginCred();
-		
+
 		try {
 			String query = "DELETE FROM services WHERE name = ? AND user_id = ? AND user_role = ?";
-			
-			PreparedStatement  ps = conn.prepareStatement(query);
+
+			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, req.getServiceName());
 			ps.setInt(2, cred.getId());
 			ps.setInt(3, cred.getRole().ordinal());
 			ps.executeUpdate();
 			ps.close();
-			
+
 			System.out.println("[WebServer:removeOffer] End");
 			return WebMessage.serialize(new OkResponse());
 		} catch (SQLException e) {
@@ -411,7 +411,7 @@ public class WebServer {
 
 		try {
 			String query = "SELECT * FROM users WHERE username = ?";
-			
+
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, req.getUsername());
 			ResultSet rs = ps.executeQuery();
@@ -453,7 +453,7 @@ public class WebServer {
 
 		try {
 			String query = "UPDATE users SET first_name = ?, last_name = ?, password = ?, avatar = ?, location = ? WHERE username = ?";
-			
+
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, profile.getFirstName());
 			ps.setString(2, profile.getLastName());
@@ -487,7 +487,7 @@ public class WebServer {
 
 		try {
 			String query = "INSERT INTO users(username, first_name, last_name, password, avatar, location) VALUES (?, ?, ?, ?, ?, ?)";
-			
+
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, profile.getUsername());
 			ps.setString(2, profile.getFirstName());

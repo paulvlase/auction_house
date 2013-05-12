@@ -19,7 +19,7 @@ public abstract class AbstractState implements State {
 	public void setService(Service service) {
 		this.service = service;
 	}
-	
+
 	public void updateState() {
 	}
 

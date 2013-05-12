@@ -7,7 +7,7 @@ import data.Service;
 
 public class LoadOffersResponse implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private ArrayList<Service> services;
+	private ArrayList<Service>	services;
 
 	public LoadOffersResponse(ArrayList<Service> services) {
 		this.services = services;

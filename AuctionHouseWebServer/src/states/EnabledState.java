@@ -40,7 +40,7 @@ public class EnabledState extends AbstractState {
 	@Override
 	public ArrayList<Message> asMessages(NetworkService net) {
 		logger.debug("Begin");
-		/* Nothing to do, for intern usage */
+		logger.debug("End");
 		return new ArrayList<Message>();
 	}
 

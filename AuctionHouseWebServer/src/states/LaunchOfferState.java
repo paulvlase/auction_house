@@ -37,7 +37,7 @@ public class LaunchOfferState extends AbstractState {
 
 		Service clonedService = service.clone();
 		logger.debug("clonedService: " + clonedService);
-		
+
 		clonedService.setUsers(null);
 		net.changeServiceNotify(clonedService);
 
@@ -51,10 +51,9 @@ public class LaunchOfferState extends AbstractState {
 		LaunchOfferRequest requestObj = new LaunchOfferRequest(web.getLoginCred(), service);
 		LaunchOfferResponse responseObj = (LaunchOfferResponse) Util.askWebServer(requestObj);
 
-		logger.debug("service.getService(): "
-				+ responseObj.getService());
-		
-		if (service.getStatus() == Status.NEW) { 
+		logger.debug("service.getService(): " + responseObj.getService());
+
+		if (service.getStatus() == Status.NEW) {
 			responseObj.getService().setStatus(Status.INACTIVE);
 			logger.debug("End");
 			return;
