@@ -8,9 +8,10 @@
 package webServer;
 
 public interface WebServer extends javax.xml.rpc.Service {
-    public java.lang.String getWebServerHttpSoap11EndpointAddress();
+	public java.lang.String getWebServerHttpSoap11EndpointAddress();
 
-    public webServer.WebServerPortType getWebServerHttpSoap11Endpoint() throws javax.xml.rpc.ServiceException;
+	public webServer.WebServerPortType getWebServerHttpSoap11Endpoint() throws javax.xml.rpc.ServiceException;
 
-    public webServer.WebServerPortType getWebServerHttpSoap11Endpoint(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+	public webServer.WebServerPortType getWebServerHttpSoap11Endpoint(java.net.URL portAddress)
+			throws javax.xml.rpc.ServiceException;
 }

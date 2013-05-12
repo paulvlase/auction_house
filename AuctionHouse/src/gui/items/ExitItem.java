@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 public class ExitItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(ExitItem.class);
+	private static Logger		logger				= Logger.getLogger(ExitItem.class);
 
 	public ExitItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);

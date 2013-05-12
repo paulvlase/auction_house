@@ -29,16 +29,16 @@ import data.Service;
  * @author Ghennadi Procopciuc
  */
 public class PriceWindow extends JFrame implements ActionListener {
-	private static final long		serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(PriceWindow.class);
+	private static final long	serialVersionUID	= 1L;
+	private static Logger		logger				= Logger.getLogger(PriceWindow.class);
 
-	private JLabel					priceLabel;
-	private JTextField				priceField;
-	private JButton					okButton;
-	private Gui						gui;
-	
-	private Service service;
-	private Integer userIndex;
+	private JLabel				priceLabel;
+	private JTextField			priceField;
+	private JButton				okButton;
+	private Gui					gui;
+
+	private Service				service;
+	private Integer				userIndex;
 
 	public PriceWindow() {
 		// TODO: logger.setLevel(Level.OFF);
@@ -63,30 +63,28 @@ public class PriceWindow extends JFrame implements ActionListener {
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 103, 10, 0 };
 		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 0, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 0.0, 0.0,
-				1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4 };
 
 		// label1
 		priceLabel.setText(GuiConfig.getValue(GuiConfig.NEW_PRICE));
 		priceField.addActionListener(this);
-		contentPane.add(priceLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
-		contentPane.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(priceLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(priceField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// button1
 		okButton.setText(GuiConfig.getValue(GuiConfig.OK));
-		contentPane.add(okButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(okButton, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(new ImageIcon(GuiConfig.PRICE_ICON64).getImage());
 		icons.add(new ImageIcon(GuiConfig.PRICE_ICON48).getImage());
 		icons.add(new ImageIcon(GuiConfig.PRICE_ICON16).getImage());
 		setIconImages(icons);
-		
+
 		pack();
 		setLocationRelativeTo(getOwner());
 	}

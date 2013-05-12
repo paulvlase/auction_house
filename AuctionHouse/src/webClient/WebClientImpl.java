@@ -32,14 +32,14 @@ import interfaces.WebService;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class WebClientImpl implements WebClient, WebService {
-	static Logger logger = Logger.getLogger(WebClientImpl.class);
+	static Logger			logger	= Logger.getLogger(WebClientImpl.class);
 
 	private MediatorWeb		med;
 
 	private WebClientEvents	thread;
 
 	public WebClientImpl(MediatorWeb med) {
-		//TODO: logger.setLevel(Level.OFF);
+		// TODO: logger.setLevel(Level.OFF);
 
 		this.med = med;
 		med.registerWebClient(this);
@@ -58,12 +58,12 @@ public class WebClientImpl implements WebClient, WebService {
 		} else if (responseObj instanceof LoginResponse) {
 			LoginResponse res = (LoginResponse) responseObj;
 			logger.info("Success");
-			
+
 			logger.error("profile.getAvatar(): " + res.getUserProfile().getAvatar());
-			
+
 			thread = new WebClientEvents(this);
 			thread.start();
-			
+
 			return new Pair<LoginCred, UserProfile>(res.getCred(), res.getUserProfile());
 		} else {
 			logger.error("Unexpected response message " + responseObj.getClass());
@@ -81,8 +81,8 @@ public class WebClientImpl implements WebClient, WebService {
 		if (responseObj instanceof ErrorResponse) {
 			ErrorResponse res = (ErrorResponse) responseObj;
 			logger.warn("Failed: " + res.getMsg());
-		} 
-		
+		}
+
 		thread.stopRunning();
 		try {
 			thread.join();
@@ -93,8 +93,8 @@ public class WebClientImpl implements WebClient, WebService {
 
 		logger.debug("End success");
 	}
-	
-	public ArrayList<Service> loadOffers(LoginCred cred){
+
+	public ArrayList<Service> loadOffers(LoginCred cred) {
 		Object responseObj = Util.askWebServer(new LoadOffersRequest(cred));
 
 		if (responseObj instanceof ErrorResponse) {
@@ -104,18 +104,18 @@ public class WebClientImpl implements WebClient, WebService {
 			return null;
 		} else if (responseObj instanceof LoadOffersResponse) {
 			LoadOffersResponse res = (LoadOffersResponse) responseObj;
-			
+
 			return res.getServices();
 		} else {
 			logger.error("Unexpected response message");
 			return null;
-		}		
+		}
 	}
 
 	public UserProfile getUserProfile(String username) {
 		Object requestObj = new GetProfileRequest(med.getLoginCred(), username);
 		Object responseObj = Util.askWebServer(requestObj);
-		
+
 		if (responseObj instanceof ErrorResponse) {
 			ErrorResponse res = (ErrorResponse) responseObj;
 
@@ -123,7 +123,7 @@ public class WebClientImpl implements WebClient, WebService {
 			return null;
 		} else if (responseObj instanceof GetProfileResponse) {
 			GetProfileResponse res = (GetProfileResponse) responseObj;
-			
+
 			return res.getProfile();
 		} else {
 			logger.error("Unexpected response message");
@@ -134,19 +134,19 @@ public class WebClientImpl implements WebClient, WebService {
 	public boolean setUserProfile(UserProfile profile) {
 		Object requestObj = new SetProfileRequest(med.getLoginCred(), profile);
 		Object responseObj = Util.askWebServer(requestObj);
-		
+
 		if (responseObj instanceof ErrorResponse) {
 			ErrorResponse res = (ErrorResponse) responseObj;
 
 			logger.warn("Failed: " + res.getMsg());
-			//return false;
-		} else if (responseObj instanceof OkResponse) {			
-			//return true;
+			// return false;
+		} else if (responseObj instanceof OkResponse) {
+			// return true;
 		} else {
 			logger.error("Unexpected response message");
-			//return false;
+			// return false;
 		}
-		
+
 		med.changeProfileNotify(profile);
 		return true;
 	}
@@ -162,14 +162,14 @@ public class WebClientImpl implements WebClient, WebService {
 			ErrorResponse res = (ErrorResponse) responseObj;
 
 			logger.warn("Failed: " + res.getMsg());
-			//return false;
-		} else if (responseObj instanceof OkResponse) {			
-			//return true;
+			// return false;
+		} else if (responseObj instanceof OkResponse) {
+			// return true;
 		} else {
 			logger.error("Unexpected response message");
-			//return false;
+			// return false;
 		}
-		
+
 		return true;
 	}
 
@@ -182,21 +182,21 @@ public class WebClientImpl implements WebClient, WebService {
 	public void publishService(Service service) {
 		thread.publishService(service);
 	}
-	
+
 	@Override
 	public void publishServices(ArrayList<Service> services) {
 		thread.publishServices(services);
 	}
-	
+
 	public void notifyNetwork(Service service) {
 		med.notifyNetwork(service);
 	}
-	
+
 	@Override
 	public String getUsername() {
 		return med.getUserProfile().getUsername();
 	}
-	
+
 	@Override
 	public UserRole getUserRole() {
 		return med.getUserProfile().getRole();

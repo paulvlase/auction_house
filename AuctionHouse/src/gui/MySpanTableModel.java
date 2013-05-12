@@ -27,14 +27,14 @@ import data.UserProfile.UserRole;
 
 public class MySpanTableModel extends AbstractTableModel {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(MySpanTableModel.class);
+	private static Logger		logger				= Logger.getLogger(MySpanTableModel.class);
 
 	private List<List<Object>>	data;
 	private List<String>		columns;
 	private List<Service>		services;
 	private ArrayList<Span>		spans;
 	protected CellAttribute		cellAtt;
-	private UserRole role;
+	private UserRole			role;
 
 	private final Lock			mutex				= new ReentrantLock(true);
 
@@ -42,8 +42,7 @@ public class MySpanTableModel extends AbstractTableModel {
 		// TODO: logger.setLevel(Level.OFF);
 
 		this.role = role;
-		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services
-				.clone());
+		this.services = (List<Service>) Collections.synchronizedList((ArrayList<Service>) services.clone());
 
 		this.columns = (List<String>) Collections.synchronizedList(new ArrayList<String>(columns));
 
@@ -103,9 +102,9 @@ public class MySpanTableModel extends AbstractTableModel {
 		mutex.lock();
 		logger.debug(Thread.currentThread().getName() + " acquaired lock ...");
 
-		if(index < 0 || index >= services.size()){
+		if (index < 0 || index >= services.size()) {
 			logger.error("Trying to remove an element : " + index);
-			return;			
+			return;
 		}
 		/* Clear all the previous data */
 		data.clear();
@@ -147,17 +146,15 @@ public class MySpanTableModel extends AbstractTableModel {
 		if (service.getStatus() == Status.ACTIVE && users != null) {
 			Integer counter = 0;
 			for (UserEntry user : users) {
-				counter ++;
-				if (user.getOffer() == Offer.TRANSFER_COMPLETE
-						|| user.getOffer() == Offer.TRANSFER_FAILED
-						|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS
-						|| user.getOffer() == Offer.TRANSFER_STARTED) {
+				counter++;
+				if (user.getOffer() == Offer.TRANSFER_COMPLETE || user.getOffer() == Offer.TRANSFER_FAILED
+						|| user.getOffer() == Offer.TRANSFER_IN_PROGRESS || user.getOffer() == Offer.TRANSFER_STARTED) {
 
 					/* User transfer span */
-					addSpan(new Span(data.size() - users.size() + counter - 1 , 3, 1, 3));
+					addSpan(new Span(data.size() - users.size() + counter - 1, 3, 1, 3));
 				}
 			}
-			
+
 			/* Service name span */
 			addSpan(new Span(data.size() - users.size(), 0, users.size(), 1));
 			/* Status span */

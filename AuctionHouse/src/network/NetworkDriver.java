@@ -82,7 +82,6 @@ public class NetworkDriver extends Thread {
 			e.printStackTrace();
 		}
 
-
 		logger.error("Address : " + serverSocketChannel.socket().getInetAddress().getCanonicalHostName());
 		try {
 			logger.error("IP Addr: " + InetAddress.getByAddress(localhost.getAddress()).getHostAddress());
@@ -90,7 +89,7 @@ public class NetworkDriver extends Thread {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		logger.debug("Begin");
 		if (serverSocketChannel == null) {
 			logger.fatal("Server isn't listening on any address");
@@ -101,13 +100,13 @@ public class NetworkDriver extends Thread {
 		logger.debug("End");
 		String name = null;
 		try {
-			 name = InetAddress.getByAddress(localhost.getAddress()).getHostAddress();
+			name = InetAddress.getByAddress(localhost.getAddress()).getHostAddress();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
-		//InetAddress.getByAddress(localhost.getAddress()).getHostAddress()
-		
+
+		// InetAddress.getByAddress(localhost.getAddress()).getHostAddress()
+
 		return new InetSocketAddress(localhost, socket.getLocalPort());
 	}
 
@@ -317,7 +316,7 @@ public class NetworkDriver extends Thread {
 
 		if (!userChanelMap.containsKey(message.getDestination())) {
 			logger.debug("Initiate a new connection with " + message.getDestination());
-			
+
 			/* Initiate a new connection and save all messages */
 			userUnsentMessages.putIfAbsent(message.getDestination(), new ArrayList<Message>());
 			userUnsentMessages.get(message.getDestination()).add(message);
@@ -387,7 +386,7 @@ public class NetworkDriver extends Thread {
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.configureBlocking(false);
-			
+
 			/* A little ugly hack */
 			destination = new InetSocketAddress(destination.getHostName(), destination.getPort());
 			logger.debug("Connect to : " + destination + " " + username);

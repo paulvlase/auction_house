@@ -44,7 +44,7 @@ public class AddNewService extends JFrame {
 		this.mainWindow = mainWindow;
 
 		initComponents();
-		
+
 		timeSpinner.setValue(new Date(System.currentTimeMillis() + ONE_HOUR));
 
 		if (mainWindow.getGui().getUserProfile().getRole() != UserRole.SELLER) {
@@ -186,13 +186,13 @@ public class AddNewService extends JFrame {
 		Service service = new Service(name);
 		service.setTime(time);
 		service.setPrice(price);
-		
+
 		logger.debug("service: " + service);
 
 		mainWindow.addService(service);
 
 		Service clonedService = service.clone();
-		
+
 		if (mainWindow.getGui().getUserProfile().getRole() == UserRole.BUYER) {
 			clonedService.setStatus(Status.NEW);
 		}

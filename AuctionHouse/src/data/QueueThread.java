@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 public abstract class QueueThread<K, T> extends Thread {
-	private static Logger logger = Logger.getLogger(QueueThread.class);
+	private static Logger							logger	= Logger.getLogger(QueueThread.class);
 
 	private Object									monitor;
 	protected ConcurrentHashMap<K, ArrayList<T>>	queue;
@@ -17,7 +17,7 @@ public abstract class QueueThread<K, T> extends Thread {
 	private String									threadName;
 
 	public QueueThread(String threadName) {
-//		 logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 
 		this.monitor = new Object();
 		this.threadName = threadName;
@@ -29,24 +29,6 @@ public abstract class QueueThread<K, T> extends Thread {
 	}
 
 	public Map.Entry<K, T> getJob() {
-//		Iterator<Entry<K, ArrayList<T>>> it = queue.entrySet().iterator();
-//
-//		if (!it.hasNext()) {
-//			return null;
-//		}
-//
-//		Map.Entry<K, ArrayList<T>> entry = it.next();
-//		K key = entry.getKey();
-//		T value = entry.getValue().get(0);
-//
-//		System.out.println("[QueueThread : getJob] Before " + queue);
-//		queue.get(key).remove(0);
-//		if (queue.get(key).size() == 0) {
-//			queue.remove(key);
-//		}
-//		System.out.println("[QueueThread : getJob] After " + queue);
-//
-//		return new Pair<K, T>(key, value);
 		return getRandomJob();
 	}
 
@@ -84,7 +66,7 @@ public abstract class QueueThread<K, T> extends Thread {
 		while (running) {
 			try {
 				synchronized (monitor) {
-					if(queue.isEmpty()){
+					if (queue.isEmpty()) {
 						monitor.wait();
 					}
 				}
@@ -116,11 +98,11 @@ public abstract class QueueThread<K, T> extends Thread {
 		System.out.println("[" + threadName + ": enqueue] Before " + value);
 		System.out.println("[" + threadName + ": enqueue] Before " + key);
 		System.out.println("[" + threadName + ": enqueue] Running " + running);
-		
+
 		if (key == null) {
 			return;
 		}
-		
+
 		queue.putIfAbsent(key, new ArrayList<T>());
 		queue.get(key).add(value);
 
@@ -147,8 +129,8 @@ public abstract class QueueThread<K, T> extends Thread {
 			monitor.notify();
 		}
 	}
-	
-	public synchronized void clear(){
+
+	public synchronized void clear() {
 		queue.clear();
 	}
 
@@ -159,15 +141,15 @@ public abstract class QueueThread<K, T> extends Thread {
 	public void setThreadName(String threadName) {
 		this.threadName = threadName;
 	}
-	
-	public void removeKey(K key){
-		if(queue == null){
+
+	public void removeKey(K key) {
+		if (queue == null) {
 			return;
 		}
-		
+
 		queue.remove(key);
 	}
-	
+
 	public void removeKey(K key, T value) {
 		if (queue == null) {
 			return;

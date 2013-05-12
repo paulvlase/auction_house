@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * @author Ghennadi Procopciuc
  */
 public class MultiSpanCellTableUI extends BasicTableUI {
-	private static Logger logger = Logger.getLogger(MultiSpanCellTableUI.class);
+	private static Logger	logger	= Logger.getLogger(MultiSpanCellTableUI.class);
 
 	public void paint(Graphics g, JComponent c) {
 		Rectangle oldClipBounds = g.getClipBounds();
@@ -30,8 +30,7 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 		int firstIndex = table.rowAtPoint(new Point(0, clipBounds.y));
 		int lastIndex = table.getRowCount() - 1;
 
-		Rectangle rowRect = new Rectangle(0, 0, tableWidth, table.getRowHeight()
-				+ table.getRowMargin());
+		Rectangle rowRect = new Rectangle(0, 0, tableWidth, table.getRowHeight() + table.getRowMargin());
 		rowRect.y = firstIndex * rowRect.height;
 
 		for (int index = firstIndex; index <= lastIndex; index++) {
@@ -103,8 +102,8 @@ public class MultiSpanCellTableUI extends BasicTableUI {
 
 			// logger.debug("Row " + row + " column : " + column + " " +
 			// component);
-			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
-					cellRect.width, cellRect.height, true);
+			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y, cellRect.width, cellRect.height,
+					true);
 		}
 	}
 }

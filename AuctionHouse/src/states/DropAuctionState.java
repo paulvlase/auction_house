@@ -34,23 +34,6 @@ public class DropAuctionState extends AbstractState {
 
 		ArrayList<UserEntry> users = service.getUsers();
 
-//		
-//		if (users != null) {
-//			for (UserEntry user : users) {
-//				user.setOffer(Offer.OFFER_REFUSED);
-//
-//				// TODO
-//				// net.putOffer(service);
-//
-//				logger.info("users: " + users);
-//			}
-//
-//			/* Remove all users */
-//			service.setUsers(null);
-//			// TODO
-//			// net.changeServiceNotify(service);
-//		}
-
 		logger.debug("End");
 	}
 

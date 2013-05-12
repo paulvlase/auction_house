@@ -20,7 +20,7 @@ import javax.swing.table.TableModel;
 public class MultiSpanCellTable extends JTable {
 
 	private static final long	serialVersionUID	= 1L;
-	TableCellRenderer renderer;
+	TableCellRenderer			renderer;
 
 	public MultiSpanCellTable(TableModel model, TableCellRenderer renderer) {
 		super(model);
@@ -60,7 +60,7 @@ public class MultiSpanCellTable extends JTable {
 			cellFrame.x += cellFrame.width;
 			index++;
 		}
-		
+
 		for (int i = 0; i < n[CellSpan.COLUMN] - 1; i++) {
 			TableColumn aColumn = (TableColumn) enumeration.nextElement();
 			cellFrame.width += aColumn.getWidth();
@@ -68,8 +68,8 @@ public class MultiSpanCellTable extends JTable {
 
 		if (!includeSpacing) {
 			Dimension spacing = getIntercellSpacing();
-			cellFrame.setBounds(cellFrame.x + spacing.width / 2, cellFrame.y + spacing.height / 2,
-					cellFrame.width - spacing.width, cellFrame.height - spacing.height);
+			cellFrame.setBounds(cellFrame.x + spacing.width / 2, cellFrame.y + spacing.height / 2, cellFrame.width
+					- spacing.width, cellFrame.height - spacing.height);
 		}
 		return cellFrame;
 	}
@@ -123,7 +123,7 @@ public class MultiSpanCellTable extends JTable {
 		}
 		repaint(dirtyRegion.x, dirtyRegion.y, dirtyRegion.width, dirtyRegion.height);
 	}
-	
+
 	@Override
 	public TableCellRenderer getCellRenderer(int row, int column) {
 		return renderer;

@@ -23,7 +23,7 @@ import data.UserProfile.UserRole;
 
 public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(LoginWindow.class);
+	private static Logger		logger				= Logger.getLogger(LoginWindow.class);
 
 	private Gui					gui;
 	private JMenuBar			menuBar;
@@ -69,10 +69,8 @@ public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 143, 10, 0 };
 		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 0, 10, 0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 1.0, 0.0, 1.0,
-				1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0,
-				1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, 1.0E-4 };
 
 		signinButton.addActionListener(this);
 
@@ -114,59 +112,50 @@ public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 			((GridBagLayout) formPanel.getLayout()).columnWidths = new int[] { 0, 96, 0 };
 			((GridBagLayout) formPanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
 			((GridBagLayout) formPanel.getLayout()).columnWeights = new double[] { 0.0, 1.0, 1.0E-4 };
-			((GridBagLayout) formPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) formPanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0E-4 };
 
 			// usernameLabel
 			usernameLabel.setText(GuiConfig.getValue(GuiConfig.USERNAME));
-			formPanel.add(usernameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
+			formPanel.add(usernameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 			usernameField.addActionListener(this);
-			formPanel.add(usernameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			formPanel.add(usernameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// passwordLabel
 			passwordLabel.setText(GuiConfig.getValue(GuiConfig.PASSWORD));
-			formPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
+			formPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 			passwordField.addActionListener(this);
-			formPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			formPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// roleLabel
 			roleLabel.setText(GuiConfig.getValue(GuiConfig.ROLE));
-			formPanel.add(roleLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
-			formPanel.add(roleCb, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			formPanel.add(roleLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+			formPanel.add(roleCb, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(formPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(formPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// bottomPannel
 		{
 			bottomPannel.setLayout(new GridBagLayout());
 			((GridBagLayout) bottomPannel.getLayout()).columnWidths = new int[] { 0, 0, 0 };
 			((GridBagLayout) bottomPannel.getLayout()).rowHeights = new int[] { 15, 0, 0 };
-			((GridBagLayout) bottomPannel.getLayout()).columnWeights = new double[] { 1.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) bottomPannel.getLayout()).columnWeights = new double[] { 1.0, 0.0, 1.0E-4 };
 			((GridBagLayout) bottomPannel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 1.0E-4 };
 
 			// loginButton
 			signinButton.setText(GuiConfig.getValue(GuiConfig.LOG_IN));
-			bottomPannel.add(signinButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			bottomPannel.add(signinButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
 
-		contentPane.add(bottomPannel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(bottomPannel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 		setTitle(GuiConfig.getValue(GuiConfig.LOGIN_TITLE));
 
 		List<Image> icons = new ArrayList<Image>();
@@ -228,8 +217,8 @@ public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 			signInAction();
 			return;
 		}
-		
-		if (e.getSource() == registerMenuItem){
+
+		if (e.getSource() == registerMenuItem) {
 			registerAction();
 			return;
 		}
@@ -259,11 +248,10 @@ public class LoginWindow extends JFrame implements ActionListener, ClearWindow {
 			userRole = UserRole.SELLER;
 		}
 
-		LoginCred cred = new LoginCred(usernameField.getText(), new String(
-				passwordField.getPassword()), userRole);
+		LoginCred cred = new LoginCred(usernameField.getText(), new String(passwordField.getPassword()), userRole);
 		gui.logIn(cred);
 	}
-	
+
 	@Override
 	public void clear() {
 		passwordField.setText("");

@@ -19,7 +19,7 @@ public interface CellSpan {
 	public boolean isVisible(int row, int column);
 
 	public void combine(int row, int column, int height, int width);
-	
+
 	public void combine(Span span);
 
 	public void split(Span span);

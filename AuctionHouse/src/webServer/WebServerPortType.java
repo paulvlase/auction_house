@@ -8,13 +8,21 @@
 package webServer;
 
 public interface WebServerPortType extends java.rmi.Remote {
-    public byte[] logout(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] launchOffer(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] registerProfile(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] dropOffer(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] removeOffer(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] login(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] loadOffers(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] getProfile(byte[] byteReq) throws java.rmi.RemoteException;
-    public byte[] setProfile(byte[] byteReq) throws java.rmi.RemoteException;
+	public byte[] logout(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] launchOffer(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] registerProfile(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] dropOffer(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] removeOffer(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] login(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] loadOffers(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] getProfile(byte[] byteReq) throws java.rmi.RemoteException;
+
+	public byte[] setProfile(byte[] byteReq) throws java.rmi.RemoteException;
 }

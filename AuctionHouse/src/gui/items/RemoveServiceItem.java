@@ -10,8 +10,8 @@ import interfaces.Gui;
 
 public class RemoveServiceItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(RemoveServiceItem.class);
-	
+	private static Logger		logger				= Logger.getLogger(RemoveServiceItem.class);
+
 	public RemoveServiceItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);
 
@@ -24,7 +24,7 @@ public class RemoveServiceItem extends GuiAbstractItem implements Command {
 	@Override
 	public void execute() {
 		window.getModel().removeService(service);
-		
+
 		if (service.isEnabledState()) {
 			service.setRemoveOfferState();
 

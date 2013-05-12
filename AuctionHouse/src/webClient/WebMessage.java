@@ -80,7 +80,7 @@ public class WebMessage {
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		return obj;
 	}
 

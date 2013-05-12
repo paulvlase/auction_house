@@ -9,7 +9,7 @@ import data.Service;
 
 public class DropAuctionItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(DropAuctionItem.class);
+	private static Logger		logger				= Logger.getLogger(DropAuctionItem.class);
 
 	public DropAuctionItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);

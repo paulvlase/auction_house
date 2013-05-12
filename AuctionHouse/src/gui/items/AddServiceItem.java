@@ -8,9 +8,9 @@ import gui.MainWindow;
 import interfaces.Command;
 import interfaces.Gui;
 
-public class AddServiceItem  extends GuiAbstractItem implements Command {
+public class AddServiceItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(AddServiceItem.class);
+	private static Logger		logger				= Logger.getLogger(AddServiceItem.class);
 
 	public AddServiceItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);
