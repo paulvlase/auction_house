@@ -13,10 +13,12 @@ import data.Service;
  */
 public interface NetworkMediator {
 	public void logIn();
+
 	public void logOut();
-	
-	public void  publishService(Service service);
-	public void  publishServices(ArrayList<Service> services);
-	
+
+	public void publishService(Service service);
+
+	public void publishServices(ArrayList<Service> services);
+
 	public InetSocketAddress getAddress();
 }

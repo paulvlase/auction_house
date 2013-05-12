@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
  * @author Ghennadi Procopciuc
  */
 public class GuiConfig {
-	private static Logger logger = Logger.getLogger(GuiConfig.class);
+	private static Logger	logger	= Logger.getLogger(GuiConfig.class);
 
 	/* GUI languages */
 	enum Language {
@@ -25,102 +25,84 @@ public class GuiConfig {
 	public static int				CURRENT_LANGUAGE					= ENGLISH_LANGUAGE;
 
 	/* Login form */
-	private static String			LOGIN_TITLE_VALUES[]				= {
-			APPLICATION_NAME + " : Login", APPLICATION_NAME + " : Autentificare" };
-	private static String			USERNAME_VALUES[]					= { "Username",
-			"Utilizator"												};
+	private static String			LOGIN_TITLE_VALUES[]				= { APPLICATION_NAME + " : Login",
+			APPLICATION_NAME + " : Autentificare"						};
+	private static String			USERNAME_VALUES[]					= { "Username", "Utilizator" };
 	private static String			PASSWORD_VALUES[]					= { "Password", "Parolă" };
 	private static String			ROLES_VALUES[]						= { "Role", "Rol" };
 	private static String			BUYER_VALUES[]						= { "Buyer", "Cumpărător" };
 	private static String			SELLER_VALUES[]						= { "Seller", "Furnizor" };
-	private static String			LOG_IN_VALUES[]						= { "Log in",
-			"Autentificare"											};
+	private static String			LOG_IN_VALUES[]						= { "Log in", "Autentificare" };
 	private static String			LANGUAGE_VALUES[]					= { "Language", "Limbă" };
 	private static String			ENGLISH_VALUES[]					= { "English", "Engleză" };
 	private static String			ROMANIAN_VALUES[]					= { "Romanian", "Română" };
 	private static String			EMPTY_USERNAME_ERROR_VALUES[]		= {
 			"Username field is empty, please fill it with a valid username.",
 			"Nu ați introdus niciun utilizator, introduce-ți unul."	};
-	private static String			EMPTY_USERNAME_VALUES[]				= { "Empty username",
-			"Lipsa utilizatorului"										};
+	private static String			EMPTY_USERNAME_VALUES[]				= { "Empty username", "Lipsa utilizatorului" };
 	private static String			EMPTY_PASSWORD_ERROR_VALUES[]		= {
-			"Password field is empty, please fill it with your password.",
-			"Nu ați introdus nici o parolă."							};
-	private static String			EMPTY_PASSWORD_VALUES[]				= { "Empty password",
-			"Lipsa parolei"											};
+			"Password field is empty, please fill it with your password.", "Nu ați introdus nici o parolă." };
+	private static String			EMPTY_PASSWORD_VALUES[]				= { "Empty password", "Lipsa parolei" };
 
-	public static final String[][]	LANGUAGES							= { ENGLISH_VALUES,
-			ROMANIAN_VALUES											};
+	public static final String[][]	LANGUAGES							= { ENGLISH_VALUES, ROMANIAN_VALUES };
 
 	/* GuiImpl */
-	private static final String		WRONG_USR_PASS_VALUES[]				= {
-			"Wrong username or password", "Nume utilizator sau parolă greșită" };
+	private static final String		WRONG_USR_PASS_VALUES[]				= { "Wrong username or password",
+			"Nume utilizator sau parolă greșită"						};
 
 	/* MainWindow */
-	private static String			BUYER_TITLE_VALUES[]				= {
-			APPLICATION_NAME + " : Buyer", APPLICATION_NAME + " : Cumpărător" };
-	private static String			SELLER_TITLE_VALUES[]				= {
-			APPLICATION_NAME + " : Seller", APPLICATION_NAME + " : Vânzător" };
+	private static String			BUYER_TITLE_VALUES[]				= { APPLICATION_NAME + " : Buyer",
+			APPLICATION_NAME + " : Cumpărător"							};
+	private static String			SELLER_TITLE_VALUES[]				= { APPLICATION_NAME + " : Seller",
+			APPLICATION_NAME + " : Vânzător"							};
 	private static final String		MENU_VALUES[]						= { "Menu", "Meniu" };
-	private static final String		ADD_SERVICE_VALUES[]				= { "Add service",
-			"Adaugă serviciu"											};
+	private static final String		ADD_SERVICE_VALUES[]				= { "Add service", "Adaugă serviciu" };
 	private static final String		PROFILE_VALUES[]					= { "Profile", "Profil" };
-	private static final String		LOGOUT_VALUES[]						= { "Logut",
-			"Deautentificare"											};
+	private static final String		LOGOUT_VALUES[]						= { "Logut", "Deautentificare" };
 	private static final String		EXIT_VALUES[]						= { "Exit", "Ieșire" };
 	private static final String		SERVICE_VALUES[]					= { "Service", "Serviciu" };
-	private static final String		OFFER_STATUS_VALUES[]				= { "Offer status",
-			"Status ofertă"											};
+	private static final String		OFFER_STATUS_VALUES[]				= { "Offer status", "Status ofertă" };
 	private static final String		TIME_VALUES[]						= { "Time", "Timp" };
 	private static final String		PRICE_VALUES[]						= { "Price", "Preț" };
 	private static final String		STATUS_VALUES[]						= { "Status", "Status" };
 	private static final String		LAUNCH_OFFER_VALUES[]				= { "Launch Offer Request",
 			"Lansează cerere ofertă"									};
-	private static final String		DROP_OFFER_VALUES[]					= { "Drop Offer Request",
-			"Renunță la ofertă"										};
-	private static final String		ACCEPT_OFFER_VALUES[]				= { "Accept Offer",
-			"Acceptă ofertă"											};
-	private static final String		REFUSE_OFFER_VALUES[]				= { "Refuse Offer",
-			"Refuză oferta"											};
-	private static final String		MAKE_OFFER_VALUES[]					= { "Make Offer",
-			"Fă o ofertă"												};
-	private static final String		DROP_AUCTION_VALUES[]				= { "Drop auction",
-			"Renunță la licitație"										};
-	private static final String		REMOVE_SERIVCE_VALUES[]				= { "Remove Service",
-			"Șterge serviciu"											};
+	private static final String		DROP_OFFER_VALUES[]					= { "Drop Offer Request", "Renunță la ofertă" };
+	private static final String		ACCEPT_OFFER_VALUES[]				= { "Accept Offer", "Acceptă ofertă" };
+	private static final String		REFUSE_OFFER_VALUES[]				= { "Refuse Offer", "Refuză oferta" };
+	private static final String		MAKE_OFFER_VALUES[]					= { "Make Offer", "Fă o ofertă" };
+	private static final String		DROP_AUCTION_VALUES[]				= { "Drop auction", "Renunță la licitație" };
+	private static final String		REMOVE_SERIVCE_VALUES[]				= { "Remove Service", "Șterge serviciu" };
 
 	/* Profile editor */
-	private static String			PROFILE_TITLE_VALUES[]				= {
-			APPLICATION_NAME + " : Profile", APPLICATION_NAME + " : Profil" };
+	private static String			PROFILE_TITLE_VALUES[]				= { APPLICATION_NAME + " : Profile",
+			APPLICATION_NAME + " : Profil"								};
 	private static final String		CHANGE_PICTURE_VALUES[]				= {
 			"Press image to change your profile picture.", "Apasă pe imagine pentru a o schimba." };
 	private static final String		FIRST_NAME_VALUES[]					= { "First name", "Prenume" };
 	private static final String		LAST_NAME_VALUES[]					= { "Last name", "Nume" };
-	private static final String		NEW_PASSWORD_VALUES[]				= { "New password",
-			"Parola noua"												};
+	private static final String		NEW_PASSWORD_VALUES[]				= { "New password", "Parola noua" };
 	private static final String		LOCATION_VALUES[]					= { "Location", "Locație" };
 	private static final String		CANCEL_VALUES[]						= { "Cancel", "Anulează" };
 	private static final String		OK_VALUES[]							= { "OK", "OK" };
 	private static final String		PASSWORD_ERROR_VALUES[]				= {
 			"If you want to change the password you should complete both password fields.",
 			"Pentru a schimba parola, trebuie să completați ambele câmpuri" };
-	private static final String		PASSWORD_MATCH_ERROR_VALUES[]		= {
-			"Passwords do not match", "Parolele nu coincid"			};
-	private static final String		FILE_CHOOSER_VALUES[]				= { "JPG & GIF Images",
-			"Imagini JPG & GIF"										};
+	private static final String		PASSWORD_MATCH_ERROR_VALUES[]		= { "Passwords do not match",
+			"Parolele nu coincid"										};
+	private static final String		FILE_CHOOSER_VALUES[]				= { "JPG & GIF Images", "Imagini JPG & GIF" };
 
 	/* AddNewService */
 	private static final String		NAME_VALUES[]						= { "Name", "Nume" };
 	private static final String		EMPTY_SERVICE_NAME_VALUES[]			= { "Empty service name",
 			"Nume serviciu necompletat"								};
 	private static final String		EMPTY_SERVICE_NAME_ERROR_VALUES[]	= {
-			"Service name seems to be empty, please complete it.",
-			"Numele serviciului nu a fost completat."					};
+			"Service name seems to be empty, please complete it.", "Numele serviciului nu a fost completat." };
 	private static final String		SERVICE_TWICE_ERROR_VALUES[]		= {
 			"Entered service seems to be already in your list of services",
 			"Serviciul introdus pare a fi prezent in lista ta de servicii" };
-	private static final String		PRICE_ERROR_VALUES[]				= {
-			"Price should be a number.", "Prețul trebuie să fie un număr" };
+	private static final String		PRICE_ERROR_VALUES[]				= { "Price should be a number.",
+			"Prețul trebuie să fie un număr"							};
 
 	/* MyTableCellRender */
 	private static final String		DONE_VALUES[]						= { "Done", "Terminat" };
@@ -132,26 +114,21 @@ public class GuiConfig {
 	/* Service */
 	private static final String		INACTIVE_VALUES[]					= { "Inactive", "Inactiv" };
 	private static final String		ACTIVE_VALUES[]						= { "Active", "Activ" };
-	private static final String		TRANSFER_STARTED_VALUES[]			= { "Transfer started",
-			"Transfer a început"										};
+	private static final String		TRANSFER_STARTED_VALUES[]			= { "Transfer started", "Transfer a început" };
 	private static final String		TRANSFER_IN_PROGRESS_VALUES[]		= { "Transfer in prgress",
 			"Transfer în progres"										};
-	private static final String		TRANSFER_COMPLETE_VALUES[]			= { "Transfer complete",
-			"Transfer complet"											};
+	private static final String		TRANSFER_COMPLETE_VALUES[]			= { "Transfer complete", "Transfer complet" };
 
 	/* RegisterWindow */
 	private static final String		CHECK_VALUES[]						= { "Check", "Verifică" };
 	private static final String		EMAIL_VALUES[]						= { "Email", "Email" };
-	private static final String		REGISTER_VALUES[]					= { "Register",
-			"Înregistrare"												};
-	private static final String		USERNAME_ERROR_VALUES[]				= {
-			"The username is already taken.", "Numele de utilizator este deja utilizat." };
+	private static final String		REGISTER_VALUES[]					= { "Register", "Înregistrare" };
+	private static final String		USERNAME_ERROR_VALUES[]				= { "The username is already taken.",
+			"Numele de utilizator este deja utilizat."					};
 	private static final String		FIRST_NAME_ERROR_VALUES[]			= {
-			"First name field seems to be empty, please fill it",
-			"Cămpul prenume este gol, completați-l vă rog"				};
+			"First name field seems to be empty, please fill it", "Cămpul prenume este gol, completați-l vă rog" };
 	private static final String		LAST_NAME_ERROR_VALUES[]			= {
-			"Last name field seems to be empty, please fill it",
-			"Cămpul nume este gol, completați-l vă rog"				};
+			"Last name field seems to be empty, please fill it", "Cămpul nume este gol, completați-l vă rog" };
 	private static final String		FILE_VALUES[]						= { "File", "Fișier" };
 
 	/* Login form */
@@ -270,22 +247,18 @@ public class GuiConfig {
 	public static final String		REGISTER_ICON32						= "resources/images/register32x32.png";
 	public static final String		REGISTER_ICON64						= "resources/images/register64x64.png";
 
-	private static final String		values[][]							= { USERNAME_VALUES,
-			PASSWORD_VALUES, ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES,
-			LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES, EMPTY_USERNAME_ERROR_VALUES,
-			EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
-			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES,
-			PROFILE_VALUES, LOGOUT_VALUES, EXIT_VALUES, SERVICE_VALUES, OFFER_STATUS_VALUES,
-			TIME_VALUES, PRICE_VALUES, STATUS_VALUES, BUYER_TITLE_VALUES, SELLER_TITLE_VALUES,
-			LAUNCH_OFFER_VALUES, DROP_OFFER_VALUES, ACCEPT_OFFER_VALUES, REFUSE_OFFER_VALUES,
-			MAKE_OFFER_VALUES, DROP_AUCTION_VALUES, REMOVE_SERIVCE_VALUES, CHANGE_PICTURE_VALUES,
-			FIRST_NAME_VALUES, LAST_NAME_VALUES, NEW_PASSWORD_VALUES, LOCATION_VALUES,
-			CANCEL_VALUES, OK_VALUES, PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES,
-			PASSWORD_MATCH_ERROR_VALUES, FILE_CHOOSER_VALUES, NAME_VALUES,
-			EMPTY_SERVICE_NAME_VALUES, EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES,
-			PRICE_ERROR_VALUES, DONE_VALUES, CANCELED_VALUES, NEW_PRICE_VALUES, INACTIVE_VALUES,
-			ACTIVE_VALUES, TRANSFER_STARTED_VALUES, TRANSFER_IN_PROGRESS_VALUES,
-			TRANSFER_COMPLETE_VALUES, CHECK_VALUES, EMAIL_VALUES, REGISTER_VALUES,
+	private static final String		values[][]							= { USERNAME_VALUES, PASSWORD_VALUES,
+			ROLES_VALUES, BUYER_VALUES, SELLER_VALUES, LOG_IN_VALUES, LANGUAGE_VALUES, ENGLISH_VALUES, ROMANIAN_VALUES,
+			EMPTY_USERNAME_ERROR_VALUES, EMPTY_USERNAME_VALUES, EMPTY_PASSWORD_ERROR_VALUES, EMPTY_PASSWORD_VALUES,
+			LOGIN_TITLE_VALUES, WRONG_USR_PASS_VALUES, MENU_VALUES, ADD_SERVICE_VALUES, PROFILE_VALUES, LOGOUT_VALUES,
+			EXIT_VALUES, SERVICE_VALUES, OFFER_STATUS_VALUES, TIME_VALUES, PRICE_VALUES, STATUS_VALUES,
+			BUYER_TITLE_VALUES, SELLER_TITLE_VALUES, LAUNCH_OFFER_VALUES, DROP_OFFER_VALUES, ACCEPT_OFFER_VALUES,
+			REFUSE_OFFER_VALUES, MAKE_OFFER_VALUES, DROP_AUCTION_VALUES, REMOVE_SERIVCE_VALUES, CHANGE_PICTURE_VALUES,
+			FIRST_NAME_VALUES, LAST_NAME_VALUES, NEW_PASSWORD_VALUES, LOCATION_VALUES, CANCEL_VALUES, OK_VALUES,
+			PROFILE_TITLE_VALUES, PASSWORD_ERROR_VALUES, PASSWORD_MATCH_ERROR_VALUES, FILE_CHOOSER_VALUES, NAME_VALUES,
+			EMPTY_SERVICE_NAME_VALUES, EMPTY_SERVICE_NAME_ERROR_VALUES, SERVICE_TWICE_ERROR_VALUES, PRICE_ERROR_VALUES,
+			DONE_VALUES, CANCELED_VALUES, NEW_PRICE_VALUES, INACTIVE_VALUES, ACTIVE_VALUES, TRANSFER_STARTED_VALUES,
+			TRANSFER_IN_PROGRESS_VALUES, TRANSFER_COMPLETE_VALUES, CHECK_VALUES, EMAIL_VALUES, REGISTER_VALUES,
 			USERNAME_ERROR_VALUES, FIRST_NAME_ERROR_VALUES, LAST_NAME_ERROR_VALUES, FILE_VALUES };
 
 	public static int getLanguage() {
@@ -298,8 +271,7 @@ public class GuiConfig {
 
 	public static String getValue(int key) {
 		if (values[key].length <= CURRENT_LANGUAGE) {
-			logger.error("No value availaible for : '" + values[key] + "' in "
-					+ CURRENT_LANGUAGE + " language");
+			logger.error("No value availaible for : '" + values[key] + "' in " + CURRENT_LANGUAGE + " language");
 			System.exit(1);
 		}
 

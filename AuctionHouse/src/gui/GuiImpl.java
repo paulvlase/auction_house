@@ -30,16 +30,16 @@ import data.UserProfile.UserRole;
  * @author Paul Vlase <vlase.paul@gmail.com>
  */
 public class GuiImpl implements Gui {
-	private static Logger logger = Logger.getLogger(GuiImpl.class);
+	private static Logger	logger	= Logger.getLogger(GuiImpl.class);
 
-	private MediatorGui	med;
+	private MediatorGui		med;
 	private LoginWindow		loginWindow;
-	private MainWindow	mainWindow;
-	private RegisterWindow registerWindow;
+	private MainWindow		mainWindow;
+	private RegisterWindow	registerWindow;
 
 	public GuiImpl(MediatorGui med) {
 		// TODO: logger.setLevel(Level.OFF);
-		
+
 		this.med = med;
 		med.registerGui(this);
 
@@ -63,13 +63,13 @@ public class GuiImpl implements Gui {
 			loginWindow.clear();
 
 			logger.debug("Logged in");
-			
+
 			mainWindow = new MainWindow(this);
 			mainWindow.setVisible(true);
-			
+
 			ArrayList<Service> services = med.loadOffers();
 			changeServicesNotify(services);
-			
+
 			if (med.getUserProfile().getRole() == UserRole.SELLER)
 				med.launchOffers(services);
 		} else {
@@ -86,40 +86,40 @@ public class GuiImpl implements Gui {
 
 		mainWindow.setVisible(false);
 		loginWindow.setVisible(true);
-		
+
 		logger.debug("End");
 	}
-	
+
 	public UserProfile getUserProfile() {
 		return med.getUserProfile();
 	}
-	
+
 	public boolean setUserProfile(UserProfile profile) {
 		return med.setUserProfile(profile);
 	}
-	
+
 	public void registerUserStep1() {
 		loginWindow.setVisible(false);
 
 		if (registerWindow == null) {
-			registerWindow =  new RegisterWindow(this);
+			registerWindow = new RegisterWindow(this);
 		}
 		registerWindow.setVisible(true);
 	}
-	
+
 	public boolean registerUser(UserProfile profile) {
 		return med.registerUser(profile);
 	}
-	
+
 	public void registerUserStep3() {
 		registerWindow.setVisible(false);
 		loginWindow.setVisible(true);
-}
-	
+	}
+
 	public boolean verifyUsername(String username) {
 		return med.verifyUsername(username);
 	}
-	
+
 	/* Notify */
 	private LoginCred loadLoginFile() {
 		File loginFile = new File(FilesConfig.LOGIN_FILENAME);
@@ -175,40 +175,40 @@ public class GuiImpl implements Gui {
 		}
 		return loginCred;
 	}
-	
-	public ArrayList<Service> loadOffers(){
+
+	public ArrayList<Service> loadOffers() {
 		return med.loadOffers();
 	}
-	
+
 	@Override
 	public void changeServiceNotify(Service service) {
 		logger.debug("Begin");
-		
+
 		if (mainWindow != null) {
 			logger.debug("SwingUtilities.invokeLater()");
 			SwingUtilities.invokeLater(new GuiServiceRunnable(mainWindow, service));
 		}
-		
+
 		logger.debug("End");
 	}
-	
+
 	public void changeServicesNotify(ArrayList<Service> services) {
 		logger.debug("Begin");
-		
-		for (Service service: services) {
+
+		for (Service service : services) {
 			changeServiceNotify(service);
 		}
-		
+
 		logger.debug("End");
 	}
 
 	@Override
 	public void changeProfileNotify(UserProfile profile) {
 		if (mainWindow != null) {
-			 SwingUtilities.invokeLater(new GuiProfileRunnable(mainWindow, profile));
+			SwingUtilities.invokeLater(new GuiProfileRunnable(mainWindow, profile));
 		}
 	}
-	
+
 	@Override
 	public void publishService(Service service) {
 		logger.debug("Begin");

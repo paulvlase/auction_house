@@ -55,40 +55,40 @@ public class AttributiveCellTableModel extends DefaultTableModel {
 	public AttributiveCellTableModel(Object[][] data, Object[] columnNames) {
 		setDataVector(data, columnNames);
 	}
-	
-	public void addSpan(Span span){
-		if(spans == null){
+
+	public void addSpan(Span span) {
+		if (spans == null) {
 			spans = new ArrayList<Span>();
 		}
-		
-		if(!spans.contains(span)){
+
+		if (!spans.contains(span)) {
 			((CellSpan) cellAtt).combine(span);
 			spans.add(span);
 			fireTableStructureChanged();
 		}
 	}
-	
-	public void removeSpan(Span obj){
+
+	public void removeSpan(Span obj) {
 		Boolean found = false;
 		for (Span span : spans) {
-			if(span.equals(obj)){
+			if (span.equals(obj)) {
 				found = true;
 				((CellSpan) cellAtt).split(span);
 				break;
 			}
 		}
-		
-		if(found){
+
+		if (found) {
 			spans.remove(obj);
 			fireTableStructureChanged();
 		}
 	}
-	
-	public void clearSpans(){
+
+	public void clearSpans() {
 		for (Span span : spans) {
 			((CellSpan) cellAtt).split(span);
 		}
-		
+
 		spans.clear();
 		fireTableStructureChanged();
 	}
@@ -142,8 +142,8 @@ public class AttributiveCellTableModel extends DefaultTableModel {
 		//
 		cellAtt.addRow();
 
-		newRowsAdded(new TableModelEvent(this, getRowCount() - 1, getRowCount() - 1,
-				TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+		newRowsAdded(new TableModelEvent(this, getRowCount() - 1, getRowCount() - 1, TableModelEvent.ALL_COLUMNS,
+				TableModelEvent.INSERT));
 	}
 
 	public void insertRow(int row, Vector rowData) {
@@ -157,8 +157,7 @@ public class AttributiveCellTableModel extends DefaultTableModel {
 
 		cellAtt.insertRow(row);
 
-		newRowsAdded(new TableModelEvent(this, row, row, TableModelEvent.ALL_COLUMNS,
-				TableModelEvent.INSERT));
+		newRowsAdded(new TableModelEvent(this, row, row, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
 	}
 
 	public CellAttribute getCellAttribute() {

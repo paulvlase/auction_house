@@ -11,14 +11,14 @@ import data.Service;
 
 public abstract class GuiAbstractItem extends JMenuItem {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(GuiAbstractItem.class);
+	private static Logger		logger				= Logger.getLogger(GuiAbstractItem.class);
 
 	protected MainWindow		window;
 	protected Gui				gui;
 	protected Service			service;
 	protected Integer			row;
 
-	public void showItem(Pair<Service, Integer> pair){
+	public void showItem(Pair<Service, Integer> pair) {
 		// TODO: logger.setLevel(Level.OFF);
 
 		setVisible(true);
@@ -26,7 +26,7 @@ public abstract class GuiAbstractItem extends JMenuItem {
 		this.row = pair.getValue();
 	}
 
-	public void hideItem(){
+	public void hideItem() {
 		setVisible(false);
 	}
 }

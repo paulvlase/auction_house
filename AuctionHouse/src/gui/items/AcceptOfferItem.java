@@ -10,7 +10,7 @@ import data.Service;
 
 public class AcceptOfferItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(AcceptOfferItem.class);
+	private static Logger		logger				= Logger.getLogger(AcceptOfferItem.class);
 
 	public AcceptOfferItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);
@@ -27,12 +27,10 @@ public class AcceptOfferItem extends GuiAbstractItem implements Command {
 		logger.debug("service.getName(): " + service.getName());
 		logger.debug("service.getName(): " + service.getStateName());
 
-//		if (service.isInactiveState()) {
-			logger.debug("Gui notification");
-			service.setAccceptOfferState(row);
+		logger.debug("Gui notification");
+		service.setAccceptOfferState(row);
 
-			gui.publishService(service.clone());
-//		}
-			logger.debug("End");
+		gui.publishService(service.clone());
+		logger.debug("End");
 	}
 }

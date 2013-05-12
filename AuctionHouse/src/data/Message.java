@@ -33,11 +33,11 @@ public class Message implements Serializable {
 	}
 
 	public Message() {
-//		logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 	}
 
 	public Message(MessageType type, String serviceName) {
-//		logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 		this.type = type;
 		this.serviceName = serviceName;
 	}

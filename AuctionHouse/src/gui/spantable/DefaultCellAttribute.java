@@ -14,12 +14,12 @@ import org.apache.log4j.Logger;
  */
 
 public class DefaultCellAttribute implements CellAttribute, CellSpan {
-	private static Logger		logger	= Logger.getLogger(DefaultCellAttribute.class);
+	private static Logger	logger	= Logger.getLogger(DefaultCellAttribute.class);
 
-	protected int		rowSize;
-	protected int		columnSize;
-	protected int[][][]	span;													// CellSpan
-	protected Color[][]	background;											//
+	protected int			rowSize;
+	protected int			columnSize;
+	protected int[][][]		span;													// CellSpan
+	protected Color[][]		background;											//
 
 	public DefaultCellAttribute() {
 		this(0, 0);
@@ -32,7 +32,7 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	}
 
 	public DefaultCellAttribute(int numRows, int numColumns) {
-//		  logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 
 		setSize(new Dimension(numColumns, numRows));
 	}
@@ -159,8 +159,8 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	}
 
 	public void addRow() {
-//		logger.debug("Rowsize : " + rowSize);
-//		logger.debug("Columnsie : " + columnSize);
+		// logger.debug("Rowsize : " + rowSize);
+		// logger.debug("Columnsie : " + columnSize);
 
 		if (rowSize == 0) {
 			span = new int[1][columnSize][2];
@@ -240,11 +240,11 @@ public class DefaultCellAttribute implements CellAttribute, CellSpan {
 	}
 
 	protected boolean isOutOfBounds(int row, int column, int height, int width) {
-//		logger.debug(">>>>Rowsize: " + rowSize);
-//		logger.debug("Columnsize: " + columnSize);
-//		logger.debug("Row: " + row + " column: " + column);
-//		logger.debug("Width: " + width + " height: "+ height);
-		
+		// logger.debug(">>>>Rowsize: " + rowSize);
+		// logger.debug("Columnsize: " + columnSize);
+		// logger.debug("Row: " + row + " column: " + column);
+		// logger.debug("Width: " + width + " height: "+ height);
+
 		if (row < 0 || row + height > rowSize) {
 			logger.debug("Row condition");
 			return true;

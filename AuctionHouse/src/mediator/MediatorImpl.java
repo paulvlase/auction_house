@@ -104,7 +104,7 @@ public class MediatorImpl implements MediatorGui, MediatorNetwork, MediatorWeb {
 		logger.debug("Begin");
 		cred.setAddress(net.getAddress());
 		Pair<LoginCred, UserProfile> pair = web.logIn(cred);
-		
+
 		if (pair != null) {
 			this.cred = pair.getFirst();
 			this.profile = pair.getSecond();

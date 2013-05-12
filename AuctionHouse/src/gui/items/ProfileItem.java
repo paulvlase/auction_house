@@ -10,7 +10,7 @@ import interfaces.Gui;
 
 public class ProfileItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(ProfileItem.class);
+	private static Logger		logger				= Logger.getLogger(ProfileItem.class);
 
 	public ProfileItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);

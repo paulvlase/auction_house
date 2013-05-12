@@ -151,7 +151,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		newMessage.setServiceName(message.getServiceName());
 
 		UserEntry userEntry = (UserEntry) message.getPayload();
-		
+
 		logger.debug("userEntry: " + userEntry);
 		if (user.getRole() == UserRole.SELLER) {
 			userEntry.setPrice(service.getPrice());
@@ -167,7 +167,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		if (service.getUsers() == null) {
 			service.setUsers(new ArrayList<UserEntry>());
 		}
-		
+
 		logger.debug("userEntry: " + userEntry);
 		logger.debug("Before service: " + service);
 		service.getUsers().remove(userEntry);
@@ -175,8 +175,8 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		logger.debug("After service: " + service);
 
 		/* Check for OFFER_EXCEED */
-//		service.getUsers().remove((UserEntry) message.getPayload());
-//		service.addUserEntry((UserEntry) message.getPayload());
+		// service.getUsers().remove((UserEntry) message.getPayload());
+		// service.addUserEntry((UserEntry) message.getPayload());
 		for (UserEntry userEntry1 : service.getUsers()) {
 			if (userEntry1.getPrice() > ((UserEntry) message.getPayload()).getPrice()) {
 				logger.debug("User : " + userEntry1.getUsername() + " : " + userEntry1.getPrice() + " > "
@@ -570,7 +570,7 @@ public class NetworkReceiveEvents extends QueueThread<SelectionKey, Message> {
 		// message.setType(MessageType.LOGOUT);
 		// message.setDestination(entry.getKey());
 		// message.setSource(userProfile.getUsername());
-		logger.debug("End"); 
+		logger.debug("End");
 	}
 
 	protected synchronized void process() {

@@ -2,11 +2,11 @@ package data;
 
 import java.util.Map;
 
-public class Pair<K, V> implements Map.Entry<K, V>{
-	private K key;
-	private V value;
-	
-	public Pair(K key, V value){
+public class Pair<K, V> implements Map.Entry<K, V> {
+	private K	key;
+	private V	value;
+
+	public Pair(K key, V value) {
 		this.key = key;
 		this.value = value;
 	}
@@ -26,16 +26,16 @@ public class Pair<K, V> implements Map.Entry<K, V>{
 		this.value = value;
 		return value;
 	}
-	
-	public K setKey(K key){
+
+	public K setKey(K key) {
 		this.key = key;
 		return key;
 	}
-	
+
 	public K getFirst() {
 		return key;
 	}
-	
+
 	public V getSecond() {
 		return value;
 	}

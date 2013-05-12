@@ -7,7 +7,6 @@ package config;
  */
 public class GlobalConfig {
 	public enum ServiceType {
-		SUPPLY,
-		DEMAND
+		SUPPLY, DEMAND
 	};
 }

@@ -79,7 +79,7 @@ public class Service implements Comparable<Service>, Serializable {
 
 	@SuppressWarnings("unchecked")
 	public Service(Service service) {
-//		 logger.setLevel(Level.OFF);
+		// logger.setLevel(Level.OFF);
 
 		this.name = service.getName();
 

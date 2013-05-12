@@ -6,7 +6,10 @@ import data.UserProfile.UserRole;
 
 public interface WebService {
 	public String getUsername();
+
 	public UserRole getUserRole();
+
 	public LoginCred getLoginCred();
+
 	public void notifyNetwork(Service service);
 }

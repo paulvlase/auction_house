@@ -9,7 +9,7 @@ import interfaces.Gui;
 
 public class DropRequestItem extends GuiAbstractItem implements Command {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(DropRequestItem.class);
+	private static Logger		logger				= Logger.getLogger(DropRequestItem.class);
 
 	public DropRequestItem(MainWindow window, Gui gui) {
 		// TODO: logger.setLevel(Level.OFF);

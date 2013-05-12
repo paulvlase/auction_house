@@ -10,13 +10,13 @@ import java.io.Serializable;
  */
 public class UserProfile implements Serializable {
 	private static final long	serialVersionUID	= 1L;
-	private String		username;
-	private String		firstName;
-	private String		lastName;
-	private UserRole	role;
-	private String		password;
-	private byte[]		avatar;
-	private String		location;
+	private String				username;
+	private String				firstName;
+	private String				lastName;
+	private UserRole			role;
+	private String				password;
+	private byte[]				avatar;
+	private String				location;
 
 	public enum UserRole {
 		BUYER, SELLER

@@ -10,7 +10,8 @@ import data.UserProfile;
  */
 public interface NetworkService {
 	public UserProfile getUserProfile();
-	
+
 	public void changeServiceNotify(Service service);
+
 	public void cancelTransfer(Service service);
 }

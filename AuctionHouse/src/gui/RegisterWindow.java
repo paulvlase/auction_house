@@ -44,7 +44,7 @@ import data.UserProfile;
  */
 public class RegisterWindow extends JFrame implements ActionListener, MouseListener, ClearWindow {
 	private static final long	serialVersionUID	= 1L;
-	private static Logger logger = Logger.getLogger(RegisterWindow.class);
+	private static Logger		logger				= Logger.getLogger(RegisterWindow.class);
 
 	private JPanel				topPanel;
 	private JLabel				avatarLabel;
@@ -109,12 +109,9 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new GridBagLayout());
 		((GridBagLayout) contentPane.getLayout()).columnWidths = new int[] { 15, 0, 9, 0 };
-		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 15, 0, 15, 0, 10,
-				0 };
-		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0,
-				1.0E-4 };
-		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowHeights = new int[] { 15, 0, 15, 0, 15, 0, 10, 0 };
+		((GridBagLayout) contentPane.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0E-4 };
+		((GridBagLayout) contentPane.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4 };
 
 		// topPanel
 		{
@@ -128,144 +125,118 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 			avatarLabel.addMouseListener(this);
 			avatarLabel.setBorder(UIManager.getBorder("TitledBorder.border"));
 			avatarLabel.setIcon(new ImageIcon(GuiConfig.DEFAULT_AVATAR));
-			topPanel.add(avatarLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
+			topPanel.add(avatarLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 			// panel1
 			{
 				panel1.setLayout(new GridBagLayout());
 				((GridBagLayout) panel1.getLayout()).columnWidths = new int[] { 0, 0, 0 };
 				((GridBagLayout) panel1.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
-				((GridBagLayout) panel1.getLayout()).columnWeights = new double[] { 0.0, 1.0,
-						1.0E-4 };
-				((GridBagLayout) panel1.getLayout()).rowWeights = new double[] { 1.0, 0.0, 0.0,
-						1.0E-4 };
+				((GridBagLayout) panel1.getLayout()).columnWeights = new double[] { 0.0, 1.0, 1.0E-4 };
+				((GridBagLayout) panel1.getLayout()).rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0E-4 };
 
 				// usernameLabel
 				usernameLabel.setText(GuiConfig.getValue(GuiConfig.USERNAME));
-				panel1.add(usernameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5),
-						0, 0));
-				panel1.add(usernameField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0),
-						0, 0));
+				panel1.add(usernameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+				panel1.add(usernameField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 				// checkButton
 				checkButton.setText(GuiConfig.getValue(GuiConfig.CHECK));
 				checkButton.addActionListener(this);
-				panel1.add(checkButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5),
-						0, 0));
+				panel1.add(checkButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 			}
-			topPanel.add(panel1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			topPanel.add(panel1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(topPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(topPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// middlePanel
 		{
 			middlePanel.setLayout(new GridBagLayout());
 			((GridBagLayout) middlePanel.getLayout()).columnWidths = new int[] { 0, 0, 15, 0, 0, 0 };
 			((GridBagLayout) middlePanel.getLayout()).rowHeights = new int[] { 0, 0, 0, 0 };
-			((GridBagLayout) middlePanel.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0,
-					0.0, 1.0, 1.0E-4 };
-			((GridBagLayout) middlePanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) middlePanel.getLayout()).columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 1.0E-4 };
+			((GridBagLayout) middlePanel.getLayout()).rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0E-4 };
 
 			// firstnameLabel
 			firstnameLabel.setText(GuiConfig.getValue(GuiConfig.FIRST_NAME));
-			middlePanel.add(firstnameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
-			middlePanel.add(firstnameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
+			middlePanel.add(firstnameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+			middlePanel.add(firstnameField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 			// locationLabel
 			locationLabel.setText(GuiConfig.getValue(GuiConfig.LOCATION));
-			middlePanel.add(locationLabel, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
-			middlePanel.add(locationField, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			middlePanel.add(locationLabel, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+			middlePanel.add(locationField, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// lastnameLabel
 			lastnameLabel.setText(GuiConfig.getValue(GuiConfig.LAST_NAME));
-			middlePanel.add(lastnameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
-			middlePanel.add(lastnameField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
+			middlePanel.add(lastnameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+			middlePanel.add(lastnameField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 			// emailLabel
 			emailLabel.setText(GuiConfig.getValue(GuiConfig.EMAIL));
-			middlePanel.add(emailLabel, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0,
-					0));
-			middlePanel.add(emailField, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0,
-					0));
+			middlePanel.add(emailLabel, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+			middlePanel.add(emailField, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 5, 0), 0, 0));
 
 			// passwordLabel
 			passwordLabel.setText(GuiConfig.getValue(GuiConfig.PASSWORD));
-			middlePanel.add(passwordLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
-			middlePanel.add(passwordField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
+			middlePanel.add(passwordLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+			middlePanel.add(passwordField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 			// passwordRetypeLabel
 			passwordRetypeLabel.setText(GuiConfig.getValue(GuiConfig.PASSWORD));
 			middlePanel.add(passwordRetypeLabel, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 			middlePanel.add(passwordRetypeField, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(middlePanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
+		contentPane.add(middlePanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		// panel2
 		{
 			panel2.setLayout(new GridBagLayout());
 			((GridBagLayout) panel2.getLayout()).columnWidths = new int[] { 0, 80, 76, 0 };
 			((GridBagLayout) panel2.getLayout()).rowHeights = new int[] { 0, 0 };
-			((GridBagLayout) panel2.getLayout()).columnWeights = new double[] { 1.0, 0.0, 0.0,
-					1.0E-4 };
+			((GridBagLayout) panel2.getLayout()).columnWeights = new double[] { 1.0, 0.0, 0.0, 1.0E-4 };
 			((GridBagLayout) panel2.getLayout()).rowWeights = new double[] { 0.0, 1.0E-4 };
 
 			// cancelButton
 			cancelButton.setText(GuiConfig.getValue(GuiConfig.CANCEL));
 			cancelButton.addActionListener(this);
-			panel2.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0,
-					0));
+			panel2.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
 			// registerButton
 			registerButton.setText(GuiConfig.getValue(GuiConfig.REGISTER));
 			registerButton.addActionListener(this);
-			panel2.add(registerButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0,
-					0));
+			panel2.add(registerButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		}
-		contentPane.add(panel2, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
-		
-
+		contentPane.add(panel2, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 5, 5), 0, 0));
 
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(new ImageIcon(GuiConfig.REGISTER_ICON16).getImage());
 		icons.add(new ImageIcon(GuiConfig.REGISTER_ICON32).getImage());
 		icons.add(new ImageIcon(GuiConfig.REGISTER_ICON64).getImage());
 		setIconImages(icons);
-		
+
 		setSize(400, 300);
 		setLocationRelativeTo(getOwner());
 		setVisible(true);
@@ -304,10 +275,8 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 				return;
 			}
 
-			if (!new String(passwordField.getPassword()).equals(new String(passwordRetypeField
-					.getPassword()))) {
-				JOptionPane.showMessageDialog(null,
-						GuiConfig.getValue(GuiConfig.PASSWORD_MATCH_ERROR),
+			if (!new String(passwordField.getPassword()).equals(new String(passwordRetypeField.getPassword()))) {
+				JOptionPane.showMessageDialog(null, GuiConfig.getValue(GuiConfig.PASSWORD_MATCH_ERROR),
 						GuiConfig.getValue(GuiConfig.PASSWORD), JOptionPane.WARNING_MESSAGE);
 				return;
 			}
@@ -348,16 +317,16 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				GuiConfig.getValue(GuiConfig.FILE_CHOOSER_TILE), "jpg", "gif", "png");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(GuiConfig.getValue(GuiConfig.FILE_CHOOSER_TILE),
+				"jpg", "gif", "png");
 		chooser.setFileFilter(filter);
 
 		int returnVal = chooser.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			ImageIcon avatar = new ImageIcon(chooser.getSelectedFile().getAbsolutePath());
 
-			ImageIcon newAvatar = new ImageIcon(avatar.getImage().getScaledInstance(
-					GuiConfig.AVATAR_WIDTH, GuiConfig.AVATAR_WIDTH, Image.SCALE_DEFAULT));
+			ImageIcon newAvatar = new ImageIcon(avatar.getImage().getScaledInstance(GuiConfig.AVATAR_WIDTH,
+					GuiConfig.AVATAR_WIDTH, Image.SCALE_DEFAULT));
 
 			setAvatar(newAvatar);
 		}
@@ -371,8 +340,8 @@ public class RegisterWindow extends JFrame implements ActionListener, MouseListe
 		if (image instanceof RenderedImage) {
 			rendered = (RenderedImage) image;
 		} else {
-			BufferedImage bufferred = new BufferedImage(imageIcon.getIconWidth(),
-					imageIcon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+			BufferedImage bufferred = new BufferedImage(imageIcon.getIconWidth(), imageIcon.getIconHeight(),
+					BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bufferred.createGraphics();
 			g.drawImage(image, 0, 0, null);
 			g.dispose();

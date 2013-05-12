@@ -14,14 +14,20 @@ import data.UserProfile;
  */
 public interface WebClient {
 	public Pair<LoginCred, UserProfile> logIn(LoginCred cred);
+
 	public void logOut();
-	
+
 	public UserProfile getUserProfile(String username);
+
 	public boolean setUserProfile(UserProfile profile);
+
 	public boolean registerUser(UserProfile profile);
+
 	public boolean verifyUsername(String username);
-	
+
 	public void publishService(Service service);
+
 	public void publishServices(ArrayList<Service> services);
+
 	public ArrayList<Service> loadOffers(LoginCred cred);
 }

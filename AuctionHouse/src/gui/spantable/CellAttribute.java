@@ -15,7 +15,7 @@ public interface CellAttribute {
 	public void addColumn();
 
 	public void addRow();
-	
+
 	public void addRows(Integer rows);
 
 	public void insertRow(int row);
@@ -23,7 +23,7 @@ public interface CellAttribute {
 	public Dimension getSize();
 
 	public void setSize(Dimension size);
-	
+
 	public void clear();
 
 }
