@@ -69,10 +69,10 @@ public class WebServer {
 	@WebMethod
 	public byte[] login(byte[] byteReq) {
 		System.out.println("[WebServer:login] Begin");
-		
+
 		MessageContext mc = wsContext.getMessageContext();
-	    HttpServletRequest request = (HttpServletRequest)mc.get(MessageContext.SERVLET_REQUEST); 
-	    System.out.println("Client IP = " + request.getRemoteAddr()); 
+		HttpServletRequest request = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
+		System.out.println("Client IP = " + request.getRemoteAddr());
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LoginRequest)) {
@@ -101,8 +101,11 @@ public class WebServer {
 				}
 
 				Statement st2 = conn.createStatement();
+//				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
+//						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
+//						+ id;
 				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
-						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
+						+ request.getRemoteAddr() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 						+ id;
 				st2.executeUpdate(query);
 
@@ -112,8 +115,7 @@ public class WebServer {
 				userProfile.setLastName(rs1.getString("last_name"));
 				userProfile.setPassword(rs1.getString("password"));
 				userProfile.setRole(cred.getRole());
-				//userProfile.setLocation(rs1.getString("location"));
-				userProfile.setLocation(request.getRemoteAddr());
+				userProfile.setLocation(rs1.getString("location"));
 				userProfile.setAvatar(rs1.getBytes("avatar"));
 
 				cred.setId(id);
