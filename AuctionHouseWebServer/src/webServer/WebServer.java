@@ -10,12 +10,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import javax.annotation.Resource;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
+
+import org.apache.axis2.context.MessageContext;
 
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
@@ -40,9 +37,7 @@ import data.UserEntry;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
-@WebService
 public class WebServer {
-	@Resource
 	WebServiceContext	wsContext;
 
 	static Connection	conn;
@@ -66,13 +61,12 @@ public class WebServer {
 		System.out.println("[WebServer:static] End");
 	}
 
-	@WebMethod
 	public byte[] login(byte[] byteReq) {
 		System.out.println("[WebServer:login] Begin");
 
-		MessageContext mc = wsContext.getMessageContext();
-		HttpServletRequest request = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
-		System.out.println("Client IP = " + request.getRemoteAddr());
+		MessageContext inMessageContext = MessageContext.getCurrentMessageContext();
+		String ip = (String) inMessageContext.getProperty("REMOTE_ADDR");
+		System.out.println("[WebServer:login] Client IP = " + ip);
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LoginRequest)) {
@@ -104,9 +98,8 @@ public class WebServer {
 //				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
 //						+ cred.getAddress().getHostName() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
 //						+ id;
-				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '"
-						+ request.getRemoteAddr() + "', port = " + cred.getAddress().getPort() + " WHERE id = "
-						+ id;
+				query = "UPDATE users" + " SET " + online_as_field + " =  1 , address = '" + ip + "', port = "
+						+ cred.getAddress().getPort() + " WHERE id = " + id;
 				st2.executeUpdate(query);
 
 				UserProfile userProfile = new UserProfile();
