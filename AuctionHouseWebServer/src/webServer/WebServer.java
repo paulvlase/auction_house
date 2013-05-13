@@ -9,10 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-import config.WebServerConfig;
+import javax.annotation.Resource;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import webServer.messages.DropOfferRequest;
 import webServer.messages.ErrorResponse;
@@ -29,6 +32,7 @@ import webServer.messages.OkResponse;
 import webServer.messages.RegisterProfileRequest;
 import webServer.messages.RemoveOfferRequest;
 import webServer.messages.SetProfileRequest;
+import config.WebServerConfig;
 import data.LoginCred;
 import data.Service;
 import data.Service.Status;
@@ -36,7 +40,11 @@ import data.UserEntry;
 import data.UserProfile;
 import data.UserProfile.UserRole;
 
+@WebService
 public class WebServer {
+	@Resource
+	WebServiceContext	wsContext;
+
 	static Connection	conn;
 
 	static {
@@ -58,8 +66,13 @@ public class WebServer {
 		System.out.println("[WebServer:static] End");
 	}
 
+	@WebMethod
 	public byte[] login(byte[] byteReq) {
 		System.out.println("[WebServer:login] Begin");
+		
+		MessageContext mc = wsContext.getMessageContext();
+	    HttpServletRequest request = (HttpServletRequest)mc.get(MessageContext.SERVLET_REQUEST); 
+	    System.out.println("Client IP = " + request.getRemoteAddr()); 
 
 		Object obj = WebMessage.deserialize(byteReq);
 		if (!(obj instanceof LoginRequest)) {
@@ -99,7 +112,8 @@ public class WebServer {
 				userProfile.setLastName(rs1.getString("last_name"));
 				userProfile.setPassword(rs1.getString("password"));
 				userProfile.setRole(cred.getRole());
-				userProfile.setLocation(rs1.getString("location"));
+				//userProfile.setLocation(rs1.getString("location"));
+				userProfile.setLocation(request.getRemoteAddr());
 				userProfile.setAvatar(rs1.getBytes("avatar"));
 
 				cred.setId(id);
